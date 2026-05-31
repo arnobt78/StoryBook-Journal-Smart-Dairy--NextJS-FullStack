@@ -1,48 +1,24 @@
-# Phase 02 — Validation (Logic Gatekeeper)
+# Phase 02 — Summary
 
 | Field | Value |
 |-------|-------|
 | Cycle | C1 |
-| Gate | GATE-0001 prerequisite met |
-| Date | 2026-03-16 |
+| Revision | C1-bootstrap-2026-06-01 |
+| Completed | **Yes** |
+| Date | 2026-06-01 |
 | Agent | logic-gatekeeper |
-| Result | **PASS** (with FLAGS) |
 
-## Evidence Summary
+## Validation result
 
-```
-Scope: validated REQ-0001–0024 | Traceability: REQ→ART→TC complete at bootstrap
-Findings: PASS 20 | FLAG 4 | FAIL 0 | CONFLICT 0
-Decision Points: REQ-0020 doc gitignored — local ops only (accepted at Gate 1)
-Log: 2026-03-16 | logic-gatekeeper | Stage 2 PASS | Blueprint testable | REQ-0024
-```
+**PASS** with FLAGS — blueprint coherent; no REQ conflicts; physical constraints N/A (web SaaS).
 
-## REQ validation matrix
+## Flags (non-blocking)
 
-| REQ | Testable? | Artifacts | Conflict | Verdict |
-|-----|-----------|-----------|----------|---------|
-| REQ-0001–0012 | Yes | ART present | None | PASS |
-| REQ-0013–0018 | Yes (future) | Planned | None | PASS (deferred) |
-| REQ-0019 | Partial NFR | ART-0017 | None | PASS + FLAG (Sentry/Pino open) |
-| REQ-0020 | Yes (future) | No ART yet | None | PASS + FLAG (local doc only) |
-| REQ-0021 | Yes | No tests yet | None | FLAG (blocks Gate 2 e2e) |
-| REQ-0022–0023 | Partial | ART-0025 | None | PASS + FLAG |
-| REQ-0024 | Yes | `.agile-v/` | None | PASS |
+1. REQ-0009 demo account needs prod gate before Vercel.
+2. REQ-0013 TipTap deps in package.json but editor not wired — status `planned` correct.
+3. REQ-0021 no test runner configured — Gate 2 blocker documented.
+4. Google OAuth enabled in auth.ts without Prisma account linking — document if enabling prod OAuth.
 
-## FLAGS (non-blocking for Gate 1)
+## Infra amendment (GATE-0003)
 
-1. **REQ-0004** — `prefers-reduced-motion` not explicitly wired in PageFlip (verify in Stage 4 manual).
-2. **REQ-0021** — Zero automated test files; e2e TCs cannot execute until Vitest/Playwright added.
-3. **REQ-0020** — Deployment guide removed from git; reference is local-only (Gate 1 condition accepted).
-4. **REQ-0010** — AI assist depends on env key; graceful degrade required at runtime (TC-0012 e2e pending).
-
-## Halt conditions checked
-
-- Ambiguous REQ: none critical
-- Missing traceability: none
-- REQ conflicts: none
-- Unclear Done: planned REQs marked 📋 with future TC
-
-## Exit
-
-Stage 2 **COMPLETE** → proceed to ongoing Stage 4 static verification; Gate 2 blocked on REQ-0021.
+REQ-0025–0027 validated against codebase: PostgreSQL schema, gitignore hygiene, docker-compose db-only.

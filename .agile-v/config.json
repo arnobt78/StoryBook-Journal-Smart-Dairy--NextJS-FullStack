@@ -3,8 +3,9 @@
   "project": {
     "name": "storybook-journal",
     "display_name": "StoryBook Journal",
-    "repository": "storybook-journal",
+    "repository": "https://github.com/arnobt78/storybook-journal",
     "cycle": "C1",
+    "revision": "C1-bootstrap-2026-06-01",
     "tech_stack": [
       "Next.js 16 App Router",
       "React 19",
@@ -12,7 +13,8 @@
       "Prisma PostgreSQL",
       "TanStack Query",
       "NextAuth v5",
-      "Tailwind CSS"
+      "Tailwind CSS",
+      "Vercel (production target)"
     ]
   },
   "paths": {
@@ -33,12 +35,12 @@
       "models": ["agent-router"],
       "approved_for": ["design", "implementation", "review"],
       "data_residency": "user-controlled",
-      "review_date": "2026-03-16"
+      "review_date": "2026-06-01"
     }
   ],
   "model_versions": {
-    "requirement_architect": { "tier": "high", "last_validated": "2026-03-16", "validated_by": "bootstrap" },
-    "build_agent_js": { "tier": "medium", "last_validated": "2026-03-16", "validated_by": "bootstrap" },
-    "red_team_verifier": { "tier": "medium", "last_validated": "2026-03-16", "validated_by": "bootstrap" }
+    "requirement_architect": { "tier": "high", "last_validated": "2026-06-01", "validated_by": "bootstrap" },
+    "build_agent_js": { "tier": "medium", "last_validated": "2026-06-01", "validated_by": "bootstrap" },
+    "red_team_verifier": { "tier": "medium", "last_validated": "2026-06-01", "validated_by": "bootstrap" }
   }
 }

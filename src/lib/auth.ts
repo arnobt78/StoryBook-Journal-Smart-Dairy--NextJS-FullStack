@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { prisma } from "@/lib/db";
+import { provisionOAuthUser } from "@/lib/auth/provision-oauth-user";
 import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 
@@ -52,12 +53,40 @@ export const authConfig: NextAuthConfig = {
   ],
   session: { strategy: "jwt" },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider !== "google" || !user.email) {
+        return true;
+      }
+
+      try {
+        const googleProfile = profile as
+          | { name?: string; picture?: string; email_verified?: boolean }
+          | undefined;
+
+        const dbUser = await provisionOAuthUser({
+          email: user.email,
+          displayName: user.name ?? googleProfile?.name ?? null,
+          avatarUrl: user.image ?? googleProfile?.picture ?? null,
+        });
+
+        user.id = dbUser.id;
+        user.name = dbUser.displayName ?? user.name;
+        user.image = dbUser.avatarUrl ?? user.image;
+        return true;
+      } catch {
+        return false;
+      }
+    },
     jwt({ token, user }) {
       if (user?.id) token.id = user.id;
+      if (user?.image) token.picture = user.image;
       return token;
     },
     session({ session, token }) {
       if (token.id) session.user.id = token.id as string;
+      if (token.picture && session.user) {
+        session.user.image = token.picture as string;
+      }
       return session;
     },
   },

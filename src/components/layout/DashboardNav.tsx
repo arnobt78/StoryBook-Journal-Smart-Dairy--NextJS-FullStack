@@ -22,6 +22,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { signOut } from "next-auth/react";
 import { Activity, FileText, LogOut } from "lucide-react";
 
+import { AUTH_STATE_KEY, OAUTH_PENDING_KEY } from "@/constants/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,6 +61,10 @@ export function DashboardNav({ user }: DashboardNavProps) {
 
     /* Clear cache while the animation plays */
     queryClient.clear();
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(AUTH_STATE_KEY);
+      localStorage.removeItem(OAUTH_PENDING_KEY);
+    }
 
     await new Promise<void>((resolve) => setTimeout(resolve, 750));
     await signOut({ callbackUrl: "/" });
@@ -204,6 +209,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                   alt={user.name ?? "User avatar"}
                   width={32}
                   height={32}
+                  referrerPolicy="no-referrer"
                   style={{
                     borderRadius: "50%",
                     objectFit: "cover",

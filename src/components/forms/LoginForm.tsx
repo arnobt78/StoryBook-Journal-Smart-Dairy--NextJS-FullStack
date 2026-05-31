@@ -17,11 +17,20 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { queryKeys } from "@/lib/query-keys";
 
-/** Test account seeded in the database for demos — matches api/auth/register seed logic */
-const TEST_EMAIL = "test@user.com";
-const TEST_PASS  = "12345678";
+import { AuthOrSeparator } from "@/components/auth/AuthOrSeparator";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
+import { TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_PASSWORD } from "@/constants/auth";
 
-export function LoginForm() {
+/** Test account seeded in the database for demos — matches api/auth/register seed logic */
+const TEST_EMAIL = TEST_ACCOUNT_EMAIL;
+const TEST_PASS  = TEST_ACCOUNT_PASSWORD;
+
+type LoginFormProps = {
+  /** From server: true when GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET are set */
+  googleEnabled?: boolean;
+};
+
+export function LoginForm({ googleEnabled = false }: LoginFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
@@ -223,6 +232,13 @@ export function LoginForm() {
       >
         {loading ? "Opening…" : "Open My Journal"}
       </button>
+
+      {googleEnabled && (
+        <>
+          <AuthOrSeparator label="or" />
+          <GoogleSignInButton disabled={loading} label="Open with Gmail" />
+        </>
+      )}
     </form>
   );
 }

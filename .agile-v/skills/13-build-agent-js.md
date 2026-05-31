@@ -15,7 +15,7 @@
 
 ## Linked REQs (storybook-journal)
 
-REQ-0001–0012, REQ-0013+
+REQ-0001–0012, REQ-0013+, REQ-0025–0027
 
 ## Handoffs
 

@@ -23,7 +23,7 @@
 | ART-0017 | C1 | api | `src/app/api/health/route.ts` | REQ-0006, REQ-0019 | implemented |
 | ART-0018 | C1 | lib | `src/lib/query-keys.ts` | REQ-0007 | implemented |
 | ART-0019 | C1 | lib | `src/lib/journal-api.ts` | REQ-0007 | implemented |
-| ART-0020 | C1 | seed | `prisma/seed.ts`, register route seed | REQ-0009 | implemented |
+| ART-0020 | C1 | seed | `prisma/seed.ts`, register route seed | REQ-0009, REQ-0025 | implemented |
 | ART-0021 | C1 | api | `src/app/api/ai/assist/route.ts` | REQ-0010 | implemented |
 | ART-0022 | C1 | styles | `src/app/globals.css` | REQ-0011 | implemented |
 | ART-0023 | C1 | lib | `src/lib/validations.ts` | REQ-0012 | implemented |
@@ -32,6 +32,14 @@
 | ART-0026 | C1 | hook | `src/hooks/usePageFlip.ts` | REQ-0004 | implemented |
 | ART-0027 | C1 | page | `src/app/(dashboard)/journal/[bookId]/page.tsx` | REQ-0003 | implemented |
 | ART-0028 | C1 | process | `.agile-v/` | REQ-0024 | implemented |
+| ART-0029 | C1 | schema | `prisma/schema.prisma` | REQ-0025 | implemented |
+| ART-0030 | C1 | migration | `prisma/migrations/` | REQ-0025 | implemented |
+| ART-0031 | C1 | config | `.env.example` | REQ-0026 | implemented |
+| ART-0032 | C1 | middleware | `src/proxy.ts` | REQ-0012 | implemented |
+| ART-0033 | C1 | config | `next.config.ts` | REQ-0020 | implemented |
+| ART-0034 | C1 | docs | `README.md` | REQ-0020, REQ-0027 | implemented |
+| ART-0035 | C1 | config | `.gitignore` | REQ-0026 | implemented |
+| ART-0036 | C1 | infra | `docker-compose.yml` | REQ-0027 | implemented |
 
 ## Planned artifacts (REQ-0013+)
 
@@ -41,3 +49,4 @@
 | ART-0101 | REQ-0014 | Realtime sync service |
 | ART-0102 | REQ-0015 | Offline sync queue |
 | ART-0103 | REQ-0016 | Search API + UI |
+| ART-0104 | REQ-0021 | Vitest + Playwright harness |

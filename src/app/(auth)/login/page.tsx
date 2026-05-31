@@ -1,7 +1,14 @@
 import { LoginForm } from "@/components/forms/LoginForm";
+import { isGoogleOAuthEnabled } from "@/lib/auth/is-google-enabled";
 
-/** Right-hand page content only; shell + left page live in `(auth)/layout` via `AuthBookShell`. */
+export const dynamic = "force-dynamic";
+
+/**
+ * Login page — server reads OAuth config; interactive form stays client-side.
+ */
 export default function LoginPage() {
+  const googleEnabled = isGoogleOAuthEnabled();
+
   return (
     <>
       <div
@@ -27,7 +34,7 @@ export default function LoginPage() {
       >
         Open your journal
       </h2>
-      <LoginForm />
+      <LoginForm googleEnabled={googleEnabled} />
     </>
   );
 }

@@ -3,15 +3,21 @@
 | Field | Value |
 |-------|-------|
 | Cycle | C1 |
-| Status | IN_PROGRESS |
-| Date | 2026-03-16 |
+| Revision | C1-bootstrap-2026-06-01 |
+| Completed | **Partial** (static only) |
+| Date | 2026-06-01 |
+| Agent | red-team-verifier |
 
-## Red Team (static pass)
+## Verification result
 
-- PASS: TC-0009, TC-0010, TC-0014, TC-0021, TC-0024
-- FLAG: TC-0023 (partial a11y audit)
-- NOT RUN: TC-0001–0008, TC-0011–0013 (e2e — REQ-0021)
+- **Static audit:** 9 TC PASS, 1 FLAG (TC-0023 partial a11y), 0 FAIL
+- **E2E/integration live:** NOT RUN — REQ-0021 blocks Gate 2
+- **eval_gate_status:** CONDITIONAL
 
-## Gate 2
+## Evidence
 
-Blocked until Playwright/Vitest + full regression run.
+VALIDATION_SUMMARY.md, EVAL_RESULTS.md, TEST_SPEC.md updated 2026-06-01.
+
+## Next
+
+Execute Playwright suite; live TC-0025 against Postgres; axe TC-0023.

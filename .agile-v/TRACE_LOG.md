@@ -7,4 +7,8 @@
 | 2026-03-16T00:00:02Z | bootstrap | bootstrap-agent | Registered ART-0001–0028 | REQ-0024 | — |
 | 2026-03-16T12:00:00Z | gate-1 | logic-gatekeeper | GATE-0001 Approved | REQ-0024 | APPROVALS.md |
 | 2026-03-16T12:00:01Z | stage-4 | red-team-verifier | Static TC PASS (5); e2e NOT RUN | REQ-0021 | TEST_SPEC.md |
-| 2026-03-16T12:00:02Z | git | bootstrap-agent | git rm --cached Hetzner guide | REQ-0020 | .gitignore |
+| 2026-03-16T12:00:02Z | git | bootstrap-agent | git rm --cached Hetzner guide | REQ-0026 | .gitignore |
+| 2026-06-01T12:00:00Z | bootstrap | bootstrap-agent | C1 re-baseline REQ-0025–0027 | REQ-0024 | POLICY.yaml |
+| 2026-06-01T12:00:01Z | gate-1-amend | bootstrap-agent | GATE-0003 infra amendment approved | REQ-0025–0027 | APPROVALS.md |
+| 2026-06-01T12:00:02Z | stage-4 | red-team-verifier | Static TC PASS +3 (0025–0027) | REQ-0025–0027 | TEST_SPEC.md |
+| 2026-06-01T12:00:03Z | git | bootstrap-agent | Fresh GitHub repo d9601bd single commit | REQ-0026 | remote verify |

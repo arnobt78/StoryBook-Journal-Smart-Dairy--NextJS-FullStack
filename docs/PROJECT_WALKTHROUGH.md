@@ -21,16 +21,17 @@ Deployment target is **Vercel** for the app; `docker-compose.yml` is an optional
 
 | Area | Choice |
 |------|--------|
-| Framework | Next.js 15 App Router (`src/app`) |
+| Framework | Next.js 16 App Router (`src/app`) |
 | UI | React 19, Tailwind 3, heavy **inline styles** for the book aesthetic |
-| Auth | **NextAuth v5** (`next-auth@5 beta`) — JWT sessions, Credentials + optional Google |
-| ORM / DB | **Prisma 6** + SQLite (`file:./dev.db`) by default |
+| Auth | **NextAuth v5** — JWT sessions, Credentials + optional **Google OAuth** |
+| ORM / DB | **Prisma 6** + **PostgreSQL** (`DATABASE_URL` + `DIRECT_URL`) |
 | Validation | **Zod** (`src/lib/validations.ts`) |
-| Client data fetching | **TanStack Query** wired in `providers.tsx` (available app-wide; journal UI mostly uses `fetch` + local React state) |
-| Global client store | **Zustand** (`src/stores/journalStore.ts`) — **defined but not imported** elsewhere (see §8) |
+| Client data fetching | **TanStack Query** — `queryKeys.journalSubtree()` invalidation on all journal CRUD + auth flows |
+| Global client store | **Zustand** (`src/stores/journalStore.ts`) — defined but unused (see §8) |
 | Animations | Custom page-flip hook + overlay (`usePageFlip`, `PageFlip`) |
 | Toasts | **Sonner** |
-| Optional AI | `BookSpread` calls **Anthropic Messages API** from the **browser** (see §8) |
+| AI | Server proxy `/api/ai/assist` (Anthropic key server-only) |
+| Production | **Vercel** — https://storybook-journal.vercel.app |
 
 ---
 
@@ -53,14 +54,22 @@ src/app/
 
 src/lib/
   db.ts                       # PrismaClient singleton (dev HMR guard)
-  auth.ts                     # NextAuth config + prisma in authorize
+  auth.ts                     # NextAuth + Google signIn → provisionOAuthUser
+  auth/provision-oauth-user.ts # Google user + welcome journal transaction
+  auth/is-google-enabled.ts   # Server-only OAuth env check
+  query-keys.ts               # journalSubtree() — single invalidation root
   validations.ts              # Zod schemas shared by API routes
   utils.ts                    # slugify, tags JSON, word counts, dates
+
+src/components/auth/
+  GoogleSignInButton.tsx      # OAuth redirect + localStorage anti-flicker flags
+  OAuthReturnSync.tsx         # Post-OAuth journalSubtree invalidation
+  AuthOrSeparator.tsx         # "or" divider on login
 
 prisma/schema.prisma          # User, JournalBook, JournalEntry (+ relations)
 ```
 
-There is **no `prisma/migrations/`** directory in the repo at audit time; local setup may rely on `prisma migrate dev` (creates migrations) or `prisma db push` (schema sync without migration files). `package.json` includes `db:migrate`, `db:push`, and a `setup` script that runs `migrate dev --name init`.
+There **is** a `prisma/migrations/` directory (init migration committed). Local/prod may use `db push` or `migrate deploy`.
 
 ---
 
@@ -80,8 +89,9 @@ Prisma models (`prisma/schema.prisma`):
 
 - **Proxy** (`src/proxy.ts`, Next.js 16+): uses `auth()` from NextAuth at the edge boundary. Protects `/dashboard` and `/journal`; sends unauthenticated users to `/login` with `callbackUrl`. Matcher **excludes** `api`, `_next/static`, `_next/image`, `favicon.ico` so API routes handle their own auth.
 - **Session strategy:** JWT (`session: { strategy: "jwt" }`). User id is copied from DB user into the token and then into `session.user.id` via callbacks.
-- **Credentials login:** `authorize` loads user by email, compares `bcryptjs` hash, updates `lastLoginAt`.
-- **Google:** Optional; if `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` are unset, the Google provider array is empty. **Note:** There is no `signIn` callback linking Google accounts to `User` rows in Prisma in the audited `auth.ts`; Google sign-in may succeed at the OAuth layer but **account linking / user creation in DB** may need verification if you enable Google for real users.
+- **Credentials login:** `authorize` loads user by email, bcrypt compare, updates `lastLoginAt`.
+- **Google OAuth:** When `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` are set, login page shows **Open with Gmail**. `signIn` callback calls `provisionOAuthUser()` — creates/updates Prisma `User` (cuid), seeds welcome book on first login, maps Google avatar into JWT/session. Redirect lands on `/dashboard`; `OAuthReturnSync` invalidates `journalSubtree()`.
+- **Login UI:** `LoginForm` (credentials + demo picker) + `AuthOrSeparator` + `GoogleSignInButton`. Server gate via `isGoogleOAuthEnabled()` in `login/page.tsx` (`force-dynamic`).
 
 API routes consistently call `await auth()` and check `session?.user?.id` before Prisma calls, and use `userId` / `findFirst({ where: { id, userId }})` patterns to avoid cross-user access.
 
@@ -128,7 +138,7 @@ flowchart LR
   Browser[Browser]
   Next[Next.js app]
   Prisma[Prisma Client]
-  DB[(SQLite file OR PostgreSQL)]
+  DB[(PostgreSQL)]
 
   Browser --> Next
   Next --> Prisma
@@ -142,11 +152,11 @@ flowchart LR
 
 ## 8. Audit notes (risks / cleanup candidates)
 
-1. **`useJournalStore` unused** — Only referenced in `journalStore.ts`. Journal UI uses local `useState` inside `BookSpread` / `BookShelf`. Either wire the store or remove it to avoid confusion.
-2. **Anthropic from the client** — `BookSpread` posts to `https://api.anthropic.com/v1/messages` without an `x-api-key` in the audited snippet; in practice the key cannot live safely in the browser. Production should use a **server Route Handler** that reads `ANTHROPIC_API_KEY` from env and proxies the request.
-3. **`.env.example`** — Contains illustrative OAuth values; treat as non-secret placeholders and rotate anything that was ever real.
-4. **Google OAuth + DB** — If you need Google users in Prisma, add an adapter or `signIn`/`events` flow to create/link `User` records.
-5. **No migration folder** — For production discipline, commit `prisma/migrations` or document a single source of truth (`db push` vs `migrate deploy`).
+1. **`useJournalStore` unused** — journal UI uses React state + TanStack Query; store optional cleanup.
+2. **Demo account on production** — `test@user.com` picker visible on login; gate behind `NODE_ENV` before wide public launch (`.agile-v` RISK-0006).
+3. **Automated tests** — Vitest/Playwright not yet wired (REQ-0021 / Gate 2 pending).
+4. **Register page** — no Google button (login only); add if parity desired.
+5. **Google Console** — origins + redirect URIs must include Vercel URL and localhost.
 
 ---
 
@@ -192,9 +202,11 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ## 11. Related docs
 
-- `README.md` — setup, structure, PostgreSQL switch instructions.
-- `docs/HETZNER_VPS_MIGRATION_GUIDE.md` — VPS, Coolify, Prisma vs Drizzle, `db push`, privileges, connection strings.
+- `README.md` — setup, PostgreSQL, Vercel deploy notes.
+- `docs/AUTH_UI_IMPLEMENTATION_GUIDE.md` — OAuth flicker, avatar, session patterns.
+- `docs/DROPDOWN_TEST_CREDENTIALS_DOCS.md` — demo account + NextAuth reference.
 - `docker-compose.yml` — optional local Postgres only (not used for Vercel deploy).
+- `.agile-v/` — Agile V C1 traceability (REQ-0001–0027).
 
 ---
 

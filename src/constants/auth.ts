@@ -1,0 +1,14 @@
+/**
+ * Auth-related constants shared by login UI and OAuth redirect handling.
+ * localStorage keys mirror AUTH_UI_IMPLEMENTATION_GUIDE.md to prevent navbar flicker
+ * when returning from Google OAuth.
+ */
+export const AUTH_STATE_KEY = "navbar_was_authenticated";
+export const OAUTH_PENDING_KEY = "oauth_login_pending";
+
+/** Demo account — matches prisma/seed.ts and register route ensureTestUser */
+export const TEST_ACCOUNT_EMAIL = "test@user.com";
+export const TEST_ACCOUNT_PASSWORD = "12345678";
+
+/** Post-OAuth landing route; dashboard queries refetch on mount via TanStack Query */
+export const OAUTH_CALLBACK_URL = "/dashboard";
