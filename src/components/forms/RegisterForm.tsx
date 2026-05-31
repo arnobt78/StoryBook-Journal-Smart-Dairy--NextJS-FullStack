@@ -61,12 +61,6 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="auth-form-stagger">
-      <AuthOAuthSection
-        googleEnabled={!!googleEnabled}
-        disabled={loading}
-        variant="register"
-      />
-
       <Field label="Your Name">
         <input
           type="text"
@@ -122,13 +116,19 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
       >
         {loading ? "Creating your journal…" : "Begin My Story"}
       </button>
+
+      <AuthOAuthSection
+        googleEnabled={!!googleEnabled}
+        disabled={loading}
+        variant="register"
+      />
     </form>
   );
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ marginBottom: "16px" }}>
+    <div className="auth-field" style={{ marginBottom: "12px" }}>
       <label style={{ display: "block", fontFamily: "'Lora',serif", fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(100,55,20,.55)", marginBottom: "6px" }}>
         {label}
       </label>

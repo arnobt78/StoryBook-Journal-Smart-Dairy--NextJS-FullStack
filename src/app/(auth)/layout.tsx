@@ -11,6 +11,7 @@ export default function AuthLayout({
 }) {
   return (
     <div
+      className="auth-book-viewport"
       style={{
         position: "fixed",
         inset: 0,

@@ -107,10 +107,8 @@ export function LoginForm({ googleEnabled = false }: LoginFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="auth-form-stagger">
-      <AuthOAuthSection googleEnabled={!!googleEnabled} disabled={loading} variant="login" />
-
       {/* Demo block: section title + full-width trigger; portaled menu lists fill + clear rows. */}
-      <div style={{ position: "relative", zIndex: 40, marginBottom: "18px" }}>
+      <div style={{ position: "relative", zIndex: 40, marginBottom: "12px" }} className="auth-field-compact">
         <p
           style={{
             fontFamily: "'Lora',serif",
@@ -233,13 +231,15 @@ export function LoginForm({ googleEnabled = false }: LoginFormProps) {
       >
         {loading ? "Opening…" : "Open My Journal"}
       </button>
+
+      <AuthOAuthSection googleEnabled={!!googleEnabled} disabled={loading} variant="login" />
     </form>
   );
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ marginBottom: "16px" }}>
+    <div className="auth-field" style={{ marginBottom: "12px" }}>
       <label style={{
         display: "block", fontFamily: "'Lora',serif", fontSize: "10px",
         letterSpacing: "2px", textTransform: "uppercase",

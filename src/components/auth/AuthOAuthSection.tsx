@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * Shared OAuth block for login/register — Google first, then optional "or" divider
- * before the credential form so the button stays visible above the fold on auth pages.
+ * Shared OAuth block for login/register — placed AFTER the primary CTA
+ * (Open My Journal / Begin My Story): "or" divider, then Google button.
  */
 import { AuthOrSeparator } from "@/components/auth/AuthOrSeparator";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
@@ -25,9 +25,9 @@ export function AuthOAuthSection({
     variant === "register" ? "Continue with Gmail" : "Open with Gmail";
 
   return (
-    <div style={{ marginBottom: "18px" }}>
+    <div style={{ marginTop: "14px" }}>
+      <AuthOrSeparator label="or" compact />
       <GoogleSignInButton disabled={disabled} label={label} />
-      <AuthOrSeparator label="or" />
     </div>
   );
 }

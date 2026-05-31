@@ -3,9 +3,11 @@
  */
 type AuthOrSeparatorProps = {
   label?: string;
+  /** Tighter spacing when placed below the primary auth CTA */
+  compact?: boolean;
 };
 
-export function AuthOrSeparator({ label = "or" }: AuthOrSeparatorProps) {
+export function AuthOrSeparator({ label = "or", compact = false }: AuthOrSeparatorProps) {
   return (
     <div
       role="separator"
@@ -14,7 +16,7 @@ export function AuthOrSeparator({ label = "or" }: AuthOrSeparatorProps) {
         display: "flex",
         alignItems: "center",
         gap: "12px",
-        margin: "18px 0 16px",
+        margin: compact ? "12px 0 10px" : "18px 0 16px",
       }}
     >
       <span

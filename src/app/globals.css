@@ -259,9 +259,36 @@ body {
   animation-delay: 0.4s;
 }
 
-/* Auth right page — scroll when OAuth + demo + fields exceed page height */
+/* Auth right page — scroll fallback when viewport is very short */
 .auth-right-scroll::-webkit-scrollbar {
   display: none;
+}
+
+/**
+ * Auth login/register — book spread fills ~85% of viewport so forms fit without scroll.
+ * Spread width = spine + 2×page-w ≈ 85vw; page height ≈ 85vh minus title band.
+ * Dashboard/journal keep :root defaults; only auth layout sets these overrides.
+ */
+.auth-book-viewport {
+  --page-w: clamp(
+    240px,
+    calc((85vw - var(--spine-w, 22px)) / 2),
+    720px
+  );
+  --page-h: clamp(
+    420px,
+    calc(85vh - 52px),
+    920px
+  );
+}
+
+/* Tighter field rhythm on auth forms — pairs with larger page tokens above */
+.auth-book-viewport .auth-form-stagger .auth-field {
+  margin-bottom: 12px;
+}
+
+.auth-book-viewport .auth-form-stagger .auth-field-compact {
+  margin-bottom: 10px;
 }
 
 /* ─── Page-turn content stagger (diary entries) ──────────────── */
