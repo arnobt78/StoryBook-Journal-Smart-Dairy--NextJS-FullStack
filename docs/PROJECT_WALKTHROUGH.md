@@ -120,6 +120,7 @@ API routes consistently call `await auth()` and check `session?.user?.id` before
    - **Patches** the current entry via `PATCH /api/entries/[entryId]` on explicit save.
    - **Posts** new entries via `POST /api/entries` with client-supplied `entryDate` / `weekday` (API overwrites with `formatEntryDate()` anyway — minor redundancy).
 3. `useAutoSave` in `BookSpread` debounces PATCH while editing; explicit Save still available.
+4. **DELETE UI** — `BookShelf` spine × and reader “Remove page/journal” use `ConfirmDialog` + `journalSubtree` invalidation.
 
 ### 6.4 API summary
 
@@ -158,8 +159,7 @@ flowchart LR
 1. **Automated tests** — Vitest/Playwright not yet wired (REQ-0021 / Gate 2 pending).
 2. **Future phases not implemented** — Redis, BullMQ, SSE/pub-sub, offline IndexedDB (architecture doc only).
 3. **Demo login** — on by default (showcase); `SHOW_DEMO_LOGIN=false` to hide.
-4. **DELETE UI** — shelf spine × + reader “Remove page/journal” with ConfirmDialog + `journalSubtree` invalidation.
-5. **Google Console** — origins + redirect URIs must include Vercel URL and `http://localhost:3000`.
+3. **Google Console** — origins + redirect URIs must include Vercel URL and `http://localhost:3000`.
 
 ---
 
