@@ -2,8 +2,8 @@
 
 /**
  * BookShelf — dashboard grid of journal spines + “New Journal” modal.
- * After POST /api/books, TanStack’s `journalSubtree` key refetches shelf stats and
- * any in-memory book payloads so other mounted routes stay in sync without reload.
+ * After POST /api/books or DELETE /api/books/[id], TanStack’s `journalSubtree` key
+ * refetches shelf stats and any in-memory book payloads without reload.
  */
 import type { CSSProperties } from "react";
 import { useState } from "react";
@@ -13,7 +13,8 @@ import { toast } from "sonner";
 import { COVER_COLORS, COVER_EMOJIS } from "@/constants";
 import type { JournalBook } from "@/types";
 import { queryKeys } from "@/lib/query-keys";
-import { fetchJournalBooks } from "@/lib/journal-api";
+import { fetchJournalBooks, deleteJournalBook } from "@/lib/journal-api";
+import { ConfirmDialog } from "@/components/feedback/ConfirmDialog";
 
 interface BookShelfProps {
   books: (JournalBook & { _count?: { entries: number } })[];
@@ -36,6 +37,8 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
 
   const [showCreate, setShowCreate] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<(JournalBook & { _count?: { entries: number } }) | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [form, setForm] = useState({ title: "", description: "", coverColor: "#8b4513", coverEmoji: "📖" });
 
   const createBook = async () => {
@@ -61,6 +64,21 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
     }
   };
 
+  const confirmDeleteBook = async () => {
+    if (!deleteTarget || isDeleting) return;
+    setIsDeleting(true);
+    try {
+      await deleteJournalBook(deleteTarget.id);
+      await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+      toast.success("Journal removed");
+      setDeleteTarget(null);
+    } catch {
+      toast.error("Failed to remove journal");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const now = new Date();
   const greeting = now.getHours() < 12 ? "Good morning" : now.getHours() < 17 ? "Good afternoon" : "Good evening";
 
@@ -83,6 +101,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
             key={book.id}
             book={book}
             onClick={() => router.push(`/journal/${book.id}`)}
+            onDelete={() => setDeleteTarget(book)}
           />
         ))}
 
@@ -177,18 +196,73 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={Boolean(deleteTarget)}
+        title="Remove this journal?"
+        description={
+          deleteTarget ? (
+            <>
+              &ldquo;{deleteTarget.title}&rdquo; and all {deleteTarget._count?.entries ?? 0} pages
+              will be permanently deleted.
+            </>
+          ) : null
+        }
+        confirmLabel="Remove journal"
+        loading={isDeleting}
+        onConfirm={() => void confirmDeleteBook()}
+        onCancel={() => !isDeleting && setDeleteTarget(null)}
+      />
     </div>
   );
 }
 
-function BookSpine({ book, onClick }: { book: JournalBook & { _count?: { entries: number } }; onClick: () => void }) {
+function BookSpine({
+  book,
+  onClick,
+  onDelete,
+}: {
+  book: JournalBook & { _count?: { entries: number } };
+  onClick: () => void;
+  onDelete: () => void;
+}) {
   const [hovered, setHovered] = useState(false);
 
   return (
-    <div onClick={onClick} style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}
+    >
+      <button
+        type="button"
+        aria-label={`Remove ${book.title}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete();
+        }}
+        style={{
+          position: "absolute",
+          top: "-6px",
+          right: "-6px",
+          zIndex: 2,
+          width: "22px",
+          height: "22px",
+          borderRadius: "50%",
+          border: "1px solid rgba(255,120,80,.25)",
+          background: "rgba(16,6,1,.88)",
+          color: "rgba(255,160,100,.7)",
+          fontSize: "11px",
+          lineHeight: 1,
+          cursor: "pointer",
+          opacity: hovered ? 1 : 0,
+          transition: "opacity .2s",
+        }}
+      >
+        ×
+      </button>
+      <div onClick={onClick} style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
       <div
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         style={{
           width: "80px", height: "220px", position: "relative",
           background: `linear-gradient(155deg, color-mix(in srgb,${book.coverColor} 60%,#000) 0%, ${book.coverColor} 40%, color-mix(in srgb,${book.coverColor} 70%,#3d1a06) 100%)`,
@@ -217,6 +291,7 @@ function BookSpine({ book, onClick }: { book: JournalBook & { _count?: { entries
       <div style={{ textAlign: "center" }}>
         <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "12px", color: "rgba(255,200,130,.65)" }}>{book.title}</div>
         <div style={{ fontFamily: "'Lora',serif", fontSize: "10px", color: "rgba(255,160,60,.3)", marginTop: "2px" }}>{book._count?.entries ?? 0} entries</div>
+      </div>
       </div>
     </div>
   );

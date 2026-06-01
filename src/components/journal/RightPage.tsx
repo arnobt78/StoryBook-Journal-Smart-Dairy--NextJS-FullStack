@@ -31,12 +31,16 @@ interface RightPageProps {
   onCancel: () => void;
   onAiAssist: () => void;
   isAiThinking: boolean;
+  /** Opens confirm flow — destructive DELETE handled in BookSpread */
+  onDeleteEntry?: () => void;
+  canDeleteEntry?: boolean;
 }
 
 export function RightPage({
   entry, pageNumber, isWriting, draft, isSaving,
   flipDir, isFlipping,
   onStartWriting, onDraftChange, onSave, onCancel, onAiAssist, isAiThinking,
+  onDeleteEntry, canDeleteEntry = true,
 }: RightPageProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [newTag, setNewTag] = useState("");
@@ -279,16 +283,25 @@ export function RightPage({
               }}>
                 <span style={{ fontSize: "15px" }}>{entry.mood}</span>
                 <span style={{ fontSize: "15px" }}>{entry.weather}</span>
-                <span style={{ fontFamily: "'Lora',serif", fontSize: "10px", color: "rgba(100,55,20,.38)" }}>
+                <span style={{ fontFamily: "'Lora',serif", fontSize: "10px", color: "rgba(100,55,20,.38)", marginRight: "auto" }}>
                   {entry.wordCount} words
                 </span>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginLeft: "auto" }}>
+                {onDeleteEntry && canDeleteEntry && (
+                  <button type="button" onClick={onDeleteEntry} style={{
+                    fontFamily: "'Lora',serif", fontSize: "9px", letterSpacing: "1.5px",
+                    textTransform: "uppercase", background: "transparent",
+                    color: "rgba(140,50,30,.55)", border: "1px solid rgba(140,50,30,.22)",
+                    padding: "4px 10px", borderRadius: "3px", cursor: "pointer",
+                  }}>Remove page</button>
+                )}
                 <button type="button" onClick={onStartWriting} style={{
                   fontFamily: "'Lora',serif", fontSize: "9.5px", letterSpacing: "1.5px",
                   textTransform: "uppercase", background: "transparent",
                   color: "rgba(100,55,20,.5)", border: "1px solid rgba(120,70,20,.2)",
                   padding: "4px 11px", borderRadius: "3px", cursor: "pointer",
-                  marginLeft: "auto",
                 }}>✒ Edit</button>
+                </div>
               </div>
             </div>
           )}

@@ -27,3 +27,23 @@ export async function fetchJournalBook(bookId: string): Promise<JournalBook & { 
   }
   return json.data as JournalBook & { entries: JournalEntry[] };
 }
+
+type MutationApi = { success: boolean; message?: string };
+
+/** DELETE /api/entries/[entryId] — cascades via Prisma; caller invalidates journalSubtree */
+export async function deleteJournalEntry(entryId: string): Promise<void> {
+  const res = await fetch(`/api/entries/${entryId}`, { method: "DELETE" });
+  const json = (await res.json()) as MutationApi;
+  if (!json.success) {
+    throw new Error(json.message ?? "Failed to delete entry");
+  }
+}
+
+/** DELETE /api/books/[bookId] — removes book + entries; caller invalidates journalSubtree */
+export async function deleteJournalBook(bookId: string): Promise<void> {
+  const res = await fetch(`/api/books/${bookId}`, { method: "DELETE" });
+  const json = (await res.json()) as MutationApi;
+  if (!json.success) {
+    throw new Error(json.message ?? "Failed to delete journal");
+  }
+}

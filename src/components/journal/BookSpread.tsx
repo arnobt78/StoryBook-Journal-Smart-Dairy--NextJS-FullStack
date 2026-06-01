@@ -6,7 +6,8 @@
  * Architecture:
  *  • TanStack Query (`useQuery`) hydrates from SSR `initialBook` and keeps the
  *    cache fresh after mutations (invalidateQueries on save/new entry).
- *  • `useAutoSave` debounces PATCH while in write mode (2s) + journalSubtree invalidation.
+ *  • DELETE entry/book via shared ConfirmDialog + journal-api helpers;
+ *    journalSubtree invalidation keeps shelf + reader in sync without reload.
  *  • Books created via POST /api/books include a starter entry so `current` is never
  *    missing on first paint. Legacy books with zero entries show a one-tap seed UI.
  *  • `flipDir` is forwarded to RightPage so it can apply the correct CSS stagger
@@ -22,6 +23,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/feedback/ConfirmDialog";
 import { LeftPage } from "./LeftPage";
 import { RightPage } from "./RightPage";
 import { PageFlipOverlay } from "./PageFlip";
@@ -29,7 +31,7 @@ import { usePageFlip } from "@/hooks/usePageFlip";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { formatEntryDate } from "@/lib/utils";
 import { queryKeys } from "@/lib/query-keys";
-import { fetchJournalBook } from "@/lib/journal-api";
+import { fetchJournalBook, deleteJournalBook, deleteJournalEntry } from "@/lib/journal-api";
 import type { JournalBook, JournalEntry, EntryDraft } from "@/types";
 import type { FlipDirection } from "@/types";
 
@@ -60,6 +62,9 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
   const [isWriting, setIsWriting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isAiThinking, setIsAiThinking] = useState(false);
+  const [confirmDeleteEntry, setConfirmDeleteEntry] = useState(false);
+  const [confirmDeleteBook, setConfirmDeleteBook] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [draft, setDraft] = useState<EntryDraft>({
     title: "",
     content: "",
@@ -240,6 +245,51 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     }
   };
 
+  /** DELETE current entry — refetch book cache and focus an adjacent page */
+  const handleDeleteEntry = async () => {
+    if (!current || isDeleting || isWriting || isFlipping) return;
+    setIsDeleting(true);
+    try {
+      await deleteJournalEntry(current.id);
+      await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+      const fresh = await queryClient.fetchQuery({
+        queryKey: queryKeys.bookDetail(bookId),
+        queryFn: () => fetchJournalBook(bookId),
+      });
+      setIsWriting(false);
+      if (fresh.entries.length === 0) {
+        setFocusedEntryId(null);
+      } else {
+        const nextIdx = Math.min(currentIdx, fresh.entries.length - 1);
+        setFocusedEntryId(fresh.entries[nextIdx]?.id ?? null);
+      }
+      toast.success("Page removed");
+    } catch {
+      toast.error("Failed to remove page");
+    } finally {
+      setIsDeleting(false);
+      setConfirmDeleteEntry(false);
+    }
+  };
+
+  /** DELETE entire journal — redirect to shelf after subtree invalidation */
+  const handleDeleteBook = async () => {
+    if (isDeleting || isFlipping) return;
+    setIsDeleting(true);
+    try {
+      await deleteJournalBook(bookId);
+      await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+      toast.success("Journal removed");
+      router.push("/dashboard");
+      router.refresh();
+    } catch {
+      toast.error("Failed to remove journal");
+    } finally {
+      setIsDeleting(false);
+      setConfirmDeleteBook(false);
+    }
+  };
+
   if (!entries.length) {
     return (
       <>
@@ -288,7 +338,39 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           >
             + First page
           </button>
+          <button
+            type="button"
+            onClick={() => setConfirmDeleteBook(true)}
+            disabled={isFlipping || isWriting || isDeleting}
+            style={{
+              display: "block",
+              margin: "16px auto 0",
+              fontFamily: "'Lora',serif",
+              fontSize: "10px",
+              letterSpacing: "1.5px",
+              textTransform: "uppercase",
+              background: "transparent",
+              color: "rgba(255,160,100,.4)",
+              border: "1px solid rgba(255,160,60,.15)",
+              padding: "8px 16px",
+              borderRadius: "20px",
+              cursor: "pointer",
+              opacity: isFlipping || isWriting || isDeleting ? 0.45 : 1,
+            }}
+          >
+            Remove journal
+          </button>
         </div>
+        <ConfirmDialog
+          open={confirmDeleteBook}
+          variant="dark"
+          title="Remove this journal?"
+          description={<>Every page in &ldquo;{bookTitle}&rdquo; will be permanently deleted.</>}
+          confirmLabel="Remove journal"
+          loading={isDeleting}
+          onConfirm={() => void handleDeleteBook()}
+          onCancel={() => setConfirmDeleteBook(false)}
+        />
       </>
     );
   }
@@ -351,6 +433,8 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
             onCancel={() => setIsWriting(false)}
             onAiAssist={aiAssist}
             isAiThinking={isAiThinking}
+            onDeleteEntry={() => setConfirmDeleteEntry(true)}
+            canDeleteEntry={!isFlipping && !isWriting && !isDeleting}
           />
 
           {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
@@ -437,7 +521,58 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           >
             + New Entry
           </button>
+          <Divider />
+          <button
+            type="button"
+            onClick={() => setConfirmDeleteBook(true)}
+            disabled={isFlipping || isWriting || isDeleting}
+            title="Remove journal"
+            style={{
+              fontFamily: "'Lora',serif",
+              fontSize: "9px",
+              letterSpacing: "1.5px",
+              textTransform: "uppercase",
+              background: "transparent",
+              color: "rgba(255,140,90,.45)",
+              border: "1px solid rgba(255,120,60,.15)",
+              padding: "5px 12px",
+              borderRadius: "20px",
+              cursor: "pointer",
+              opacity: isFlipping || isWriting || isDeleting ? 0.35 : 1,
+            }}
+          >
+            Remove journal
+          </button>
         </div>
+
+        <ConfirmDialog
+          open={confirmDeleteEntry}
+          variant="dark"
+          title="Remove this page?"
+          description={
+            <>
+              &ldquo;{current.title}&rdquo; will be permanently deleted from this journal.
+            </>
+          }
+          confirmLabel="Remove page"
+          loading={isDeleting}
+          onConfirm={() => void handleDeleteEntry()}
+          onCancel={() => setConfirmDeleteEntry(false)}
+        />
+        <ConfirmDialog
+          open={confirmDeleteBook}
+          variant="dark"
+          title="Remove this journal?"
+          description={
+            <>
+              Every page in &ldquo;{bookTitle}&rdquo; will be permanently deleted.
+            </>
+          }
+          confirmLabel="Remove journal"
+          loading={isDeleting}
+          onConfirm={() => void handleDeleteBook()}
+          onCancel={() => setConfirmDeleteBook(false)}
+        />
 
         {/* Book title label above spread */}
         <div
