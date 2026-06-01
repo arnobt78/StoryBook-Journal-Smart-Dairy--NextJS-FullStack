@@ -1,4 +1,4 @@
-# StoryBook Journal Digital Diary - Next.js, TypeScript, PostgreSQL, Tailwind CSS FullStack Project
+# StoryBook Journal - Next.js, TypeScript, PostgreSQL, Tailwind CSS FullStack Project (Online/Offline Drafting & Sync Capability with IndexedDB & AI Writing Assistance Smart Diary)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
