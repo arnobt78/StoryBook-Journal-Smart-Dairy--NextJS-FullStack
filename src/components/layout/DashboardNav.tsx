@@ -30,6 +30,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SafeImage } from "@/components/ui/safe-image";
+import { useOfflineSync } from "@/context/OfflineSyncContext";
 
 interface DashboardNavProps {
   user: { name?: string | null; email?: string | null; image?: string | null };
@@ -42,6 +44,7 @@ function robohashUrl(seed: string) {
 
 export function DashboardNav({ user }: DashboardNavProps) {
   const queryClient = useQueryClient();
+  const { pendingCount } = useOfflineSync();
   const [signingOut, setSigningOut] = useState(false);
   const [closing, setClosing] = useState(false);
   const avatarSeed = user.email ?? user.name ?? "guest";
@@ -194,6 +197,23 @@ export function DashboardNav({ user }: DashboardNavProps) {
 
         {/* Profile: dropdown trigger keeps fixed footprint; menu content is portaled. */}
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          {pendingCount > 0 && (
+            <span
+              title={`${pendingCount} change${pendingCount === 1 ? "" : "s"} waiting to sync`}
+              style={{
+                fontFamily: "'IM Fell English',serif",
+                fontSize: "10px",
+                letterSpacing: "1px",
+                color: "rgba(255,185,100,.65)",
+                background: "rgba(160,85,30,.22)",
+                border: "1px solid rgba(160,85,30,.28)",
+                padding: "3px 9px",
+                borderRadius: "12px",
+              }}
+            >
+              {pendingCount} offline
+            </span>
+          )}
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <button
@@ -203,21 +223,19 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 className="flex shrink-0 cursor-pointer items-center justify-center rounded-full border-2 border-[rgb(137,68,19,.88)] bg-transparent p-0.5 outline-none ring-offset-2 ring-offset-transparent transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[rgba(255,205,130,0.45)] disabled:cursor-default disabled:opacity-40"
                 style={{ width: 40, height: 40 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element -- remote Robohash URL */}
-                <img
+                <SafeImage
+                  key={user.image ?? avatarSeed}
                   src={user.image ?? robohashUrl(avatarSeed)}
+                  fallbackSrc={user.image ? robohashUrl(avatarSeed) : undefined}
                   alt={user.name ?? "User avatar"}
                   width={32}
                   height={32}
                   referrerPolicy="no-referrer"
+                  className="rounded-full object-cover"
                   style={{
                     borderRadius: "50%",
                     objectFit: "cover",
                     display: "block",
-                  }}
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src =
-                      robohashUrl(avatarSeed);
                   }}
                 />
               </button>

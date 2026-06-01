@@ -17,6 +17,14 @@ import {
   fetchJournalBooks,
   updateJournalBook,
 } from "@/lib/journal-api";
+import { useOfflineSync } from "@/context/OfflineSyncContext";
+import { useJournalPrefetch } from "@/hooks/useJournalPrefetch";
+import {
+  enqueuePatchBookOffline,
+  enqueuePostBookOffline,
+  isBrowserOffline,
+  isOfflineOrNetworkError,
+} from "@/lib/offline/offline-journal-actions";
 import { ConfirmDialog } from "@/components/feedback/ConfirmDialog";
 import { BookEditorModal } from "@/components/journal/BookEditorModal";
 
@@ -28,6 +36,8 @@ interface BookShelfProps {
 export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { refreshCount } = useOfflineSync();
+  const { prefetchBook } = useJournalPrefetch();
   const { data: books = initialBooks } = useQuery({
     queryKey: queryKeys.booksList(),
     queryFn: fetchJournalBooks,
@@ -54,12 +64,39 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
     if (isSaving) return;
     setIsSaving(true);
     try {
+      if (isBrowserOffline()) {
+        const tempId = await enqueuePostBookOffline({
+          queryClient,
+          payload: values,
+          refreshPendingCount: refreshCount,
+        });
+        setShowCreate(false);
+        toast.info("Journal saved offline — will sync when online");
+        router.push(`/journal/${tempId}`);
+        return;
+      }
+
       await createJournalBook(values);
       await invalidateJournal();
       setShowCreate(false);
       toast.success("Journal created");
-    } catch {
-      toast.error("Failed to create journal");
+    } catch (err) {
+      if (isOfflineOrNetworkError(err)) {
+        try {
+          const tempId = await enqueuePostBookOffline({
+            queryClient,
+            payload: values,
+            refreshPendingCount: refreshCount,
+          });
+          setShowCreate(false);
+          toast.info("Journal saved offline — will sync when online");
+          router.push(`/journal/${tempId}`);
+        } catch {
+          toast.error("Failed to create journal offline");
+        }
+      } else {
+        toast.error("Failed to create journal");
+      }
     } finally {
       setIsSaving(false);
     }
@@ -69,12 +106,39 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
     if (!editTarget || isSaving) return;
     setIsSaving(true);
     try {
+      if (isBrowserOffline()) {
+        await enqueuePatchBookOffline({
+          queryClient,
+          bookId: editTarget.id,
+          payload: values,
+          refreshPendingCount: refreshCount,
+        });
+        setEditTarget(null);
+        toast.info("Journal saved offline — will sync when online");
+        return;
+      }
+
       await updateJournalBook(editTarget.id, values);
       await invalidateJournal();
       setEditTarget(null);
       toast.success("Journal updated");
-    } catch {
-      toast.error("Failed to update journal");
+    } catch (err) {
+      if (isOfflineOrNetworkError(err)) {
+        try {
+          await enqueuePatchBookOffline({
+            queryClient,
+            bookId: editTarget.id,
+            payload: values,
+            refreshPendingCount: refreshCount,
+          });
+          setEditTarget(null);
+          toast.info("Journal saved offline — will sync when online");
+        } catch {
+          toast.error("Failed to save journal offline");
+        }
+      } else {
+        toast.error("Failed to update journal");
+      }
     } finally {
       setIsSaving(false);
     }
@@ -147,6 +211,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
             key={book.id}
             book={book}
             onClick={() => router.push(`/journal/${book.id}`)}
+            onPrefetch={() => prefetchBook(book.id)}
             onEdit={() => setEditTarget(book)}
             onDelete={() => setDeleteTarget(book)}
           />
@@ -275,11 +340,13 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
 function BookSpine({
   book,
   onClick,
+  onPrefetch,
   onEdit,
   onDelete,
 }: {
   book: JournalBook & { _count?: { entries: number } };
   onClick: () => void;
+  onPrefetch: () => void;
   onEdit: () => void;
   onDelete: () => void;
 }) {
@@ -287,7 +354,10 @@ function BookSpine({
 
   return (
     <div
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={() => {
+        setHovered(true);
+        onPrefetch();
+      }}
       onMouseLeave={() => setHovered(false)}
       style={{
         position: "relative",

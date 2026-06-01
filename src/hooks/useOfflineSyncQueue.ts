@@ -1,0 +1,192 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import {
+  dispatchOfflineBookSynced,
+  dispatchOfflineEntrySynced,
+  isOfflineTempBookId,
+  isOfflineTempEntryId,
+} from "@/constants/offline";
+import {
+  createJournalBook,
+  createJournalEntry,
+  updateJournalBook,
+  updateJournalEntry,
+} from "@/lib/journal-api";
+import {
+  replaceOptimisticBookId,
+  replaceOptimisticEntryId,
+} from "@/lib/journal-cache-optimistic";
+import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
+import {
+  listSyncQueue,
+  removeSyncItem,
+  syncQueueCount,
+  type SyncQueueItem,
+} from "@/lib/offline/sync-queue-store";
+
+type ProcessResult = "ok" | "defer" | "drop";
+
+/**
+ * Drains IndexedDB sync queue on `online`.
+ * Remaps offline temp ids before PATCH; dispatches browser events for focus preservation.
+ */
+export function useOfflineSyncQueue() {
+  const queryClient = useQueryClient();
+  const [pendingCount, setPendingCount] = useState(0);
+  const drainingRef = useRef(false);
+  const idRemapRef = useRef(new Map<string, string>());
+
+  const updatePendingCount = useCallback(async () => {
+    try {
+      setPendingCount(await syncQueueCount());
+    } catch {
+      setPendingCount(0);
+    }
+  }, []);
+
+  const resolveId = useCallback((id: string): string | null => {
+    if (isOfflineTempEntryId(id) || isOfflineTempBookId(id)) {
+      return idRemapRef.current.get(id) ?? null;
+    }
+    return id;
+  }, []);
+
+  const processItem = useCallback(
+    async (item: SyncQueueItem): Promise<ProcessResult> => {
+      try {
+        switch (item.type) {
+          case "patchEntry": {
+            const entryId = resolveId(item.entryId);
+            if (!entryId) return "defer";
+            await updateJournalEntry(entryId, item.payload);
+            break;
+          }
+          case "postEntry": {
+            const created = await createJournalEntry(item.payload);
+            if (item.clientTempId) {
+              idRemapRef.current.set(item.clientTempId, created.id);
+              replaceOptimisticEntryId(
+                queryClient,
+                item.payload.bookId,
+                item.clientTempId,
+                created.id,
+              );
+              dispatchOfflineEntrySynced({
+                bookId: item.payload.bookId,
+                tempEntryId: item.clientTempId,
+                realEntryId: created.id,
+              });
+            }
+            break;
+          }
+          case "patchBook": {
+            const bookId = resolveId(item.bookId);
+            if (!bookId) return "defer";
+            await updateJournalBook(bookId, item.payload);
+            break;
+          }
+          case "postBook": {
+            const created = await createJournalBook(item.payload);
+            if (item.clientTempBookId) {
+              idRemapRef.current.set(item.clientTempBookId, created.id);
+              replaceOptimisticBookId(queryClient, item.clientTempBookId, created.id);
+              dispatchOfflineBookSynced({
+                tempBookId: item.clientTempBookId,
+                realBookId: created.id,
+              });
+            }
+            break;
+          }
+        }
+        await removeSyncItem(item.id);
+        return "ok";
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Sync failed";
+        if (message.includes("409") || message.toLowerCase().includes("conflict")) {
+          await removeSyncItem(item.id);
+          toast.error("Offline change conflicted with server — discarded");
+          return "drop";
+        }
+        if (/failed|4\d\d/i.test(message)) {
+          await removeSyncItem(item.id);
+          toast.error(`Could not sync offline change: ${message}`);
+          return "drop";
+        }
+        throw err;
+      }
+    },
+    [queryClient, resolveId],
+  );
+
+  const drainQueue = useCallback(async () => {
+    if (drainingRef.current || typeof navigator === "undefined" || !navigator.onLine) {
+      return;
+    }
+    drainingRef.current = true;
+    try {
+      let items = await listSyncQueue();
+      if (items.length === 0) return;
+
+      let synced = 0;
+      let deferrals = 0;
+      const maxPasses = items.length * 2;
+
+      while (items.length > 0 && deferrals < maxPasses) {
+        let progressed = false;
+        for (const item of items) {
+          const result = await processItem(item);
+          if (result === "ok") {
+            synced += 1;
+            progressed = true;
+          } else if (result === "defer") {
+            deferrals += 1;
+          }
+        }
+        if (!progressed) break;
+        items = await listSyncQueue();
+      }
+
+      if (synced > 0) {
+        notifyJournalCacheUpdated(queryClient);
+        toast.success(
+          synced === 1 ? "Synced 1 offline change" : `Synced ${synced} offline changes`,
+          { duration: 2200 },
+        );
+      }
+    } catch {
+      /* network still flaky — retry on next online event */
+    } finally {
+      drainingRef.current = false;
+      await updatePendingCount();
+    }
+  }, [processItem, queryClient, updatePendingCount]);
+
+  useEffect(() => {
+    let active = true;
+
+    void syncQueueCount()
+      .then((count) => {
+        if (active) setPendingCount(count);
+      })
+      .catch(() => {
+        if (active) setPendingCount(0);
+      });
+
+    const onOnline = () => {
+      idRemapRef.current.clear();
+      void drainQueue();
+    };
+    window.addEventListener("online", onOnline);
+    if (navigator.onLine) void drainQueue();
+
+    return () => {
+      active = false;
+      window.removeEventListener("online", onOnline);
+    };
+  }, [drainQueue]);
+
+  return { pendingCount, drainQueue, refreshCount: updatePendingCount };
+}

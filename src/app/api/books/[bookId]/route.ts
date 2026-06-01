@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { resolveUniqueBookSlug } from "@/lib/journal-slug";
 import { updateBookSchema } from "@/lib/validations";
 import { parseTags } from "@/lib/utils";
 
@@ -57,9 +59,29 @@ export async function PATCH(
     return NextResponse.json({ success: false, message: parsed.error.message }, { status: 400 });
   }
 
+  const updateData: Prisma.JournalBookUpdateInput = { ...parsed.data };
+
+  if (parsed.data.title !== undefined) {
+    const existing = await prisma.journalBook.findFirst({
+      where: { id: bookId, userId: session.user.id },
+      select: { title: true },
+    });
+    if (!existing) {
+      return NextResponse.json({ success: false, message: "Not found" }, { status: 404 });
+    }
+    if (existing.title !== parsed.data.title) {
+      updateData.slug = await resolveUniqueBookSlug({
+        title: parsed.data.title,
+        userId: session.user.id,
+        bookId,
+        prisma,
+      });
+    }
+  }
+
   const book = await prisma.journalBook.updateMany({
     where: { id: bookId, userId: session.user.id },
-    data: parsed.data,
+    data: updateData,
   });
 
   if (book.count === 0) {

@@ -1,5 +1,6 @@
 import type { JournalBook, JournalEntry } from "@/types";
 import type { BookFormValues } from "@/types/book-form";
+import type { CreateEntryInput, UpdateEntryInput } from "@/lib/validations";
 
 type BooksApi = { success: boolean; data?: (JournalBook & { _count?: { entries: number } })[]; message?: string };
 type BookApi = { success: boolean; data?: JournalBook & { entries: JournalEntry[] }; message?: string };
@@ -30,18 +31,21 @@ export async function fetchJournalBook(bookId: string): Promise<JournalBook & { 
 }
 
 type MutationApi = { success: boolean; message?: string };
+type CreateBookApi = { success: boolean; data?: { id: string }; message?: string };
+type CreateEntryApi = { success: boolean; data?: { id: string }; message?: string };
 
 /** POST /api/books — caller invalidates journalSubtree */
-export async function createJournalBook(data: BookFormValues): Promise<void> {
+export async function createJournalBook(data: BookFormValues): Promise<{ id: string }> {
   const res = await fetch("/api/books", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-  const json = (await res.json()) as MutationApi;
-  if (!json.success) {
+  const json = (await res.json()) as CreateBookApi;
+  if (!json.success || !json.data?.id) {
     throw new Error(json.message ?? "Failed to create journal");
   }
+  return { id: json.data.id };
 }
 
 /** PATCH /api/books/[bookId] — caller invalidates journalSubtree */
@@ -56,8 +60,38 @@ export async function updateJournalBook(
   });
   const json = (await res.json()) as MutationApi;
   if (!json.success) {
-    throw new Error(json.message ?? "Failed to update journal");
+    throw new Error(json.message ?? `Failed to update journal (${res.status})`);
   }
+}
+
+/** PATCH /api/entries/[entryId] — caller invalidates journalSubtree */
+export async function updateJournalEntry(
+  entryId: string,
+  data: UpdateEntryInput,
+): Promise<void> {
+  const res = await fetch(`/api/entries/${entryId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  const json = (await res.json()) as MutationApi;
+  if (!res.ok || !json.success) {
+    throw new Error(json.message ?? `Failed to update entry (${res.status})`);
+  }
+}
+
+/** POST /api/entries — caller invalidates journalSubtree */
+export async function createJournalEntry(data: CreateEntryInput): Promise<{ id: string }> {
+  const res = await fetch("/api/entries", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  const json = (await res.json()) as CreateEntryApi;
+  if (!json.success || !json.data?.id) {
+    throw new Error(json.message ?? `Failed to create entry (${res.status})`);
+  }
+  return { id: json.data.id };
 }
 
 /** DELETE /api/entries/[entryId] — cascades via Prisma; caller invalidates journalSubtree */

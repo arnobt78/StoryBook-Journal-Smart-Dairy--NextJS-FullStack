@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { resolveUniqueEntrySlug } from "@/lib/journal-slug";
 import { updateEntrySchema } from "@/lib/validations";
 import { wordCount, readingTime, stringifyTags, parseTags } from "@/lib/utils";
 
@@ -34,6 +35,24 @@ export async function PATCH(
 
   if (tags !== undefined) {
     updateData.tags = stringifyTags(tags);
+  }
+
+  if (parsed.data.title !== undefined) {
+    const existing = await prisma.journalEntry.findFirst({
+      where: { id: entryId, userId: session.user.id },
+      select: { title: true, bookId: true },
+    });
+    if (!existing) {
+      return NextResponse.json({ success: false, message: "Entry not found" }, { status: 404 });
+    }
+    if (existing.title !== parsed.data.title) {
+      updateData.slug = await resolveUniqueEntrySlug({
+        title: parsed.data.title,
+        bookId: existing.bookId,
+        entryId,
+        prisma,
+      });
+    }
   }
 
   const result = await prisma.journalEntry.updateMany({

@@ -9,6 +9,8 @@ interface PageProps {
   params: Promise<{ bookId: string }>;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function JournalPage({ params }: PageProps) {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");

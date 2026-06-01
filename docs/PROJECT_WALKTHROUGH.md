@@ -29,7 +29,10 @@ Deployment target is **Vercel** for the app; `docker-compose.yml` is an optional
 | Client data fetching | **TanStack Query** — `queryKeys.journalSubtree()` invalidation on all journal CRUD + auth flows |
 | Animations | Custom page-flip hook + overlay (`usePageFlip`, `PageFlip`) |
 | Toasts | **Sonner** |
-| AI | Server proxy `/api/ai/assist` (Anthropic key server-only) |
+| AI | `/api/ai/assist` (sync) + `/api/ai/assist/stream` (SSE); Zod + rate limit; Anthropic key server-only |
+| Images | `SafeImage` for remote avatars; `next.config` `remotePatterns` (Google, GitHub, Robohash) |
+| Offline | IndexedDB drafts + sync queue (`patchEntry`, `postEntry`, `patchBook`, `postBook`); `OfflineSyncContext`; optimistic cache + `notifyJournalCacheUpdated`; shelf hover prefetch |
+| Production guardrails | `next.config` + `vercel.json` security/cache headers; `robots.ts`; dashboard `noindex`; `force-dynamic` on dashboard/journal pages |
 | Production | **Vercel** — https://storybook-journal.vercel.app |
 
 ---
@@ -39,7 +42,8 @@ Deployment target is **Vercel** for the app; `docker-compose.yml` is an optional
 ```
 src/app/
   page.tsx                    # Landing → redirect if logged in
-  layout.tsx, providers.tsx   # fonts, SessionProvider, QueryClient, Toaster
+  layout.tsx, providers.tsx   # SessionProvider, QueryClient, OfflineSyncProvider, Toaster
+  robots.ts                   # disallow /api, /dashboard, /journal; block AI scrapers
   (auth)/login, register      # Auth pages + forms
   (dashboard)/
     layout.tsx                # Shell + nav
@@ -59,8 +63,28 @@ src/lib/
   auth/google-oauth-env.ts    # GOOGLE_CLIENT_* + legacy GOOGLE_ID/SECRET aliases
   auth/get-auth-page-config.ts # SSR flags for login/register (force-dynamic)
   query-keys.ts               # journalSubtree() — single invalidation root
+  journal-slug.ts             # resolveUniqueBookSlug / resolveUniqueEntrySlug on PATCH title change
+  journal-cache-optimistic.ts # optimistic shelf/reader patches for offline writes
+  journal-cache-notify.ts     # notifyJournalCacheUpdated (invalidate subtree; refetchType none when offline)
+  offline/                    # IndexedDB drafts + sync queue + offline-journal-actions
+  ai-assist.ts, ai-rate-limit.ts
   validations.ts              # Zod schemas shared by API routes
   utils.ts                    # slugify, tags JSON, word counts, dates
+
+src/context/
+  OfflineSyncContext.tsx      # pendingCount badge + sync processor
+
+src/constants/
+  offline.ts                  # temp id prefixes + sync browser events
+
+src/hooks/
+  useOfflineSyncQueue.ts      # FIFO drain, id remap, defer until postEntry/postBook syncs
+  useOfflineEntryDraft.ts     # IndexedDB draft persist/restore
+  useOfflineIdRemap.ts        # temp entry/book id → server cuid after sync
+  useJournalPrefetch.ts       # shelf hover → prefetch route + bookDetail query
+
+src/components/ui/
+  safe-image.tsx              # next/image + fallbackSrc (Robohash) + native img fallback
 
 src/components/auth/
   AuthOAuthSection.tsx        # "or" + Google below primary CTA (login + register)
@@ -111,7 +135,8 @@ API routes consistently call `await auth()` and check `session?.user?.id` before
 ### 6.2 Dashboard
 
 1. `dashboard/page.tsx` is a **Server Component**: `auth()` then `prisma.journalBook.findMany` for the session user.
-2. `BookShelf` (client) keeps a copy of books in state; creating a book calls `POST /api/books` and prepends the result.
+2. `BookShelf` (client) uses TanStack Query with SSR `initialData`; hover prefetches `/journal/[bookId]` + `bookDetail` cache via `useJournalPrefetch`.
+3. Offline book CREATE enqueues `postBook`, optimistic shelf seed, navigates to temp book id until sync remaps URL.
 
 ### 6.3 Journal reader
 
@@ -119,9 +144,12 @@ API routes consistently call `await auth()` and check `session?.user?.id` before
 2. `BookSpread` (client) holds **entries**, current index, write mode, draft, save state. It:
    - **Patches** the current entry via `PATCH /api/entries/[entryId]` on explicit save.
    - **Posts** new entries via `POST /api/entries` with client-supplied `entryDate` / `weekday` (API overwrites with `formatEntryDate()` anyway — minor redundancy).
-3. `useAutoSave` in `BookSpread` debounces PATCH while editing; explicit Save still available.
-4. **DELETE UI** — `BookShelf` spine × and reader “Remove page/journal” use `ConfirmDialog` + `journalSubtree` invalidation.
-5. **PATCH book UI** — shared `BookEditorModal` on shelf (hover ✎) and reader (“Edit journal”); `updateJournalBook` + `journalSubtree` invalidation.
+3. `useAutoSave` debounces PATCH; offline path uses optimistic cache + sync queue + `notifyJournalCacheUpdated`. `useOfflineEntryDraft` persists/restores drafts.
+4. Offline entry CREATE/PATCH/BOOK PATCH/BOOK CREATE all enqueue to IndexedDB; `DashboardNav` shows `{n} offline` badge; drain on `online` invalidates `journalSubtree`.
+5. Temp ids (`offline-entry-*`, `offline-book-*`) remap to server cuids via `useOfflineIdRemap` + sync events — reader focus preserved after sync.
+6. **DELETE UI** — `ConfirmDialog` + `journalSubtree` invalidation.
+7. **PATCH book UI** — `BookEditorModal` on shelf + reader; slug sync on title change (`journal-slug.ts`).
+8. **AI assist** — SSE stream + sync fallback; `assistSessionId` dedupes rate limit (10/min, in-memory MVP).
 
 ### 6.4 API summary
 
@@ -158,9 +186,10 @@ flowchart LR
 ## 8. Audit notes (risks / cleanup candidates)
 
 1. **Automated tests** — Vitest/Playwright not yet wired (REQ-0021 / Gate 2 pending).
-2. **Future phases not implemented** — Redis, BullMQ, SSE/pub-sub, offline IndexedDB (architecture doc only).
+2. **Future phases not implemented** — Redis/Upstash rate limit, BullMQ, multi-tab SSE pub/sub (offline IndexedDB full MVP done).
 3. **Demo login** — on by default (showcase); `SHOW_DEMO_LOGIN=false` to hide.
-3. **Google Console** — origins + redirect URIs must include Vercel URL and `http://localhost:3000`.
+4. **Google Console** — origins + redirect URIs must include Vercel URL and `http://localhost:3000`.
+5. **Vercel Dashboard (manual)** — enable Bot Protection + AI Bots on production project.
 
 ---
 

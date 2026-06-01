@@ -31,9 +31,20 @@ import { RightPage } from "./RightPage";
 import { PageFlipOverlay } from "./PageFlip";
 import { usePageFlip } from "@/hooks/usePageFlip";
 import { useAutoSave } from "@/hooks/useAutoSave";
+import { useOfflineEntryDraft } from "@/hooks/useOfflineEntryDraft";
+import { useOfflineIdRemap } from "@/hooks/useOfflineIdRemap";
+import { useOfflineSync } from "@/context/OfflineSyncContext";
+import { createAiAssistSessionId } from "@/lib/ai-assist";
 import { formatEntryDate } from "@/lib/utils";
 import { queryKeys } from "@/lib/query-keys";
 import { fetchJournalBook, deleteJournalBook, deleteJournalEntry, updateJournalBook } from "@/lib/journal-api";
+import {
+  enqueuePatchBookOffline,
+  enqueuePatchEntryOffline,
+  enqueuePostEntryOffline,
+  isBrowserOffline,
+  isOfflineOrNetworkError,
+} from "@/lib/offline/offline-journal-actions";
 import type { JournalBook, JournalEntry, EntryDraft } from "@/types";
 import { bookToFormValues, type BookFormValues } from "@/types/book-form";
 import type { FlipDirection } from "@/types";
@@ -46,6 +57,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
   const bookId = initialBook.id;
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { refreshCount } = useOfflineSync();
 
   const { data: book } = useQuery({
     queryKey: queryKeys.bookDetail(bookId),
@@ -83,6 +95,16 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
   const [lastFlipDir, setLastFlipDir] = useState<FlipDirection | null>(null);
   const { isFlipping, flipDir, triggerFlip } = usePageFlip();
 
+  const remapFocusedEntry = useCallback((realEntryId: string) => {
+    setFocusedEntryId(realEntryId);
+  }, []);
+
+  useOfflineIdRemap({
+    bookId,
+    focusedEntryId,
+    onEntryIdRemap: remapFocusedEntry,
+  });
+
   const currentIdx = useMemo(() => {
     if (!entries.length) return 0;
     if (focusedEntryId) {
@@ -100,12 +122,26 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     [draft],
   );
 
+  const { clearLocalDraft } = useOfflineEntryDraft({
+    bookId,
+    entryId: current?.id ?? "",
+    draft,
+    enabled: isWriting && Boolean(current?.id),
+    entryUpdatedAt: current?.updatedAt
+      ? new Date(current.updatedAt).toISOString()
+      : undefined,
+    onRestore: (restored) => setDraft(restored),
+  });
+
   /* Debounced PATCH while editing — pauses during explicit save or when not in write mode */
   useAutoSave({
     entryId: current?.id ?? "",
     bookId,
     data: autoSavePayload,
     enabled: isWriting && !isSaving && Boolean(current?.id),
+    onSaveSuccess: () => {
+      void clearLocalDraft();
+    },
   });
 
   const navigate = useCallback(
@@ -148,21 +184,65 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
   const saveEntry = async () => {
     if (!current || isSaving) return;
     setIsSaving(true);
+    const payload = {
+      title: draft.title,
+      content: draft.content,
+      mood: draft.mood,
+      weather: draft.weather,
+      tags: draft.tags,
+      ...(draft.location ? { location: draft.location } : {}),
+    };
+
+    if (isBrowserOffline()) {
+      try {
+        await enqueuePatchEntryOffline({
+          queryClient,
+          bookId,
+          entryId: current.id,
+          payload,
+          refreshPendingCount: refreshCount,
+        });
+        setIsWriting(false);
+        toast.info("Saved offline — will sync when online");
+      } catch {
+        toast.error("Failed to save offline");
+      } finally {
+        setIsSaving(false);
+      }
+      return;
+    }
+
     try {
       const res = await fetch(`/api/entries/${current.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...draft, tags: draft.tags }),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error();
       setIsWriting(false);
-      /* One subtree invalidation covers book JSON + shelf entry counts without extra round-trips */
+      await clearLocalDraft();
       await queryClient.invalidateQueries({
         queryKey: queryKeys.journalSubtree(),
       });
       toast.success("Entry saved");
-    } catch {
-      toast.error("Failed to save entry");
+    } catch (err) {
+      if (isOfflineOrNetworkError(err)) {
+        try {
+          await enqueuePatchEntryOffline({
+            queryClient,
+            bookId,
+            entryId: current.id,
+            payload,
+            refreshPendingCount: refreshCount,
+          });
+          setIsWriting(false);
+          toast.info("Saved offline — will sync when online");
+        } catch {
+          toast.error("Failed to save offline");
+        }
+      } else {
+        toast.error("Failed to save entry");
+      }
     } finally {
       setIsSaving(false);
     }
@@ -171,17 +251,49 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
   const newEntry = async () => {
     if (isFlipping || isWriting) return;
     const { entryDate, weekday } = formatEntryDate();
+    const createPayload = {
+      bookId,
+      title: "New Entry",
+      content: "",
+      mood: "✨",
+      weather: "☀️",
+      tags: [] as string[],
+    };
+
+    if (isBrowserOffline()) {
+      try {
+        const tempId = await enqueuePostEntryOffline({
+          queryClient,
+          bookId,
+          payload: createPayload,
+          refreshPendingCount: refreshCount,
+        });
+        triggerFlip("fwd", () => {
+          setFocusedEntryId(tempId);
+          setLastFlipDir("fwd");
+          setDraft({
+            title: "New Entry",
+            content: "",
+            mood: "✨",
+            weather: "☀️",
+            tags: [],
+            location: "",
+          });
+          setIsWriting(true);
+        });
+        toast.info("New page saved offline — will sync when online");
+      } catch {
+        toast.error("Failed to queue new page offline");
+      }
+      return;
+    }
+
     try {
       const res = await fetch("/api/entries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          bookId,
-          title: "New Entry",
-          content: "",
-          mood: "✨",
-          weather: "☀️",
-          tags: [],
+          ...createPayload,
           entryDate,
           weekday,
         }),
@@ -211,36 +323,118 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
         });
         setIsWriting(true);
       });
-    } catch {
-      toast.error("Failed to create entry");
+    } catch (err) {
+      if (isOfflineOrNetworkError(err)) {
+        try {
+          const tempId = await enqueuePostEntryOffline({
+            queryClient,
+            bookId,
+            payload: createPayload,
+            refreshPendingCount: refreshCount,
+          });
+          triggerFlip("fwd", () => {
+            setFocusedEntryId(tempId);
+            setLastFlipDir("fwd");
+            setDraft({
+              title: "New Entry",
+              content: "",
+              mood: "✨",
+              weather: "☀️",
+              tags: [],
+              location: "",
+            });
+            setIsWriting(true);
+          });
+          toast.info("New page saved offline — will sync when online");
+        } catch {
+          toast.error("Failed to queue new page offline");
+        }
+      } else {
+        toast.error("Failed to create entry");
+      }
     }
   };
 
   /**
-   * AI Assist — calls /api/ai/assist (server-side proxy) so the Anthropic key
-   * stays in environment variables and never reaches the browser.
+   * AI Assist — prefers SSE stream; falls back to sync POST on failure.
    */
   const aiAssist = async () => {
     if (isAiThinking || !draft.content.trim()) return;
     setIsAiThinking(true);
+    const assistSessionId = createAiAssistSessionId();
+
+    const body = JSON.stringify({
+      title: draft.title,
+      content: draft.content,
+      mood: draft.mood,
+      assistSessionId,
+    });
+
     try {
+      const streamRes = await fetch("/api/ai/assist/stream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+      });
+
+      if (streamRes.status === 429) {
+        const errJson = (await streamRes.json()) as { error?: string };
+        toast.error(errJson.error ?? "AI rate limit exceeded");
+        return;
+      }
+
+      if (streamRes.ok && streamRes.body) {
+        const reader = streamRes.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let prefixAdded = false;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split("\n\n");
+          buffer = parts.pop() ?? "";
+
+          for (const part of parts) {
+            const line = part.trim();
+            if (!line.startsWith("data: ")) continue;
+            const json = JSON.parse(line.slice(6)) as {
+              text?: string;
+              error?: string;
+              done?: string;
+            };
+            if (json.error) throw new Error(json.error);
+            if (json.text) {
+              setDraft((d) => {
+                const sep =
+                  !prefixAdded && d.content && !d.content.endsWith("\n")
+                    ? "\n\n"
+                    : "";
+                prefixAdded = true;
+                return { ...d, content: d.content + sep + json.text };
+              });
+            }
+          }
+        }
+        return;
+      }
+
+      /* Fallback to sync route */
       const res = await fetch("/api/ai/assist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: draft.title,
-          content: draft.content,
-          mood: draft.mood,
-        }),
+        body,
       });
-      const json = await res.json();
+      const json = (await res.json()) as { text?: string; error?: string };
+      if (json.error) throw new Error(json.error);
       if (json.text) {
         setDraft((d) => ({
           ...d,
           content:
             d.content +
             (d.content.endsWith("\n") ? "" : "\n\n") +
-            json.text.trim(),
+            json.text!.trim(),
         }));
       }
     } catch {
@@ -295,17 +489,44 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     }
   };
 
-  /** PATCH journal metadata — spine color/title update live via useQuery refetch */
+  /** PATCH journal metadata — optimistic + offline queue when network unavailable */
   const handleUpdateBook = async (values: BookFormValues) => {
     if (isSavingBook || isFlipping) return;
     setIsSavingBook(true);
     try {
+      if (isBrowserOffline()) {
+        await enqueuePatchBookOffline({
+          queryClient,
+          bookId,
+          payload: values,
+          refreshPendingCount: refreshCount,
+        });
+        setShowEditBook(false);
+        toast.info("Journal saved offline — will sync when online");
+        return;
+      }
+
       await updateJournalBook(bookId, values);
       await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
       setShowEditBook(false);
       toast.success("Journal updated");
-    } catch {
-      toast.error("Failed to update journal");
+    } catch (err) {
+      if (isOfflineOrNetworkError(err)) {
+        try {
+          await enqueuePatchBookOffline({
+            queryClient,
+            bookId,
+            payload: values,
+            refreshPendingCount: refreshCount,
+          });
+          setShowEditBook(false);
+          toast.info("Journal saved offline — will sync when online");
+        } catch {
+          toast.error("Failed to save journal offline");
+        }
+      } else {
+        toast.error("Failed to update journal");
+      }
     } finally {
       setIsSavingBook(false);
     }
