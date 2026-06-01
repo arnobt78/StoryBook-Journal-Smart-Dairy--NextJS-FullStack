@@ -14,6 +14,11 @@
  *    immediately (no full reload). After mutations elsewhere, call
  *    `queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() })` so UI
  *    refetches without navigation — see `src/lib/query-keys.ts`.
+ *
+ * ── WALKTHROUGH ──
+ *  OFFLINE — `{pendingCount} offline` badge from `OfflineSyncContext`; counts IndexedDB queue.
+ *  SafeImage — avatar tries Google URL first; `fallbackSrc` Robohash on error (see safe-image.tsx).
+ *  3D book — sign-out overlay plays faux leather cover slam before NextAuth redirect.
  */
 import { useState } from "react";
 import Image from "next/image";
@@ -197,6 +202,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
 
         {/* Profile: dropdown trigger keeps fixed footprint; menu content is portaled. */}
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+        {/* ── OFFLINE: pending sync queue count from IndexedDB ── */}
           {pendingCount > 0 && (
             <span
               title={`${pendingCount} change${pendingCount === 1 ? "" : "s"} waiting to sync`}
@@ -223,6 +229,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 className="flex shrink-0 cursor-pointer items-center justify-center rounded-full border-2 border-[rgb(137,68,19,.88)] bg-transparent p-0.5 outline-none ring-offset-2 ring-offset-transparent transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[rgba(255,205,130,0.45)] disabled:cursor-default disabled:opacity-40"
                 style={{ width: 40, height: 40 }}
               >
+                {/* ── SafeImage fallback: Google avatar → Robohash on load error ── */}
                 <SafeImage
                   key={user.image ?? avatarSeed}
                   src={user.image ?? robohashUrl(avatarSeed)}

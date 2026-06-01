@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import { siteMetadata } from "@/lib/site-metadata";
 
-export const metadata: Metadata = {
-  title: "StoryBook Journal",
-  description: "A premium immersive journaling experience — write your story, one page at a time.",
-  icons: { icon: "/favicon.ico" },
-  openGraph: {
-    title: "StoryBook Journal",
-    description: "A premium immersive journaling experience.",
-    type: "website",
-  },
-};
+/** Root SEO metadata — author, OG, Twitter, keywords; see src/lib/site-metadata.ts */
+export const metadata: Metadata = siteMetadata;
 
 /**
  * Root layout — injects global CSS (fonts, tokens, animations) and wraps all

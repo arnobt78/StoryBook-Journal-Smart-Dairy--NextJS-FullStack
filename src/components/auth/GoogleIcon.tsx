@@ -1,5 +1,8 @@
 /**
  * Official multicolor Google "G" mark for OAuth buttons (SVG, no external asset).
+ *
+ * ── WALKTHROUGH ──
+ *  Inline SVG avoids extra network request; used inside GoogleSignInButton on auth pages.
  */
 export function GoogleIcon({ size = 18 }: { size?: number }) {
   return (

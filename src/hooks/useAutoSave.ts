@@ -1,5 +1,22 @@
 "use client";
 
+/**
+ * WALKTHROUGH — useAutoSave
+ *
+ * Lifecycle: mounts when BookSpread enters write mode (`enabled=true`).
+ * Two effects cooperate:
+ *   1) Baseline effect — snapshots `data` when editing starts so the first
+ *      render does not trigger a spurious save.
+ *   2) Debounce effect — serializes draft JSON; after `delay` ms (default 2s)
+ *      fires PATCH or offline enqueue.
+ *
+ * Online path: fetch PATCH → invalidate `journalSubtree` → Sonner toast.
+ * Offline path: `enqueuePatchEntryOffline` → optimistic cache + IndexedDB
+ * sync queue → badge count via `refreshCount`.
+ *
+ * Refs (`timer`, `isSaving`, `previousData`) survive re-renders without
+ * re-subscribing; cleanup clears pending timeout on unmount or deps change.
+ */
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -39,6 +56,7 @@ export function useAutoSave({
   const previousData = useRef<string>("");
   const wasEnabled = useRef(false);
 
+  /* Effect 1 — establish baseline snapshot when write mode opens */
   useEffect(() => {
     if (enabled && entryId) {
       if (!wasEnabled.current) {
@@ -50,6 +68,7 @@ export function useAutoSave({
     wasEnabled.current = enabled;
   }, [enabled, entryId, data]);
 
+  /* Effect 2 — debounced save: online PATCH or offline queue + optimistic UI */
   useEffect(() => {
     if (!enabled || !entryId || !bookId) return;
 

@@ -1,3 +1,7 @@
+/**
+ * Product constants — mood/weather pickers, book cover palette, autosave timing.
+ * Re-export auth keys from ./auth for a single import path in UI code.
+ */
 export const MOODS = [
   "😊", "😔", "😤", "✨", "☕", "🌙", "🔥", "💭",
   "🌿", "❤️", "😌", "🥹", "😴", "🤔", "🎶", "🎉",
@@ -25,6 +29,7 @@ export const COVER_EMOJIS = [
   "✨", "🌙", "🌿", "❤️", "🔥", "☕", "🎵", "🌊",
 ];
 
+/** Debounce before PATCH /api/entries — balances UX vs server load */
 export const AUTOSAVE_DELAY = 2000;
 
 export const WORD_COUNT_DEBOUNCE = 300;

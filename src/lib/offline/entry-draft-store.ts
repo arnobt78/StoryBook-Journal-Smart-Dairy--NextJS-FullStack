@@ -1,4 +1,14 @@
 /**
+ * WALKTHROUGH — entry-draft-store.ts (IndexedDB drafts)
+ *
+ * Persists in-progress entry text while editing — separate from sync queue.
+ * Drafts survive refresh; restored by useOfflineEntryDraft when local
+ * updatedAt beats server entryUpdatedAt.
+ *
+ * CRUD: getEntryDraft / putEntryDraft / clearEntryDraft — each opens IDB,
+ * runs one transaction, closes connection.
+ */
+/**
  * IndexedDB store for offline entry drafts (REQ-0015 MVP).
  * Key: `${bookId}:${entryId}` — survives refresh while editing.
  */

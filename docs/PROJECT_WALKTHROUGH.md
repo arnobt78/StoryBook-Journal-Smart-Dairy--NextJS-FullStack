@@ -6,7 +6,7 @@ This document is a **persistent map** of the repository: what the product is, ho
 
 ## 1. What this project is
 
-**Storybook Journal** is a Next.js 15 web app that presents a **leather-bound, two-page “book spread”** journal. Users:
+**Storybook Journal** is a Next.js 16 web app that presents a **leather-bound, two-page “book spread”** journal. Users:
 
 - Register (email + password) or use optional **Google OAuth** (when env vars are set).
 - Land on a **dashboard** showing journal “books” on a shelf.
@@ -33,6 +33,7 @@ Deployment target is **Vercel** for the app; `docker-compose.yml` is an optional
 | Images | `SafeImage` for remote avatars; `next.config` `remotePatterns` (Google, GitHub, Robohash) |
 | Offline | IndexedDB drafts + sync queue (`patchEntry`, `postEntry`, `patchBook`, `postBook`); `OfflineSyncContext`; optimistic cache + `notifyJournalCacheUpdated`; shelf hover prefetch |
 | Production guardrails | `next.config` + `vercel.json` security/cache headers; `robots.ts`; dashboard `noindex`; `force-dynamic` on dashboard/journal pages |
+| SEO | `src/lib/site-metadata.ts` — OG/Twitter/keywords; author Arnob Mahmud |
 | Production | **Vercel** — https://storybook-journal.vercel.app |
 
 ---
@@ -67,6 +68,7 @@ src/lib/
   journal-cache-optimistic.ts # optimistic shelf/reader patches for offline writes
   journal-cache-notify.ts     # notifyJournalCacheUpdated (invalidate subtree; refetchType none when offline)
   offline/                    # IndexedDB drafts + sync queue + offline-journal-actions
+  site-metadata.ts            # Central SEO metadata for root layout
   ai-assist.ts, ai-rate-limit.ts
   validations.ts              # Zod schemas shared by API routes
   utils.ts                    # slugify, tags JSON, word counts, dates
@@ -160,11 +162,28 @@ API routes consistently call `await auth()` and check `session?.user?.id` before
 | GET, POST | `/api/books` | List / create books |
 | GET, PATCH, DELETE | `/api/books/[bookId]` | Book + entries payload, update, delete |
 | POST | `/api/entries` | Create entry (checks book ownership) |
-| PATCH, DELETE | `/api/entries/[entryId]` | Update / delete (scoped by userId) |
+| POST | `/api/ai/assist` | Sync AI assist (rate limited) |
+| POST | `/api/ai/assist/stream` | SSE AI assist stream |
+| GET | `/api/health` | Health check |
 
 ---
 
-## 7. Deployment shape (conceptual)
+## 7. Cache & invalidation (verified)
+
+| Event | Mechanism |
+|-------|-----------|
+| Online CRUD | `invalidateQueries({ queryKey: queryKeys.journalSubtree() })` |
+| Offline write | Optimistic `setQueryData` + `notifyJournalCacheUpdated` (`refetchType: "none"` offline) |
+| Sync drain | `useOfflineSyncQueue` → API → id remap events → `notifyJournalCacheUpdated` |
+| Auth login/register/OAuth | `journalSubtree` invalidation |
+| Sign-out | `queryClient.clear()` before `signOut()` |
+| Shelf hover | `useJournalPrefetch` — route + `bookDetail` prefetch |
+
+SSR: dashboard/journal pages fetch server-side; client `useQuery` uses SSR `initialData` with `staleTime: 60_000`.
+
+---
+
+## 8. Deployment shape (conceptual)
 
 ```mermaid
 flowchart LR
@@ -183,17 +202,32 @@ flowchart LR
 
 ---
 
-## 8. Audit notes (risks / cleanup candidates)
+## 9. Audit notes (2026-06-01)
 
-1. **Automated tests** — Vitest/Playwright not yet wired (REQ-0021 / Gate 2 pending).
-2. **Future phases not implemented** — Redis/Upstash rate limit, BullMQ, multi-tab SSE pub/sub (offline IndexedDB full MVP done).
-3. **Demo login** — on by default (showcase); `SHOW_DEMO_LOGIN=false` to hide.
-4. **Google Console** — origins + redirect URIs must include Vercel URL and `http://localhost:3000`.
-5. **Vercel Dashboard (manual)** — enable Bot Protection + AI Bots on production project.
+### Verified passing
+
+- `npm run lint` — pass
+- `npm run typecheck` — pass
+- `npm run build` — pass
+- Query invalidation wired on all journal CRUD + auth + offline paths
+- Offline: drafts, queue (4 types), remap, badge, optimistic cache
+- Guardrails: headers, robots, noindex, force-dynamic, SafeImage
+- Educational walkthrough comments across `src/` (76 files)
+- `README.md` — full setup + learning guide
+
+### Known gaps (non-blocking for C1)
+
+1. **Automated tests** — no Vitest/Playwright files yet (Gate 2).
+2. **AI rate limit** — in-memory only; resets on serverless cold start.
+3. **TipTap** — in dependencies; UI still uses HTML content / textarea pattern in RightPage.
+4. **Future** — Redis/Upstash, BullMQ, multi-tab SSE pub/sub.
+5. **Demo login** — on by default; `SHOW_DEMO_LOGIN=false` for production hide.
+6. **Python** — N/A (TypeScript full-stack only).
+7. **Manual Vercel** — enable Bot Protection + AI Bots in dashboard.
 
 ---
 
-## 9. SQLite vs PostgreSQL on the VPS (recommendation)
+## 10. SQLite vs PostgreSQL on the VPS (recommendation)
 
 | Concern | SQLite on VPS | PostgreSQL on VPS |
 |--------|----------------|-------------------|
@@ -211,7 +245,7 @@ Optional: add `directUrl` in `schema.prisma` if you use connection poolers (PgBo
 
 ---
 
-## 10. Short answer: creating the database on the VPS (terminal)
+## 11. Short answer: creating the database on the VPS (terminal)
 
 Aligned with **`docs/HETZNER_VPS_MIGRATION_GUIDE.md`** (generic project names — substitute your container name if yours differs):
 
@@ -233,9 +267,10 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 11. Related docs
+## 12. Related docs
 
-- `README.md` — setup, PostgreSQL, Vercel deploy notes.
+- `README.md` — setup, env vars, API, learning walkthrough, stack badges.
+- `CLAUDE.md` — compact agent instructions (gitignored locally).
 - `docs/AUTH_UI_IMPLEMENTATION_GUIDE.md` — OAuth flicker, avatar, session patterns.
 - `docs/DROPDOWN_TEST_CREDENTIALS_DOCS.md` — demo account + NextAuth reference.
 - `docker-compose.yml` — optional local Postgres only (not used for Vercel deploy).
@@ -243,4 +278,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed against the repository layout and key source files as part of a structured codebase audit.*
+*Last reviewed: 2026-06-01 — C1 audit; lint/typecheck/build pass.*

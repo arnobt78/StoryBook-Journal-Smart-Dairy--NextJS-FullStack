@@ -1,3 +1,11 @@
+/**
+ * POST /api/ai/assist/stream — SSE token stream for incremental draft append.
+ *
+ * HTTP: POST; returns text/event-stream (SSE chunks).
+ * Auth: session required; 401 without session.user.id.
+ * Validation: aiAssistRequestSchema (Zod) — same contract as sync route.
+ * Ownership: N/A; rate limit shared with /api/ai/assist via assistSessionId.
+ */
 import { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import {
@@ -12,6 +20,7 @@ import { consumeAiRateLimit } from "@/lib/ai-rate-limit";
  * Falls back to a single dev placeholder chunk when ANTHROPIC_API_KEY is unset.
  */
 export async function POST(req: NextRequest) {
+  /* Session check — streaming assist requires authenticated user. */
   const session = await auth();
   if (!session?.user?.id) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
@@ -24,6 +33,7 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: "Invalid JSON" }), { status: 400 });
   }
 
+  /* Zod validation — mirrors sync route payload shape. */
   const parsed = aiAssistRequestSchema.safeParse(body);
   if (!parsed.success) {
     return new Response(
@@ -32,6 +42,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  /* Rate limit — same slot as sync route when assistSessionId matches. */
   const rate = consumeAiRateLimit(session.user.id, parsed.data.assistSessionId);
   if (!rate.ok) {
     return new Response(
@@ -43,6 +54,7 @@ export async function POST(req: NextRequest) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const encoder = new TextEncoder();
 
+  /* ReadableStream — forwards Anthropic SSE deltas as `data: {text}` events. */
   const stream = new ReadableStream({
     async start(controller) {
       const send = (data: Record<string, string>) => {

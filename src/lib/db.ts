@@ -1,3 +1,7 @@
+/**
+ * Prisma singleton — reused across hot reloads in dev to avoid connection exhaustion.
+ * All server data access (pages, API routes, auth) imports this single client.
+ */
 import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {

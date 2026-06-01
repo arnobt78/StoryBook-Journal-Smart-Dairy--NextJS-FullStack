@@ -9,6 +9,12 @@
  *  • Clickable entries navigate via the parent onNavigate callback.
  *
  * Sizing: controlled by CSS custom properties --page-w / --page-h.
+ *
+ * ── WALKTHROUGH: page flip companion (left leaf) ──
+ *  This page does NOT run the flip animation — it stays static while `PageFlipOverlay`
+ *  (mounted in BookSpread) rotates over the right page. Entry list clicks call
+ *  `onNavigate(idx)` which triggers flip-then-focus in the parent.
+ *  3D hit-testing: outer shell is `pointerEvents: none`; scrollable inner stack is `auto`.
  */
 import type { JournalEntry } from "@/types";
 import { stripHtml } from "@/lib/utils";
@@ -108,6 +114,7 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
             </div>
           )}
 
+          {/* ── PAGE FLIP: entry list re-staggers after parent flip completes ── */}
           {/* Entry list with stagger animation */}
           <div style={{ marginTop: "20px" }}>
             <SectionLabel>All Entries</SectionLabel>

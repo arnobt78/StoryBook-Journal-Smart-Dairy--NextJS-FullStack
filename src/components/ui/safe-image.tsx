@@ -3,6 +3,12 @@
 /**
  * Remote image wrapper — next/image first, optional fallbackSrc (e.g. Robohash),
  * then native img when the optimizer fails.
+ *
+ * ── WALKTHROUGH: SafeImage fallback chain ──
+ *  1. Render next/image with primary `src` (e.g. Google avatar URL).
+ *  2. On error: if `fallbackSrc` set and not yet tried → swap to fallback (Robohash).
+ *  3. If fallback also fails → `useNative` renders plain `<img>` (bypasses /_next/image).
+ *  Used in DashboardNav: `src={user.image}` + `fallbackSrc={robohashUrl(seed)}`.
  */
 import { cn } from "@/lib/utils";
 import Image, { type ImageProps } from "next/image";
@@ -35,12 +41,14 @@ export function SafeImage({
   const handleError = useCallback(
     (e: SyntheticEvent<HTMLImageElement, Event>) => {
       onError?.(e);
+      /* Step 2: try fallbackSrc once before giving up on next/image */
       if (fallbackSrc && !usedFallback && resolvedSrc !== fallbackSrc) {
         setUsedFallback(true);
         setActiveSrc(fallbackSrc);
         setUseNative(false);
         return;
       }
+      /* Step 3: last resort — native img when optimizer or remote host blocks */
       if (resolvedSrc) setUseNative(true);
     },
     [fallbackSrc, onError, resolvedSrc, usedFallback],
@@ -49,6 +57,7 @@ export function SafeImage({
   const eager = Boolean(priority || loading === "eager");
 
   if (useNative && resolvedSrc) {
+    /* Step 3 render path: native img bypasses next/image optimizer */
     if (fill) {
       return (
         // eslint-disable-next-line @next/next/no-img-element -- fallback when /_next/image fails

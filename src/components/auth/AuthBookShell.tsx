@@ -23,6 +23,12 @@
  *
  *  4. Route push fires AFTER flip completes (onComplete callback) so the new RSC
  *     renders behind the overlay's back-face — no blank-then-pop flash.
+ *
+ * ── WALKTHROUGH: auth book shell + page flip ──
+ *  3D BOOK — spine | left marketing | right form; `preserve-3d` without row tilt.
+ *  PAGE FLIP — login ↔ register uses same `PageFlipOverlay` as journal; `router.push`
+ *    fires in `triggerFlip` onComplete (after animation, not during).
+ *  AUTH FORMS — `{children}` is LoginForm or RegisterForm on the right page only.
  */
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -455,6 +461,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
             {/* Page flip overlay — sibling of pages, same preserve-3d parent.
                 position:relative on this container ensures top:0;right:0 lands
                 on the right page's area, not the outer title/shadow wrapper. */}
+            {/* ── PAGE FLIP: same overlay component as journal BookSpread ── */}
             {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
           </div>
     </div>

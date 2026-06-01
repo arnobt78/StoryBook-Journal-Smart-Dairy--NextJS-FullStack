@@ -1,3 +1,12 @@
+/**
+ * WALKTHROUGH — ai-assist.ts
+ *
+ * Shared server/client contract for AI writing continuation:
+ *   - Zod schema validates POST body (title, content, mood, assistSessionId)
+ *   - createAiAssistSessionId() — one id per button click; pairs with rate limit
+ *   - buildAssistPrompt() — poetic journal tone for Claude/API route
+ *   - DEV_PLACEHOLDER — fallback text when no API key in development
+ */
 import { z } from "zod";
 
 export const aiAssistRequestSchema = z.object({

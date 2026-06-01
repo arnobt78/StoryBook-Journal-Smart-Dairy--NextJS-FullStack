@@ -1,5 +1,13 @@
 /**
- * Shared journal book form shape — matches createBookSchema / updateBookSchema fields.
+ * Journal book form types — UI ↔ API walkthrough
+ * ------------------------------------------------
+ * BookFormValues mirrors createBookSchema / updateBookSchema in validations.ts.
+ * Keeping one shared type avoids drift between BookEditorModal, BookShelf create
+ * flow, and PATCH handlers.
+ *
+ * DEFAULT_BOOK_FORM — empty-slate for "New book" modal (leather brown + 📖).
+ * bookToFormValues() — maps a JournalBook row into form defaults when editing;
+ *   null description becomes "" so controlled inputs never receive undefined.
  */
 export type BookFormValues = {
   title: string;

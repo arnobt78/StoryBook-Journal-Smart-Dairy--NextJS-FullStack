@@ -1,6 +1,14 @@
 "use client";
 
 /**
+ * WALKTHROUGH — usePageFlip
+ *
+ * Hook lifecycle:
+ *   mount → idle (`isFlipping=false`, `flipDir=null`)
+ *   triggerFlip(dir) → ref guard + state → CSS overlay animates FLIP_MS
+ *   setTimeout(onComplete) → reset state → caller may router.push
+ *   resetFlip() → abort timer if route unmounts mid-animation
+ *
  * usePageFlip — shared page-flip state for BookSpread and AuthBookShell.
  *
  * Uses a synchronous `flippingRef` as the re-entrancy guard rather than reading

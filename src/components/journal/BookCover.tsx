@@ -23,6 +23,12 @@
  *
  * The cover click and both CTA buttons call the same `openAndNavigate` handler.
  * Once `coverOpening` is true, all interactions are disabled to prevent double-fire.
+ *
+ * ── WALKTHROUGH: 3D book cover (landing) ──
+ *  Real hinge physics: `.cover-hinge` rotates on `transform-origin: left center` (spine).
+ *  `preserve-3d` + dual faces (`backface-visibility: hidden`) show leather outside,
+ *  cream paper inside. Container tilt (`rotateY -18deg`) gives the hinge room to swing.
+ *  Navigation waits COVER_OPEN_MS so users see the full open before route change.
  */
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -93,6 +99,7 @@ export function LandingCover() {
       />
 
       <style>{`
+        /* ── 3D BOOK COVER: hinge + fold keyframes (see file header walkthrough) ── */
         /* ── Hover tilt when idle ── */
         .cover-wrap:hover .cover-book:not(.cover-book-opening) {
           transform: perspective(1200px) rotateY(-9deg) rotateX(3deg) translateY(-14px);

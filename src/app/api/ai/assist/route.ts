@@ -1,3 +1,11 @@
+/**
+ * POST /api/ai/assist — sync JSON AI writing fallback.
+ *
+ * HTTP: POST; returns full text in one JSON response.
+ * Auth: session required; 401 without session.user.id.
+ * Validation: aiAssistRequestSchema (Zod) — title, content, mood, assistSessionId.
+ * Ownership: N/A (draft text only); rate limit keyed by userId + assistSessionId.
+ */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import {
@@ -12,6 +20,7 @@ import { consumeAiRateLimit } from "@/lib/ai-rate-limit";
  * POST /api/ai/assist — sync JSON fallback; shares assistSessionId rate slot with stream route.
  */
 export async function POST(req: NextRequest) {
+  /* Session check — AI assist is authenticated-only. */
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" } satisfies AiAssistResponse, {
@@ -28,6 +37,7 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  /* Zod validation — title, content, mood, assistSessionId. */
   const parsed = aiAssistRequestSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
@@ -36,6 +46,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  /* Rate limit — 10 req/min per user; assistSessionId dedupes stream+sync pair. */
   const rate = consumeAiRateLimit(session.user.id, parsed.data.assistSessionId);
   if (!rate.ok) {
     return NextResponse.json(

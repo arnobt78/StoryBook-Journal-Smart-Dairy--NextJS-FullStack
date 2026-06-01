@@ -1,3 +1,11 @@
+/**
+ * WALKTHROUGH — journal-slug.ts
+ *
+ * Server-side slug collision resolver for PATCH handlers.
+ * Prisma enforces @@unique([userId, slug]) on books and @@unique([bookId, slug])
+ * on entries. When title changes, regenerate slug via slugify(); on collision
+ * append timestamp suffix so URLs stay stable without manual user input.
+ */
 import type { PrismaClient } from "@prisma/client";
 import { slugify } from "@/lib/utils";
 

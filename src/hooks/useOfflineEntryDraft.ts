@@ -1,5 +1,18 @@
 "use client";
 
+/**
+ * WALKTHROUGH — useOfflineEntryDraft
+ *
+ * IndexedDB draft persistence while editing (survives refresh/tab close).
+ * Three-effect lifecycle:
+ *   1) Debounced put — writes draft to IDB every 500ms while `enabled`.
+ *   2) Restore — on write-mode open, compares local `updatedAt` vs server
+ *      `entryUpdatedAt`; newer local wins → `onRestore` + toast.
+ *   3) Guard reset — clears `restoredRef` when leaving write mode so the
+ *      next open can restore again.
+ *
+ * Key format: `${bookId}:${entryId}` via `draftKey()`.
+ */
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import {

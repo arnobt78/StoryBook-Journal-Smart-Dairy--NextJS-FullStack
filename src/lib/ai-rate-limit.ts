@@ -1,6 +1,15 @@
 /**
- * In-memory per-user rate limit (resets on cold start — Vercel MVP).
- * assistSessionId dedupes stream + sync fallback. Upgrade: Redis/Upstash for multi-instance.
+ * WALKTHROUGH — ai-rate-limit.ts
+ *
+ * In-memory sliding window: 10 requests / 60s per userId (Vercel MVP).
+ * assistSessionId dedupes stream + sync fallback so one click = one slot.
+ *
+ * consumeAiRateLimit flow:
+ *   1) Prune expired session keys
+ *   2) If assistSessionId seen recently → ok (no double charge)
+ *   3) Else increment bucket or reject with retryAfterSec
+ *
+ * Upgrade path: Redis/Upstash for multi-instance serverless.
  */
 const WINDOW_MS = 60_000;
 const MAX_REQUESTS = 10;
@@ -25,6 +34,7 @@ export function consumeAiRateLimit(
   if (assistSessionId) {
     const sessionKey = `${userId}:${assistSessionId}`;
     const sessionExpires = assistSessions.get(sessionKey);
+    /* Same click retried stream→sync: do not consume another bucket slot */
     if (sessionExpires && now < sessionExpires) {
       return { ok: true };
     }
@@ -32,6 +42,7 @@ export function consumeAiRateLimit(
 
   const bucket = buckets.get(userId);
 
+  /* New window or expired bucket — reset counter */
   if (!bucket || now >= bucket.resetAt) {
     buckets.set(userId, { count: 1, resetAt: now + WINDOW_MS });
     if (assistSessionId) {

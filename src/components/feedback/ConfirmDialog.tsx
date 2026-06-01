@@ -3,6 +3,10 @@
 /**
  * Reusable confirmation overlay — paper theme (dashboard) or dark theme (journal nav).
  * Used before destructive DELETE calls; parent handles API + query invalidation.
+ *
+ * ── WALKTHROUGH ──
+ *  Guard pattern: parent sets `open` state; this modal only confirms intent.
+ *  `variant="dark"` matches journal nav; `"paper"` matches shelf modals.
  */
 import type { CSSProperties, ReactNode } from "react";
 

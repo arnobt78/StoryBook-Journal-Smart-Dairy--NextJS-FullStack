@@ -1,7 +1,21 @@
 /**
- * Creates or updates a Prisma User for Google OAuth sign-in.
- * JWT sessions do not persist OAuth users automatically — this callback ensures
- * user.id is our database cuid (required for book/entry ownership filters).
+ * OAuth user provisioning — database walkthrough
+ * ----------------------------------------------
+ * NextAuth JWT sessions store a token, not a Prisma row. Google sign-in gives
+ * email/name/image from the provider, but our app scopes data by User.id (cuid).
+ *
+ * Called from auth.ts signIn callback after Google OAuth succeeds:
+ *
+ * Existing user (match by email):
+ *   → update lastLoginAt, refresh displayName/avatarUrl if provider sent new values
+ *   → return { id, email, ... } so JWT callback sets token.id = database id
+ *
+ * New user:
+ *   → $transaction: create User, default JournalBook ("My Journal"), welcome Entry
+ *   → same return shape; first login lands user with a ready-to-edit journal
+ *
+ * Without this step, session.user.id would be the OAuth subject string, and
+ * book/entry queries filtered by userId would return nothing or wrong rows.
  */
 import { prisma } from "@/lib/db";
 import { formatEntryDate, slugify, stringifyTags } from "@/lib/utils";

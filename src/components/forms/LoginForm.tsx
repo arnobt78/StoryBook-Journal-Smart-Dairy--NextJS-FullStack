@@ -7,6 +7,12 @@
  *  • Full validation feedback inline (no page reload).
  *  • Clears TanStack Query cache before entering dashboard so stale book data
  *    from a previous session never leaks through.
+ *
+ * ── WALKTHROUGH: auth form flow ──
+ *  1. User submits email/password → NextAuth `signIn("credentials")`.
+ *  2. On success: toast, invalidate `journalSubtree`, push `/dashboard`.
+ *  3. Optional demo picker portaled to `document.body` (avoids auth shell clip).
+ *  4. `AuthOAuthSection` below primary CTA adds Google OAuth when env vars set.
  */
 import { useState, useRef, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
@@ -196,6 +202,7 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
       </div>
       )}
 
+      {/* ── AUTH FORM: credential fields + inline validation ── */}
       <Field label="Email">
         <input
           type="email" required

@@ -1,5 +1,9 @@
 /**
  * "or" divider with horizontal rules — matches StoryBook auth page typography.
+ *
+ * ── WALKTHROUGH ──
+ *  Visual separator between credential submit and OAuth in LoginForm / RegisterForm.
+ *  `compact` tightens vertical rhythm when placed directly under the primary CTA.
  */
 type AuthOrSeparatorProps = {
   label?: string;

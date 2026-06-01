@@ -1,6 +1,16 @@
 import { AuthBookShell } from "@/components/auth/AuthBookShell";
 
 /**
+ * @file (auth)/layout.tsx
+ * @route Route group `(auth)` — shared shell for `/login` and `/register` (URLs omit the group name).
+ *
+ * **SSR vs client:** Server Component layout. Wraps children in `AuthBookShell` (client)
+ * which owns the 3-D book spread and page-flip between auth routes.
+ *
+ * **Layout constraint:** `position: fixed; overflow: hidden` prevents a scroll container
+ * from breaking pointer hit-testing on 3-D transformed pages (see CLAUDE.md).
+ */
+/**
  * Auth layout — fixed full-viewport shell with the book **centered** in the viewport
  * (same balanced framing as before). `overflow: hidden` keeps 3-D hit-testing predictable.
  */

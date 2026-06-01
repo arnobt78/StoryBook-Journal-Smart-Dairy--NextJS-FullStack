@@ -1,5 +1,20 @@
 "use client";
 
+/**
+ * WALKTHROUGH — useOfflineSyncQueue (sync queue drain)
+ *
+ * Mount lifecycle:
+ *   1) Read pending count from IndexedDB `sync-queue` store.
+ *   2) Subscribe to `window.online` + drain if already online.
+ *
+ * drainQueue():
+ *   - FIFO pass over queued items (patchEntry, postEntry, patchBook, postBook).
+ *   - Temp ids (`offline-*`) defer PATCH until post* remaps via `idRemapRef`.
+ *   - Success → removeSyncItem; conflict/4xx → drop + toast.
+ *   - After any sync → `notifyJournalCacheUpdated` refetches journalSubtree.
+ *
+ * Returns `{ pendingCount, drainQueue, refreshCount }` for context + badge.
+ */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -39,6 +54,7 @@ export function useOfflineSyncQueue() {
   const drainingRef = useRef(false);
   const idRemapRef = useRef(new Map<string, string>());
 
+  /* Re-read queue length for DashboardNav badge */
   const updatePendingCount = useCallback(async () => {
     try {
       setPendingCount(await syncQueueCount());
@@ -47,6 +63,7 @@ export function useOfflineSyncQueue() {
     }
   }, []);
 
+  /* Map offline temp id → server cuid after postEntry/postBook succeeds */
   const resolveId = useCallback((id: string): string | null => {
     if (isOfflineTempEntryId(id) || isOfflineTempBookId(id)) {
       return idRemapRef.current.get(id) ?? null;
@@ -57,6 +74,7 @@ export function useOfflineSyncQueue() {
   const processItem = useCallback(
     async (item: SyncQueueItem): Promise<ProcessResult> => {
       try {
+        /* Replay one queued mutation; remap temp ids before PATCH */
         switch (item.type) {
           case "patchEntry": {
             const entryId = resolveId(item.entryId);
@@ -121,6 +139,7 @@ export function useOfflineSyncQueue() {
     [queryClient, resolveId],
   );
 
+  /* Multi-pass drain: defer PATCH on temp ids until CREATE remaps them */
   const drainQueue = useCallback(async () => {
     if (drainingRef.current || typeof navigator === "undefined" || !navigator.onLine) {
       return;
@@ -164,6 +183,7 @@ export function useOfflineSyncQueue() {
     }
   }, [processItem, queryClient, updatePendingCount]);
 
+  /* Mount: initial count + online listener triggers drain */
   useEffect(() => {
     let active = true;
 

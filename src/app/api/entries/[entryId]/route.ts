@@ -1,3 +1,11 @@
+/**
+ * /api/entries/[entryId] — update or delete a single entry.
+ *
+ * HTTP: PATCH (partial update), DELETE (hard delete).
+ * Auth: session required; 401 without session.user.id.
+ * Validation: updateEntrySchema (Zod) on PATCH body.
+ * Ownership: updateMany/deleteMany filter by userId; slug sync on title change.
+ */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -9,6 +17,7 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ entryId: string }> }
 ) {
+  /* Session check */
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -16,6 +25,7 @@ export async function PATCH(
 
   const { entryId } = await params;
   const body = await req.json();
+  /* Zod validation — partial fields; content/tags trigger derived fields. */
   const parsed = updateEntrySchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ success: false, message: parsed.error.message }, { status: 400 });
@@ -38,6 +48,7 @@ export async function PATCH(
   }
 
   if (parsed.data.title !== undefined) {
+    /* Ownership + slug sync — regenerate entry slug when title changes. */
     const existing = await prisma.journalEntry.findFirst({
       where: { id: entryId, userId: session.user.id },
       select: { title: true, bookId: true },
@@ -46,6 +57,7 @@ export async function PATCH(
       return NextResponse.json({ success: false, message: "Entry not found" }, { status: 404 });
     }
     if (existing.title !== parsed.data.title) {
+      /* resolveUniqueEntrySlug — unique slug within parent book. */
       updateData.slug = await resolveUniqueEntrySlug({
         title: parsed.data.title,
         bookId: existing.bookId,
@@ -55,6 +67,7 @@ export async function PATCH(
     }
   }
 
+  /* Prisma updateMany — userId in where blocks cross-user edits. */
   const result = await prisma.journalEntry.updateMany({
     where: { id: entryId, userId: session.user.id },
     data: updateData,
@@ -75,6 +88,7 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ entryId: string }> }
 ) {
+  /* Session check */
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -82,6 +96,7 @@ export async function DELETE(
 
   const { entryId } = await params;
 
+  /* Prisma deleteMany — ownership enforced via userId filter. */
   const result = await prisma.journalEntry.deleteMany({
     where: { id: entryId, userId: session.user.id },
   });

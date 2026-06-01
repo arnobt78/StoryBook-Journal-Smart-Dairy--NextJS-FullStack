@@ -1,3 +1,11 @@
+/**
+ * POST /api/auth/register — public account creation.
+ *
+ * HTTP: POST only.
+ * Auth: none (open signup); returns 201 with userId on success.
+ * Validation: registerSchema (Zod) — email, password, displayName.
+ * Ownership: N/A; seeds default book + welcome entry for new userId.
+ */
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
@@ -44,6 +52,7 @@ async function ensureTestUser() {
 export async function POST(req: NextRequest) {
   try {
     const body   = await req.json();
+    /* Zod validation — reject malformed signup payloads before DB touch. */
     const parsed = registerSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -55,6 +64,7 @@ export async function POST(req: NextRequest) {
 
     const { email, password, displayName } = parsed.data;
 
+    /* Prisma — duplicate email check (409 before hash/create). */
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
       return NextResponse.json(
@@ -64,6 +74,7 @@ export async function POST(req: NextRequest) {
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
+    /* Prisma — create user row; book/entry seeding follows. */
     const user = await prisma.user.create({
       data: { email, passwordHash, displayName },
     });

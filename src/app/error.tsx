@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @file error.tsx
+ * @route Root error boundary — catches unhandled errors in this segment and below.
+ *
+ * **SSR vs client:** Must be a Client Component (`"use client"`). Next.js passes
+ * `error` and `reset` props so the user can retry without a full page reload.
+ *
+ * **When it runs:** Runtime/render failures in pages or layouts that aren't caught
+ * locally. Does not catch 404 (`not-found.tsx`) or auth redirects.
+ */
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div style={{
@@ -14,6 +24,7 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
         {error.message}
       </p>
       <button onClick={reset}
+        // `reset()` re-renders the failed segment — softer recovery than location.reload()
         style={{ fontFamily: "'Lora',serif", fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", background: "rgba(90,40,10,.82)", color: "rgba(255,215,150,.92)", border: "none", padding: "10px 22px", borderRadius: "3px", cursor: "pointer" }}>
         Try again
       </button>

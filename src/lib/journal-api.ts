@@ -1,3 +1,14 @@
+/**
+ * WALKTHROUGH — journal-api.ts
+ *
+ * Thin fetch wrappers for journal REST routes. Used by:
+ *   - TanStack Query queryFns (fetchJournalBooks, fetchJournalBook)
+ *   - useOfflineSyncQueue drain (create/update after IndexedDB replay)
+ *
+ * Pattern: parse `{ success, data, message }` envelope; throw on failure
+ * so callers (Query / drain) can toast or retry. Cache invalidation is
+ * caller responsibility — these functions do not touch QueryClient.
+ */
 import type { JournalBook, JournalEntry } from "@/types";
 import type { BookFormValues } from "@/types/book-form";
 import type { CreateEntryInput, UpdateEntryInput } from "@/lib/validations";

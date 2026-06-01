@@ -1,7 +1,20 @@
 /**
- * Single source of truth for Google OAuth env vars.
- * Accepts canonical names (GOOGLE_CLIENT_*) and legacy aliases (GOOGLE_ID / GOOGLE_SECRET)
- * so local .env files match either convention without breaking the provider or UI gate.
+ * Google OAuth environment — single source of truth
+ * -------------------------------------------------
+ * Canonical (preferred):
+ *   GOOGLE_CLIENT_ID
+ *   GOOGLE_CLIENT_SECRET
+ *
+ * Legacy aliases (still supported for older .env files):
+ *   GOOGLE_ID     → same as GOOGLE_CLIENT_ID
+ *   GOOGLE_SECRET → same as GOOGLE_CLIENT_SECRET
+ *
+ * Resolution: first non-empty trimmed value wins per field.
+ * enabled: true only when BOTH clientId and clientSecret are set.
+ *
+ * Walkthrough: copy .env.example → .env, fill Google Cloud Console credentials,
+ * restart dev server. isGoogleOAuthEnabled() and NextAuth GoogleProvider both
+ * read from getGoogleOAuthEnv() — no duplicate env parsing elsewhere.
  */
 export type GoogleOAuthEnv = {
   clientId: string | undefined;

@@ -2,6 +2,9 @@
  * Next.js 16+ edge boundary: `src/proxy.ts` replaces `src/middleware.ts` (same runtime role).
  * Runs before matched routes; use `matcher` to skip static assets and `/api/*` (handlers call `auth()` themselves).
  * This layer only steers unauthenticated users away from `/dashboard` and `/journal`; do not rely on it alone for authorization.
+ *
+ * Flow: unauthenticated + protected path → redirect /login?callbackUrl=…
+ *       authenticated + /login|/register → redirect /dashboard
  */
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";

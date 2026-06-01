@@ -9,14 +9,23 @@ interface PageProps {
   params: Promise<{ bookId: string }>;
 }
 
+/**
+ * @file (dashboard)/journal/[bookId]/page.tsx
+ * @route `/journal/[bookId]` — immersive page-flip editor for one book.
+ *
+ * **SSR vs client:** Server loads book + entries (ownership check via userId);
+ * `BookSpread` (client) receives `initialBook` to hydrate TanStack Query cache.
+ */
 export const dynamic = "force-dynamic";
 
 export default async function JournalPage({ params }: PageProps) {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
+  // Next.js 15+: dynamic segment params are async
   const { bookId } = await params;
 
+  // findFirst + userId — 404 if book missing or belongs to another user
   const book = await prisma.journalBook.findFirst({
     where: { id: bookId, userId: session.user.id },
     include: {
@@ -39,6 +48,7 @@ export default async function JournalPage({ params }: PageProps) {
   };
 
   return (
+    // Fixed viewport — matches journal reading mode (no document scroll)
     <div
       style={{
         position: "fixed",

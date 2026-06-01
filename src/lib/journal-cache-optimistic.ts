@@ -1,6 +1,15 @@
 /**
+ * WALKTHROUGH — journal-cache-optimistic.ts
+ *
  * Optimistic TanStack Query cache patches for offline saves.
  * Keeps shelf + reader UI in sync immediately without waiting for network sync.
+ *
+ * Flow when user saves offline:
+ *   1) setQueryData on bookDetail / booksList (instant UI)
+ *   2) enqueueSyncItem in sync-queue-store
+ *   3) After drain: replaceOptimistic*Id swaps temp → real cuid
+ *
+ * Temp ids use OFFLINE_ID_PREFIX so PATCH can defer until CREATE syncs.
  */
 import type { QueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
@@ -13,6 +22,7 @@ import { OFFLINE_ID_PREFIX } from "@/constants/offline";
 type BookWithEntries = JournalBook & { entries: JournalEntry[] };
 type ShelfBook = JournalBook & { _count?: { entries: number } };
 
+/** Patch one entry in bookDetail cache — mirrors PATCH payload fields */
 export function applyOptimisticEntryPatch(
   queryClient: QueryClient,
   bookId: string,
@@ -45,6 +55,7 @@ export function applyOptimisticEntryPatch(
   });
 }
 
+/** Patch book metadata in both bookDetail and shelf list caches */
 export function applyOptimisticBookPatch(
   queryClient: QueryClient,
   bookId: string,

@@ -1,3 +1,11 @@
+/**
+ * GET /api/health — liveness probe.
+ *
+ * HTTP: GET only; always 200 when App Router responds.
+ * Auth: none — safe for profile menu "API Status" link.
+ * Validation: N/A — no request body.
+ * Ownership: N/A — no user-scoped data.
+ */
 import { NextResponse } from "next/server";
 
 /**

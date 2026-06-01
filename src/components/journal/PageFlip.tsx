@@ -15,6 +15,13 @@
  * real pages once the overlay unmounted (especially under a parent `filter`).
  *
  * Width matches --page-w CSS variable; falls back to 360px.
+ *
+ * ── WALKTHROUGH: how page flip works ──
+ *  1. Parent calls `triggerFlip(dir, onComplete)` from `usePageFlip` hook.
+ *  2. This overlay mounts with `flip-fwd` or `flip-bwd` keyframe (rotateY 0 → ±180°).
+ *  3. `transform-origin: left center` pivots on the spine edge of the right page.
+ *  4. Front face = right paper; back face = left paper (pre-rotated rotateY(180deg)).
+ *  5. On animation end, hook unmounts overlay and runs onComplete (swap entry / router.push).
  */
 import type { FlipDirection } from "@/types";
 
@@ -43,6 +50,7 @@ export function PageFlipOverlay({ direction }: PageFlipProps) {
   return (
     <>
       <style>{`
+        /* ── PAGE FLIP keyframes: rotateY on spine edge (see file header) ── */
         @keyframes flipFwd {
           0%   { transform: rotateY(0deg); }
           100% { transform: rotateY(-180deg); }

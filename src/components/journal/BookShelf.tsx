@@ -3,6 +3,12 @@
 /**
  * BookShelf — dashboard grid of journal spines + create/edit journal modals.
  * POST / PATCH / DELETE all invalidate `journalSubtree` so shelf + reader stay in sync.
+ *
+ * ── WALKTHROUGH: offline-first shelf CRUD ──
+ *  When `isBrowserOffline()` or fetch throws a network error, create/edit enqueue to
+ *  IndexedDB sync queue via `enqueuePostBookOffline` / `enqueuePatchBookOffline`.
+ *  Optimistic TanStack cache updates immediately; `refreshCount()` bumps the nav badge.
+ *  Hover prefetch (`useJournalPrefetch`) warms book detail before navigation.
  */
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -60,6 +66,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
     await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
   };
 
+  /* ── OFFLINE: create journal — queue when offline, else POST then invalidate ── */
   const handleCreate = async (values: BookFormValues) => {
     if (isSaving) return;
     setIsSaving(true);
@@ -106,6 +113,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
     if (!editTarget || isSaving) return;
     setIsSaving(true);
     try {
+      /* ── OFFLINE: edit journal metadata via queue when offline ── */
       if (isBrowserOffline()) {
         await enqueuePatchBookOffline({
           queryClient,

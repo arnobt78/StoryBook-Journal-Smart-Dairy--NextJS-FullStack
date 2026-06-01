@@ -3,6 +3,12 @@
 /**
  * RegisterForm — email/password sign-up with optional Google OAuth (same env gate as login).
  * Invalidates journalSubtree after success so dashboard loads fresh shelves for the new user.
+ *
+ * ── WALKTHROUGH: auth form flow ──
+ *  1. POST `/api/auth/register` creates user + welcome book server-side.
+ *  2. Auto `signIn("credentials")` so user lands authenticated.
+ *  3. Invalidate `journalSubtree` then navigate to dashboard (no stale prior-user cache).
+ *  4. Google path delegated to `AuthOAuthSection` when `googleEnabled`.
  */
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -61,6 +67,7 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="auth-form-stagger">
+      {/* ── AUTH FORM: register fields (name, email, password min 8) ── */}
       <Field label="Your Name">
         <input
           type="text"

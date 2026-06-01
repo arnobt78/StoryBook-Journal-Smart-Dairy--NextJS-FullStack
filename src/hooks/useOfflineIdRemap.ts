@@ -1,6 +1,16 @@
 "use client";
 
 /**
+ * WALKTHROUGH — useOfflineIdRemap
+ *
+ * Listens for browser CustomEvents dispatched after sync queue drain
+ * replaces temp ids with server cuids. Keeps reader focus + URL correct:
+ *   - entrySynced → if focused entry was temp, call onEntryIdRemap(realId)
+ *   - bookSynced → router.replace to `/journal/{realBookId}`
+ *
+ * Effect subscribes on mount, unsubscribes on bookId/focus change/unmount.
+ */
+/**
  * Remaps focused entry/book ids when offline temp rows sync to server cuids.
  */
 import { useEffect } from "react";
@@ -19,6 +29,7 @@ export function useOfflineIdRemap(params: {
   const router = useRouter();
   const { bookId, focusedEntryId, onEntryIdRemap } = params;
 
+  /* CustomEvents from sync drain — keep editor focus on remapped entry id */
   useEffect(() => {
     const onEntry = (event: Event) => {
       const detail = (event as CustomEvent<OfflineEntrySyncedDetail>).detail;

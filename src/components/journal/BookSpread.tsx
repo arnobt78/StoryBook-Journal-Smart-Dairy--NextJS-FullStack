@@ -17,6 +17,18 @@
  *
  * Book sizing: all page/spine widths driven by CSS vars (--page-w, --page-h)
  * defined in globals.css :root so the entire spread scales responsively.
+ *
+ * ── WALKTHROUGH: subsystems wired in this orchestrator ──
+ *  PAGE FLIP — `usePageFlip()` owns `isFlipping` + `flipDir`. `navigate()` calls
+ *    `triggerFlip(dir, onComplete)`; only after the animation callback runs do we
+ *    swap `focusedEntryId`. `PageFlipOverlay` mounts as a sibling inside the 3-D row.
+ *  AUTOSAVE — `useAutoSave` debounces PATCH to `/api/entries/:id` while `isWriting`.
+ *    Paused during explicit Save (`isSaving`) or read mode. Clears IndexedDB draft on success.
+ *  OFFLINE — `useOfflineEntryDraft` mirrors draft to IndexedDB; saves call
+ *    `enqueuePatchEntryOffline` / `enqueuePostEntryOffline` when offline or on network error.
+ *    `useOfflineIdRemap` swaps temp cuid ids after sync drain.
+ *  3D BOOK — flex row uses `transformStyle: preserve-3d` + mild perspective tilt;
+ *    page shells set `pointerEvents: none` with inner stacks at `auto` (see Left/RightPage).
  */
 import type { ReactNode } from "react";
 import { useState, useCallback, useMemo } from "react";
@@ -99,6 +111,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     setFocusedEntryId(realEntryId);
   }, []);
 
+  /* ── OFFLINE: temp entry ids from queue remap to server ids after sync ── */
   useOfflineIdRemap({
     bookId,
     focusedEntryId,
@@ -122,6 +135,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     [draft],
   );
 
+  /* ── OFFLINE + AUTOSAVE: IndexedDB draft backup while editing (survives refresh/tab crash) ── */
   const { clearLocalDraft } = useOfflineEntryDraft({
     bookId,
     entryId: current?.id ?? "",
@@ -134,6 +148,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
   });
 
   /* Debounced PATCH while editing — pauses during explicit save or when not in write mode */
+  /* ── AUTOSAVE: see useAutoSave hook — debounced PATCH while isWriting ── */
   useAutoSave({
     entryId: current?.id ?? "",
     bookId,
@@ -144,6 +159,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     },
   });
 
+  /* ── PAGE FLIP: flip animation first, then swap focused entry in onComplete ── */
   const navigate = useCallback(
     (targetIdx: number) => {
       if (targetIdx === currentIdx || isFlipping || isWriting) return;
@@ -195,6 +211,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
 
     if (isBrowserOffline()) {
       try {
+        /* ── OFFLINE: queue PATCH + optimistic cache; toast instead of API ── */
         await enqueuePatchEntryOffline({
           queryClient,
           bookId,
@@ -657,6 +674,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
         {/* Book spread — `pointer-events: none` on the 3-D flex row avoids an oversized
           axis-aligned hit box (full spread) stealing clicks; `LeftPage` / `RightPage`
           re-enable `auto` only on their inner content stacks. */}
+        {/* ── 3D BOOK: preserve-3d spread — shadow on wrapper, not filter (avoids shimmer) ── */}
         <div
           style={{
             display: "flex",
@@ -710,6 +728,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
             canDeleteEntry={!isFlipping && !isWriting && !isDeleting}
           />
 
+          {/* ── PAGE FLIP: overlay mounts only during animation ── */}
           {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
         </div>
 

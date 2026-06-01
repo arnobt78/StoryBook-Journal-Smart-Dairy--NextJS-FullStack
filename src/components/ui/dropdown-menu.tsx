@@ -4,6 +4,10 @@
  * Shadcn-style Radix Dropdown Menu primitives.
  * Content renders in a Portal with fixed positioning so opening the menu does not
  * change document flow (no navbar layout shift). Consumers style via `className`.
+ *
+ * ── WALKTHROUGH ──
+ *  DashboardNav uses `modal={false}` so opening the profile menu does not scroll-lock
+ *  the page or reflow the sticky nav. Content portals to document body via Radix Portal.
  */
 import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";

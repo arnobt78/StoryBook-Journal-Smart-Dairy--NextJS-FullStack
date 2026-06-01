@@ -10,6 +10,12 @@
  *
  * Sizing: driven by CSS custom properties --page-w / --page-h so the entire
  * book scales responsively from the root :root rule in globals.css.
+ *
+ * ── WALKTHROUGH: page flip stagger (right leaf) ──
+ *  After flip completes, `flipDir` from BookSpread drives CSS classes
+ *  `page-stagger-fwd` / `page-stagger-bwd` on read-mode content so lines animate in.
+ *  Stagger is suppressed while `isFlipping` or `isWriting` to avoid fighting the overlay.
+ *  Write mode is controlled here; autosave/offline persistence live in BookSpread.
  */
 import { useRef, useState } from "react";
 import type { JournalEntry, EntryDraft } from "@/types";

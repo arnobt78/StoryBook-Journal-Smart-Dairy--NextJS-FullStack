@@ -1,3 +1,12 @@
+/**
+ * NextAuth v5 configuration — session/JWT strategy for the whole app.
+ *
+ * Walkthrough:
+ * 1. Providers: Google (optional via env) + Credentials (email/password + bcrypt).
+ * 2. `signIn` callback: Google users are upserted via `provisionOAuthUser` so JWT carries Prisma cuid.
+ * 3. `jwt` / `session` callbacks: copy `user.id` + avatar into the client session.
+ * 4. Export `auth()` for Server Components, Route Handlers, and `src/proxy.ts`.
+ */
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
@@ -25,6 +34,7 @@ export const authConfig: NextAuthConfig = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        /* Credentials flow: lookup User → bcrypt compare → touch lastLoginAt */
         if (!credentials?.email || !credentials?.password) return null;
 
         const user = await prisma.user.findUnique({
@@ -57,6 +67,7 @@ export const authConfig: NextAuthConfig = {
   session: { strategy: "jwt" },
   callbacks: {
     async signIn({ user, account, profile }) {
+      /* Google OAuth: persist/link Prisma user before JWT is minted */
       if (account?.provider !== "google" || !user.email) {
         return true;
       }
@@ -81,6 +92,7 @@ export const authConfig: NextAuthConfig = {
       }
     },
     jwt({ token, user }) {
+      /* First sign-in only: embed DB user id + picture on the JWT */
       if (user?.id) token.id = user.id;
       if (user?.image) token.picture = user.image;
       return token;

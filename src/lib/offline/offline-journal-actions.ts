@@ -1,4 +1,15 @@
 /**
+ * WALKTHROUGH — offline-journal-actions.ts
+ *
+ * Orchestrates offline save in three steps (every enqueue* function):
+ *   1) Optimistic TanStack patch (journal-cache-optimistic)
+ *   2) notifyJournalCacheUpdated (stale/refetch journalSubtree)
+ *   3) enqueueSyncItem → IndexedDB sync-queue
+ *
+ * Callers pass refreshPendingCount from OfflineSyncContext for badge update.
+ * isBrowserOffline / isOfflineOrNetworkError gate useAutoSave + shelf CRUD.
+ */
+/**
  * Shared offline enqueue + optimistic cache for journal mutations.
  * Callers refresh pendingCount via OfflineSyncContext after enqueue.
  */
@@ -29,6 +40,7 @@ export async function enqueuePatchEntryOffline(params: {
   payload: UpdateEntryInput;
   refreshPendingCount?: () => Promise<void>;
 }): Promise<void> {
+  /* optimistic UI → stale mark → queue PATCH for drain on online */
   applyOptimisticEntryPatch(params.queryClient, params.bookId, params.entryId, params.payload);
   notifyJournalCacheUpdated(params.queryClient);
   await enqueueSyncItem({

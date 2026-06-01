@@ -3,6 +3,10 @@
 /**
  * After Google OAuth redirect, invalidate journal queries once so shelf/spread
  * show the new user's data without a manual refresh (matches credentials login flow).
+ *
+ * ── WALKTHROUGH: post-OAuth cache sync ──
+ *  GoogleSignInButton sets OAUTH_PENDING_KEY before redirect; this effect runs once
+ *  on dashboard mount, clears the flag, and invalidates `journalSubtree`.
  */
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";

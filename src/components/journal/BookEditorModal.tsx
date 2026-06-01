@@ -3,6 +3,11 @@
 /**
  * Shared create/edit journal modal — used on the shelf and in the reader nav.
  * Parent handles POST/PATCH + journalSubtree invalidation after onSubmit.
+ *
+ * ── WALKTHROUGH ──
+ *  Pure UI shell: no fetch here. BookShelf / BookSpread pass `onSubmit` that may
+ *  route online PATCH/POST or offline queue (`enqueuePatchBookOffline`). Parent `key`
+ *  remounts form state when switching create vs edit targets.
  */
 import type { CSSProperties } from "react";
 import { useState } from "react";

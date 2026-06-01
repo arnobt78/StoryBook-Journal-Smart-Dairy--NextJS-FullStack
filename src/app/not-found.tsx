@@ -1,3 +1,10 @@
+/**
+ * @file not-found.tsx
+ * @route Global 404 UI — rendered when `notFound()` is called or no route matches.
+ *
+ * **SSR vs client:** Server Component. Static-friendly; no session or DB access.
+ * Linked from journal pages when a book id doesn't belong to the signed-in user.
+ */
 import Link from "next/link";
 
 export default function NotFound() {
@@ -14,6 +21,7 @@ export default function NotFound() {
         This page seems to have been torn out.
       </p>
       <Link href="/dashboard" style={{
+        // Shelf is the default home for signed-in users hitting a bad URL
         fontFamily: "'Lora',serif", fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase",
         background: "rgba(90,40,10,.82)", color: "rgba(255,215,150,.92)", textDecoration: "none",
         padding: "10px 22px", borderRadius: "3px",

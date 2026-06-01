@@ -1,3 +1,9 @@
+/**
+ * Shared TypeScript domain types — mirror Prisma models + client-only shapes.
+ * Used by components, hooks, and journal-api fetch helpers for strict typing.
+ */
+
+/** Mirrors Prisma User — session user is a subset via NextAuth */
 export interface User {
   id: string;
   email: string;
@@ -9,6 +15,7 @@ export interface User {
   updatedAt: Date;
 }
 
+/** Journal on the shelf; `_count.entries` from Prisma include on dashboard */
 export interface JournalBook {
   id: string;
   userId: string;
@@ -25,6 +32,7 @@ export interface JournalBook {
   entries?: JournalEntry[];
 }
 
+/** Single diary page; `tags` is parsed JSON string from DB in API/pages */
 export interface JournalEntry {
   id: string;
   userId: string;
@@ -47,13 +55,16 @@ export interface JournalEntry {
   updatedAt: Date;
 }
 
+/** In-memory write mode shape — subset of JournalEntry fields edited in RightPage */
 export type EntryDraft = Pick<
   JournalEntry,
   "title" | "content" | "mood" | "weather" | "tags" | "location"
 >;
 
+/** Page-flip animation direction consumed by PageFlipOverlay + stagger CSS */
 export type FlipDirection = "fwd" | "bwd";
 
+/** Standard JSON envelope from Route Handlers (`success`, `message`, optional `data`) */
 export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;

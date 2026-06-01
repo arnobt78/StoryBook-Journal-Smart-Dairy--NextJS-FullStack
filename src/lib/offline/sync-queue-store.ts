@@ -1,4 +1,14 @@
 /**
+ * WALKTHROUGH — sync-queue-store.ts (IndexedDB sync queue)
+ *
+ * FIFO queue of offline mutations replayed by useOfflineSyncQueue on `online`.
+ * Item types: patchEntry, postEntry, patchBook, postBook.
+ * post* items carry clientTempId for id remap after server CREATE.
+ *
+ * enqueueSyncItem → listSyncQueue (sorted by createdAt) → removeSyncItem
+ * syncQueueCount powers DashboardNav pending badge.
+ */
+/**
  * IndexedDB FIFO queue for offline CRUD replay when connectivity returns.
  */
 import type { CreateEntryInput, UpdateEntryInput } from "@/lib/validations";

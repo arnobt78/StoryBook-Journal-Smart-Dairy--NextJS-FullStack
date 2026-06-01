@@ -3,6 +3,10 @@
 /**
  * Shared OAuth block for login/register — placed AFTER the primary CTA
  * (Open My Journal / Begin My Story): "or" divider, then Google button.
+ *
+ * ── WALKTHROUGH: OAuth placement in auth forms ──
+ *  Primary CTA (credentials submit) always comes first for accessibility and flow.
+ *  This block renders only when server passes `googleEnabled` (env vars present).
  */
 import { AuthOrSeparator } from "@/components/auth/AuthOrSeparator";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
