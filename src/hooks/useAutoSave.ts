@@ -21,6 +21,7 @@ import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
 import { useOfflineSync } from "@/context/OfflineSyncContext";
+import { applyOptimisticEntryPatch } from "@/lib/journal-cache-optimistic";
 import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
 import {
   enqueuePatchEntryOffline,
@@ -112,6 +113,7 @@ export function useAutoSave({
 
         if (!res.ok) throw new Error("Save failed");
 
+        applyOptimisticEntryPatch(queryClient, bookId, entryId, payload);
         void notifyJournalCacheUpdated(queryClient);
         onSaveSuccess?.();
 

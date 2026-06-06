@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { createBookSchema } from "@/lib/validations";
+import { normalizeTags } from "@/lib/utils";
 
 describe("createBookSchema", () => {
   it("accepts valid theme enum", () => {
@@ -23,5 +24,15 @@ describe("createBookSchema", () => {
       theme: "neon-punk",
     });
     expect(r.success).toBe(false);
+  });
+});
+
+describe("normalizeTags", () => {
+  it("parses JSON string from Prisma", () => {
+    expect(normalizeTags('["poems","night"]')).toEqual(["poems", "night"]);
+  });
+
+  it("passes through string arrays", () => {
+    expect(normalizeTags(["welcome"])).toEqual(["welcome"]);
   });
 });

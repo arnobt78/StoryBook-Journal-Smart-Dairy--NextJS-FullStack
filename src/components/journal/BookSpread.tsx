@@ -50,7 +50,8 @@ import { useOfflineEntryDraft } from "@/hooks/useOfflineEntryDraft";
 import { useOfflineIdRemap } from "@/hooks/useOfflineIdRemap";
 import { useOfflineSync } from "@/context/OfflineSyncContext";
 import { createAiAssistSessionId } from "@/lib/ai-assist";
-import { formatEntryDate } from "@/lib/utils";
+import { applyOptimisticEntryPatch } from "@/lib/journal-cache-optimistic";
+import { formatEntryDate, normalizeTags } from "@/lib/utils";
 import { queryKeys } from "@/lib/query-keys";
 import {
   notifyJournalCacheUpdated,
@@ -84,7 +85,11 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     initialData: initialBook,
   });
 
-  const entries = book.entries;
+  /** Ensure tags are always string[] — cache refetch must not leave JSON strings */
+  const entries = useMemo(
+    () => book.entries.map((e) => ({ ...e, tags: normalizeTags(e.tags) })),
+    [book.entries],
+  );
   const bookTitle = book.title;
   const bookColor = book.coverColor;
   const bookThemeProps = useBookTheme(book.theme ?? "warm-paper");
@@ -244,6 +249,8 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error();
+      /* Optimistic patch before read mode — tags/mood visible instantly without waiting for refetch */
+      applyOptimisticEntryPatch(queryClient, bookId, current.id, payload);
       setIsWriting(false);
       await clearLocalDraft();
       await notifyJournalCacheUpdated(queryClient);

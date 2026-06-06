@@ -48,10 +48,21 @@ export function formatEntryDate(date: Date = new Date()): {
 export function parseTags(raw: string): string[] {
   try {
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    return Array.isArray(parsed) ? parsed.filter((t): t is string => typeof t === "string") : [];
   } catch {
     return [];
   }
+}
+
+/** Normalize tags from cache/API — handles parsed arrays or legacy JSON strings */
+export function normalizeTags(tags: unknown): string[] {
+  if (Array.isArray(tags)) {
+    return tags.filter((t): t is string => typeof t === "string");
+  }
+  if (typeof tags === "string") {
+    return parseTags(tags);
+  }
+  return [];
 }
 
 /** Serialize tag array before Prisma write */

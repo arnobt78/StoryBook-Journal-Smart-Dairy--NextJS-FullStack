@@ -21,7 +21,8 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import type { JournalEntry, EntryDraft } from "@/types";
 import { MOODS, WEATHERS } from "@/constants";
-import { wordCount } from "@/lib/utils";
+import { normalizeTags, wordCount } from "@/lib/utils";
+import { JournalEntryTags } from "@/components/journal/JournalEntryTags";
 import type { FlipDirection } from "@/types";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { JournalReadFooter } from "@/components/journal/JournalReadFooter";
@@ -87,6 +88,8 @@ export function RightPage({
   };
 
   const wc = wordCount(draft.content);
+  const entryTags = normalizeTags(entry.tags);
+  const draftTags = normalizeTags(draft.tags);
 
   /* Stagger class applied after flip so content lines animate in sequentially */
   const staggerClass = !isFlipping && !isWriting
@@ -146,8 +149,16 @@ export function RightPage({
           </div>
 
           {isWriting ? (
-            /* ── WRITE MODE ── */
-            <>
+            /* ── WRITE MODE — flex column so editor scrolls; tags/footer stay pinned ── */
+            <div
+              style={{
+                flex: 1,
+                minHeight: 0,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+              }}
+            >
               <input
                 value={draft.title}
                 onChange={e => onDraftChange("title", e.target.value)}
@@ -200,15 +211,9 @@ export function RightPage({
                 </div>
               )}
 
-              {/* Tags */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "8px" }}>
-                {draft.tags.map(t => (
-                  <span key={t} style={{
-                    fontFamily: "'Lora',serif", fontSize: "10px", color: "rgba(110,60,22,.6)",
-                    background: "rgba(120,70,20,.09)", padding: "2px 8px",
-                    borderRadius: "20px", border: "1px solid rgba(120,70,20,.14)",
-                  }}>#{t}</span>
-                ))}
+              {/* Tags — pinned below editor; pills match read mode */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "8px", flexShrink: 0 }}>
+                <JournalEntryTags tags={draftTags} />
                 <input
                   value={newTag}
                   onChange={e => setNewTag(e.target.value)}
@@ -232,7 +237,7 @@ export function RightPage({
                 onCancel={onCancel}
                 onSave={onSave}
               />
-            </>
+            </div>
           ) : (
             /* ── READ MODE with stagger animation ── */
             <div className={staggerClass} style={{
@@ -250,10 +255,10 @@ export function RightPage({
               {/* Divider */}
               <div style={{ height: "1px", background: "linear-gradient(to right,rgba(120,70,20,.25),transparent)", marginBottom: "12px", flexShrink: 0 }} />
 
-              {/* Body */}
+              {/* Body — minHeight:0 lets long entries scroll; tags/footer stay visible */}
               <div style={{
                 fontFamily: "'Lora',serif", fontSize: "13px", lineHeight: 1.92,
-                color: "rgba(35,14,3,.78)", flex: 1, overflowY: "auto",
+                color: "rgba(35,14,3,.78)", flex: 1, minHeight: 0, overflowY: "auto",
                 scrollbarWidth: "none",
               }}>
                 {entry.content
@@ -268,16 +273,18 @@ export function RightPage({
                   )}
               </div>
 
-              {/* Tags */}
-              {entry.tags.length > 0 && (
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "10px", flexShrink: 0 }}>
-                  {entry.tags.map(t => (
-                    <span key={t} style={{
-                      fontFamily: "'Lora',serif", fontSize: "10px", color: "rgba(110,60,22,.6)",
-                      background: "rgba(120,70,20,.09)", padding: "2px 8px",
-                      borderRadius: "20px", border: "1px solid rgba(120,70,20,.14)",
-                    }}>#{t}</span>
-                  ))}
+              {entryTags.length > 0 && (
+                <div
+                  className="journal-entry-tags"
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "4px",
+                    marginTop: "10px",
+                    flexShrink: 0,
+                  }}
+                >
+                  <JournalEntryTags tags={entryTags} />
                 </div>
               )}
 

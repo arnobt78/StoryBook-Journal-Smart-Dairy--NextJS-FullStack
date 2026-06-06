@@ -14,7 +14,7 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import type { CreateEntryInput, UpdateEntryInput } from "@/lib/validations";
-import { formatEntryDate, readingTime, wordCount } from "@/lib/utils";
+import { formatEntryDate, normalizeTags, readingTime, wordCount } from "@/lib/utils";
 import type { JournalBook, JournalEntry } from "@/types";
 import type { BookFormValues } from "@/types/book-form";
 import { OFFLINE_ID_PREFIX } from "@/constants/offline";
@@ -44,7 +44,10 @@ export function applyOptimisticEntryPatch(
           mood: payload.mood ?? entry.mood,
           weather: payload.weather ?? entry.weather,
           location: payload.location ?? entry.location,
-          tags: payload.tags ?? entry.tags,
+          tags:
+            payload.tags !== undefined
+              ? normalizeTags(payload.tags)
+              : normalizeTags(entry.tags),
           wordCount: wc,
           readingTime: payload.content !== undefined ? readingTime(wc) : entry.readingTime,
           excerpt: payload.content !== undefined ? content.slice(0, 200) : entry.excerpt,
