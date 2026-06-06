@@ -326,7 +326,7 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 - `docs/AUTH_UI_IMPLEMENTATION_GUIDE.md` — OAuth flicker, avatar, session patterns.
 - `docs/DROPDOWN_TEST_CREDENTIALS_DOCS.md` — demo account + NextAuth reference.
 - `docker-compose.yml` — optional local Postgres only (not used for Vercel deploy).
-- `.agile-v/` — Agile V traceability (C2: CR-0003, REQ-0013–0018, ART-0049–0062).
+- `.agile-v/` — Agile V traceability **C4** (REQ-0001–0031, ART-0078, `.cursor/rules/agile-v.mdc` alwaysApply).
 
 ---
 

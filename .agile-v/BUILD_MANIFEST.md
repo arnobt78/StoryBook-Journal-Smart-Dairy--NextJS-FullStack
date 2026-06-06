@@ -71,9 +71,20 @@
 | ART-0065 | C3 | api+hook | SSE hardening `journal/events`, `useJournalRealtime` | REQ-0014 | implemented |
 | ART-0066 | C3 | test | `vitest.config.ts`, `src/lib/__tests__/*` (12 tests) | REQ-0021 | implemented |
 | ART-0067 | C3 | test+ci | `playwright.config.ts`, `tests/e2e/*`, `.github/workflows/ci.yml` | REQ-0021 | partial |
+| ART-0068 | C4 | lib | `src/lib/leather-glass-styles.ts` | REQ-0030 | implemented |
+| ART-0069 | C4 | ui | `src/components/ui/AvatarRing.tsx` | REQ-0030 | implemented |
+| ART-0070 | C4 | component | `src/components/auth/DemoAccountMenuRow.tsx` | REQ-0030 | implemented |
+| ART-0071 | C4 | lib | `src/lib/auth-form-styles.ts` (glass + oauth) | REQ-0030 | implemented |
+| ART-0072 | C4 | component | `JournalWriteFooter`, `JournalReadFooter` | REQ-0029 | implemented |
+| ART-0073 | C4 | ui+hook | `TypewriterText.tsx`, `useTypewriter.ts` | REQ-0029 | implemented |
+| ART-0074 | C4 | lib | `src/lib/robohash.ts` | REQ-0029, REQ-0030 | implemented |
+| ART-0075 | C4 | component | `JournalEntryTags.tsx` | REQ-0031 | implemented |
+| ART-0076 | C4 | component | `JournalEntryTagsEditor.tsx` | REQ-0031 | implemented |
+| ART-0077 | C4 | lib | `src/lib/journal-tags.ts` | REQ-0031 | implemented |
+| ART-0078 | C4 | config | `next.config.ts` prod-only static cache | REQ-0030 | implemented |
 
 ## Planned artifacts (backlog)
 
 | ART-ID | Linked REQ | Notes |
 |--------|------------|-------|
-| ART-0104 | REQ-0021 | Vitest + Playwright harness |
+| ART-0104 | REQ-0021 | Full e2e in CI |

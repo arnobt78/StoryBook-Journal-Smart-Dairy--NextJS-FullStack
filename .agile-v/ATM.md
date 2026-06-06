@@ -27,7 +27,26 @@
 | REQ-0027 | ART-0036 | TC-0027 | **PASS** (static) | Red Team |
 | REQ-0028 | ART-0048, ART-0033, ART-0042, ART-0047 | TC-0030 | **PASS** (static) | Red Team |
 
-## Coverage
+## C2–C3 extension
 
-- **Implemented REQs with ART:** 21 / 21 (0001–0012, 0015, 0019–0020, 0022–0028)
-- **Planned backlog:** REQ-0013, 0014, 0016–0018, 0021
+| REQ | ART | TC | Verification |
+|-----|-----|-----|--------------|
+| REQ-0013 | ART-0055 | TC-0015 | PASS static |
+| REQ-0014 | ART-0056–0058, ART-0065 | TC-0016 | PASS static |
+| REQ-0016 | ART-0059 | TC-0018 | PASS static |
+| REQ-0017 | ART-0060–0061, ART-0064 | TC-0019 | PASS e2e local |
+| REQ-0018 | ART-0062, ART-0064 | TC-0020 | PASS e2e local |
+| REQ-0021 | ART-0066–0067 | TC-0001–0014 | 16 unit PASS; e2e partial |
+
+## C4 extension (2026-06-07)
+
+| REQ | ART | TC | Verification |
+|-----|-----|-----|--------------|
+| REQ-0029 | ART-0072–0074 | TC-0031 | **PASS** static |
+| REQ-0030 | ART-0068–0071, ART-0078 | TC-0032, TC-0033 | **PASS** static |
+| REQ-0031 | ART-0075–0077, ART-0009 | TC-0034, TC-0035 | **PASS** static+db |
+
+## Coverage (C4)
+
+- **Implemented REQs with ART:** 26 / 31
+- **Backlog:** REQ-0021 CI e2e, REQ-0019 observability, REQ-0022 axe, REQ-0009 prod demo

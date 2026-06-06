@@ -34,7 +34,12 @@
 | TC-0028 | C1 | REQ-0010 | AI rate limit returns 429 when exceeded | integration | **PASS** (static) | 2026-06-01 |
 | TC-0029 | C1 | REQ-0023 | robots.ts disallows /dashboard, /journal | audit | **PASS** (static) | 2026-06-01 |
 | TC-0030 | C1 | REQ-0028 | Security headers + SafeImage fallback | audit | **PASS** (static) | 2026-06-01 |
+| TC-0031 | C4 | REQ-0029 | Landing typewriter + auth footers + RippleButton icons | audit | **PASS** | 2026-06-07 |
+| TC-0032 | C4 | REQ-0030 | Leather glass CSS tokens + 70% cover | audit | **PASS** | 2026-06-07 |
+| TC-0033 | C4 | REQ-0030 | Nav AvatarRing circular; toast center align | audit | **PASS** | 2026-06-07 |
+| TC-0034 | C4 | REQ-0031 | Tag PATCH persists to DB (mergePendingTag) | unit+db | **PASS** | 2026-06-07 |
+| TC-0035 | C4 | REQ-0031 | Tags visible on long entry; × removes in edit | audit | **PASS** | 2026-06-07 |
 
 ## Regression baseline (Gate 2)
 
-TC-0001–0014 + TC-0021–0030 — **14 PASS static, 1 FLAG, 15 NOT RUN**
+TC-0001–0014 + TC-0021–0035 — **19 PASS static/unit, 1 FLAG, 15 NOT RUN e2e**

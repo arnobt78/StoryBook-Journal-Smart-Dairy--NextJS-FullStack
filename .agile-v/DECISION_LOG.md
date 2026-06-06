@@ -18,3 +18,12 @@
 | 2026-06-01T18:00:01Z | DEC-0014 | C1 | agile-v-bootstrap | REQ-0015 promoted implemented via CR-0002 | Offline MVP complete: IndexedDB, queue, optimistic cache | REQ-0015 |
 | 2026-06-01T18:00:02Z | DEC-0015 | C1 | agile-v-bootstrap | REQ-0028 registered (guardrails+SafeImage) | Security headers, robots, slug PATCH, force-dynamic | REQ-0028 |
 | 2026-06-01T18:00:03Z | DEC-0016 | C1 | red-team-verifier | Static verify PASS +5 TC (0017,0028–0030) | Stage 3 synthesis complete; Gate 2 still blocked on e2e | REQ-0021 |
+| 2026-06-01T20:00:00Z | DEC-0017 | C3 | build-agent-js | Single invalidation via journal-cache-notify.ts | Prevents scattered journalSubtree invalidates | REQ-0007 |
+| 2026-06-01T22:00:00Z | DEC-0018 | C4 | ux-spec-author | Leather glass amber variant not sky-blue | Maps UI_STYLING_GUIDE to journal palette | REQ-0030 |
+| 2026-06-01T22:00:01Z | DEC-0019 | C4 | build-agent-js | RippleButton skips default borderRadius unless shine | Preserves rounded-full nav avatar | REQ-0030 |
+| 2026-06-01T22:00:02Z | DEC-0020 | C4 | build-agent-js | Auth OAuth uses buttonOutlinePaper not landing outline | Dark text on cream paper readability | REQ-0030 |
+| 2026-06-07T00:30:00Z | DEC-0021 | C4 | red-team-verifier | DB audit: Midnight Thoughts tags `[]` while mood saved | Root cause pending-tag input not in PATCH payload | REQ-0031 |
+| 2026-06-07T00:35:00Z | DEC-0022 | C4 | build-agent-js | mergePendingTag on blur/save before PATCH | Fixes tag persistence without requiring Enter | REQ-0031 |
+| 2026-06-07T00:40:00Z | DEC-0023 | C4 | build-agent-js | Read body minHeight:0 — tags clipped on long entries | Flex overflow fix separate from DB issue | REQ-0031 |
+| 2026-06-07T00:42:00Z | DEC-0024 | C4 | build-agent-js | JournalEntryTagsEditor with × remove in write mode | Tags editable like mood/weather pickers | REQ-0031 |
+| 2026-06-07T00:45:00Z | DEC-0025 | C4 | agile-v-bootstrap | C4 AQMS re-baseline REQ-0029–0031 | Full traceability for UI+tags work; cursor rule alwaysApply | REQ-0024 |

@@ -1,8 +1,8 @@
-# Agile V policy-as-code — storybook-journal C1
-# Version: 1.0.0 | Cycle: C1
+# Agile V policy-as-code — storybook-journal C4
+# Version: 1.1.0 | Cycle: C4
 
-version: "1.0.0"
-cycle: C1
+version: "1.1.0"
+cycle: C4
 project: storybook-journal
 
 traceability:

@@ -7,7 +7,7 @@
 | **Skill** | `build-agent-js` |
 | **V-Position** | Apex |
 | **SCOPE-V phases** | Orchestrate, Prove |
-| **Cycle** | C1 |
+| **Cycle** | C4 |
 
 ## Primary outputs
 
@@ -15,7 +15,7 @@
 
 ## Linked REQs (storybook-journal)
 
-REQ-0001–0012, REQ-0015, REQ-0025–0028
+REQ-0001–0012, REQ-0013–0018, REQ-0015, REQ-0025–0031
 
 ## Handoffs
 

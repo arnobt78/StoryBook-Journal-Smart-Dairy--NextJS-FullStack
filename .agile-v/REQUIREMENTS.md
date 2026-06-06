@@ -1,6 +1,6 @@
 # Requirements (Blueprint)
 
-<!-- project: storybook-journal | version: C1-bootstrap-2026-06-01-r2 | Gate 1: GATE-0001 + GATE-0003 + CR-0002 -->
+<!-- project: storybook-journal | version: C4-ui-tags-2026-06-07 | Gate 1: GATE-0001 + GATE-0003 + CR-0005 -->
 
 Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `implemented` = code present. `planned` = backlog via CR.
 
@@ -272,3 +272,39 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 | REQ-0025 | ART-0029–0030, ART-0020 |
 | REQ-0026 | ART-0031, ART-0035 |
 | REQ-0027 | ART-0036 |
+| REQ-0029 | ART-0072–0074 |
+| REQ-0030 | ART-0068–0071, ART-0078 |
+| REQ-0031 | ART-0075–0077, ART-0009 |
+
+---
+
+## Stage 1 — C4 UX polish (REQ-0029–0031) · `approved [C4]` CR-0005
+
+### REQ-0029 — UI polish wave 1 (landing, auth, footers)
+
+- **Status:** implemented · `approved [C4]`
+- **Requirement:** Landing cover ~80% viewport; typewriter CTA; Lucide icons on RippleButton CTAs; unified auth control heights; demo robohash; extracted journal read/write footers; welcome toast gap.
+- **Constraint:** No invalidation/SSR path changes; `force-dynamic` preserved.
+- **Verification Criteria:** TC-0031 — static audit; manual 375/1440 landing+login.
+- **Artifacts:** ART-0072 JournalWriteFooter/JournalReadFooter, ART-0073 TypewriterText/useTypewriter, ART-0074 robohash.ts + auth-form-styles, BookCover/LoginForm updates
+- **Commits:** `91bea2a`
+
+### REQ-0030 — Leather glass UI wave 2
+
+- **Status:** implemented · `approved [C4]`
+- **Requirement:** Leather-themed glassmorphism per `docs/UI_STYLING_GUIDE.md`; landing cover **70%** + padding; inline CTA icon+text; AvatarRing; DemoAccountMenuRow; auth outer-glow inputs; paper OAuth button; nav circular avatar; toast icon center; RippleButton radius fix; prod-only static Cache-Control for dev HMR.
+- **Constraint:** Paper page interiors remain flat (no blur); blur only on chrome.
+- **Verification Criteria:** TC-0032 — static CSS/token audit; TC-0033 — nav avatar circular.
+- **Artifacts:** ART-0068 leather-glass-styles, ART-0069 AvatarRing, ART-0070 DemoAccountMenuRow, ART-0071 auth-form-styles glass classes, ART-0078 next.config.ts, globals.css `.leather-glass-*`
+- **Commits:** `859de14`, `58e29a7`, `f746a53`
+
+### REQ-0031 — Entry tags display, persist, and edit
+
+- **Status:** implemented · `approved [C4]`
+- **Requirement:** Tags SHALL persist to PostgreSQL on save/autosave; SHALL display in read mode above footer; SHALL be editable in write mode (add, remove, flush pending `+ tag` input on blur/save); long entries SHALL not clip tags (`minHeight:0` scroll).
+- **Constraint:** Tags stored as JSON string in Prisma; parsed via `parseTags`/`normalizeTags`; optimistic patch includes tags.
+- **Verification Criteria:** TC-0034 — DB `tags` non-empty after save; TC-0035 — remove pill × updates PATCH.
+- **Done Criteria:** `mergePendingTag`; `JournalEntryTagsEditor`; `applyOptimisticEntryPatch` on save/autosave.
+- **Artifacts:** ART-0075 JournalEntryTags, ART-0076 JournalEntryTagsEditor, ART-0077 journal-tags.ts, RightPage/BookSpread/useAutoSave updates
+- **Commits:** `5b515b9`, `8354849`, `8f88e90`
+- **Linked REQ:** REQ-0003 (entry CRUD field)

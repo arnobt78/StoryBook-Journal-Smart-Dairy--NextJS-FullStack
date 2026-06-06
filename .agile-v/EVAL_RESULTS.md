@@ -2,27 +2,29 @@
 
 | Field | Value |
 |-------|-------|
-| **Cycle** | C1 |
-| **Revision** | C1-bootstrap-2026-06-01-r2 |
+| **Cycle** | C4 |
+| **Revision** | C4-ui-tags-2026-06-07 |
 | **eval_gate_status** | **CONDITIONAL** |
-| **Last run** | 2026-06-01T18:00:00Z |
+| **Last run** | 2026-06-07T00:45:00Z |
 | **Waiver** | none |
 
 ## Eval checklist (C1)
 
 | Eval | Result | Notes |
 |------|--------|-------|
-| REQ traceability complete | PASS | REQ-0001–0028 + ATM |
-| BUILD_MANIFEST linked | PASS | ART-0001–0048 |
-| TEST_SPEC drafted | PASS | TC-0001–0030 |
+| REQ traceability complete | PASS | REQ-0001–0031 + ATM |
+| BUILD_MANIFEST linked | PASS | ART-0001–0078 |
+| TEST_SPEC drafted | PASS | TC-0001–0035 |
 | Gate 1 approved | PASS | GATE-0001 |
 | Gate 1 infra amendment | PASS | GATE-0003 |
 | CR-0002 synthesis | PASS | Offline + guardrails + SEO |
 | Logic Gatekeeper Stage 2 | PASS | phases/02-validation/SUMMARY.md |
 | Static Red Team | PASS | 14 TC PASS static |
 | Stage 3 synthesis | PASS | commit 72bb670 |
-| E2E regression executed | **FAIL** | REQ-0021 — no Vitest/Playwright |
-| Lint + typecheck + build | PASS | 2026-06-01 |
+| E2E regression executed | **FAIL** | REQ-0021 — e2e not in CI |
+| Vitest unit | PASS | 16 tests 2026-06-07 |
+| Lint + typecheck + build | PASS | 2026-06-07 |
+| C4 tag UX TC-0034–0035 | PASS | static + DB audit |
 | Policy POLICY.yaml honored | PASS | Cursor rule `.cursor/rules/agile-v.mdc` |
 | Public repo secrets hygiene | PASS | TC-0026 |
 

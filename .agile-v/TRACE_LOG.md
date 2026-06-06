@@ -15,3 +15,7 @@
 | 2026-06-01T18:00:01Z | cr-0002 | agile-v-bootstrap | REQ-0015+0028 implemented | REQ-0015, REQ-0028 | CHANGE_LOG.md |
 | 2026-06-01T18:00:02Z | cursor-rule | agile-v-bootstrap | Created .cursor/rules/agile-v.mdc alwaysApply | REQ-0024 | hitl |
 | 2026-06-01T18:00:03Z | stage-4 | red-team-verifier | Static TC +5 PASS; build PASS | REQ-0021 | EVAL_RESULTS.md |
+| 2026-06-01T20:00:00Z | cr-0004 | build-agent-js | C3 consistency hardening shipped | REQ-0007 | CHANGE_LOG.md |
+| 2026-06-01T22:00:00Z | cr-0005 | ux-spec-author | C4 UI polish wave 1+2 started | REQ-0029–0030 | CHANGE_LOG.md |
+| 2026-06-07T00:30:00Z | verify | red-team-verifier | Prisma audit tags [] on Midnight Thoughts | REQ-0031 | DEC-0021 |
+| 2026-06-07T00:45:00Z | bootstrap-c4 | agile-v-bootstrap | C4 STATE/REQ/DEC/VAL refresh; cursor rule | REQ-0024 | STATE.md |

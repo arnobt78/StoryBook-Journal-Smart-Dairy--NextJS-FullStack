@@ -1,6 +1,6 @@
 # Agile V Skills Index — 24 agents
 
-<!-- Cycle C1 | Load agile-v-core first, then domain skills on demand -->
+<!-- Cycle C4 | Load agile-v-core first, then domain skills on demand -->
 
 | # | File | Skill | V-Position | Primary stage |
 |---|------|-------|------------|---------------|
@@ -29,9 +29,11 @@
 | 23 | `23-release-manager.md` | release-manager | Right | Stage 5 |
 | 24 | `24-schematic-generator.md` | schematic-generator | Apex | HW only |
 
-## StoryBook Journal primary skills (C1)
+## StoryBook Journal primary skills (C4)
 
 **Always:** 01 → 02 → 07 → 11 → **13** → 18 → 19 → 20 → 04
+
+**C4 active REQs:** REQ-0029–0031 (UI polish, leather glass, entry tags)
 
 ## Traceability
 
