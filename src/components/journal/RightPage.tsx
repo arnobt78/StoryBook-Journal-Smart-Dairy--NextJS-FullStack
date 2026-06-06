@@ -18,9 +18,10 @@
  *  Write mode is controlled here; autosave/offline persistence live in BookSpread.
  */
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { JournalEntry, EntryDraft } from "@/types";
 import { MOODS, WEATHERS } from "@/constants";
+import { mergePendingTag } from "@/lib/journal-tags";
 import { normalizeTags, wordCount } from "@/lib/utils";
 import { JournalEntryTags } from "@/components/journal/JournalEntryTags";
 import type { FlipDirection } from "@/types";
@@ -60,7 +61,8 @@ interface RightPageProps {
   isFlipping: boolean;
   onStartWriting: () => void;
   onDraftChange: (field: keyof EntryDraft, value: string | string[]) => void;
-  onSave: () => void;
+  /** Optional override merges pending tag input before PATCH (draft state may lag one tick) */
+  onSave: (override?: Partial<EntryDraft>) => void;
   onCancel: () => void;
   onAiAssist: () => void;
   isAiThinking: boolean;
@@ -77,19 +79,36 @@ export function RightPage({
 }: RightPageProps) {
   const [newTag, setNewTag] = useState("");
 
-  const handleTagKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && newTag.trim()) {
-      onDraftChange("tags", [...draft.tags, newTag.trim()]);
-      setNewTag("");
-    }
-    if (e.key === "Backspace" && !newTag && draft.tags.length) {
-      onDraftChange("tags", draft.tags.slice(0, -1));
-    }
-  };
-
   const wc = wordCount(draft.content);
   const entryTags = normalizeTags(entry.tags);
   const draftTags = normalizeTags(draft.tags);
+
+  /** Commit "+ tag" field into draft — Enter, blur, or Save */
+  const commitPendingTag = useCallback((): string[] => {
+    const merged = mergePendingTag(draftTags, newTag);
+    if (merged.length !== draftTags.length || merged.some((t, i) => t !== draftTags[i])) {
+      onDraftChange("tags", merged);
+    }
+    setNewTag("");
+    return merged;
+  }, [draftTags, newTag, onDraftChange]);
+
+  const handleTagKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && newTag.trim()) {
+      e.preventDefault();
+      commitPendingTag();
+    }
+    if (e.key === "Backspace" && !newTag && draftTags.length) {
+      onDraftChange("tags", draftTags.slice(0, -1));
+    }
+  };
+
+  const handleSave = () => {
+    const tags = mergePendingTag(draftTags, newTag);
+    if (newTag.trim()) setNewTag("");
+    if (tags.length !== draftTags.length) onDraftChange("tags", tags);
+    onSave({ tags });
+  };
 
   /* Stagger class applied after flip so content lines animate in sequentially */
   const staggerClass = !isFlipping && !isWriting
@@ -218,6 +237,7 @@ export function RightPage({
                   value={newTag}
                   onChange={e => setNewTag(e.target.value)}
                   onKeyDown={handleTagKey}
+                  onBlur={commitPendingTag}
                   placeholder="+ tag"
                   style={{
                     fontFamily: "'Lora',serif", fontSize: "10px",
@@ -235,7 +255,7 @@ export function RightPage({
                 canAiAssist={Boolean(draft.content.trim())}
                 onAiAssist={onAiAssist}
                 onCancel={onCancel}
-                onSave={onSave}
+                onSave={handleSave}
               />
             </div>
           ) : (

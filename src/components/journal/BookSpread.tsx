@@ -210,17 +210,21 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     setDraft((d) => ({ ...d, [field]: value }));
   };
 
-  const saveEntry = async () => {
+  const saveEntry = async (override?: Partial<EntryDraft>) => {
     if (!current || isSaving) return;
     setIsSaving(true);
+    const effective = { ...draft, ...override };
     const payload = {
-      title: draft.title,
-      content: draft.content,
-      mood: draft.mood,
-      weather: draft.weather,
-      tags: draft.tags,
-      ...(draft.location ? { location: draft.location } : {}),
+      title: effective.title,
+      content: effective.content,
+      mood: effective.mood,
+      weather: effective.weather,
+      tags: normalizeTags(effective.tags),
+      ...(effective.location ? { location: effective.location } : {}),
     };
+    if (override) {
+      setDraft((d) => ({ ...d, ...override, tags: normalizeTags(effective.tags) }));
+    }
 
     if (isBrowserOffline()) {
       try {

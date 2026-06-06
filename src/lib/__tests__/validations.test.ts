@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { createBookSchema } from "@/lib/validations";
+import { mergePendingTag } from "@/lib/journal-tags";
 import { normalizeTags } from "@/lib/utils";
 
 describe("createBookSchema", () => {
@@ -24,6 +25,16 @@ describe("createBookSchema", () => {
       theme: "neon-punk",
     });
     expect(r.success).toBe(false);
+  });
+});
+
+describe("mergePendingTag", () => {
+  it("appends uncommitted input on save", () => {
+    expect(mergePendingTag([], "poetry")).toEqual(["poetry"]);
+  });
+
+  it("skips duplicate pending tag", () => {
+    expect(mergePendingTag(["poetry"], "poetry")).toEqual(["poetry"]);
   });
 });
 

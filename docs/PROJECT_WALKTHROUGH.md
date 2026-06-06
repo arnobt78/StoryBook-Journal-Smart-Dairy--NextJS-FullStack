@@ -273,7 +273,7 @@ flowchart LR
 
 **Contrast pass (2026-06-07):** Landing CTA gold text/icons (`f746a53`). Auth inputs: outer amber glow (no inset), dim leather placeholders; Google OAuth uses `leather-glass-btn-outline-paper` (dark text + border on cream).
 
-**Tags display fix:** Long entries hid tag pills below `overflow:hidden` — read body now `minHeight:0` + scroll; save/autosave call `applyOptimisticEntryPatch`; `normalizeTags()` on query entries.
+**Tags:** DB audit showed `Midnight Thoughts` had `tags: []` — uncommitted "+ tag" text never merged before PATCH. `mergePendingTag()` on blur/save; layout `minHeight:0`; optimistic cache patch.
 
 **Audit:** W1–W6 + contrast fixes complete. No invalidation/SSR/query regressions. `lint` · `typecheck` · 12 vitest · `build` pass (`rm -rf .next` if dev running).
 
