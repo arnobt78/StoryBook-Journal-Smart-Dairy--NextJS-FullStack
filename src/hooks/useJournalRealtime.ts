@@ -2,6 +2,7 @@
 
 /**
  * SSE subscription — invalidates journalSubtree when another tab/device mutates data.
+ * Reconnect passes ?since=lastEventAt for dedupe; pauses when tab is hidden.
  */
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,37 +19,54 @@ export function useJournalRealtime() {
   const esRef = useRef<EventSource | null>(null);
   const backoffRef = useRef(RECONNECT_MS);
   const lastToastRef = useRef(0);
+  const lastEventAtRef = useRef(0);
 
   useEffect(() => {
     if (status !== "authenticated") return;
 
+    if (lastEventAtRef.current === 0) {
+      lastEventAtRef.current = Date.now();
+    }
+
     let cancelled = false;
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
+    const buildUrl = () => {
+      const since = lastEventAtRef.current;
+      return `/api/journal/events?since=${since}`;
+    };
+
     const connect = () => {
-      if (cancelled) return;
+      if (cancelled || document.visibilityState === "hidden") return;
       esRef.current?.close();
 
-      const es = new EventSource("/api/journal/events");
+      const es = new EventSource(buildUrl());
       esRef.current = es;
 
       es.onmessage = (ev) => {
         try {
-          const data = JSON.parse(ev.data) as { type?: string; heartbeat?: boolean };
-          if (data.heartbeat) return;
-          notifyJournalCacheUpdated(queryClient);
+          const data = JSON.parse(ev.data) as {
+            type?: string;
+            heartbeat?: boolean;
+            connected?: boolean;
+            at?: number;
+          };
+          if (data.at) lastEventAtRef.current = Math.max(lastEventAtRef.current, data.at);
+          if (data.heartbeat || data.connected) return;
+          void notifyJournalCacheUpdated(queryClient);
           const now = Date.now();
           if (now - lastToastRef.current > 4000) {
             lastToastRef.current = now;
             appToast.sync.refreshed();
           }
         } catch {
-          /* ignore */
+          /* ignore malformed events */
         }
       };
 
       es.onerror = () => {
         es.close();
+        esRef.current = null;
         if (cancelled) return;
         reconnectTimer = setTimeout(() => {
           backoffRef.current = Math.min(backoffRef.current * 1.5, MAX_RECONNECT_MS);
@@ -62,7 +80,12 @@ export function useJournalRealtime() {
     };
 
     const onVisible = () => {
-      if (document.visibilityState === "visible") connect();
+      if (document.visibilityState === "visible") {
+        connect();
+      } else {
+        esRef.current?.close();
+        esRef.current = null;
+      }
     };
 
     connect();

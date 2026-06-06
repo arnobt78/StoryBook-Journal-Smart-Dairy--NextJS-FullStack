@@ -17,6 +17,7 @@ import { appToast } from "@/lib/app-toast";
 import type { JournalBook } from "@/types";
 import { bookToFormValues, type BookFormValues } from "@/types/book-form";
 import { queryKeys } from "@/lib/query-keys";
+import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
 import {
   createJournalBook,
   deleteJournalBook,
@@ -64,7 +65,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
   const [createSession, setCreateSession] = useState(0);
 
   const invalidateJournal = async () => {
-    await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+    await notifyJournalCacheUpdated(queryClient);
   };
 
   /* ── OFFLINE: create journal — queue when offline, else POST then invalidate ── */

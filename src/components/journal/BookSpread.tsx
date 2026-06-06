@@ -5,7 +5,7 @@
  *
  * Architecture:
  *  • TanStack Query (`useQuery`) hydrates from SSR `initialBook` and keeps the
- *    cache fresh after mutations (invalidateQueries on save/new entry).
+ *    cache fresh after mutations via notifyJournalCacheUpdated.
  *  • DELETE entry/book via shared ConfirmDialog + journal-api helpers;
  *    journalSubtree invalidation keeps shelf + reader in sync without reload.
  *  • PATCH book metadata via BookEditorModal (shelf ✎ or reader “Edit journal”).
@@ -51,6 +51,10 @@ import { useOfflineSync } from "@/context/OfflineSyncContext";
 import { createAiAssistSessionId } from "@/lib/ai-assist";
 import { formatEntryDate } from "@/lib/utils";
 import { queryKeys } from "@/lib/query-keys";
+import {
+  notifyJournalCacheUpdated,
+  notifyJournalCacheUpdatedAndRefetch,
+} from "@/lib/journal-cache-notify";
 import { fetchJournalBook, deleteJournalBook, deleteJournalEntry, updateJournalBook } from "@/lib/journal-api";
 import {
   enqueuePatchBookOffline,
@@ -241,9 +245,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
       if (!res.ok) throw new Error();
       setIsWriting(false);
       await clearLocalDraft();
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.journalSubtree(),
-      });
+      await notifyJournalCacheUpdated(queryClient);
       appToast.journal.entrySaved();
     } catch (err) {
       if (isOfflineOrNetworkError(err)) {
@@ -320,13 +322,12 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
       });
       const json = await res.json();
       if (!json.success) throw new Error();
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.journalSubtree(),
-      });
-      const fresh = await queryClient.fetchQuery({
-        queryKey: queryKeys.bookDetail(bookId),
-        queryFn: () => fetchJournalBook(bookId),
-      });
+      const fresh = await notifyJournalCacheUpdatedAndRefetch(queryClient, () =>
+        queryClient.fetchQuery({
+          queryKey: queryKeys.bookDetail(bookId),
+          queryFn: () => fetchJournalBook(bookId),
+        }),
+      );
       const last = fresh.entries[fresh.entries.length - 1];
       const newId = last?.id;
       if (!newId) throw new Error();
@@ -472,11 +473,12 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     setIsDeleting(true);
     try {
       await deleteJournalEntry(current.id);
-      await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
-      const fresh = await queryClient.fetchQuery({
-        queryKey: queryKeys.bookDetail(bookId),
-        queryFn: () => fetchJournalBook(bookId),
-      });
+      const fresh = await notifyJournalCacheUpdatedAndRefetch(queryClient, () =>
+        queryClient.fetchQuery({
+          queryKey: queryKeys.bookDetail(bookId),
+          queryFn: () => fetchJournalBook(bookId),
+        }),
+      );
       setIsWriting(false);
       if (fresh.entries.length === 0) {
         setFocusedEntryId(null);
@@ -499,7 +501,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     setIsDeleting(true);
     try {
       await deleteJournalBook(bookId);
-      await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+      await notifyJournalCacheUpdated(queryClient);
       appToast.journal.bookRemoved();
       router.push("/dashboard");
       router.refresh();
@@ -529,7 +531,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
       }
 
       await updateJournalBook(bookId, values);
-      await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+      await notifyJournalCacheUpdated(queryClient);
       setShowEditBook(false);
       appToast.journal.bookUpdated();
     } catch (err) {

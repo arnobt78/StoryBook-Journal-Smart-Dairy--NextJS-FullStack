@@ -1,6 +1,8 @@
 /**
  * GET /api/journal/events — SSE stream of journal mutations (Redis list poll).
- * Upstash REST has no blocking SUBSCRIBE; we poll the per-user event buffer.
+ *
+ * Upstash REST has no blocking SUBSCRIBE — we LPUSH on publish and poll the
+ * per-user buffer here. Adaptive interval: 500ms with Redis, 3000ms without.
  */
 import { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
@@ -9,6 +11,9 @@ import { journalChannel, type JournalSyncEvent } from "@/lib/journal-pubsub";
 
 export const dynamic = "force-dynamic";
 
+const POLL_MS_REDIS = 500;
+const POLL_MS_NO_REDIS = 3000;
+
 export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
@@ -16,23 +21,34 @@ export async function GET(req: NextRequest) {
   }
 
   const userId = session.user.id;
+  const sinceParam = req.nextUrl.searchParams.get("since");
+  const sinceParsed = sinceParam ? Number(sinceParam) : NaN;
+  const initialSince = Number.isFinite(sinceParsed) ? sinceParsed : Date.now();
+
   const encoder = new TextEncoder();
   const listKey = `${journalChannel(userId)}:buffer`;
 
+  let cleanupFn: (() => void) | null = null;
+
   const stream = new ReadableStream({
     start(controller) {
-      let lastSeen = Date.now();
+      let lastSeen = initialSince;
       let closed = false;
+      let heartbeat: ReturnType<typeof setInterval> | null = null;
 
       const send = (data: object) => {
         if (closed) return;
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+        try {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+        } catch {
+          cleanup();
+        }
       };
 
       const cleanup = () => {
         if (closed) return;
         closed = true;
-        clearInterval(heartbeat);
+        if (heartbeat) clearInterval(heartbeat);
         try {
           controller.close();
         } catch {
@@ -40,13 +56,18 @@ export async function GET(req: NextRequest) {
         }
       };
 
-      const heartbeat = setInterval(() => {
+      cleanupFn = cleanup;
+
+      send({ connected: true, at: Date.now() });
+
+      heartbeat = setInterval(() => {
         send({ heartbeat: true });
       }, 25000);
 
       const poll = async () => {
         while (!closed) {
           const redis = getRedis();
+          const interval = redis ? POLL_MS_REDIS : POLL_MS_NO_REDIS;
           if (redis) {
             try {
               const raw = await redis.lrange<string>(listKey, 0, 19);
@@ -61,16 +82,15 @@ export async function GET(req: NextRequest) {
               /* retry on next tick */
             }
           }
-          await new Promise((r) => setTimeout(r, 1500));
+          await new Promise((r) => setTimeout(r, interval));
         }
       };
 
       void poll();
-
       req.signal.addEventListener("abort", cleanup);
     },
     cancel() {
-      /* client disconnected */
+      cleanupFn?.();
     },
   });
 
@@ -79,6 +99,7 @@ export async function GET(req: NextRequest) {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
+      "X-Accel-Buffering": "no",
     },
   });
 }

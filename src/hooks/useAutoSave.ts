@@ -21,7 +21,7 @@ import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
 import { useOfflineSync } from "@/context/OfflineSyncContext";
-import { queryKeys } from "@/lib/query-keys";
+import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
 import {
   enqueuePatchEntryOffline,
   isBrowserOffline,
@@ -112,7 +112,7 @@ export function useAutoSave({
 
         if (!res.ok) throw new Error("Save failed");
 
-        void queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+        void notifyJournalCacheUpdated(queryClient);
         onSaveSuccess?.();
 
         appToast.journal.autosaved();

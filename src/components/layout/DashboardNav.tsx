@@ -12,8 +12,7 @@
  *  • Book-close animation overlay on sign-out: faux leather cover before redirect.
  *  • Sign-out calls `queryClient.clear()` so TanStack Query drops all cached server state
  *    immediately (no full reload). After mutations elsewhere, call
- *    `queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() })` so UI
- *    refetches without navigation — see `src/lib/query-keys.ts`.
+ *    `notifyJournalCacheUpdated(queryClient)` so UI refetches without navigation.
  *
  * ── WALKTHROUGH ──
  *  OFFLINE — `{pendingCount} offline` badge from `OfflineSyncContext`; counts IndexedDB queue.

@@ -1,6 +1,11 @@
 /**
  * Journal realtime events — Redis pub/sub channel per userId.
- * SSE route subscribes; API routes publish after mutations.
+ *
+ * Upstash REST cannot block on SUBSCRIBE, so we:
+ *   1) PUBLISH (for future native subscribers)
+ *   2) LPUSH into `${channel}:buffer` — SSE route polls this list (500ms)
+ *
+ * API routes call publishJournalEvent via afterJournalMutation after Prisma writes.
  */
 import { getRedis } from "@/lib/redis";
 

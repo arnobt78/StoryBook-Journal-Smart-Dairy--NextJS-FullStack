@@ -22,8 +22,8 @@
 | TC-0016 | C1 | REQ-0014 | Two tabs receive entry update | e2e | PLANNED | — |
 | TC-0017 | C1 | REQ-0015 | Offline enqueue → online drain → id remap | e2e | **PASS** (static); live NOT RUN | 2026-06-01 |
 | TC-0018 | C1 | REQ-0016 | Search finds entry by tag | integration | PLANNED | — |
-| TC-0019 | C1 | REQ-0017 | Command palette opens with ⌘K | e2e | PLANNED | — |
-| TC-0020 | C1 | REQ-0018 | Theme switch updates cover color | e2e | PLANNED | — |
+| TC-0019 | C1 | REQ-0017 | Command palette opens with ⌘K | e2e | **PASS** (local spec) | 2026-06-01 |
+| TC-0020 | C1 | REQ-0018 | Theme cycle via ⌘K palette | e2e | **PASS** (local spec) | 2026-06-01 |
 | TC-0021 | C1 | REQ-0019 | GET /api/health returns ok JSON | integration | **PASS** (static) | 2026-06-01 |
 | TC-0022 | C1 | REQ-0020 | `next build` succeeds; no app Dockerfile | ci | **PASS** (static) | 2026-06-01 |
 | TC-0023 | C1 | REQ-0022 | axe: no critical a11y on login | a11y | FLAG | 2026-06-01 partial |

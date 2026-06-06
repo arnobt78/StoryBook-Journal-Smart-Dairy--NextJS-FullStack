@@ -11,7 +11,7 @@
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { OAUTH_PENDING_KEY } from "@/constants/auth";
-import { queryKeys } from "@/lib/query-keys";
+import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
 
 export function OAuthReturnSync() {
   const queryClient = useQueryClient();
@@ -23,7 +23,7 @@ export function OAuthReturnSync() {
 
     ran.current = true;
     localStorage.removeItem(OAUTH_PENDING_KEY);
-    void queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+    void notifyJournalCacheUpdated(queryClient);
   }, [queryClient]);
 
   return null;

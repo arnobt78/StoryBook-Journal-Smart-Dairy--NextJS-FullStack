@@ -183,10 +183,11 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 
 ### REQ-0021 — Automated test suite
 
-- **Status:** planned 📋
+- **Status:** partial · `approved [C3]` (CR-0004)
 - **Requirement:** Vitest + RTL + Playwright SHALL cover auth, CRUD, critical animations.
-- **Verification Criteria:** TEST_SPEC.md execution at Gate 2.
-- **Done Criteria:** CI pipeline green.
+- **Verification Criteria:** 12 Vitest unit PASS; 3 Playwright e2e smoke (local); CI lint/typecheck/vitest/build.
+- **Done Criteria:** Full TC-0001–0014 e2e in CI — future.
+- **Artifacts:** ART-0063–0067
 
 ### REQ-0022 — Accessibility (WCAG-oriented)
 

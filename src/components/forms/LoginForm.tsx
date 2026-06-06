@@ -20,7 +20,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
-import { queryKeys } from "@/lib/query-keys";
+import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
 
 import { AuthOAuthSection } from "@/components/auth/AuthOAuthSection";
 import { RippleButton } from "@/components/ui/ripple-button";
@@ -103,7 +103,7 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
         const displayName = form.email.split("@")[0] || "Reader";
         appToast.auth.welcomeBack(displayName);
         /* Drop stale journal payloads from any prior session (shelf + every open book cache). */
-        await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+        await notifyJournalCacheUpdated(queryClient);
         router.push("/dashboard");
         router.refresh();
       }

@@ -6,9 +6,9 @@
 |-------|-------|
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/Storybook-Dairy-Journal--NextJS-FullStack |
-| **Cycle** | C2 |
-| **Revision** | C2-platform-upgrade-2026-06-01 |
-| **Last commit** | (pending) — C2 platform upgrade |
+| **Cycle** | C3 |
+| **Revision** | C3-consistency-hardening-2026-06-01 |
+| **Last commit** | (pending) — C3 consistency hardening |
 | **Current Stage** | 4 — Verification (static PASS; e2e pending) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003) |
@@ -52,7 +52,7 @@
 
 ## Backlog (planned)
 
-REQ-0021 automated tests (Vitest + Playwright e2e)
+REQ-0021 full e2e suite in CI (TC-0001–0014)
 
 ## Infinity Loop
 

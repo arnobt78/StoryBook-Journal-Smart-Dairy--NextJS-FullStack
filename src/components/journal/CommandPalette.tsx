@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * ⌘K command palette — search entries, navigate journals, quick actions.
+ * ⌘K command palette — search entries, navigate journals, cycle theme, quick actions.
  */
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { signOut } from "next-auth/react";
 import {
   Command,
@@ -16,6 +16,12 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { queryKeys } from "@/lib/query-keys";
+import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
+import { updateJournalBook } from "@/lib/journal-api";
+import { getNextBookThemeId, getBookThemeLabel } from "@/lib/book-theme-cycle";
+import { appToast } from "@/lib/app-toast";
+import { useActiveJournalBook } from "@/hooks/useActiveJournalBook";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import type { SearchHit } from "@/lib/search";
 import type { JournalBook } from "@/types";
 
@@ -26,7 +32,11 @@ type CommandPaletteProps = {
 
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [query, setQuery] = useState("");
+  const [themeBusy, setThemeBusy] = useState(false);
+  const debouncedQuery = useDebouncedValue(query, 300);
+  const { bookId, book, isOnJournalPage } = useActiveJournalBook();
 
   const { data: books = [] } = useQuery<JournalBook[]>({
     queryKey: queryKeys.booksList(),
@@ -39,13 +49,15 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   });
 
   const { data: searchHits = [] } = useQuery<SearchHit[]>({
-    queryKey: ["search", query],
+    queryKey: ["search", debouncedQuery],
     queryFn: async () => {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=12`);
+      const res = await fetch(
+        `/api/search?q=${encodeURIComponent(debouncedQuery)}&limit=12`,
+      );
       const json = await res.json();
       return json.data ?? [];
     },
-    enabled: open && query.trim().length >= 2,
+    enabled: open && debouncedQuery.trim().length >= 2,
   });
 
   const run = useCallback(
@@ -57,7 +69,28 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     [onOpenChange],
   );
 
+  const cycleTheme = useCallback(async () => {
+    if (!bookId || !book || themeBusy) return;
+    setThemeBusy(true);
+    try {
+      const nextId = getNextBookThemeId(book.theme ?? "warm-paper");
+      await updateJournalBook(bookId, { theme: nextId });
+      await notifyJournalCacheUpdated(queryClient);
+      appToast.journal.themeChanged(getBookThemeLabel(nextId));
+      onOpenChange(false);
+      setQuery("");
+    } catch {
+      appToast.journal.saveFailed("update theme");
+    } finally {
+      setThemeBusy(false);
+    }
+  }, [book, bookId, onOpenChange, queryClient, themeBusy]);
+
   if (!open) return null;
+
+  const themeActionLabel = isOnJournalPage && book
+    ? `Cycle page theme (${getBookThemeLabel(book.theme ?? "warm-paper")})`
+    : "Cycle page theme — open a journal first";
 
   return (
     <div
@@ -100,19 +133,25 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
             )}
 
             <CommandGroup heading="Journals">
-              {books.map((book) => (
+              {books.map((b) => (
                 <CommandItem
-                  key={book.id}
-                  value={book.title}
-                  onSelect={() => run(() => router.push(`/journal/${book.id}`))}
+                  key={b.id}
+                  value={b.title}
+                  onSelect={() => run(() => router.push(`/journal/${b.id}`))}
                 >
-                  <span>{book.coverEmoji}</span>
-                  <span>{book.title}</span>
+                  <span>{b.coverEmoji}</span>
+                  <span>{b.title}</span>
                 </CommandItem>
               ))}
             </CommandGroup>
 
             <CommandGroup heading="Actions">
+              <CommandItem
+                disabled={!isOnJournalPage || !book || themeBusy}
+                onSelect={() => void cycleTheme()}
+              >
+                {themeActionLabel}
+              </CommandItem>
               <CommandItem onSelect={() => run(() => router.push("/dashboard"))}>
                 Open shelf
               </CommandItem>

@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { signIn } from "next-auth/react";
 import { appToast } from "@/lib/app-toast";
-import { queryKeys } from "@/lib/query-keys";
+import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
 
 import { AuthOAuthSection } from "@/components/auth/AuthOAuthSection";
 import { RippleButton } from "@/components/ui/ripple-button";
@@ -57,7 +57,7 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
       const name = form.displayName.trim() || form.email.split("@")[0] || "Writer";
       appToast.auth.registered(name);
       /* New user: refresh every journal-scoped query so dashboard + reader never reuse old cache. */
-      await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+      await notifyJournalCacheUpdated(queryClient);
       router.push("/dashboard");
       router.refresh();
     } catch {

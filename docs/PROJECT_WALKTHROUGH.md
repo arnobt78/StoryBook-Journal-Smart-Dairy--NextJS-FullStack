@@ -211,6 +211,7 @@ API routes consistently call `await auth()` and check `session?.user?.id` before
 | Shelf hover | `useJournalPrefetch` — route + `bookDetail` prefetch |
 | Other-tab mutation | SSE → `useJournalRealtime` → `notifyJournalCacheUpdated` |
 | Server write | `afterJournalMutation` → Redis publish (fire-and-forget) |
+| All client CRUD | **Only** `notifyJournalCacheUpdated` in `journal-cache-notify.ts` |
 
 SSR: dashboard/journal pages fetch server-side; client `useQuery` uses SSR `initialData` with `staleTime: 60_000`.
 
@@ -246,13 +247,13 @@ flowchart LR
 - `force-dynamic` on dashboard/auth/journal pages + search/events APIs
 - `.agile-v/` CR-0003; REQ-0013–0018 → implemented
 
-### Minor gaps (non-blocking)
+### C3 hardening (2026-06-01)
 
-1. **Automated tests** — no Vitest/Playwright (Gate 2).
-2. **Command palette** — no in-palette theme toggle (themes via BookEditorModal only).
-3. **SSE** — Upstash list poll (not blocking SUBSCRIBE); needs `UPSTASH_*` for prod multi-tab.
-4. **Demo login** — on by default; `SHOW_DEMO_LOGIN=false` for prod.
-5. **Python** — N/A (TypeScript full-stack).
+1. **Invalidation** — all client paths use `notifyJournalCacheUpdated` / `AndRefetch` (no raw `journalSubtree` elsewhere).
+2. **⌘K theme** — `Cycle page theme` in CommandPalette when on `/journal/[bookId]`.
+3. **SSE** — adaptive 500ms poll, `?since=` reconnect, stream `cancel()` cleanup, hidden-tab pause.
+4. **Tests** — Vitest 12 unit tests; Playwright 3 e2e smoke; CI workflow (no e2e in CI).
+5. **Demo login** — on by default; `SHOW_DEMO_LOGIN=false` for prod.
 
 ---
 
@@ -307,4 +308,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-01 — C2 platform upgrade audit; lint/typecheck/build pass.*
+*Last reviewed: 2026-06-01 — C3 consistency hardening; lint/typecheck/test/build pass.*

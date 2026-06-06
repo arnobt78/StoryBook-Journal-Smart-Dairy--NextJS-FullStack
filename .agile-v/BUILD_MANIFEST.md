@@ -66,6 +66,11 @@
 | ART-0060 | C2 | ui | `src/components/journal/CommandPalette.tsx` | REQ-0017 | implemented |
 | ART-0061 | C2 | layout | `src/components/layout/DashboardCommandProvider.tsx` | REQ-0017 | implemented |
 | ART-0062 | C2 | constants+hook | `src/constants/themes.ts`, `useBookTheme.ts` | REQ-0018 | implemented |
+| ART-0063 | C3 | lib | `journal-cache-notify.ts` (awaitable + AndRefetch) | REQ-0007 | implemented |
+| ART-0064 | C3 | lib+hook | `book-theme-cycle.ts`, `useActiveJournalBook`, `useDebouncedValue` | REQ-0017–0018 | implemented |
+| ART-0065 | C3 | api+hook | SSE hardening `journal/events`, `useJournalRealtime` | REQ-0014 | implemented |
+| ART-0066 | C3 | test | `vitest.config.ts`, `src/lib/__tests__/*` (12 tests) | REQ-0021 | implemented |
+| ART-0067 | C3 | test+ci | `playwright.config.ts`, `tests/e2e/*`, `.github/workflows/ci.yml` | REQ-0021 | partial |
 
 ## Planned artifacts (backlog)
 

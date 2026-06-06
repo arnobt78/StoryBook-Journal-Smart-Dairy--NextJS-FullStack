@@ -14,7 +14,10 @@
     "db:studio": "prisma studio",
     "db:push": "prisma db push",
     "setup": "npm install && npx prisma generate && npx prisma db push",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -50,18 +53,23 @@
     "postcss": "^8.5.10"
   },
   "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@testing-library/react": "^16.3.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.19.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "autoprefixer": "^10.4.20",
+    "@vitejs/plugin-react": "^4.5.0",
     "eslint": "^9.39.0",
+    "jsdom": "^26.1.0",
     "eslint-config-next": "16.2.6",
     "postcss": "^8.5.10",
     "prisma": "^6.19.0",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.4",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

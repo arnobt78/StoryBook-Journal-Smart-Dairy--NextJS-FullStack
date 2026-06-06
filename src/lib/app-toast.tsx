@@ -97,6 +97,14 @@ export const appToast = {
     bookRemoved() {
       show({ title: "Journal removed", description: "The book and its pages are gone.", icon: Trash2 });
     },
+    themeChanged(label: string) {
+      show({
+        title: "Page theme updated",
+        description: `Now using ${label}.`,
+        icon: Pencil,
+        duration: 2500,
+      });
+    },
     autosaved() {
       show({
         title: "Saved",
