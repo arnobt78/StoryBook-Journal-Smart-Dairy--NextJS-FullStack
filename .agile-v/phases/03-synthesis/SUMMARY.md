@@ -3,25 +3,23 @@
 | Field | Value |
 |-------|-------|
 | Cycle | C1 |
-| Revision | C1-bootstrap-2026-06-01 |
-| Completed | **Partial** (baseline implemented) |
+| Revision | C1-bootstrap-2026-06-01-r2 |
+| Completed | **YES** |
 | Date | 2026-06-01 |
-| Agents | build-agent-js ∥ test-designer |
+| Agent | build-agent-js |
 
-## Synthesis status
+## Delivered (ART-0037–0048)
 
-| Wave | REQs | Status |
-|------|------|--------|
-| Auth + shell | REQ-0001, 0006, 0012 | implemented |
-| Journal core | REQ-0002–0004, 0007–0008 | implemented |
-| UX + AI | REQ-0005, 0009–0011, 0010 | implemented (0009 prod gate open) |
-| Infra | REQ-0020, 0025–0027 | implemented |
-| Backlog | REQ-0013–0018, 0021 | planned |
+- Offline: IndexedDB drafts + sync queue + optimistic cache
+- AI: stream route + rate limit
+- SEO: site-metadata.ts + robots.ts
+- Guardrails: vercel.json, SafeImage, slug PATCH
+- Docs: README, walkthrough comments (76 files)
 
-## Build manifest
+## Evidence
 
-ART-0001–0036 registered — see BUILD_MANIFEST.md.
+BUILD_MANIFEST.md ART-0001–0048; commits `22fa6ef`, `72bb670`.
 
-## Test designer output
+## Next
 
-TEST_SPEC.md TC-0001–0027; e2e harness deferred to REQ-0021.
+Stage 4 e2e execution (REQ-0021).

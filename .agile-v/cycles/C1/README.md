@@ -1,15 +1,17 @@
 # Cycle C1 archive slot
 
-<!-- Frozen read-only snapshot written on Gate 2 acceptance -->
+<!-- Frozen read-only snapshot on Gate 2 acceptance -->
 
-Living documents copy here at cycle close:
+**Status:** Active — living docs in `.agile-v/` root until Gate 2.
 
-- REQUIREMENTS.md → REQUIREMENTS_C1.md
-- BUILD_MANIFEST.md → BUILD_MANIFEST_C1.md
-- TEST_SPEC.md → TEST_SPEC_C1.md
-- VALIDATION_SUMMARY.md → VALIDATION_SUMMARY_C1.md
-- DECISION_LOG.md (append-only copy at close)
+**Revision:** C1-bootstrap-2026-06-01-r2
 
-**Status:** Active cycle — living docs remain in `.agile-v/` root until Gate 2.
+| Metric | Value |
+|--------|-------|
+| REQs | 28 (21 implemented) |
+| ARTs | ART-0001–0048 |
+| Gates | GATE-0001 ✅ GATE-0003 ✅ GATE-0002 pending |
+| Commits | 22fa6ef (features) · 72bb670 (docs+audit) |
+| eval_gate_status | CONDITIONAL |
 
-**Revision:** C1-bootstrap-2026-06-01 — 27 REQs, 36 artifacts, Gate 1 + infra amendment approved.
+On Gate 2 accept, copy living docs here as `*_C1.md` (frozen).

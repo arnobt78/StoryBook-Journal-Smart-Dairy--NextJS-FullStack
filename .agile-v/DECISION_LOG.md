@@ -14,3 +14,7 @@
 | 2026-06-01T12:00:01Z | DEC-0010 | C1 | bootstrap-agent | Vercel-native deploy; remove app Dockerfile | No Docker app image; docker-compose Postgres-only optional | REQ-0020, REQ-0027 |
 | 2026-06-01T12:00:02Z | DEC-0011 | C1 | bootstrap-agent | Add REQ-0025–0027; amend GATE-0003 | Infrastructure traceability for Gate 2 readiness | REQ-0025–0027 |
 | 2026-06-01T12:00:03Z | DEC-0012 | C1 | bootstrap-agent | Demo credentials flagged for prod disable | test@user.com in UI acceptable dev-only; CR before Vercel prod | REQ-0009, RISK-0006 |
+| 2026-06-01T18:00:00Z | DEC-0013 | C1 | agile-v-bootstrap | C1 r2 Infinity Loop re-baseline | Align AQMS with commits 22fa6ef+72bb670; activate Cursor rule | REQ-0024 |
+| 2026-06-01T18:00:01Z | DEC-0014 | C1 | agile-v-bootstrap | REQ-0015 promoted implemented via CR-0002 | Offline MVP complete: IndexedDB, queue, optimistic cache | REQ-0015 |
+| 2026-06-01T18:00:02Z | DEC-0015 | C1 | agile-v-bootstrap | REQ-0028 registered (guardrails+SafeImage) | Security headers, robots, slug PATCH, force-dynamic | REQ-0028 |
+| 2026-06-01T18:00:03Z | DEC-0016 | C1 | red-team-verifier | Static verify PASS +5 TC (0017,0028–0030) | Stage 3 synthesis complete; Gate 2 still blocked on e2e | REQ-0021 |

@@ -5,49 +5,62 @@
 | Field | Value |
 |-------|-------|
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
-| **Repository** | https://github.com/arnobt78/storybook-journal |
+| **Repository** | https://github.com/arnobt78/Storybook-Dairy-Journal--NextJS-FullStack |
 | **Cycle** | C1 |
-| **Revision** | C1-bootstrap-2026-06-01 |
-| **Current Stage** | 4 — Verification (static pass; e2e pending) |
+| **Revision** | C1-bootstrap-2026-06-01-r2 |
+| **Last commit** | `72bb670` — docs, SEO, walkthrough comments, audit |
+| **Current Stage** | 4 — Verification (static PASS; e2e pending) |
 | **Stage Status** | `IN_PROGRESS` |
-| **Last Gate** | Gate 1 — **Approved** (GATE-0001); infra amendment (GATE-0003) |
-| **Next Gate** | Human Gate 2 — after REQ-0021 e2e suite |
-| **eval_gate_status** | `CONDITIONAL` (static verify PASS; e2e NOT RUN) |
+| **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003) |
+| **Next Gate** | Human Gate 2 — REQ-0021 e2e + live TC |
+| **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-01T12:00:00Z |
-| **Updated By** | bootstrap-agent (C1 re-baseline) |
+| **Last Updated** | 2026-06-01T18:00:00Z |
+| **Updated By** | agile-v-bootstrap (Infinity Loop init) |
 
 ## Stage checklist
 
 | Stage | Status | Evidence |
 |-------|--------|----------|
-| 1 Requirements | **COMPLETE** | REQUIREMENTS.md REQ-0001–0027; GATE-0001, GATE-0003 |
+| 1 Requirements | **COMPLETE** | REQ-0001–0028; GATE-0001, GATE-0003, CR-0002 |
 | 2 Validation | **COMPLETE** | `phases/02-validation/SUMMARY.md` |
-| 3 Synthesis | **PARTIAL** | ART-0001–0032 implemented baseline |
-| 4 Verification | **IN_PROGRESS** | Static TC PASS; e2e NOT RUN |
+| 3 Synthesis | **COMPLETE** | ART-0001–0048; commit 22fa6ef + 72bb670 |
+| 4 Verification | **IN_PROGRESS** | Static 14 TC PASS; e2e NOT RUN |
 | 5 Acceptance | NOT_STARTED | — |
 
-## Human gates
+## Implemented feature rollup (C1)
 
-| Gate | Status | Reference |
-|------|--------|-----------|
-| Gate 1 (REQ blueprint) | **Approved** | GATE-0001 |
-| Gate 1 amendment (infra) | **Approved** | GATE-0003 |
-| Gate 2 (Release) | PENDING | VALIDATION_SUMMARY.md + EVAL_RESULTS.md |
+| Area | REQ | Status |
+|------|-----|--------|
+| Auth + OAuth | REQ-0001 | ✅ |
+| Journal CRUD | REQ-0002–0003 | ✅ |
+| Book UX + flip | REQ-0004–0005 | ✅ |
+| Nav + health | REQ-0006 | ✅ |
+| Query cache | REQ-0007 | ✅ |
+| AI assist + stream | REQ-0010 | ✅ |
+| Offline drafts + sync | REQ-0015 | ✅ |
+| Guardrails + SafeImage | REQ-0028 | ✅ |
+| SEO metadata | REQ-0023 | ✅ |
+| Docs + comments | REQ-0024 | ✅ |
+| PostgreSQL + deploy | REQ-0025–0027 | ✅ |
 
-## Infinity Loop (error & extension)
+## Backlog (planned)
+
+REQ-0013 TipTap · REQ-0014 realtime · REQ-0016 search · REQ-0017 command palette · REQ-0018 themes · REQ-0021 automated tests
+
+## Infinity Loop
 
 ```
 Specify → Constrain → Orchestrate → Prove → Evolve → Verify
      ↑___________________________________|
 ```
 
-Use **CHANGE_LOG.md** (CR-XXXX) for extensions; re-enter at Stage 1–2 per impact. Bug fixes trace to parent REQ; append **DECISION_LOG.md**; re-run affected TC in Stage 4.
+Extensions: `CHANGE_LOG.md` CR-XXXX → re-enter Stage 1–4 per impact.
 
 ## Resume protocol
 
-1. Read this file.
+1. Read this file + `.cursor/rules/agile-v.mdc`.
 2. If `CHECKPOINTS.md` has `PENDING`, match `resume_token` in `APPROVALS.md`.
-3. Load only current-stage files under `phases/XX-*/`.
-4. Honor `POLICY.yaml`.
+3. Load `agile-v-core` skill; domain skills per `skills/SKILLS_INDEX.md`.
+4. Load only current `phases/XX-*/` files.

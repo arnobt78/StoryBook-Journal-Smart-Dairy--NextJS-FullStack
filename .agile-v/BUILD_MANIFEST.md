@@ -40,13 +40,24 @@
 | ART-0034 | C1 | docs | `README.md` | REQ-0020, REQ-0027 | implemented |
 | ART-0035 | C1 | config | `.gitignore` | REQ-0026 | implemented |
 | ART-0036 | C1 | infra | `docker-compose.yml` | REQ-0027 | implemented |
+| ART-0037 | C1 | api | `src/app/api/ai/assist/stream/route.ts` | REQ-0010 | implemented |
+| ART-0038 | C1 | lib | `src/lib/ai-rate-limit.ts`, `src/lib/ai-assist.ts` | REQ-0010 | implemented |
+| ART-0039 | C1 | lib | `src/lib/offline/idb.ts` | REQ-0015 | implemented |
+| ART-0040 | C1 | lib | `src/lib/offline/entry-draft-store.ts` | REQ-0015 | implemented |
+| ART-0041 | C1 | lib | `src/lib/offline/sync-queue-store.ts` | REQ-0015 | implemented |
+| ART-0042 | C1 | lib | `src/lib/journal-slug.ts` | REQ-0028 | implemented |
+| ART-0043 | C1 | lib | `src/lib/journal-cache-optimistic.ts`, `journal-cache-notify.ts` | REQ-0015, REQ-0007 | implemented |
+| ART-0044 | C1 | lib | `src/lib/offline/offline-journal-actions.ts` | REQ-0015 | implemented |
+| ART-0045 | C1 | context+hooks | `OfflineSyncContext`, `useOffline*` hooks | REQ-0015 | implemented |
+| ART-0046 | C1 | lib | `src/lib/site-metadata.ts` | REQ-0023 | implemented |
+| ART-0047 | C1 | meta | `src/app/robots.ts` | REQ-0023, REQ-0028 | implemented |
+| ART-0048 | C1 | ui+config | `src/components/ui/safe-image.tsx`, `vercel.json` | REQ-0028 | implemented |
 
-## Planned artifacts (REQ-0013+)
+## Planned artifacts (backlog)
 
 | ART-ID | Linked REQ | Notes |
 |--------|------------|-------|
 | ART-0100 | REQ-0013 | TipTap editor module |
 | ART-0101 | REQ-0014 | Realtime sync service |
-| ART-0102 | REQ-0015 | Offline sync queue |
 | ART-0103 | REQ-0016 | Search API + UI |
 | ART-0104 | REQ-0021 | Vitest + Playwright harness |

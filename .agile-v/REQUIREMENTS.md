@@ -1,6 +1,6 @@
 # Requirements (Blueprint)
 
-<!-- project: storybook-journal | version: C1-bootstrap-2026-06-01 | Gate 1: GATE-0001 + GATE-0003 -->
+<!-- project: storybook-journal | version: C1-bootstrap-2026-06-01-r2 | Gate 1: GATE-0001 + GATE-0003 + CR-0002 -->
 
 Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `implemented` = code present. `planned` = backlog via CR.
 
@@ -90,12 +90,12 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 
 ### REQ-0010 — AI writing assist (optional)
 
-- **Status:** implemented · `approved [C1]` (basic)
-- **Requirement:** Editor MAY request AI continuation via server proxy `/api/ai/assist` (no client API keys).
-- **Constraint:** Anthropic key server-only; graceful placeholder when unset.
-- **Verification Criteria:** TC-0012 — assist returns text append.
-- **Done Criteria:** BookSpread aiAssist + route handler.
-- **Artifacts:** ART-0021 `/api/ai/assist`
+- **Status:** implemented · `approved [C1]`
+- **Requirement:** Editor MAY request AI continuation via server proxy `/api/ai/assist` + SSE `/api/ai/assist/stream` (no client API keys).
+- **Constraint:** Anthropic key server-only; rate limit 10/min; `assistSessionId` dedupes stream+sync; graceful placeholder when unset.
+- **Verification Criteria:** TC-0012 — assist returns text; TC-0028 — rate limit 429.
+- **Done Criteria:** BookSpread stream assist; ai-rate-limit.ts; ai-assist.ts.
+- **Artifacts:** ART-0021, ART-0037–0038
 
 ### REQ-0011 — Responsive book sizing
 
@@ -129,12 +129,14 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 - **Requirement:** Entry changes SHALL propagate across tabs/devices via Redis pub/sub or SSE.
 - **Verification Criteria:** TC-0016 (future).
 
-### REQ-0015 — Offline-first drafts
+### REQ-0015 — Offline-first drafts & sync queue
 
-- **Status:** planned 📋
-- **Requirement:** Drafts SHALL persist locally (IndexedDB) and sync when online.
-- **Verification Criteria:** TC-0017 (future).
-- **Note:** useAutoSave.ts exists as partial foundation.
+- **Status:** implemented · `approved [C1]` (CR-0002)
+- **Requirement:** Drafts SHALL persist locally (IndexedDB); mutations SHALL enqueue when offline and drain on reconnect with temp-id remap.
+- **Constraint:** Optimistic TanStack cache; `notifyJournalCacheUpdated`; FIFO queue types: patchEntry, postEntry, patchBook, postBook.
+- **Verification Criteria:** TC-0017 — offline save → online sync → server id remap.
+- **Done Criteria:** offline/* stores, OfflineSyncContext, useOffline* hooks, nav badge.
+- **Artifacts:** ART-0039–0045
 
 ### REQ-0016 — Full-text search
 
@@ -189,10 +191,10 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 
 ### REQ-0023 — SEO & metadata
 
-- **Status:** partial · `approved [C1]`
-- **Requirement:** App routes SHALL define metadata, OpenGraph where public.
-- **Verification Criteria:** TC-0024 — root layout metadata present.
-- **Artifacts:** ART-0025 root layout metadata
+- **Status:** implemented · `approved [C1]`
+- **Requirement:** App routes SHALL define metadata, OpenGraph, Twitter cards; author Arnob Mahmud; dashboard `noindex`.
+- **Verification Criteria:** TC-0024 — site-metadata.ts + layout; TC-0029 — robots.ts.
+- **Artifacts:** ART-0025, ART-0046–0047
 
 ### REQ-0024 — Agile V traceability (process)
 
@@ -228,6 +230,14 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 - **Verification Criteria:** TC-0027 — `docker compose up -d db` + local `.env` connects.
 - **Artifacts:** ART-0036 docker-compose.yml
 
+### REQ-0028 — Production guardrails & SafeImage
+
+- **Status:** implemented · `approved [C1]` (CR-0002)
+- **Requirement:** Production SHALL ship security headers, robots rules, SafeImage avatar fallbacks, slug sync on title PATCH, `force-dynamic` on private routes.
+- **Constraint:** AI keys server-only; dashboard noindex; remotePatterns for Google/GitHub/Robohash.
+- **Verification Criteria:** TC-0030 — next.config + vercel.json headers; SafeImage fallback chain.
+- **Artifacts:** ART-0048, ART-0033, ART-0047, ART-0042 journal-slug.ts
+
 ---
 
 ## Traceability index (REQ → primary ART)
@@ -243,7 +253,10 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 | REQ-0007 | ART-0018–0019 |
 | REQ-0008 | ART-0006–0007 |
 | REQ-0009 | ART-0002, ART-0020 |
-| REQ-0010 | ART-0021 |
+| REQ-0010 | ART-0021, ART-0037–0038 |
+| REQ-0015 | ART-0039–0045 |
+| REQ-0023 | ART-0025, ART-0046–0047 |
+| REQ-0028 | ART-0048, ART-0033, ART-0042 |
 | REQ-0011 | ART-0022 |
 | REQ-0012 | ART-0023–0024, ART-0032 |
 | REQ-0019 | ART-0017 |

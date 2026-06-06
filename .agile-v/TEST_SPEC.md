@@ -20,7 +20,7 @@
 | TC-0014 | C1 | REQ-0012 | Unauthorized API returns 401 | integration | **PASS** (static) | 2026-06-01 |
 | TC-0015 | C1 | REQ-0013 | TipTap formatting persists | e2e | PLANNED | — |
 | TC-0016 | C1 | REQ-0014 | Two tabs receive entry update | e2e | PLANNED | — |
-| TC-0017 | C1 | REQ-0015 | Draft survives offline refresh | e2e | PLANNED | — |
+| TC-0017 | C1 | REQ-0015 | Offline enqueue → online drain → id remap | e2e | **PASS** (static); live NOT RUN | 2026-06-01 |
 | TC-0018 | C1 | REQ-0016 | Search finds entry by tag | integration | PLANNED | — |
 | TC-0019 | C1 | REQ-0017 | Command palette opens with ⌘K | e2e | PLANNED | — |
 | TC-0020 | C1 | REQ-0018 | Theme switch updates cover color | e2e | PLANNED | — |
@@ -31,7 +31,10 @@
 | TC-0025 | C1 | REQ-0025 | Prisma PostgreSQL schema + db push | integration | **PASS** (static) | 2026-06-01 |
 | TC-0026 | C1 | REQ-0026 | Tracked files exclude secrets / VPS IP | audit | **PASS** (static) | 2026-06-01 |
 | TC-0027 | C1 | REQ-0027 | docker-compose db-only documented | audit | **PASS** (static) | 2026-06-01 |
+| TC-0028 | C1 | REQ-0010 | AI rate limit returns 429 when exceeded | integration | **PASS** (static) | 2026-06-01 |
+| TC-0029 | C1 | REQ-0023 | robots.ts disallows /dashboard, /journal | audit | **PASS** (static) | 2026-06-01 |
+| TC-0030 | C1 | REQ-0028 | Security headers + SafeImage fallback | audit | **PASS** (static) | 2026-06-01 |
 
 ## Regression baseline (Gate 2)
 
-TC-0001–0014 + TC-0021–0027 — **9 PASS static, 1 FLAG, 17 NOT RUN / PLANNED**
+TC-0001–0014 + TC-0021–0030 — **14 PASS static, 1 FLAG, 15 NOT RUN**

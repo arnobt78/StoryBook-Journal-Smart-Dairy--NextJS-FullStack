@@ -5,7 +5,8 @@
     "display_name": "StoryBook Journal",
     "repository": "https://github.com/arnobt78/storybook-journal",
     "cycle": "C1",
-    "revision": "C1-bootstrap-2026-06-01",
+    "revision": "C1-bootstrap-2026-06-01-r2",
+    "last_commit": "72bb670",
     "tech_stack": [
       "Next.js 16 App Router",
       "React 19",
