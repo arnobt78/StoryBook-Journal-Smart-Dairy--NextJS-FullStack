@@ -36,7 +36,7 @@ import { useRouter } from "next/navigation";
 import { LogIn, PenLine } from "lucide-react";
 import { TypewriterText } from "@/components/animations/TypewriterText";
 import { RippleButton } from "@/components/ui/ripple-button";
-import { LEATHER_GLASS_CLASS } from "@/lib/leather-glass-styles";
+import { LEATHER_GLASS, LEATHER_GLASS_CLASS } from "@/lib/leather-glass-styles";
 
 /** Total ms the cover animation plays before router.push fires. */
 const COVER_OPEN_MS = 900;
@@ -423,6 +423,7 @@ export function LandingCover() {
           className={LEATHER_GLASS_CLASS.buttonPrimary}
           style={{
             ...ctaTypography,
+            color: LEATHER_GLASS.buttonPrimary.color,
             padding: "11px 26px",
             borderRadius: "4px",
             flexShrink: 0,
@@ -437,6 +438,7 @@ export function LandingCover() {
           className={LEATHER_GLASS_CLASS.buttonOutline}
           style={{
             ...ctaTypography,
+            color: "rgba(255,205,130,.95)",
             padding: "11px 26px",
             borderRadius: "4px",
             flexShrink: 0,

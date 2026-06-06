@@ -391,6 +391,12 @@ body {
   -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 160, 60, 0.25);
   box-shadow: 0 15px 35px rgba(90, 40, 10, 0.35);
+  color: rgba(255, 215, 150, 0.95);
+}
+
+.leather-glass-btn svg {
+  color: inherit;
+  stroke: currentColor;
 }
 
 .leather-glass-btn-outline {
@@ -399,6 +405,12 @@ body {
   -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 160, 60, 0.22);
   box-shadow: 0 10px 30px rgba(139, 69, 19, 0.12);
+  color: rgba(255, 200, 120, 0.92);
+}
+
+.leather-glass-btn-outline svg {
+  color: inherit;
+  stroke: currentColor;
 }
 
 .leather-glass-input {

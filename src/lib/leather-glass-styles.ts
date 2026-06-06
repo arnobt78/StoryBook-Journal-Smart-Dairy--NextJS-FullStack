@@ -40,7 +40,7 @@ export const LEATHER_GLASS: Record<
     WebkitBackdropFilter: "blur(6px)",
     border: "1px solid rgba(255,160,60,.22)",
     boxShadow: "0 10px 30px rgba(139,69,19,.12)",
-    color: "rgba(255,170,70,.7)",
+    color: "rgba(255,200,120,.92)",
   },
   input: {
     background: "linear-gradient(135deg, rgba(120,70,20,.08), rgba(90,40,10,.03))",
