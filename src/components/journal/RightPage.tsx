@@ -24,6 +24,7 @@ import { MOODS, WEATHERS } from "@/constants";
 import { mergePendingTag } from "@/lib/journal-tags";
 import { normalizeTags, wordCount } from "@/lib/utils";
 import { JournalEntryTags } from "@/components/journal/JournalEntryTags";
+import { JournalEntryTagsEditor } from "@/components/journal/JournalEntryTagsEditor";
 import type { FlipDirection } from "@/types";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { JournalReadFooter } from "@/components/journal/JournalReadFooter";
@@ -230,9 +231,18 @@ export function RightPage({
                 </div>
               )}
 
-              {/* Tags — pinned below editor; pills match read mode */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "8px", flexShrink: 0 }}>
-                <JournalEntryTags tags={draftTags} />
+              <MiniLabel>Tags</MiniLabel>
+              {/* Editable pills — × removes; "+ tag" adds; Backspace on empty input pops last */}
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "4px", marginBottom: "8px", flexShrink: 0 }}>
+                <JournalEntryTagsEditor
+                  tags={draftTags}
+                  onRemove={(tag) =>
+                    onDraftChange(
+                      "tags",
+                      draftTags.filter((t) => t !== tag),
+                    )
+                  }
+                />
                 <input
                   value={newTag}
                   onChange={e => setNewTag(e.target.value)}
