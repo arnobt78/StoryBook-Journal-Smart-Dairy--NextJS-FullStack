@@ -240,8 +240,8 @@ flowchart LR
 
 ### Verified passing
 
-- `npm run lint` / `typecheck` / `test` / `build` — pass
-- `npm run test:e2e` — pass after `test:e2e:install` (2 pass, 1 conditional skip)
+- `npm run lint` / `typecheck` / `test` / `build` — pass (stop `dev` before build, or `rm -rf .next`)
+- `npm run test:e2e` — pass with `dev` on :3000 + `test:e2e:install` (2 pass, 1 skip w/o seed)
 - C2 waves 1–8: Redis, AI provider, toasts, ripple, TipTap, SSE realtime, search, ⌘K palette, themes
 - Server `afterJournalMutation` on all books/entries routes
 - Client `journalSubtree` invalidation on CRUD + auth + offline + SSE
@@ -309,4 +309,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-01 — C3 verified; full suite + e2e smoke pass.*
+*Last reviewed: 2026-06-01 — C3 audit re-run; CI suite pass; e2e env-dependent.*
