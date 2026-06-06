@@ -271,7 +271,9 @@ flowchart LR
 5. **Journal chrome** — `.leather-glass-nav-pill` on spread nav; `.leather-glass-action-btn` on footers; paper pages stay flat (no blur).
 6. **Dev** — `next.config.ts` immutable `Cache-Control` on `/_next/static` production-only (fixes lucide HMR stale chunk in dev).
 
-**Audit (2026-06-01):** Plan phases W1–W6 complete. No invalidation/SSR/query regressions. `lint` · `typecheck` · 12 vitest · `build` pass (`rm -rf .next` if dev server holds lock). Optional cosmetic: demo row could add `·` between name/email. Commit `859de14`.
+**Contrast pass (2026-06-07):** Landing CTA gold text/icons (`f746a53`). Auth inputs: outer amber glow (no inset), dim leather placeholders; Google OAuth uses `leather-glass-btn-outline-paper` (dark text + border on cream).
+
+**Audit:** W1–W6 + contrast fixes complete. No invalidation/SSR/query regressions. `lint` · `typecheck` · 12 vitest · `build` pass (`rm -rf .next` if dev running).
 
 ---
 
@@ -326,4 +328,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-01 — leather glass wave 2; lint/typecheck/test/build pass.*
+*Last reviewed: 2026-06-07 — wave 2 + auth contrast; lint/typecheck/test/build pass.*

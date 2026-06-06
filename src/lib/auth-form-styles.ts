@@ -30,7 +30,7 @@ export const authControlStyle: CSSProperties = {
   width: "100%",
   fontFamily: "'Lora', serif",
   fontSize: "13px",
-  color: "rgba(100,55,20,.65)",
+  color: "rgba(55,28,8,.72)",
   borderRadius: "4px",
   padding: "10px 12px",
   cursor: "pointer",
@@ -82,6 +82,14 @@ export const outlineCtaStyle: CSSProperties = {
   boxSizing: "border-box",
   minHeight: AUTH_CONTROL_HEIGHT,
   ...LEATHER_GLASS.buttonOutline,
+};
+
+/** OAuth on cream auth pages — dark leather text, outer glow border */
+export const oauthCtaClassName = LEATHER_GLASS_CLASS.buttonOutlinePaper;
+
+export const oauthCtaStyle: CSSProperties = {
+  ...outlineCtaStyle,
+  ...LEATHER_GLASS.buttonOutlinePaper,
 };
 
 export const fieldLabelStyle: CSSProperties = {

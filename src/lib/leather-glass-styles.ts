@@ -8,14 +8,24 @@ import type { CSSProperties } from "react";
 export const LEATHER_GLASS_CLASS = {
   panel: "leather-glass-panel",
   buttonPrimary: "leather-glass-btn",
+  /** Dark landing / ambient backgrounds — light gold label */
   buttonOutline: "leather-glass-btn-outline",
+  /** Cream auth pages — dark leather label + visible border */
+  buttonOutlinePaper: "leather-glass-btn-outline-paper",
   input: "leather-glass-input",
   avatarRing: "leather-avatar-ring",
   navPill: "leather-glass-nav-pill",
 } as const;
 
 export const LEATHER_GLASS: Record<
-  "panel" | "buttonPrimary" | "buttonOutline" | "input" | "dropdown" | "avatarRing" | "navPill",
+  | "panel"
+  | "buttonPrimary"
+  | "buttonOutline"
+  | "buttonOutlinePaper"
+  | "input"
+  | "dropdown"
+  | "avatarRing"
+  | "navPill",
   CSSProperties
 > = {
   panel: {
@@ -43,11 +53,18 @@ export const LEATHER_GLASS: Record<
     color: "rgba(255,200,120,.92)",
   },
   input: {
-    background: "linear-gradient(135deg, rgba(120,70,20,.08), rgba(90,40,10,.03))",
-    backdropFilter: "blur(4px)",
-    WebkitBackdropFilter: "blur(4px)",
-    border: "1px solid rgba(255,160,60,.18)",
-    boxShadow: "0 10px 30px rgba(139,69,19,.1)",
+    background: "rgba(255,250,242,.72)",
+    border: "1px solid rgba(139,69,19,.32)",
+    /* Outer glow only — no inset shadow */
+    boxShadow:
+      "0 4px 16px rgba(139,69,19,.14), 0 0 20px rgba(255,160,60,.1)",
+  },
+  buttonOutlinePaper: {
+    background: "rgba(255,250,242,.55)",
+    border: "1px solid rgba(139,69,19,.38)",
+    boxShadow:
+      "0 4px 16px rgba(139,69,19,.12), 0 0 18px rgba(255,160,60,.1)",
+    color: "rgba(55,28,8,.85)",
   },
   dropdown: {
     background: "linear-gradient(135deg, rgba(244,236,218,.96), rgba(238,225,205,.94))",

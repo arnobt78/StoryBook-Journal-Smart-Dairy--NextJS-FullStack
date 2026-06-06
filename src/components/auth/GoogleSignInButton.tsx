@@ -7,7 +7,7 @@
 import { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
 import { appToast } from "@/lib/app-toast";
-import { outlineCtaClassName, outlineCtaStyle } from "@/lib/auth-form-styles";
+import { oauthCtaClassName, oauthCtaStyle } from "@/lib/auth-form-styles";
 import {
   AUTH_STATE_KEY,
   OAUTH_CALLBACK_URL,
@@ -55,24 +55,15 @@ export function GoogleSignInButton({
       disabled={disabled || loading}
       onClick={handleGoogleSignIn}
       aria-label={label}
-      className={`w-full auth-control ${outlineCtaClassName}`}
+      className={`w-full auth-control ${oauthCtaClassName}`}
       style={{
-        ...outlineCtaStyle,
+        ...oauthCtaStyle,
         cursor: disabled || loading ? "not-allowed" : "pointer",
         opacity: disabled || loading ? 0.65 : 1,
-        transition: "background 0.15s ease",
-      }}
-      onMouseEnter={(e) => {
-        if (!disabled && !loading) {
-          e.currentTarget.style.background = "rgba(120,70,20,.1)";
-        }
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = "rgba(120,70,20,.06)";
       }}
     >
       <GoogleIcon size={18} />
-      <span>{loading ? "Redirecting…" : label}</span>
+      <span style={{ letterSpacing: "1.5px" }}>{loading ? "Redirecting…" : label}</span>
     </RippleButton>
   );
 }

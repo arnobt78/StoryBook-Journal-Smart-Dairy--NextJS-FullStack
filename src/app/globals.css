@@ -413,12 +413,48 @@ body {
   stroke: currentColor;
 }
 
+/* Auth inputs / demo picker — outer amber glow (no inset shadow) */
 .leather-glass-input {
-  background: linear-gradient(135deg, rgba(120, 70, 20, 0.08), rgba(90, 40, 10, 0.03));
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 160, 60, 0.18) !important;
-  box-shadow: 0 10px 30px rgba(139, 69, 19, 0.1);
+  background: rgba(255, 250, 242, 0.72);
+  border: 1px solid rgba(139, 69, 19, 0.32) !important;
+  box-shadow:
+    0 4px 16px rgba(139, 69, 19, 0.14),
+    0 0 20px rgba(255, 160, 60, 0.1);
+}
+
+.auth-form-stagger .leather-glass-input::placeholder {
+  color: rgba(100, 55, 20, 0.38);
+  opacity: 1;
+}
+
+.auth-form-stagger .leather-glass-input:focus {
+  outline: none;
+  border-color: rgba(139, 69, 19, 0.45) !important;
+  box-shadow:
+    0 4px 18px rgba(139, 69, 19, 0.18),
+    0 0 24px rgba(255, 160, 60, 0.16);
+}
+
+/* Google / OAuth on cream paper — readable dark leather label */
+.leather-glass-btn-outline-paper {
+  background: rgba(255, 250, 242, 0.55);
+  border: 1px solid rgba(139, 69, 19, 0.38) !important;
+  box-shadow:
+    0 4px 16px rgba(139, 69, 19, 0.12),
+    0 0 18px rgba(255, 160, 60, 0.1);
+  color: rgba(55, 28, 8, 0.85);
+}
+
+.leather-glass-btn-outline-paper:hover:not(:disabled) {
+  background: rgba(244, 232, 210, 0.75);
+  border-color: rgba(139, 69, 19, 0.48) !important;
+  box-shadow:
+    0 6px 20px rgba(139, 69, 19, 0.16),
+    0 0 22px rgba(255, 160, 60, 0.14);
+}
+
+.leather-glass-btn-outline-paper span {
+  color: inherit;
 }
 
 .leather-avatar-ring {
