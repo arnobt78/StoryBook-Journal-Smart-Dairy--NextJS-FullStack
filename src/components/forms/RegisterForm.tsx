@@ -11,7 +11,13 @@ import { signIn } from "next-auth/react";
 import { BookPlus } from "lucide-react";
 import { appToast } from "@/lib/app-toast";
 import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
-import { fieldLabelStyle, inputStyle, primaryCtaStyle } from "@/lib/auth-form-styles";
+import {
+  fieldLabelStyle,
+  inputClassName,
+  inputStyle,
+  primaryCtaClassName,
+  primaryCtaStyle,
+} from "@/lib/auth-form-styles";
 
 import { AuthOAuthSection } from "@/components/auth/AuthOAuthSection";
 import { RippleButton } from "@/components/ui/ripple-button";
@@ -67,7 +73,7 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
         <input
           type="text"
           required
-          className="auth-control"
+          className={inputClassName}
           value={form.displayName}
           onChange={(e) => setForm((f) => ({ ...f, displayName: e.target.value }))}
           placeholder="Jane Doe"
@@ -78,7 +84,7 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
         <input
           type="email"
           required
-          className="auth-control"
+          className={inputClassName}
           value={form.email}
           onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
           placeholder="you@example.com"
@@ -90,7 +96,7 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
           type="password"
           required
           minLength={8}
-          className="auth-control"
+          className={inputClassName}
           value={form.password}
           onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
           placeholder="At least 8 characters"
@@ -108,7 +114,7 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
         icon={BookPlus}
         shine
         shineRadius={4}
-        className="w-full"
+        className={`w-full ${primaryCtaClassName}`}
         style={{
           ...primaryCtaStyle,
           cursor: loading ? "not-allowed" : "pointer",

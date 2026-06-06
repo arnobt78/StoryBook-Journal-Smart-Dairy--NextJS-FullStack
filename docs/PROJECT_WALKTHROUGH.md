@@ -262,6 +262,15 @@ flowchart LR
 2. **Auth** — `.book-viewport-80`; unified `auth-form-styles`; demo robohash avatar; Clear Section disabled when fields empty; Google button matches primary shape.
 3. **Journal** — `JournalWriteFooter` / `JournalReadFooter`; readable AI Assist; nav icons; welcome toast `HandMetal` + Sonner gap.
 
+### Leather glass polish — wave 2 (2026-06-01)
+
+1. **Tokens** — `leather-glass-styles.ts` + `.leather-glass-*` utilities in `globals.css` (amber/leather glassmorphism from `UI_STYLING_GUIDE`).
+2. **Landing** — closed cover **70%** viewport with vertical padding; CTA icons inline with labels (no `display:inline-block` override); glass primary/outline buttons.
+3. **Auth** — `AvatarRing` + `DemoAccountMenuRow` (inline name · email, equal row heights); glass panel/inputs on login/register/Google.
+4. **Nav + toast** — `DashboardNav` circular `AvatarRing`; `RippleButton` skips default radius unless shine; `.journal-toast` centers Sonner icon vertically.
+5. **Journal chrome** — `.leather-glass-nav-pill` on spread nav; `.leather-glass-action-btn` on footers; paper pages stay flat (no blur).
+6. **Dev** — `next.config.ts` immutable `Cache-Control` on `/_next/static` production-only (fixes lucide HMR stale chunk in dev).
+
 ---
 
 ## 10. SQLite vs PostgreSQL on the VPS (recommendation)
@@ -315,4 +324,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-01 — UI polish wave; lint/typecheck/test/build pass.*
+*Last reviewed: 2026-06-01 — leather glass wave 2; lint/typecheck/test/build pass.*

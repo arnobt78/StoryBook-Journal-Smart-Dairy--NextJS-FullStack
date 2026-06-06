@@ -23,16 +23,18 @@ import { BookOpen, ChevronDown } from "lucide-react";
 import { appToast } from "@/lib/app-toast";
 import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
 import {
+  authControlClassName,
   authControlStyle,
   fieldLabelStyle,
+  inputClassName,
   inputStyle,
+  primaryCtaClassName,
   primaryCtaStyle,
 } from "@/lib/auth-form-styles";
-import { robohashUrl } from "@/lib/robohash";
-
 import { AuthOAuthSection } from "@/components/auth/AuthOAuthSection";
+import { DemoAccountMenuRow } from "@/components/auth/DemoAccountMenuRow";
 import { RippleButton } from "@/components/ui/ripple-button";
-import { SafeImage } from "@/components/ui/safe-image";
+import { AvatarRing } from "@/components/ui/AvatarRing";
 import { TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_PASSWORD } from "@/constants/auth";
 
 /** Test account seeded in the database for demos — matches api/auth/register seed logic */
@@ -134,7 +136,7 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
           <RippleButton
             ref={demoTriggerRef}
             type="button"
-            className="w-full auth-control"
+            className={`w-full ${authControlClassName}`}
             onClick={() => setShowTestMenu((v) => !v)}
             style={authControlStyle}
           >
@@ -148,88 +150,32 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
               <div
                 role="listbox"
                 aria-label="Demo account actions"
+                className="leather-glass-panel overflow-hidden"
                 style={{
                   position: "fixed",
                   top: menuBox.top,
                   left: menuBox.left,
                   width: menuBox.width,
                   zIndex: 9999,
-                  background: "rgba(244,236,218,.98)",
-                  border: "1px solid rgba(120,70,20,.2)",
                   borderRadius: "4px",
-                  boxShadow: "0 8px 24px rgba(0,0,0,.18)",
-                  overflow: "hidden",
                   boxSizing: "border-box",
                 }}
               >
-                <RippleButton
-                  type="button"
-                  onClick={fillTestCredentials}
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    alignItems: "center",
-                    gap: "10px",
-                    textAlign: "left",
-                    fontFamily: "'Lora',serif",
-                    fontSize: "12px",
-                    color: "rgba(35,14,3,.8)",
-                    padding: "10px 14px",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    borderBottom: "1px solid rgba(120,70,20,.1)",
-                    boxSizing: "border-box",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(120,70,20,.06)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "none";
-                  }}
-                >
-                  <SafeImage
-                    src={robohashUrl(TEST_EMAIL, 56)}
-                    alt=""
-                    width={28}
-                    height={28}
-                    className="shrink-0 rounded-full"
-                    unoptimized
-                  />
-                  <span>
+                <DemoAccountMenuRow onClick={fillTestCredentials} withBorderBottom>
+                  <AvatarRing seed={TEST_EMAIL} size={28} unoptimized />
+                  <span className="demo-menu-row__inline" style={{ fontSize: "12px" }}>
                     <strong>Test User</strong>
-                    <span style={{ display: "block", fontSize: "10px", opacity: 0.65 }}>{TEST_EMAIL}</span>
+                    <span style={{ opacity: 0.65, fontSize: "11px" }}>{TEST_EMAIL}</span>
                   </span>
-                </RippleButton>
-                <RippleButton
-                  type="button"
+                </DemoAccountMenuRow>
+                <DemoAccountMenuRow
                   disabled={!hasCredentials}
                   onClick={clearCredentialFields}
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    textAlign: "left",
-                    fontFamily: "'Lora',serif",
-                    fontSize: "11px",
-                    letterSpacing: "1px",
-                    textTransform: "uppercase",
-                    color: "rgba(100,55,20,.55)",
-                    padding: "10px 14px",
-                    background: "none",
-                    border: "none",
-                    cursor: hasCredentials ? "pointer" : "not-allowed",
-                    opacity: hasCredentials ? 1 : 0.35,
-                    boxSizing: "border-box",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (hasCredentials) e.currentTarget.style.background = "rgba(120,70,20,.06)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "none";
-                  }}
+                  className="uppercase tracking-wide"
+                  style={{ fontSize: "11px", letterSpacing: "1px", color: "rgba(100,55,20,.55)" }}
                 >
                   Clear Section
-                </RippleButton>
+                </DemoAccountMenuRow>
               </div>,
               document.body,
             )}
@@ -240,7 +186,7 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
         <input
           type="email"
           required
-          className="auth-control"
+          className={inputClassName}
           value={form.email}
           onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
           placeholder="you@example.com"
@@ -251,7 +197,7 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
         <input
           type="password"
           required
-          className="auth-control"
+          className={inputClassName}
           value={form.password}
           onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
           placeholder="••••••••"
@@ -271,7 +217,7 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
         icon={BookOpen}
         shine
         shineRadius={4}
-        className="w-full"
+        className={`w-full ${primaryCtaClassName}`}
         style={{
           ...primaryCtaStyle,
           cursor: loading ? "not-allowed" : "pointer",

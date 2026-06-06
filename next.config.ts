@@ -22,21 +22,20 @@ const nextConfig: NextConfig = {
     ],
   },
   async headers() {
-    return [
-      {
+    /* Immutable static caching is production-only — in dev it breaks Turbopack HMR
+       (stale lucide chunks → "module factory is not available" after icon refactors). */
+    const routes: { source: string; headers: { key: string; value: string }[] }[] = [
+      { source: "/(.*)", headers: securityHeaders },
+    ];
+    if (process.env.NODE_ENV === "production") {
+      routes.unshift({
         source: "/_next/static/(.*)",
         headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
-      },
-      {
-        source: "/(.*)",
-        headers: securityHeaders,
-      },
-    ];
+      });
+    }
+    return routes;
   },
 };
 

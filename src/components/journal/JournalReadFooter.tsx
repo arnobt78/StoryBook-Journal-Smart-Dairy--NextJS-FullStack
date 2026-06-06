@@ -66,6 +66,7 @@ export function JournalReadFooter({
             icon={Trash2}
             iconSize={13}
             onClick={onDeleteEntry}
+            className="leather-glass-action-btn"
             style={{
               fontFamily: "'Lora',serif",
               fontSize: "9px",
@@ -88,6 +89,7 @@ export function JournalReadFooter({
           icon={PencilLine}
           iconSize={13}
           onClick={onStartWriting}
+          className="leather-glass-action-btn"
           style={{
             fontFamily: "'Lora',serif",
             fontSize: "9.5px",

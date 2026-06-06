@@ -35,9 +35,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SafeImage } from "@/components/ui/safe-image";
+import { AvatarRing } from "@/components/ui/AvatarRing";
 import { appToast } from "@/lib/app-toast";
-import { robohashUrl } from "@/lib/robohash";
 import { useOfflineSync } from "@/context/OfflineSyncContext";
 
 interface DashboardNavProps {
@@ -224,24 +223,14 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 type="button"
                 aria-label="Open account menu"
                 disabled={signingOut}
-                className="flex shrink-0 cursor-pointer items-center justify-center rounded-full border-2 border-[rgb(137,68,19,.88)] bg-transparent p-0.5 outline-none ring-offset-2 ring-offset-transparent transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[rgba(255,205,130,0.45)] disabled:cursor-default disabled:opacity-40"
-                style={{ width: 40, height: 40 }}
+                className="flex shrink-0 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 outline-none ring-offset-2 ring-offset-transparent transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[rgba(255,205,130,0.45)] disabled:cursor-default disabled:opacity-40"
+                style={{ width: 40, height: 40, borderRadius: "50%" }}
               >
-                {/* ── SafeImage fallback: Google avatar → Robohash on load error ── */}
-                <SafeImage
-                  key={user.image ?? avatarSeed}
-                  src={user.image ?? robohashUrl(avatarSeed)}
-                  fallbackSrc={user.image ? robohashUrl(avatarSeed) : undefined}
+                <AvatarRing
+                  src={user.image}
+                  seed={avatarSeed}
+                  size={36}
                   alt={user.name ?? "User avatar"}
-                  width={32}
-                  height={32}
-                  referrerPolicy="no-referrer"
-                  className="rounded-full object-cover"
-                  style={{
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
                 />
               </RippleButton>
             </DropdownMenuTrigger>

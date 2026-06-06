@@ -50,6 +50,7 @@ export function JournalWriteFooter({
           iconSize={13}
           onClick={onAiAssist}
           disabled={isAiThinking || !canAiAssist}
+          className="leather-glass-action-btn"
           style={{
             fontFamily: "'Lora',serif",
             fontSize: "9px",
@@ -72,6 +73,7 @@ export function JournalWriteFooter({
           icon={X}
           iconSize={13}
           onClick={onCancel}
+          className="leather-glass-action-btn"
           style={{
             fontFamily: "'Lora',serif",
             fontSize: "9.5px",
@@ -96,6 +98,7 @@ export function JournalWriteFooter({
           disabled={isSaving}
           shine
           shineRadius={4}
+          className="leather-glass-action-btn"
           style={{
             fontFamily: "'Lora',serif",
             fontSize: "9.5px",

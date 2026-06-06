@@ -746,6 +746,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
 
         {/* Navigation bar */}
         <div
+          className="leather-glass-nav-pill"
           style={{
             position: "absolute",
             bottom: "-80px",
@@ -754,11 +755,8 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
             display: "flex",
             alignItems: "center",
             gap: "14px",
-            background: "rgba(16,6,1,.9)",
-            backdropFilter: "blur(10px)",
             padding: "10px 22px",
             borderRadius: "50px",
-            border: "1px solid rgba(255,160,60,.08)",
             whiteSpace: "nowrap",
           }}
         >

@@ -14,8 +14,8 @@
   --page-w: clamp(280px, 41vw, 450px);
   --page-h: clamp(420px, 57vh, 576px);
   --spine-w: 22px;
-  /* Landing closed cover — 80% viewport, aspect 240:340 */
-  --cover-w: min(80vw, calc(80vh * 240 / 340));
+  /* Landing closed cover — 70% viewport + padding in .landing-cover-viewport */
+  --cover-w: min(70vw, calc(70vh * 240 / 340));
   --cover-h: calc(var(--cover-w) * 340 / 240);
   --auth-control-h: 42px;
 
@@ -369,9 +369,102 @@ body {
 
 /* Landing cover container — enables container queries for scaled typography */
 .landing-cover-viewport {
-  --cover-w: min(80vw, calc(80vh * 240 / 340));
+  --cover-w: min(70vw, calc(70vh * 240 / 340));
   --cover-h: calc(var(--cover-w) * 340 / 240);
   container-type: inline-size;
+  padding: clamp(32px, 5vh, 56px) 16px;
+  box-sizing: border-box;
+}
+
+/* ─── Leather glassmorphism (docs/UI_STYLING_GUIDE.md — amber/leather variant) ── */
+.leather-glass-panel {
+  background: linear-gradient(135deg, rgba(244, 236, 218, 0.92), rgba(240, 228, 210, 0.88));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 160, 60, 0.22);
+  box-shadow: 0 10px 30px rgba(139, 69, 19, 0.18);
+}
+
+.leather-glass-btn {
+  background: linear-gradient(135deg, rgba(90, 40, 10, 0.88), rgba(70, 32, 8, 0.82));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 160, 60, 0.25);
+  box-shadow: 0 15px 35px rgba(90, 40, 10, 0.35);
+}
+
+.leather-glass-btn-outline {
+  background: linear-gradient(135deg, rgba(120, 70, 20, 0.1), rgba(90, 40, 10, 0.04));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 160, 60, 0.22);
+  box-shadow: 0 10px 30px rgba(139, 69, 19, 0.12);
+}
+
+.leather-glass-input {
+  background: linear-gradient(135deg, rgba(120, 70, 20, 0.08), rgba(90, 40, 10, 0.03));
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 160, 60, 0.18) !important;
+  box-shadow: 0 10px 30px rgba(139, 69, 19, 0.1);
+}
+
+.leather-avatar-ring {
+  border: 2px solid rgba(139, 69, 19, 0.55);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 160, 60, 0.28), inset 0 0 8px rgba(90, 40, 10, 0.12);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leather-glass-nav-pill {
+  background: rgba(16, 6, 1, 0.88) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 160, 60, 0.12) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 160, 60, 0.06);
+}
+
+.leather-glass-action-btn {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.1);
+}
+
+/* Demo menu row — equal height for user + clear rows */
+.demo-menu-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--auth-control-h, 42px);
+  padding: 10px 14px;
+  gap: 10px;
+  box-sizing: border-box;
+  text-align: left;
+  font-family: "Lora", serif;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.demo-menu-row__inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+@media (max-width: 360px) {
+  .demo-menu-row__inline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
 }
 
 /* Auth controls — unified height for inputs, demo picker, OAuth */
@@ -395,7 +488,7 @@ body {
 /* Sonner toast — gap between icon and title/subtitle */
 .journal-toast {
   display: flex !important;
-  align-items: flex-start !important;
+  align-items: center !important;
   gap: 12px !important;
 }
 

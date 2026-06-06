@@ -3,6 +3,7 @@
 /**
  * RippleButton — water-splash click effect per docs/RIPPLE_BUTTON_EFFECT.md.
  * Optional Lucide icon + configurable shine radius (fixes pill-stretch on inline CTAs).
+ * Border radius only applied when shine/shineRadius set — preserves rounded-full avatars.
  */
 import {
   forwardRef,
@@ -17,7 +18,7 @@ import { cn } from "@/lib/utils";
 export type RippleButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   /** Wrap in cta-shine-wrap for auto-playing shine sweep on primary CTAs */
   shine?: boolean;
-  /** Border radius applied to shine wrap + button (default 4px — avoids pill stretch) */
+  /** Border radius for shine wrap + button — omit to let className (e.g. rounded-full) win */
   shineRadius?: string | number;
   /** Optional Lucide icon rendered before/after label */
   icon?: LucideIcon;
@@ -25,8 +26,7 @@ export type RippleButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   iconSize?: number;
 };
 
-function toRadius(value: string | number | undefined): string {
-  if (value === undefined) return "4px";
+function toRadius(value: string | number): string {
   return typeof value === "number" ? `${value}px` : value;
 }
 
@@ -65,18 +65,32 @@ export const RippleButton = forwardRef<HTMLButtonElement, RippleButtonProps>(
       [onClick],
     );
 
-    const radius = toRadius(shineRadius ?? (style?.borderRadius as string | number | undefined));
+    const hasExplicitRadius =
+      shineRadius !== undefined ||
+      shine ||
+      style?.borderRadius !== undefined;
+
+    const radius = hasExplicitRadius
+      ? toRadius(
+          shineRadius ??
+            (style?.borderRadius as string | number | undefined) ??
+            "4px",
+        )
+      : undefined;
+
     const isFullWidth = className?.includes("w-full") || style?.width === "100%";
 
     const buttonStyle: CSSProperties = {
       position: "relative",
       overflow: "hidden",
       display: "inline-flex",
+      flexDirection: "row",
+      flexWrap: Icon ? "nowrap" : undefined,
       alignItems: "center",
       justifyContent: "center",
       gap: Icon ? "8px" : undefined,
       flexShrink: 0,
-      borderRadius: radius,
+      ...(radius !== undefined ? { borderRadius: radius } : {}),
       ...style,
     };
 
@@ -105,7 +119,7 @@ export const RippleButton = forwardRef<HTMLButtonElement, RippleButtonProps>(
         display: isFullWidth ? "block" : "inline-flex",
         width: isFullWidth ? "100%" : "fit-content",
         overflow: "hidden",
-        borderRadius: radius,
+        borderRadius: radius ?? "4px",
         flexShrink: 0,
       };
       return (

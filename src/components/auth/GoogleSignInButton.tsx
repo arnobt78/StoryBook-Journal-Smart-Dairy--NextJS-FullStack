@@ -7,7 +7,7 @@
 import { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
 import { appToast } from "@/lib/app-toast";
-import { outlineCtaStyle } from "@/lib/auth-form-styles";
+import { outlineCtaClassName, outlineCtaStyle } from "@/lib/auth-form-styles";
 import {
   AUTH_STATE_KEY,
   OAUTH_CALLBACK_URL,
@@ -55,7 +55,7 @@ export function GoogleSignInButton({
       disabled={disabled || loading}
       onClick={handleGoogleSignIn}
       aria-label={label}
-      className="w-full auth-control"
+      className={`w-full auth-control ${outlineCtaClassName}`}
       style={{
         ...outlineCtaStyle,
         cursor: disabled || loading ? "not-allowed" : "pointer",

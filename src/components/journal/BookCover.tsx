@@ -36,6 +36,7 @@ import { useRouter } from "next/navigation";
 import { LogIn, PenLine } from "lucide-react";
 import { TypewriterText } from "@/components/animations/TypewriterText";
 import { RippleButton } from "@/components/ui/ripple-button";
+import { LEATHER_GLASS_CLASS } from "@/lib/leather-glass-styles";
 
 /** Total ms the cover animation plays before router.push fires. */
 const COVER_OPEN_MS = 900;
@@ -63,14 +64,12 @@ export function LandingCover() {
     [coverOpening, router]
   );
 
-  const linkStyle: CSSProperties = {
+  /** Typography only — no display/textAlign (would override RippleButton inline-flex row) */
+  const ctaTypography: CSSProperties = {
     fontFamily: "'Lora', serif",
     fontSize: "11px",
     letterSpacing: "2px",
     textTransform: "uppercase",
-    textDecoration: "none",
-    display: "inline-block",
-    textAlign: "center",
     cursor: coverOpening ? "default" : "pointer",
     pointerEvents: coverOpening ? "none" : "auto",
     transition: "opacity 0.2s",
@@ -421,14 +420,11 @@ export function LandingCover() {
           onClick={() => openAndNavigate("/register")}
           shine
           shineRadius={4}
+          className={LEATHER_GLASS_CLASS.buttonPrimary}
           style={{
-            ...linkStyle,
-            background: "rgba(90,40,10,.82)",
-            color: "rgba(255,215,150,.92)",
-            border: "none",
+            ...ctaTypography,
             padding: "11px 26px",
             borderRadius: "4px",
-            boxShadow: "0 2px 10px rgba(0,0,0,.3)",
             flexShrink: 0,
           }}
         >
@@ -438,11 +434,9 @@ export function LandingCover() {
           type="button"
           icon={LogIn}
           onClick={() => openAndNavigate("/login")}
+          className={LEATHER_GLASS_CLASS.buttonOutline}
           style={{
-            ...linkStyle,
-            background: "transparent",
-            color: "rgba(255,170,70,.65)",
-            border: "1px solid rgba(255,170,70,.28)",
+            ...ctaTypography,
             padding: "11px 26px",
             borderRadius: "4px",
             flexShrink: 0,
