@@ -240,7 +240,8 @@ flowchart LR
 
 ### Verified passing
 
-- `npm run lint` / `typecheck` / `build` — pass
+- `npm run lint` / `typecheck` / `test` / `build` — pass
+- `npm run test:e2e` — pass after `test:e2e:install` (2 pass, 1 conditional skip)
 - C2 waves 1–8: Redis, AI provider, toasts, ripple, TipTap, SSE realtime, search, ⌘K palette, themes
 - Server `afterJournalMutation` on all books/entries routes
 - Client `journalSubtree` invalidation on CRUD + auth + offline + SSE
@@ -252,7 +253,7 @@ flowchart LR
 1. **Invalidation** — all client paths use `notifyJournalCacheUpdated` / `AndRefetch` (no raw `journalSubtree` elsewhere).
 2. **⌘K theme** — `Cycle page theme` in CommandPalette when on `/journal/[bookId]`.
 3. **SSE** — adaptive 500ms poll, `?since=` reconnect, stream `cancel()` cleanup, hidden-tab pause.
-4. **Tests** — Vitest 12 unit tests; Playwright 3 e2e smoke; CI workflow (no e2e in CI).
+4. **Tests** — Vitest 12 unit; Playwright 3 e2e smoke (`npm run test:e2e:install` once, dev on :3000); theme-cycle skips if shelf empty; CI has no e2e.
 5. **Demo login** — on by default; `SHOW_DEMO_LOGIN=false` for prod.
 
 ---
@@ -308,4 +309,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-01 — C3 consistency hardening; lint/typecheck/test/build pass.*
+*Last reviewed: 2026-06-01 — C3 verified; full suite + e2e smoke pass.*

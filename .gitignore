@@ -20,6 +20,8 @@ node_modules/
 # --- Tooling / OS ---
 # Test coverage output, TypeScript incremental build info, Turborepo cache, OS metadata.
 coverage/
+test-results/
+playwright-report/
 *.tsbuildinfo
 .turbo/
 .DS_Store
