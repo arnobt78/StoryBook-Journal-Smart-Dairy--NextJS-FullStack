@@ -7,7 +7,7 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave10-2026-06-28 |
+| **Revision** | C4-ui-wave11-2026-06-28 |
 | **Last commit** | `0581b60` — docs Wave 10 audit sync |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-28T14:25:00Z |
-| **Updated By** | agile-v-core (Wave 10 audit PASS) |
+| **Last Updated** | 2026-06-28T14:38:00Z |
+| **Updated By** | agile-v-core (C4 Wave 11) |
 
 ## Stage checklist
 
@@ -56,6 +56,7 @@
 | Landing hint/CTA stagger | REQ-0029 | ✅ Wave 8 |
 | Auth stagger consistency + nav hook | REQ-0029–0030 | ✅ Wave 9 |
 | Full-row auth stagger (labels/inputs/CTA/footer) | REQ-0029–0030 | ✅ Wave 10 |
+| Footer bottom pin + gutter flip polish | REQ-0029–0030 | ✅ Wave 11 |
 
 ## Backlog
 

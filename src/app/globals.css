@@ -428,6 +428,59 @@ body {
   }
 }
 
+/* Left-page footer cross-route link — amber text-shadow glow on hover (no underline) */
+.auth-footer-link {
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+.auth-footer-link:hover:not(:disabled) {
+  color: rgba(160, 85, 25, 0.95);
+  text-shadow:
+    0 0 10px rgba(255, 185, 80, 0.45),
+    0 0 18px rgba(255, 140, 40, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-footer-link {
+    transition: none;
+  }
+}
+
+/* Persistent center crease between auth spread leaves — stays mounted during flip */
+.auth-spread-gutter {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 16px;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(100, 50, 10, 0.14) 0%,
+    rgba(60, 30, 8, 0.28) 48%,
+    rgba(100, 50, 10, 0.14) 100%
+  );
+  box-shadow:
+    inset 4px 0 8px rgba(80, 40, 10, 0.12),
+    inset -4px 0 8px rgba(80, 40, 10, 0.12);
+  transition: opacity 0.28s ease-in-out, box-shadow 0.28s ease-in-out;
+}
+
+/* Flip / route-settle phase — slightly deepen crease while overlay or hold-cover active */
+.auth-spread-flipping .auth-spread-gutter {
+  opacity: 1;
+  box-shadow:
+    inset 5px 0 12px rgba(60, 30, 8, 0.18),
+    inset -5px 0 12px rgba(60, 30, 8, 0.18);
+}
+
+@keyframes authHoldFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Static paper sheet — covers right page while RSC loads after flip (no old form flash) */
 .auth-page-hold-cover {
   position: absolute;
@@ -447,6 +500,16 @@ body {
     rgba(120, 80, 30, 0.1) 28px
   );
   background-position: 0 52px;
+  animation: authHoldFadeIn 0.22s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-page-hold-cover {
+    animation: none;
+  }
+  .auth-spread-gutter {
+    transition: none;
+  }
 }
 
 /* Auth right page — scroll fallback when viewport is very short */

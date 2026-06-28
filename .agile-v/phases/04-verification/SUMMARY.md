@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Cycle | **C4** |
-| Revision | C4-ui-wave10-2026-06-28 |
+| Revision | C4-ui-wave11-2026-06-28 |
 | Completed | **Partial** (static + unit + build PASS; e2e NOT RUN) |
-| Date | 2026-06-28 (Wave 10) |
+| Date | 2026-06-28 (Wave 11) |
 | Agent | red-team-verifier (static) |
 
 ## Verification result
@@ -14,7 +14,7 @@
 - **Unit:** 24 Vitest PASS (2026-06-28)
 - **Lint + typecheck:** PASS (2026-06-28)
 - **Build:** PASS (2026-06-28)
-- **Wave 10 audit:** `authStaggerRowProps` + `.auth-stagger-row`; no dead `auth-form-contents` in src; docs synced
+- **Wave 11 audit:** footer bottom pin; `.auth-spread-gutter` + hold-cover fade; PageFlip spine depth
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
 

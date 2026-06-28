@@ -379,7 +379,18 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 16. Related docs
+## 16. C4 UI Wave 11 — Footer pin + gutter flip polish (2026-06-28)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Footer layout | `AuthBookShell.tsx`, `auth-form-styles.ts` | Marketing flex-1; footer `marginTop: auto`; darker prompt; `.auth-footer-link` glow hover |
+| Gutter crease | `AuthBookShell.tsx`, `globals.css` | `.auth-spread-gutter` between leaves; `.auth-spread-flipping` during flip/hold |
+| Hold cover | `globals.css` | `authHoldFadeIn` 220ms fade instead of pop |
+| Page flip | `PageFlip.tsx` | Mid-flip spine box-shadow + ease-in-out easing (shared with journal) |
+
+---
+
+## 17. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -390,4 +401,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-28 — C4 Wave 10 full-row auth stagger; lint/typecheck/24 Vitest/build PASS.*
+*Last reviewed: 2026-06-28 — C4 Wave 11 footer pin + gutter crease; lint/typecheck/24 Vitest/build PASS.*

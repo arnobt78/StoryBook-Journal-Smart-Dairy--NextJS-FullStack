@@ -52,15 +52,17 @@ export function PageFlipOverlay({ direction }: PageFlipProps) {
       <style>{`
         /* ── PAGE FLIP keyframes: rotateY on spine edge (see file header) ── */
         @keyframes flipFwd {
-          0%   { transform: rotateY(0deg); }
-          100% { transform: rotateY(-180deg); }
+          0%   { transform: rotateY(0deg);   box-shadow: 2px 0 8px rgba(80,40,10,.08); }
+          50%  { transform: rotateY(-90deg); box-shadow: -8px 0 24px rgba(40,20,5,.22), 4px 0 12px rgba(80,40,10,.14); }
+          100% { transform: rotateY(-180deg); box-shadow: 2px 0 8px rgba(80,40,10,.08); }
         }
         @keyframes flipBwd {
-          0%   { transform: rotateY(-180deg); }
-          100% { transform: rotateY(0deg); }
+          0%   { transform: rotateY(-180deg); box-shadow: 2px 0 8px rgba(80,40,10,.08); }
+          50%  { transform: rotateY(-90deg);  box-shadow: -8px 0 24px rgba(40,20,5,.22), 4px 0 12px rgba(80,40,10,.14); }
+          100% { transform: rotateY(0deg);    box-shadow: 2px 0 8px rgba(80,40,10,.08); }
         }
-        .flip-fwd { animation: flipFwd .65s cubic-bezier(.4,0,.2,1) forwards; }
-        .flip-bwd { animation: flipBwd .65s cubic-bezier(.4,0,.2,1) forwards; }
+        .flip-fwd { animation: flipFwd .65s cubic-bezier(.45,.05,.25,1) forwards; }
+        .flip-bwd { animation: flipBwd .65s cubic-bezier(.45,.05,.25,1) forwards; }
       `}</style>
       <div
         className={direction === "fwd" ? "flip-fwd" : "flip-bwd"}

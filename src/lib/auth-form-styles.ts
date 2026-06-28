@@ -101,3 +101,23 @@ export const fieldLabelStyle: CSSProperties = {
   color: "rgba(100,55,20,.55)",
   marginBottom: "6px",
 };
+
+/** Left-page footer prompt — darker than body copy for readability */
+export const authFooterPromptStyle: CSSProperties = {
+  fontFamily: "'Lora', serif",
+  fontSize: "12px",
+  color: "rgba(55,28,8,.78)",
+  margin: 0,
+};
+
+/** Footer cross-route link — pairs with `.auth-footer-link` hover glow in globals.css */
+export const AUTH_FOOTER_LINK_CLASS = "auth-footer-link";
+
+export const authFooterLinkStyle: CSSProperties = {
+  background: "none",
+  border: "none",
+  padding: 0,
+  color: "rgba(139,69,19,.85)",
+  fontFamily: "'Lora', serif",
+  fontSize: "12px",
+};

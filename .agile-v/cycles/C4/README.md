@@ -24,6 +24,11 @@ DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills
 - **REQ-0029/0030:** `.auth-stagger-row` explicit indices — footer, labels, inputs, CTA, OR, Google
 - **Tests:** 24 Vitest (2 new auth-stagger helper tests)
 
+## Wave 11 (2026-06-28)
+
+- **REQ-0029/0030:** Footer `marginTop: auto` + `.auth-footer-link` glow; `.auth-spread-gutter` + flip polish
+- **Shared:** `PageFlip.tsx` mid-flip spine shadow + smoother easing
+
 ## Verification
 
 16 Vitest · lint · typecheck · build PASS · TC-0031–0035 static PASS
