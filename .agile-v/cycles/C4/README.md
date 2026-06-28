@@ -27,7 +27,10 @@ DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills
 ## Wave 12 (2026-06-28)
 
 - **REQ-0029/0030:** `SpreadCoilBinding` overlay coil; removed `.auth-spread-gutter` flex gap
-- **Shared:** auth + journal seam; `usePageFlip` 80ms settle
+
+## Wave 13 (2026-06-28)
+
+- **REQ-0029/0030:** PageFlip dual animation (linear rotate + shadow depth); steady coil glow
 
 ## Verification
 

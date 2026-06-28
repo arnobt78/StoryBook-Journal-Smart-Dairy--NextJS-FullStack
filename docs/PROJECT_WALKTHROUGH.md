@@ -401,7 +401,16 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 18. Related docs
+## 18. C4 UI Wave 13 — Even flip + subtle depth (2026-06-28)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Dual flip | `PageFlip.tsx` | Linear rotate + separate shadow keyframes (no mid-turn kick) |
+| Coil glow | `globals.css` | Stronger idle shadow; soft transition on flip (no pulse) |
+
+---
+
+## 19. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -412,4 +421,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-28 — C4 Wave 12 spiral coil seam; lint/typecheck/24 Vitest/build PASS.*
+*Last reviewed: 2026-06-28 — C4 Wave 13 even flip + shadow depth; lint/typecheck/24 Vitest/build PASS.*

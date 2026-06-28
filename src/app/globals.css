@@ -454,7 +454,7 @@ body {
   height: var(--page-h, 540px);
   z-index: 8;
   pointer-events: none;
-  filter: drop-shadow(0 0 6px rgba(80, 40, 10, 0.12));
+  filter: drop-shadow(0 0 8px rgba(80, 40, 10, 0.14));
   transition: filter 0.28s ease-in-out;
 }
 
@@ -479,20 +479,9 @@ body {
   width: 32px !important;
 }
 
-@keyframes spreadCoilPulse {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 6px rgba(80, 40, 10, 0.12));
-  }
-  50% {
-    filter: drop-shadow(0 0 10px rgba(60, 30, 8, 0.2));
-  }
-}
-
-/* Flip / route-settle — deepen coil shadow smoothly */
+/* Flip / route-settle — soft filter step via transition (no pulse keyframes) */
 .spread-coil-flipping .spread-coil-binding {
-  animation: spreadCoilPulse 0.65s ease-in-out;
-  filter: drop-shadow(0 0 12px rgba(60, 30, 8, 0.22));
+  filter: drop-shadow(0 0 10px rgba(60, 30, 8, 0.18));
 }
 
 @keyframes authHoldFadeIn {
@@ -531,8 +520,7 @@ body {
     animation: none;
   }
   .spread-coil-flipping .spread-coil-binding {
-    animation: none;
-    filter: drop-shadow(0 0 8px rgba(60, 30, 8, 0.18));
+    filter: drop-shadow(0 0 8px rgba(60, 30, 8, 0.16));
   }
 }
 

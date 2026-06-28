@@ -10,9 +10,9 @@
  * Back face  = left-page paper (reverse side visible mid-turn).
  *
  * Both faces carry ruled-line + margin-line textures for realism.
- * Depth cue is a static `box-shadow` on the flip root only — animating `filter` on
- * the same layer as `transform` caused post-flip edge shimmer / “vibration” next to
- * real pages once the overlay unmounted (especially under a parent `filter`).
+ * Depth uses **dual animations** on the flip root: linear rotateY (even speed) +
+ * ease-in-out box-shadow only (subtle lift at seam). Decoupling avoids the Wave 11
+ * “kick” from 50% transform + eased rotation + coil pulse.
  *
  * Width matches --page-w CSS variable; falls back to 360px.
  *
@@ -50,19 +50,44 @@ export function PageFlipOverlay({ direction }: PageFlipProps) {
   return (
     <>
       <style>{`
-        /* ── PAGE FLIP keyframes: rotateY on spine edge (see file header) ── */
-        @keyframes flipFwd {
-          0%   { transform: rotateY(0deg);   box-shadow: 2px 0 8px rgba(80,40,10,.08); }
-          50%  { transform: rotateY(-90deg); box-shadow: -8px 0 24px rgba(40,20,5,.22), 4px 0 12px rgba(80,40,10,.14); }
-          100% { transform: rotateY(-180deg); box-shadow: 2px 0 8px rgba(80,40,10,.08); }
+        /* A — rotation only (even angular velocity) */
+        @keyframes flipFwdRotate {
+          from { transform: rotateY(0deg); }
+          to   { transform: rotateY(-180deg); }
         }
-        @keyframes flipBwd {
-          0%   { transform: rotateY(-180deg); box-shadow: 2px 0 8px rgba(80,40,10,.08); }
-          50%  { transform: rotateY(-90deg);  box-shadow: -8px 0 24px rgba(40,20,5,.22), 4px 0 12px rgba(80,40,10,.14); }
-          100% { transform: rotateY(0deg);    box-shadow: 2px 0 8px rgba(80,40,10,.08); }
+        @keyframes flipBwdRotate {
+          from { transform: rotateY(-180deg); }
+          to   { transform: rotateY(0deg); }
         }
-        .flip-fwd { animation: flipFwd .65s cubic-bezier(.45,.05,.25,1) forwards; }
-        .flip-bwd { animation: flipBwd .65s cubic-bezier(.45,.05,.25,1) forwards; }
+        /* B — shadow only (subtle seam lift; does not affect rotate timing) */
+        @keyframes flipFwdShadow {
+          0%, 100% { box-shadow: 2px 0 10px rgba(80,40,10,.10); }
+          50%      { box-shadow: -5px 0 16px rgba(40,20,5,.16); }
+        }
+        @keyframes flipBwdShadow {
+          0%, 100% { box-shadow: 2px 0 10px rgba(80,40,10,.10); }
+          50%      { box-shadow: -5px 0 16px rgba(40,20,5,.16); }
+        }
+        .flip-fwd {
+          animation:
+            flipFwdRotate .65s linear forwards,
+            flipFwdShadow .65s ease-in-out forwards;
+        }
+        .flip-bwd {
+          animation:
+            flipBwdRotate .65s linear forwards,
+            flipBwdShadow .65s ease-in-out forwards;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .flip-fwd {
+            animation: flipFwdRotate .65s linear forwards;
+            box-shadow: 2px 0 10px rgba(80,40,10,.10);
+          }
+          .flip-bwd {
+            animation: flipBwdRotate .65s linear forwards;
+            box-shadow: 2px 0 10px rgba(80,40,10,.10);
+          }
+        }
       `}</style>
       <div
         className={direction === "fwd" ? "flip-fwd" : "flip-bwd"}

@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Cycle | **C4** |
-| Revision | C4-ui-wave12-2026-06-28 |
+| Revision | C4-ui-wave13-2026-06-28 |
 | Completed | **Partial** (static + unit + build PASS; e2e NOT RUN) |
-| Date | 2026-06-28 (Wave 12) |
+| Date | 2026-06-28 (Wave 13) |
 | Agent | red-team-verifier (static) |
 
 ## Verification result
@@ -14,7 +14,7 @@
 - **Unit:** 24 Vitest PASS (2026-06-28)
 - **Lint + typecheck:** PASS (2026-06-28)
 - **Build:** PASS (2026-06-28)
-- **Wave 12 audit:** SpreadCoilBinding flush seam; removed flex gutter; flip settle 80ms
+- **Wave 13 audit:** dual flip animation; steady coil; no mid-turn kick
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
 

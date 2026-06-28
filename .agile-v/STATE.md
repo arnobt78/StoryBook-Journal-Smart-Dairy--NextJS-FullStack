@@ -7,7 +7,7 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave12-2026-06-28 |
+| **Revision** | C4-ui-wave13-2026-06-28 |
 | **Last commit** | `7d394fc` — feat(ui) C4 Wave 12 spiral coil seam |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-28T14:45:00Z |
-| **Updated By** | agile-v-core (C4 Wave 12) |
+| **Last Updated** | 2026-06-28T15:01:00Z |
+| **Updated By** | agile-v-core (C4 Wave 13) |
 
 ## Stage checklist
 
@@ -58,6 +58,7 @@
 | Full-row auth stagger (labels/inputs/CTA/footer) | REQ-0029–0030 | ✅ Wave 10 |
 | Footer bottom pin + gutter flip polish | REQ-0029–0030 | ✅ Wave 11 |
 | Spiral coil seam (flush pages, auth + journal) | REQ-0029–0030 | ✅ Wave 12 |
+| Even flip + subtle shadow depth (no kick) | REQ-0029–0030 | ✅ Wave 13 |
 
 ## Backlog
 
