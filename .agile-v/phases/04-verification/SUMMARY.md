@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Cycle | **C4** |
-| Revision | C4-ui-wave13-2026-06-28 |
+| Revision | C4-ui-wave14-2026-06-28 |
 | Completed | **Partial** (static + unit + build PASS; e2e NOT RUN) |
-| Date | 2026-06-28 (Wave 13) |
+| Date | 2026-06-28 (Wave 14) |
 | Agent | red-team-verifier (static) |
 
 ## Verification result
