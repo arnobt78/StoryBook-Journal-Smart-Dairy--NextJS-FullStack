@@ -14,7 +14,7 @@
 - **Unit:** 24 Vitest PASS (2026-06-28)
 - **Lint + typecheck:** PASS (2026-06-28)
 - **Build:** PASS (2026-06-28)
-- **Wave 13 audit:** dual flip animation; steady coil; no mid-turn kick
+- **Wave 14 audit:** coil z35 above flip; rings visible during turn; Wave 13 flip unchanged
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
 

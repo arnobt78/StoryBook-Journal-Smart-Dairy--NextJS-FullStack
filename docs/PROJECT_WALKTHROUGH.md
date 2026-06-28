@@ -410,7 +410,17 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 19. Related docs
+## 19. C4 UI Wave 14 — Coil visible during flip (2026-06-28)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Z-order | `globals.css` | `--spread-coil-z: 35` above flip/hold (30) |
+| DOM order | `AuthBookShell.tsx`, `BookSpread.tsx` | `SpreadCoilBinding` last in spread row |
+| Effect | — | Fixed rings at seam; page sweeps underneath |
+
+---
+
+## 20. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -421,4 +431,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-28 — C4 Wave 13 even flip + shadow depth; lint/typecheck/24 Vitest/build PASS.*
+*Last reviewed: 2026-06-28 — C4 Wave 14 coil above flip; lint/typecheck/24 Vitest/build PASS.*

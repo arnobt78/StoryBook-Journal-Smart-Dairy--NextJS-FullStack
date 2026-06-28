@@ -760,10 +760,10 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
             canDeleteEntry={!isFlipping && !isWriting && !isDeleting}
           />
 
-          <SpreadCoilBinding />
-
-          {/* ── PAGE FLIP: overlay mounts only during animation ── */}
           {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
+
+          {/* Coil above flip plane (z35) — rings fixed at seam; page rotates underneath */}
+          <SpreadCoilBinding />
         </div>
 
         {/* Navigation bar — cta-splash-glow adds outer leather amber glow on the pill */}

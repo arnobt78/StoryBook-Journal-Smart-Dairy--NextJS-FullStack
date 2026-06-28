@@ -32,6 +32,10 @@ DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills
 
 - **REQ-0029/0030:** PageFlip dual animation (linear rotate + shadow depth); steady coil glow
 
+## Wave 14 (2026-06-28)
+
+- **REQ-0029/0030:** Coil z35 above flip overlay — rings visible during page turn
+
 ## Verification
 
 16 Vitest · lint · typecheck · build PASS · TC-0031–0035 static PASS
