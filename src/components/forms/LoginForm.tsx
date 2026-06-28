@@ -8,11 +8,7 @@
  *  • Clears TanStack Query cache before entering dashboard so stale book data
  *    from a previous session never leaks through.
  *
- * ── WALKTHROUGH: auth form flow ──
- *  1. User submits email/password → NextAuth `signIn("credentials")`.
- *  2. On success: toast, invalidate `journalSubtree`, push `/dashboard`.
- *  3. Optional demo picker portaled to `document.body` (avoids auth shell clip).
- *  4. `AuthOAuthSection` below primary CTA adds Google OAuth when env vars set.
+ * Stagger indices 0–1 live in login/page.tsx; form rows use explicit authStaggerRowProps.
  */
 import { useState, useRef, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
@@ -22,6 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { BookOpen, ChevronDown } from "lucide-react";
 import { appToast } from "@/lib/app-toast";
 import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
+import { authStaggerRowProps } from "@/lib/auth-stagger";
 import {
   authControlClassName,
   authControlStyle,
@@ -31,20 +28,44 @@ import {
   primaryCtaClassName,
   primaryCtaStyle,
 } from "@/lib/auth-form-styles";
+import { AuthFormField } from "@/components/auth/AuthFormField";
 import { AuthOAuthSection } from "@/components/auth/AuthOAuthSection";
 import { DemoAccountMenuRow } from "@/components/auth/DemoAccountMenuRow";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { AvatarRing } from "@/components/ui/AvatarRing";
 import { TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_PASSWORD } from "@/constants/auth";
 
-/** Test account seeded in the database for demos — matches api/auth/register seed logic */
 const TEST_EMAIL = TEST_ACCOUNT_EMAIL;
 const TEST_PASS = TEST_ACCOUNT_PASSWORD;
 
+/** Stagger row indices when demo picker is visible (page headers use 0–1) */
+const LOGIN_STAGGER_WITH_DEMO = {
+  demoLabel: 2,
+  demoButton: 3,
+  emailLabel: 4,
+  emailInput: 5,
+  passwordLabel: 6,
+  passwordInput: 7,
+  error: 8,
+  cta: 9,
+  or: 10,
+  google: 11,
+} as const;
+
+/** Stagger row indices when demo picker is hidden */
+const LOGIN_STAGGER_NO_DEMO = {
+  emailLabel: 2,
+  emailInput: 3,
+  passwordLabel: 4,
+  passwordInput: 5,
+  error: 6,
+  cta: 7,
+  or: 8,
+  google: 9,
+} as const;
+
 type LoginFormProps = {
-  /** From server: true when GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET are set */
   googleEnabled?: boolean;
-  /** From server: demo picker on unless SHOW_DEMO_LOGIN=false */
   demoLoginEnabled?: boolean;
 };
 
@@ -55,9 +76,10 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [showTestMenu, setShowTestMenu] = useState(false);
-  /** Viewport-anchored box for the demo menu — updated while open on resize/scroll. */
   const [menuBox, setMenuBox] = useState<{ top: number; left: number; width: number } | null>(null);
   const demoTriggerRef = useRef<HTMLButtonElement>(null);
+
+  const stagger = demoLoginEnabled ? LOGIN_STAGGER_WITH_DEMO : LOGIN_STAGGER_NO_DEMO;
 
   const hasCredentials = Boolean(form.email.trim() || form.password.trim());
 
@@ -68,7 +90,6 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
     setError("");
   };
 
-  /** Clears email/password only — enabled when fields have content */
   const clearCredentialFields = () => {
     if (!hasCredentials) return;
     setForm({ email: "", password: "" });
@@ -77,10 +98,6 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
     setError("");
   };
 
-  /**
-   * Keeps the fixed demo panel under the trigger while the auth shell scrolls or
-   * the viewport resizes; capture-phase scroll catches nested scroll containers.
-   */
   useLayoutEffect(() => {
     if (!showTestMenu || !demoTriggerRef.current) {
       setMenuBox(null);
@@ -116,7 +133,6 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
       } else {
         const displayName = form.email.split("@")[0] || "Reader";
         appToast.auth.welcomeBack(displayName);
-        /* Drop stale journal payloads from any prior session (shelf + every open book cache). */
         await notifyJournalCacheUpdated(queryClient);
         router.push("/dashboard");
         router.refresh();
@@ -129,64 +145,76 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
   };
 
   return (
-    /* display:contents merges form rows into AuthBookShell .auth-right-stagger nth-child chain */
-    <form onSubmit={handleSubmit} className="auth-form-contents">
+    <form onSubmit={handleSubmit}>
       {demoLoginEnabled && (
-        <div style={{ position: "relative", zIndex: 40, marginBottom: "12px" }} className="auth-field-compact">
-          <p style={{ ...fieldLabelStyle, margin: "0 0 8px" }}>Test Account To Login With</p>
-          <RippleButton
-            ref={demoTriggerRef}
-            type="button"
-            className={`w-full ${authControlClassName}`}
-            onClick={() => setShowTestMenu((v) => !v)}
-            style={authControlStyle}
+        <>
+          <p
+            {...authStaggerRowProps(LOGIN_STAGGER_WITH_DEMO.demoLabel, {
+              style: { ...fieldLabelStyle, margin: "0 0 8px" },
+            })}
           >
-            <span>Select Demo Account</span>
-            <ChevronDown size={14} aria-hidden className="shrink-0 opacity-60" />
-          </RippleButton>
-          {showTestMenu &&
-            menuBox &&
-            typeof document !== "undefined" &&
-            createPortal(
-              <div
-                role="listbox"
-                aria-label="Demo account actions"
-                className="leather-glass-panel overflow-hidden"
-                style={{
-                  position: "fixed",
-                  top: menuBox.top,
-                  left: menuBox.left,
-                  width: menuBox.width,
-                  zIndex: 9999,
-                  borderRadius: "4px",
-                  boxSizing: "border-box",
-                }}
-              >
-                <DemoAccountMenuRow onClick={fillTestCredentials} withBorderBottom>
-                  <AvatarRing seed={TEST_EMAIL} size={28} unoptimized />
-                  <span className="demo-menu-row__inline" style={{ fontSize: "12px" }}>
-                    <strong>Test User</strong>
-                    <span className="demo-menu-row__sep" aria-hidden>
-                      ·
-                    </span>
-                    <span style={{ opacity: 0.65, fontSize: "11px" }}>{TEST_EMAIL}</span>
-                  </span>
-                </DemoAccountMenuRow>
-                <DemoAccountMenuRow
-                  disabled={!hasCredentials}
-                  onClick={clearCredentialFields}
-                  className="uppercase tracking-wide"
-                  style={{ fontSize: "11px", letterSpacing: "1px", color: "rgba(100,55,20,.55)" }}
+            Test Account To Login With
+          </p>
+          <div
+            {...authStaggerRowProps(LOGIN_STAGGER_WITH_DEMO.demoButton, {
+              className: "auth-field-compact",
+              style: { position: "relative", zIndex: 40, marginBottom: "12px" },
+            })}
+          >
+            <RippleButton
+              ref={demoTriggerRef}
+              type="button"
+              className={`w-full ${authControlClassName}`}
+              onClick={() => setShowTestMenu((v) => !v)}
+              style={authControlStyle}
+            >
+              <span>Select Demo Account</span>
+              <ChevronDown size={14} aria-hidden className="shrink-0 opacity-60" />
+            </RippleButton>
+            {showTestMenu &&
+              menuBox &&
+              typeof document !== "undefined" &&
+              createPortal(
+                <div
+                  role="listbox"
+                  aria-label="Demo account actions"
+                  className="leather-glass-panel overflow-hidden"
+                  style={{
+                    position: "fixed",
+                    top: menuBox.top,
+                    left: menuBox.left,
+                    width: menuBox.width,
+                    zIndex: 9999,
+                    borderRadius: "4px",
+                    boxSizing: "border-box",
+                  }}
                 >
-                  Clear Section
-                </DemoAccountMenuRow>
-              </div>,
-              document.body,
-            )}
-        </div>
+                  <DemoAccountMenuRow onClick={fillTestCredentials} withBorderBottom>
+                    <AvatarRing seed={TEST_EMAIL} size={28} unoptimized />
+                    <span className="demo-menu-row__inline" style={{ fontSize: "12px" }}>
+                      <strong>Test User</strong>
+                      <span className="demo-menu-row__sep" aria-hidden>
+                        ·
+                      </span>
+                      <span style={{ opacity: 0.65, fontSize: "11px" }}>{TEST_EMAIL}</span>
+                    </span>
+                  </DemoAccountMenuRow>
+                  <DemoAccountMenuRow
+                    disabled={!hasCredentials}
+                    onClick={clearCredentialFields}
+                    className="uppercase tracking-wide"
+                    style={{ fontSize: "11px", letterSpacing: "1px", color: "rgba(100,55,20,.55)" }}
+                  >
+                    Clear Section
+                  </DemoAccountMenuRow>
+                </div>,
+                document.body,
+              )}
+          </div>
+        </>
       )}
 
-      <Field label="Email">
+      <AuthFormField label="Email" labelIndex={stagger.emailLabel} inputIndex={stagger.emailInput}>
         <input
           type="email"
           required
@@ -196,8 +224,12 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
           placeholder="you@example.com"
           style={inputStyle}
         />
-      </Field>
-      <Field label="Password">
+      </AuthFormField>
+      <AuthFormField
+        label="Password"
+        labelIndex={stagger.passwordLabel}
+        inputIndex={stagger.passwordInput}
+      >
         <input
           type="password"
           required
@@ -207,40 +239,48 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
           placeholder="••••••••"
           style={inputStyle}
         />
-      </Field>
+      </AuthFormField>
 
       {error && (
-        <p style={{ fontFamily: "'Lora',serif", fontSize: "12px", color: "#c0392b", margin: "0 0 12px" }}>
+        <p
+          {...authStaggerRowProps(stagger.error, {
+            style: {
+              fontFamily: "'Lora',serif",
+              fontSize: "12px",
+              color: "#c0392b",
+              margin: "0 0 12px",
+            },
+          })}
+        >
           {error}
         </p>
       )}
 
       <RippleButton
+        {...authStaggerRowProps(stagger.cta, {
+          className: `w-full ${primaryCtaClassName}`,
+          style: {
+            ...primaryCtaStyle,
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.7 : 1,
+          },
+        })}
         type="submit"
         disabled={loading}
         icon={BookOpen}
         shine
         shineRadius={4}
-        className={`w-full ${primaryCtaClassName}`}
-        style={{
-          ...primaryCtaStyle,
-          cursor: loading ? "not-allowed" : "pointer",
-          opacity: loading ? 0.7 : 1,
-        }}
       >
         {loading ? "Opening…" : "Open My Journal"}
       </RippleButton>
 
-      <AuthOAuthSection googleEnabled={!!googleEnabled} disabled={loading} variant="login" />
+      <AuthOAuthSection
+        googleEnabled={!!googleEnabled}
+        disabled={loading}
+        variant="login"
+        orStaggerIndex={stagger.or}
+        googleStaggerIndex={stagger.google}
+      />
     </form>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="auth-field" style={{ marginBottom: "12px" }}>
-      <label style={fieldLabelStyle}>{label}</label>
-      {children}
-    </div>
   );
 }

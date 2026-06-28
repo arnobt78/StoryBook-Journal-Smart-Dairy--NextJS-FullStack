@@ -401,86 +401,28 @@ body {
   }
 }
 
-/* Form wrapper — display:contents so rows join .auth-right-stagger nth-child chain */
-.auth-form-contents {
-  display: contents;
+/* Explicit auth row stagger — index via --auth-stagger-i (SSR + client safe) */
+.auth-stagger-row {
+  animation: authRowIn 0.48s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: calc(var(--auth-stagger-i, 0) * 60ms);
 }
 
-/* Shared stagger timing — 60ms steps, 12 slots */
-.auth-stagger > *,
-.auth-right-stagger > *,
+/* Landing below-cover entrance — nth-child stair (2 rows) */
 .landing-enter-stagger > * {
   animation: authRowIn 0.48s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
-.auth-stagger > *:nth-child(1),
-.auth-right-stagger > *:nth-child(1),
 .landing-enter-stagger > *:nth-child(1) {
   animation-delay: 0s;
 }
-.auth-stagger > *:nth-child(2),
-.auth-right-stagger > *:nth-child(2),
 .landing-enter-stagger > *:nth-child(2) {
   animation-delay: 0.06s;
 }
-.auth-stagger > *:nth-child(3),
-.auth-right-stagger > *:nth-child(3),
-.landing-enter-stagger > *:nth-child(3) {
+.landing-enter-stagger > *:nth-child(n + 3) {
   animation-delay: 0.12s;
-}
-.auth-stagger > *:nth-child(4),
-.auth-right-stagger > *:nth-child(4),
-.landing-enter-stagger > *:nth-child(4) {
-  animation-delay: 0.18s;
-}
-.auth-stagger > *:nth-child(5),
-.auth-right-stagger > *:nth-child(5),
-.landing-enter-stagger > *:nth-child(5) {
-  animation-delay: 0.24s;
-}
-.auth-stagger > *:nth-child(6),
-.auth-right-stagger > *:nth-child(6),
-.landing-enter-stagger > *:nth-child(6) {
-  animation-delay: 0.3s;
-}
-.auth-stagger > *:nth-child(7),
-.auth-right-stagger > *:nth-child(7),
-.landing-enter-stagger > *:nth-child(7) {
-  animation-delay: 0.36s;
-}
-.auth-stagger > *:nth-child(8),
-.auth-right-stagger > *:nth-child(8),
-.landing-enter-stagger > *:nth-child(8) {
-  animation-delay: 0.42s;
-}
-.auth-stagger > *:nth-child(9),
-.auth-right-stagger > *:nth-child(9),
-.landing-enter-stagger > *:nth-child(9) {
-  animation-delay: 0.48s;
-}
-.auth-stagger > *:nth-child(10),
-.auth-right-stagger > *:nth-child(10),
-.landing-enter-stagger > *:nth-child(10) {
-  animation-delay: 0.54s;
-}
-.auth-stagger > *:nth-child(11),
-.auth-right-stagger > *:nth-child(11),
-.landing-enter-stagger > *:nth-child(11) {
-  animation-delay: 0.6s;
-}
-.auth-stagger > *:nth-child(12),
-.auth-right-stagger > *:nth-child(12),
-.landing-enter-stagger > *:nth-child(12) {
-  animation-delay: 0.66s;
-}
-.auth-stagger > *:nth-child(n + 13),
-.auth-right-stagger > *:nth-child(n + 13),
-.landing-enter-stagger > *:nth-child(n + 13) {
-  animation-delay: 0.72s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .auth-stagger > *,
-  .auth-right-stagger > *,
+  .auth-stagger-row,
   .landing-enter-stagger > * {
     animation: none !important;
   }
@@ -585,12 +527,12 @@ body {
     0 0 20px rgba(255, 160, 60, 0.1);
 }
 
-.auth-form-contents .leather-glass-input::placeholder {
+.auth-book-viewport form .leather-glass-input::placeholder {
   color: rgba(100, 55, 20, 0.38);
   opacity: 1;
 }
 
-.auth-form-contents .leather-glass-input:focus {
+.auth-book-viewport form .leather-glass-input:focus {
   outline: none;
   border-color: rgba(139, 69, 19, 0.45) !important;
   box-shadow:
@@ -705,13 +647,13 @@ body {
 }
 
 /* Tighter field rhythm on auth forms — pairs with larger page tokens above */
-.book-viewport-80 .auth-form-contents .auth-field,
-.auth-book-viewport .auth-form-contents .auth-field {
+.book-viewport-80 form .auth-field,
+.auth-book-viewport form .auth-field {
   margin-bottom: 12px;
 }
 
-.book-viewport-80 .auth-form-contents .auth-field-compact,
-.auth-book-viewport .auth-form-contents .auth-field-compact {
+.book-viewport-80 form .auth-field-compact,
+.auth-book-viewport form .auth-field-compact {
   margin-bottom: 10px;
 }
 

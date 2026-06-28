@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave9-2026-06-28 |
-| **Last commit** | `e8365a7` — feat(ui) C4 Wave 9: auth stagger consistency + nav hook |
+| **Revision** | C4-ui-wave10-2026-06-28 |
+| **Last commit** | pending — feat(ui) C4 Wave 10: full-row auth stagger |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-28T14:00:00Z |
-| **Updated By** | agile-v-core (C4 Wave 9) |
+| **Last Updated** | 2026-06-28T14:20:00Z |
+| **Updated By** | agile-v-core (C4 Wave 10) |
 
 ## Stage checklist
 
@@ -26,7 +26,7 @@
 | 1 Requirements | **COMPLETE** | REQ-0001–0031; CR-0001–0005 |
 | 2 Validation | **COMPLETE** | `phases/02-validation/SUMMARY.md` |
 | 3 Synthesis | **COMPLETE** | ART-0001–0078; commits 7d3c3ed→8f88e90 |
-| 4 Verification | **IN_PROGRESS** | 22 Vitest PASS; lint/typecheck PASS (2026-06-28) |
+| 4 Verification | **IN_PROGRESS** | 24 Vitest PASS; lint/typecheck PASS (2026-06-28) |
 | 5 Acceptance | NOT_STARTED | — |
 
 ## Cycle rollup
@@ -46,7 +46,7 @@
 | Leather glass wave 2 | REQ-0030 | ✅ |
 | Entry tags display/edit/persist | REQ-0031 | ✅ |
 | Invalidation single entry | REQ-0007 | ✅ unchanged |
-| Vitest | REQ-0021 | ✅ 22 unit |
+| Vitest | REQ-0021 | ✅ 24 unit |
 | Self-hosted fonts (15 WOFF2) | REQ-0029 | ✅ Wave 3 |
 | Landing cover redesign + glows | REQ-0029 | ✅ Wave 3 |
 | Auth book spotlight | REQ-0030 | ✅ Wave 3 |
@@ -55,6 +55,7 @@
 | Auth row stagger + flip flash fix | REQ-0029–0030 | ✅ Wave 8 |
 | Landing hint/CTA stagger | REQ-0029 | ✅ Wave 8 |
 | Auth stagger consistency + nav hook | REQ-0029–0030 | ✅ Wave 9 |
+| Full-row auth stagger (labels/inputs/CTA/footer) | REQ-0029–0030 | ✅ Wave 10 |
 
 ## Backlog
 

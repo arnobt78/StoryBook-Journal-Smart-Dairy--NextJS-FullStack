@@ -19,11 +19,10 @@
 
 DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills
 
-## Wave 9 (2026-06-28)
+## Wave 10 (2026-06-28)
 
-- **REQ-0029/0030:** `useAuthBookNavigation` + unified `.auth-form-contents` stagger timeline
-- **Tests:** 22 Vitest (6 new helper tests)
-- **Verify:** lint · typecheck · build PASS
+- **REQ-0029/0030:** `.auth-stagger-row` explicit indices — footer, labels, inputs, CTA, OR, Google
+- **Tests:** 24 Vitest (2 new auth-stagger helper tests)
 
 ## Verification
 

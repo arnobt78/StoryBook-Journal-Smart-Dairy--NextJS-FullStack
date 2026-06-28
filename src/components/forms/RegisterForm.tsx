@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * RegisterForm — email/password sign-up with optional Google OAuth (same env gate as login).
- * Invalidates journalSubtree after success so dashboard loads fresh shelves for the new user.
+ * RegisterForm — email/password sign-up with optional Google OAuth.
+ * Stagger indices 0–1 live in register/page.tsx; form rows use explicit authStaggerRowProps.
  */
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -11,19 +11,32 @@ import { signIn } from "next-auth/react";
 import { BookPlus } from "lucide-react";
 import { appToast } from "@/lib/app-toast";
 import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
+import { authStaggerRowProps } from "@/lib/auth-stagger";
 import {
-  fieldLabelStyle,
   inputClassName,
   inputStyle,
   primaryCtaClassName,
   primaryCtaStyle,
 } from "@/lib/auth-form-styles";
-
+import { AuthFormField } from "@/components/auth/AuthFormField";
 import { AuthOAuthSection } from "@/components/auth/AuthOAuthSection";
 import { RippleButton } from "@/components/ui/ripple-button";
 
+/** Stagger row indices (page headers use 0–1) */
+const REGISTER_STAGGER = {
+  nameLabel: 2,
+  nameInput: 3,
+  emailLabel: 4,
+  emailInput: 5,
+  passwordLabel: 6,
+  passwordInput: 7,
+  error: 8,
+  cta: 9,
+  or: 10,
+  google: 11,
+} as const;
+
 type RegisterFormProps = {
-  /** From server: true when Google OAuth env vars are set */
   googleEnabled?: boolean;
 };
 
@@ -68,9 +81,12 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
   };
 
   return (
-    /* display:contents merges form rows into AuthBookShell .auth-right-stagger nth-child chain */
-    <form onSubmit={handleSubmit} className="auth-form-contents">
-      <Field label="Your Name">
+    <form onSubmit={handleSubmit}>
+      <AuthFormField
+        label="Your Name"
+        labelIndex={REGISTER_STAGGER.nameLabel}
+        inputIndex={REGISTER_STAGGER.nameInput}
+      >
         <input
           type="text"
           required
@@ -80,8 +96,12 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
           placeholder="Jane Doe"
           style={inputStyle}
         />
-      </Field>
-      <Field label="Email">
+      </AuthFormField>
+      <AuthFormField
+        label="Email"
+        labelIndex={REGISTER_STAGGER.emailLabel}
+        inputIndex={REGISTER_STAGGER.emailInput}
+      >
         <input
           type="email"
           required
@@ -91,8 +111,12 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
           placeholder="you@example.com"
           style={inputStyle}
         />
-      </Field>
-      <Field label="Password">
+      </AuthFormField>
+      <AuthFormField
+        label="Password"
+        labelIndex={REGISTER_STAGGER.passwordLabel}
+        inputIndex={REGISTER_STAGGER.passwordInput}
+      >
         <input
           type="password"
           required
@@ -103,38 +127,46 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
           placeholder="At least 8 characters"
           style={inputStyle}
         />
-      </Field>
+      </AuthFormField>
       {error && (
-        <p style={{ fontFamily: "'Lora',serif", fontSize: "12px", color: "#c0392b", marginBottom: "12px" }}>
+        <p
+          {...authStaggerRowProps(REGISTER_STAGGER.error, {
+            style: {
+              fontFamily: "'Lora',serif",
+              fontSize: "12px",
+              color: "#c0392b",
+              marginBottom: "12px",
+            },
+          })}
+        >
           {error}
         </p>
       )}
       <RippleButton
+        {...authStaggerRowProps(REGISTER_STAGGER.cta, {
+          className: `w-full ${primaryCtaClassName}`,
+          style: {
+            ...primaryCtaStyle,
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.7 : 1,
+          },
+        })}
         type="submit"
         disabled={loading}
         icon={BookPlus}
         shine
         shineRadius={4}
-        className={`w-full ${primaryCtaClassName}`}
-        style={{
-          ...primaryCtaStyle,
-          cursor: loading ? "not-allowed" : "pointer",
-          opacity: loading ? 0.7 : 1,
-        }}
       >
         {loading ? "Creating your journal…" : "Begin My Story"}
       </RippleButton>
 
-      <AuthOAuthSection googleEnabled={!!googleEnabled} disabled={loading} variant="register" />
+      <AuthOAuthSection
+        googleEnabled={!!googleEnabled}
+        disabled={loading}
+        variant="register"
+        orStaggerIndex={REGISTER_STAGGER.or}
+        googleStaggerIndex={REGISTER_STAGGER.google}
+      />
     </form>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="auth-field" style={{ marginBottom: "12px" }}>
-      <label style={fieldLabelStyle}>{label}</label>
-      {children}
-    </div>
   );
 }

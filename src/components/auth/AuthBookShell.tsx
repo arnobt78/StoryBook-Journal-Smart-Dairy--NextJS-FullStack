@@ -18,7 +18,7 @@
  *  3. Spread transform is `perspective` only (no rotateX/Y on the row): those tilts
  *     with `preserve-3d` caused sub-pixel “vibrating” strokes after the flip sheet
  *     unmounted. Pointer-events: `none` on page shells + `auto` on inner stacks (same
- *     pattern as dashboard). Row stagger via `.auth-stagger` / `.auth-right-stagger`.
+ *     pattern as dashboard). Row stagger via explicit `.auth-stagger-row` indices.
  *
  *  4. Route push + nav lock live in `useAuthBookNavigation`; hold cover masks slow RSC;
  *     stagger remount keys (`authStaggerRemountKey`) force row animation when contentReady.
@@ -38,6 +38,7 @@ import {
   useAuthBookNavigation,
 } from "@/hooks/useAuthBookNavigation";
 import { usePageFlip } from "@/hooks/usePageFlip";
+import { authStaggerRowProps } from "@/lib/auth-stagger";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { RotatingTypewriterText } from "@/components/animations/RotatingTypewriterText";
 
@@ -119,7 +120,6 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
     <div style={{ position: "relative" }}>
           {/* Book branding block — StoryBook + rotating phrase inline on one row (wraps on narrow viewports) */}
           <div
-            className="auth-stagger"
             key={brandStaggerKey}
             style={{
               position: "absolute",
@@ -137,23 +137,28 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
               pointerEvents: "none",
             }}
           >
-            <span style={AUTH_BRAND_TEXT_STYLE}>StoryBook</span>
+            <span {...authStaggerRowProps(0, { style: AUTH_BRAND_TEXT_STYLE })}>
+              StoryBook
+            </span>
             <span
+              {...authStaggerRowProps(1, {
+                style: { ...AUTH_BRAND_TEXT_STYLE, opacity: 0.5 },
+              })}
               aria-hidden
-              style={{ ...AUTH_BRAND_TEXT_STYLE, opacity: 0.5 }}
             >
               ·
             </span>
-            {/* Inline rotating phrase — same 20px Dancing Script as title; minWidth limits layout shift */}
             <RotatingTypewriterText
+              {...authStaggerRowProps(2, {
+                style: {
+                  ...AUTH_BRAND_TEXT_STYLE,
+                  whiteSpace: "nowrap",
+                  minHeight: "1.2em",
+                  minWidth: "clamp(140px, 22vw, 240px)",
+                },
+              })}
               texts={[...AUTH_BRAND_PHRASES]}
               noShine
-              style={{
-                ...AUTH_BRAND_TEXT_STYLE,
-                whiteSpace: "nowrap",
-                minHeight: "1.2em",
-                minWidth: "clamp(140px, 22vw, 240px)",
-              }}
             />
           </div>
 
@@ -285,9 +290,8 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                   pointerEvents: "auto",
                 }}
               >
-                {/* Left marketing copy — row stagger when contentReady (translateY, not opacity-only) */}
+                {/* Left marketing + footer — explicit auth-stagger-row indices 0–5 */}
                 <div
-                  className={contentReady ? "auth-stagger" : undefined}
                   key={staggerRemountKey}
                   style={{
                     flex: "1 1 auto",
@@ -298,28 +302,31 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                   }}
                 >
                   <p
-                    style={{
-                      fontFamily: "'IM Fell English',serif",
-                      fontSize: "10px",
-                      letterSpacing: "3px",
-                      color: "rgba(100,55,20,.45)",
-                      margin: 0,
-                      textTransform: "uppercase",
-                    }}
+                    {...authStaggerRowProps(0, {
+                      style: {
+                        fontFamily: "'IM Fell English',serif",
+                        fontSize: "10px",
+                        letterSpacing: "3px",
+                        color: "rgba(100,55,20,.45)",
+                        margin: 0,
+                        textTransform: "uppercase",
+                      },
+                    })}
                   >
                     {leftIsRegister ? "New chapter" : "Returning reader"}
                   </p>
-                  {/* Left-page icon — Sparkles (register) / Zap (login) with amber spotlight orb */}
                   <div
-                    style={{
-                      position: "relative",
-                      marginTop: "10px",
-                      width: "40px",
-                      height: "40px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
+                    {...authStaggerRowProps(1, {
+                      style: {
+                        position: "relative",
+                        marginTop: "10px",
+                        width: "40px",
+                        height: "40px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      },
+                    })}
                     aria-hidden
                   >
                     <div style={AUTH_LEFT_ICON_SPOTLIGHT} />
@@ -333,111 +340,119 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                     )}
                   </div>
                   <h2
-                    style={{
-                      fontFamily: "'Playfair Display',serif",
-                      fontStyle: "italic",
-                      fontSize: "22px",
-                      color: "rgba(35,14,3,.88)",
-                      margin: "12px 0 0",
-                      lineHeight: 1.2,
-                    }}
+                    {...authStaggerRowProps(2, {
+                      style: {
+                        fontFamily: "'Playfair Display',serif",
+                        fontStyle: "italic",
+                        fontSize: "22px",
+                        color: "rgba(35,14,3,.88)",
+                        margin: "12px 0 0",
+                        lineHeight: 1.2,
+                      },
+                    })}
                   >
                     {leftIsRegister ? "Your story awaits" : "Welcome back"}
                   </h2>
                   <p
-                    style={{
-                      fontFamily: "'Lora',serif",
-                      fontSize: "12px",
-                      fontStyle: "italic",
-                      color: "rgba(100,55,20,.55)",
-                      marginTop: "12px",
-                      lineHeight: 1.65,
-                    }}
+                    {...authStaggerRowProps(3, {
+                      style: {
+                        fontFamily: "'Lora',serif",
+                        fontSize: "12px",
+                        fontStyle: "italic",
+                        color: "rgba(100,55,20,.55)",
+                        marginTop: "12px",
+                        lineHeight: 1.65,
+                      },
+                    })}
                   >
                     {leftIsRegister
                       ? "Every great story begins somewhere. Inscribe your name and step onto the first page."
                       : "Pick up where you left off — your shelves and entries rest quietly until you return."}
                   </p>
                   <div
-                    style={{
-                      marginTop: "18px",
-                      fontSize: "11px",
-                      color: "rgba(120,70,30,.3)",
-                      letterSpacing: "6px",
-                    }}
+                    {...authStaggerRowProps(4, {
+                      style: {
+                        marginTop: "18px",
+                        fontSize: "11px",
+                        color: "rgba(120,70,30,.3)",
+                        letterSpacing: "6px",
+                      },
+                    })}
                     aria-hidden
                   >
                     ◆ ◆ ◆
                   </div>
-                </div>
-
-                {/* Footer navigation — outside stagger so it's never hidden during delay */}
-                <div
-                  style={{
-                    flexShrink: 0,
-                    paddingTop: "20px",
-                    position: "relative",
-                    zIndex: 8,
-                    pointerEvents: "auto",
-                  }}
-                >
-                  {showRegisterLink ? (
-                    <p
-                      style={{
-                        fontFamily: "'Lora',serif",
-                        fontSize: "12px",
-                        color: "rgba(100,55,20,.55)",
-                        margin: 0,
-                      }}
-                    >
-                      No account yet?{" "}
-                      <RippleButton
-                        type="button"
-                        onClick={goRegister}
-                        disabled={authNavBusy}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          padding: 0,
-                          cursor: authNavBusy ? "default" : "pointer",
-                          color: "rgba(139,69,19,.85)",
-                          textDecoration: "underline",
-                          fontFamily: "'Lora',serif",
-                          fontSize: "12px",
-                        }}
+                  <div
+                    style={{
+                      flexShrink: 0,
+                      paddingTop: "20px",
+                      position: "relative",
+                      zIndex: 8,
+                      pointerEvents: "auto",
+                    }}
+                  >
+                    {showRegisterLink ? (
+                      <p
+                        {...authStaggerRowProps(5, {
+                          style: {
+                            fontFamily: "'Lora',serif",
+                            fontSize: "12px",
+                            color: "rgba(100,55,20,.55)",
+                            margin: 0,
+                          },
+                        })}
                       >
-                        Start your story
-                      </RippleButton>
-                    </p>
-                  ) : (
-                    <p
-                      style={{
-                        fontFamily: "'Lora',serif",
-                        fontSize: "12px",
-                        color: "rgba(100,55,20,.55)",
-                        margin: 0,
-                      }}
-                    >
-                      Already have an account?{" "}
-                      <RippleButton
-                        type="button"
-                        onClick={goLogin}
-                        disabled={authNavBusy}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          padding: 0,
-                          cursor: authNavBusy ? "default" : "pointer",
-                          color: "rgba(139,69,19,.85)",
-                          textDecoration: "underline",
-                          fontFamily: "'Lora',serif",
-                          fontSize: "12px",
-                        }}
+                        No account yet?{" "}
+                        <RippleButton
+                          type="button"
+                          onClick={goRegister}
+                          disabled={authNavBusy}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            padding: 0,
+                            cursor: authNavBusy ? "default" : "pointer",
+                            color: "rgba(139,69,19,.85)",
+                            textDecoration: "underline",
+                            fontFamily: "'Lora',serif",
+                            fontSize: "12px",
+                          }}
+                        >
+                          Start your story
+                        </RippleButton>
+                      </p>
+                    ) : (
+                      <p
+                        {...authStaggerRowProps(5, {
+                          style: {
+                            fontFamily: "'Lora',serif",
+                            fontSize: "12px",
+                            color: "rgba(100,55,20,.55)",
+                            margin: 0,
+                          },
+                        })}
                       >
-                        Open your journal
-                      </RippleButton>
-                    </p>
-                  )}
+                        Already have an account?{" "}
+                        <RippleButton
+                          type="button"
+                          onClick={goLogin}
+                          disabled={authNavBusy}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            padding: 0,
+                            cursor: authNavBusy ? "default" : "pointer",
+                            color: "rgba(139,69,19,.85)",
+                            textDecoration: "underline",
+                            fontFamily: "'Lora',serif",
+                            fontSize: "12px",
+                          }}
+                        >
+                          Open your journal
+                        </RippleButton>
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -504,8 +519,8 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                 }}
                 className="auth-right-scroll"
               >
+                {/* Right-page stack — layout wrapper; stagger rows use auth-stagger-row indices in page/forms */}
                 <div
-                  className={contentReady ? "auth-right-stagger" : undefined}
                   key={staggerRemountKey}
                   style={{
                     display: "flex",

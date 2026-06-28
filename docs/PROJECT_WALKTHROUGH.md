@@ -368,7 +368,18 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 15. Related docs
+## 15. C4 UI Wave 10 — Full-row auth stagger (2026-06-28)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Index helper | `auth-stagger.ts` | `authStaggerRowProps(index, extras?)` — merges styles without dropping `--auth-stagger-i` |
+| Form rows | `AuthFormField.tsx`, `LoginForm.tsx`, `RegisterForm.tsx` | Label + input separate indices; demo/OR/Google/CTA staggered |
+| Left footer | `AuthBookShell.tsx` | Footer link index 5 inside stagger container |
+| CSS | `globals.css` | `.auth-stagger-row`; removed `display:contents` approach |
+
+---
+
+## 16. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -379,4 +390,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-28 — C4 Wave 9 auth stagger consistency; lint/typecheck/22 Vitest/build PASS.*
+*Last reviewed: 2026-06-28 — C4 Wave 10 full-row auth stagger; lint/typecheck/24 Vitest/build PASS.*

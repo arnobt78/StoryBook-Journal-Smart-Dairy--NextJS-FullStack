@@ -1,27 +1,27 @@
 "use client";
 
 /**
- * Shared OAuth block for login/register — placed AFTER the primary CTA
- * (Open My Journal / Begin My Story): "or" divider, then Google button.
- *
- * ── WALKTHROUGH: OAuth placement in auth forms ──
- *  Primary CTA (credentials submit) always comes first for accessibility and flow.
- *  This block renders only when server passes `googleEnabled` (env vars present).
+ * Shared OAuth block for login/register — placed AFTER the primary CTA.
+ * OR divider and Google button are separate stagger rows (explicit indices from parent form).
  */
 import { AuthOrSeparator } from "@/components/auth/AuthOrSeparator";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
+import { authStaggerRowProps } from "@/lib/auth-stagger";
 
 type AuthOAuthSectionProps = {
   googleEnabled: boolean;
   disabled?: boolean;
-  /** Login vs register copy on the Google CTA */
   variant?: "login" | "register";
+  orStaggerIndex: number;
+  googleStaggerIndex: number;
 };
 
 export function AuthOAuthSection({
   googleEnabled,
   disabled = false,
   variant = "login",
+  orStaggerIndex,
+  googleStaggerIndex,
 }: AuthOAuthSectionProps) {
   if (!googleEnabled) return null;
 
@@ -29,9 +29,13 @@ export function AuthOAuthSection({
     variant === "register" ? "Continue with Gmail" : "Open with Gmail";
 
   return (
-    <div style={{ marginTop: "14px" }}>
-      <AuthOrSeparator label="or" compact />
-      <GoogleSignInButton disabled={disabled} label={label} />
-    </div>
+    <>
+      <div {...authStaggerRowProps(orStaggerIndex, { style: { marginTop: "14px" } })}>
+        <AuthOrSeparator label="or" compact />
+      </div>
+      <div {...authStaggerRowProps(googleStaggerIndex)}>
+        <GoogleSignInButton disabled={disabled} label={label} />
+      </div>
+    </>
   );
 }
