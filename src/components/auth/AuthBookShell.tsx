@@ -36,6 +36,15 @@ import { usePathname, useRouter } from "next/navigation";
 import { PageFlipOverlay } from "@/components/journal/PageFlip";
 import { usePageFlip } from "@/hooks/usePageFlip";
 import { RippleButton } from "@/components/ui/ripple-button";
+import { RotatingTypewriterText } from "@/components/animations/RotatingTypewriterText";
+
+/** Branding subtitle phrases — cycle beneath the "StoryBook" label above the open spread */
+const AUTH_BRAND_PHRASES = [
+  "Your story, your words",
+  "Begin a new chapter",
+  "Every memory preserved",
+  "Write. Reflect. Remember.",
+] as const;
 
 const BOOK_COLOR = "#8b4513";
 
@@ -130,25 +139,58 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
     {/* No `filter` here: parent filter + child `preserve-3d` repaints every frame and
         reads as edge “vibration” after the flip overlay unmounts; shadow lives on spread. */}
     <div style={{ position: "relative" }}>
-          {/* Book title label above spread */}
+          {/* Book branding block above spread — Dancing Script + rotating subtitle.
+              top:-70px reserves space for both the title and rotating subtitle line. */}
           <div
             style={{
               position: "absolute",
-              top: "-42px",
+              top: "-70px",
               left: "50%",
               transform: "translateX(-50%)",
-              fontFamily: "'Playfair Display',serif",
-              fontStyle: "italic",
-              fontSize: "14px",
-              color: "rgba(255,200,130,.45)",
-              whiteSpace: "nowrap",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 0,
+              pointerEvents: "none",
             }}
           >
-            StoryBook
+            {/* "StoryBook" — Dancing Script matches the cover title font, bright leather gold */}
+            <div
+              style={{
+                fontFamily: "'Dancing Script', cursive",
+                fontWeight: 700,
+                fontStyle: "italic",
+                fontSize: "20px",
+                color: "rgba(255,205,120,.9)",
+                whiteSpace: "nowrap",
+                textShadow:
+                  "0 0 22px rgba(255,165,60,.5), 0 2px 8px rgba(0,0,0,.45)",
+                letterSpacing: "0.02em",
+              }}
+            >
+              StoryBook
+            </div>
+
+            {/* Rotating branding subtitle — IM Fell italic, subtle gold, no shine (keeps it readable at small size) */}
+            <RotatingTypewriterText
+              texts={[...AUTH_BRAND_PHRASES]}
+              noShine
+              style={{
+                marginTop: "4px",
+                fontFamily: "'IM Fell English', serif",
+                fontStyle: "italic",
+                fontSize: "11px",
+                color: "rgba(255,185,90,.65)",
+                whiteSpace: "nowrap",
+                minHeight: "1.3em",
+                letterSpacing: "0.04em",
+              }}
+            />
           </div>
 
-          {/* Center spotlight — radial leather glow behind the open diary layout.
-              pointer-events:none + zIndex:0 keeps it behind the book pages entirely. */}
+          {/* Center spotlight — radial leather glow behind and AROUND the open diary layout.
+              Size exceeds book footprint by ~280px h / 200px v so the halo extends visibly
+              beyond the book edges. zIndex:0 keeps it behind the spread (zIndex:1). */}
           <div
             aria-hidden
             style={{
@@ -156,11 +198,11 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: "calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 100px)",
-              height: "calc(var(--page-h, 540px) + 90px)",
+              width: "calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 280px)",
+              height: "calc(var(--page-h, 540px) + 200px)",
               background:
-                "radial-gradient(ellipse at 50% 50%, rgba(139,69,19,.28) 0%, rgba(90,40,10,.15) 38%, transparent 68%)",
-              filter: "blur(36px)",
+                "radial-gradient(ellipse at 50% 50%, rgba(139,69,19,.42) 0%, rgba(90,40,10,.24) 40%, transparent 65%)",
+              filter: "blur(50px)",
               borderRadius: "50%",
               pointerEvents: "none",
               zIndex: 0,

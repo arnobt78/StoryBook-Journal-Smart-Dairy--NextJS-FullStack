@@ -34,7 +34,7 @@ import type { CSSProperties } from "react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { LogIn, PenLine } from "lucide-react";
-import { TypewriterText } from "@/components/animations/TypewriterText";
+import { RotatingTypewriterText } from "@/components/animations/RotatingTypewriterText";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { LEATHER_GLASS, LEATHER_GLASS_CLASS } from "@/lib/leather-glass-styles";
 
@@ -330,10 +330,11 @@ export function LandingCover() {
                   📖
                 </div>
 
-                {/* "StoryBook" — Playfair Display italic, gold */}
+                {/* "StoryBook" — Dancing Script (matches "Journal" below), gold */}
                 <div
                   style={{
-                    fontFamily: "'Playfair Display', serif",
+                    fontFamily: "'Dancing Script', cursive",
+                    fontWeight: 700,
                     fontStyle: "italic",
                     fontSize: "clamp(22px, calc(var(--cover-w) * 0.112), 42px)",
                     color: "rgba(255,210,135,.92)",
@@ -378,16 +379,17 @@ export function LandingCover() {
                   aria-hidden
                 />
 
-                {/* Subtitle — replaces year row */}
+                {/* Subtitle — brighter gold with gentle glow for readability */}
                 <div
                   style={{
                     fontFamily: "'IM Fell English', serif",
                     fontStyle: "italic",
-                    fontSize: "clamp(9px, calc(var(--cover-w) * 0.038), 13px)",
+                    fontSize: "clamp(10px, calc(var(--cover-w) * 0.042), 14px)",
                     letterSpacing: "0.12em",
-                    color: "rgba(255,175,80,.45)",
+                    color: "rgba(255,185,105,.72)",
                     textAlign: "center",
                     lineHeight: 1.5,
+                    textShadow: "0 0 16px rgba(255,155,60,.3)",
                   }}
                 >
                   Your private collection of moments
@@ -425,8 +427,8 @@ export function LandingCover() {
         </div>
       </div>
 
-      {/* Glassmorphic spotlight + typewriter hint — spotlight glow sits behind the text.
-          marginTop replaces TypewriterText's own marginTop (overridden to 0 below). */}
+      {/* Glassmorphic spotlight + rotating typewriter hint — spotlight glow sits behind the text.
+          marginTop on wrapper replaces the component's own marginTop (overridden to 0 inside). */}
       <div
         style={{
           position: "relative",
@@ -450,11 +452,24 @@ export function LandingCover() {
             pointerEvents: "none",
           }}
         />
-        <TypewriterText
-          text="Open to begin your story"
+        {/* Rotating phrases cycle: type → hold → erase → next phrase */}
+        <RotatingTypewriterText
+          texts={[
+            "Open to begin your story",
+            "Every day is a new chapter",
+            "Write what you feel today",
+            "Your memories, preserved forever",
+            "Turn the page and begin",
+          ]}
           paused={coverOpening}
           pausedText="Opening your journal…"
-          style={{ marginTop: 0 }}
+          style={{
+            marginTop: 0,
+            fontFamily: "'IM Fell English', serif",
+            fontStyle: "italic",
+            fontSize: "clamp(13px, 3.5vw, 16px)",
+            minHeight: "1.4em",
+          }}
         />
       </div>
 

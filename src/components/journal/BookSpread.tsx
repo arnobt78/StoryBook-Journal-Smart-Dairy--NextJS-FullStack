@@ -694,6 +694,12 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
         style={{ position: "relative", ...bookThemeProps.style }}
         data-book-theme={bookThemeProps["data-book-theme"]}
       >
+        {/* Leather ambient spotlight — absolute-positioned BEFORE the 3D book so it paints
+            behind it (DOM order, same stacking context). Extends +280px h / +200px v beyond
+            the book footprint so the halo is visible around the outer edges of the spread.
+            filter:blur is on THIS sibling div, not on the preserve-3d ancestor — safe. */}
+        <div aria-hidden className="journal-spread-spotlight" />
+
         {/* Book spread — `pointer-events: none` on the 3-D flex row avoids an oversized
           axis-aligned hit box (full spread) stealing clicks; `LeftPage` / `RightPage`
           re-enable `auto` only on their inner content stacks. */}
@@ -706,8 +712,9 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
             transform: "perspective(2000px) rotateX(3deg) rotateY(-2deg)",
             position: "relative",
             pointerEvents: "none",
+            /* Add leather outer ambient ring on top of the drop-shadow */
             boxShadow:
-              "0 48px 96px rgba(0,0,0,.72), 0 16px 40px rgba(0,0,0,.38)",
+              "0 48px 96px rgba(0,0,0,.72), 0 16px 40px rgba(0,0,0,.38), 0 0 90px rgba(139,69,19,.22), 0 0 200px rgba(90,40,10,.12)",
           }}
         >
           {/* Spine */}

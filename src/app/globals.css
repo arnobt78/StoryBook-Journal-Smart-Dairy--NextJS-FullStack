@@ -1012,13 +1012,38 @@ body {
 }
 
 /* ─── Auth book glow — ambient leather spotlight around open spread ─────────
-   Applied to the outer box-shadow of the spread row in AuthBookShell.
+   box-shadow on the spread row; three concentric glow rings extend the leather
+   ambient beyond the book's physical footprint so the halo is clearly visible.
 ──────────────────────────────────────────────────────────────────────────── */
 .auth-book-glow {
   box-shadow:
     0 28px 56px rgba(0, 0, 0, 0.5),
-    0 0 70px rgba(139, 69, 19, 0.2),
-    0 0 130px rgba(90, 40, 10, 0.1);
+    0 0 90px rgba(139, 69, 19, 0.38),
+    0 0 180px rgba(90, 40, 10, 0.22),
+    0 0 280px rgba(70, 30, 8, 0.12);
+}
+
+/* ─── Journal spread spotlight — leather ambient behind the open book in BookSpread.
+   Sibling of the preserve-3d row (not an ancestor) so filter:blur is safe.
+   Width/height exceed the book footprint by ~280 / 200 px so the halo shows
+   outside the book edges even with the blur attenuation.
+──────────────────────────────────────────────────────────────────────────── */
+.journal-spread-spotlight {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 280px);
+  height: calc(var(--page-h, 540px) + 200px);
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(139, 69, 19, 0.38) 0%,
+    rgba(90, 40, 10, 0.22) 40%,
+    transparent 65%
+  );
+  filter: blur(50px);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
 /* ─── Dashboard header entrance ─────────────────────────────────────────── */
