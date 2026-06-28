@@ -16,6 +16,30 @@ export const metadata: Metadata = siteMetadata;
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <head>
+        {/* Critical font preloads — landing cover titles render before globals.css is parsed */}
+        <link
+          rel="preload"
+          href="/fonts/dancing-700.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/imfell-400i.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/playfair-400i.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body suppressHydrationWarning>
         <Providers>{children}</Providers>
       </body>

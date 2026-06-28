@@ -31,9 +31,9 @@
  *  Navigation waits COVER_OPEN_MS so users see the full open before route change.
  */
 import type { CSSProperties } from "react";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { LogIn, PenLine } from "lucide-react";
+import { BookOpen, LogIn, PenLine } from "lucide-react";
 import { RotatingTypewriterText } from "@/components/animations/RotatingTypewriterText";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { LEATHER_GLASS, LEATHER_GLASS_CLASS } from "@/lib/leather-glass-styles";
@@ -75,6 +75,18 @@ export function LandingCover() {
     transition: "opacity 0.2s",
     opacity: coverOpening ? 0.45 : 1,
   };
+
+  /* Today's date on the right welcome page — stable for the session (client-only) */
+  const todayLabel = useMemo(
+    () =>
+      new Date().toLocaleDateString("en-GB", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+    [],
+  );
 
   return (
     <div
@@ -184,6 +196,18 @@ export function LandingCover() {
         .cover-book-opening .cover-fold-sheet   { opacity: 1; }
         .cover-book-opening .cover-fold-sheet-l { transform: rotateY(-55deg); }
         .cover-book-opening .cover-fold-sheet-r { transform: rotateY(50deg); }
+
+        /* Welcome text on inner pages — hidden until cover starts opening (~450ms in) */
+        .cover-inner-text {
+          opacity: 0;
+          transform: translateY(10px);
+          transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+        .cover-book-opening .cover-inner-text {
+          opacity: 1;
+          transform: translateY(0);
+          transition-delay: 0.45s;
+        }
       `}</style>
 
       {/* ── Book ── */}
@@ -248,6 +272,79 @@ export function LandingCover() {
                 pointerEvents: "none",
               }}
             />
+            {/* Right welcome page — visible as cover swings open (cream page stack) */}
+            <div
+              className="cover-inner-text"
+              style={{
+                position: "relative",
+                zIndex: 2,
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "18% 12%",
+                textAlign: "center",
+                pointerEvents: "none",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "'IM Fell English', serif",
+                  fontStyle: "italic",
+                  fontSize: "clamp(8px, calc(var(--cover-w) * 0.032), 11px)",
+                  letterSpacing: "0.08em",
+                  color: "rgba(100,55,20,.45)",
+                  marginBottom: "10px",
+                }}
+              >
+                {todayLabel}
+              </div>
+              <div
+                aria-hidden
+                style={{
+                  fontSize: "clamp(10px, calc(var(--cover-w) * 0.038), 14px)",
+                  color: "rgba(180,110,40,.55)",
+                  marginBottom: "8px",
+                }}
+              >
+                ✦
+              </div>
+              <div
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontStyle: "italic",
+                  fontSize: "clamp(11px, calc(var(--cover-w) * 0.048), 16px)",
+                  color: "rgba(80,45,12,.62)",
+                  lineHeight: 1.35,
+                  marginBottom: "12px",
+                }}
+              >
+                Your story begins today
+              </div>
+              <div
+                style={{
+                  fontFamily: "'Lora', serif",
+                  fontSize: "clamp(8px, calc(var(--cover-w) * 0.028), 10px)",
+                  color: "rgba(90,50,15,.48)",
+                  lineHeight: 1.65,
+                  maxWidth: "88%",
+                }}
+              >
+                Every great story begins with a single word. Open your heart — let the
+                pages speak.
+              </div>
+              <div
+                aria-hidden
+                style={{
+                  width: "45%",
+                  height: "1px",
+                  background:
+                    "linear-gradient(90deg, transparent, rgba(180,110,40,.28), transparent)",
+                  marginTop: "14px",
+                }}
+              />
+            </div>
           </div>
 
           {/* Inner fold sheets — fan open behind the hinge (z-index 2) */}
@@ -316,18 +413,18 @@ export function LandingCover() {
                   padding: "0 14%",
                 }}
               >
-                {/* Floating ornament — open-book glyph with leather filter */}
-                <div
-                  className="float-y"
-                  style={{
-                    fontSize: "clamp(24px, calc(var(--cover-w) * 0.13), 48px)",
-                    lineHeight: 1,
-                    filter:
-                      "sepia(1) saturate(0.6) brightness(0.75) drop-shadow(0 2px 6px rgba(0,0,0,.5))",
-                  }}
-                  aria-hidden
-                >
-                  📖
+                {/* Floating ornament — Lucide BookOpen, leather gold, float-y animation */}
+                <div className="float-y" aria-hidden>
+                  <BookOpen
+                    style={{
+                      width: "clamp(24px, calc(var(--cover-w) * 0.13), 44px)",
+                      height: "clamp(24px, calc(var(--cover-w) * 0.13), 44px)",
+                      color: "rgba(255,195,100,.78)",
+                      filter: "drop-shadow(0 2px 6px rgba(0,0,0,.5))",
+                      display: "block",
+                    }}
+                    strokeWidth={1.5}
+                  />
                 </div>
 
                 {/* "StoryBook" — Dancing Script (matches "Journal" below), gold */}
@@ -422,6 +519,67 @@ export function LandingCover() {
                   pointerEvents: "none",
                 }}
               />
+              {/* Left welcome page — inside of cover (back face), visible when hinge opens */}
+              <div
+                className="cover-inner-text"
+                style={{
+                  position: "relative",
+                  zIndex: 2,
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "18% 14%",
+                  textAlign: "center",
+                  pointerEvents: "none",
+                }}
+              >
+                <BookOpen
+                  aria-hidden
+                  style={{
+                    width: "22px",
+                    height: "22px",
+                    color: "rgba(120,60,15,.45)",
+                    marginBottom: "10px",
+                  }}
+                  strokeWidth={1.5}
+                />
+                <div
+                  style={{
+                    fontFamily: "'Dancing Script', cursive",
+                    fontWeight: 700,
+                    fontStyle: "italic",
+                    fontSize: "clamp(14px, calc(var(--cover-w) * 0.065), 22px)",
+                    color: "rgba(120,60,15,.6)",
+                    marginBottom: "12px",
+                  }}
+                >
+                  Welcome
+                </div>
+                <div
+                  style={{
+                    fontFamily: "'IM Fell English', serif",
+                    fontStyle: "italic",
+                    fontSize: "clamp(8px, calc(var(--cover-w) * 0.03), 11px)",
+                    color: "rgba(90,50,15,.5)",
+                    lineHeight: 1.65,
+                    maxWidth: "90%",
+                  }}
+                >
+                  &ldquo;Not all who wander are lost, but all who write are found.&rdquo;
+                </div>
+                <div
+                  aria-hidden
+                  style={{
+                    width: "50%",
+                    height: "1px",
+                    background:
+                      "linear-gradient(90deg, transparent, rgba(180,110,40,.28), transparent)",
+                    marginTop: "14px",
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
