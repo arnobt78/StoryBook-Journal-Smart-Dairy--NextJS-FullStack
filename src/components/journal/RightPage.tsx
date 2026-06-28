@@ -133,12 +133,18 @@ export function RightPage({
         backgroundImage: "repeating-linear-gradient(transparent,transparent 27px,rgba(120,80,30,.1) 27px,rgba(120,80,30,.1) 28px)",
         backgroundPosition: "0 52px", pointerEvents: "none", zIndex: 0,
       }} />
-      {/* Left curl shadow */}
-      <div style={{
-        position: "absolute", left: 0, top: 0, bottom: 0, width: "28px",
-        background: "linear-gradient(to right,rgba(100,50,10,.1) 0%,transparent 100%)",
-        pointerEvents: "none", zIndex: 2,
-      }} />
+      {/* Left curl shadow toward coil seam */}
+      <div
+        className="spread-seam-curl-right"
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          bottom: 0,
+          pointerEvents: "none",
+          zIndex: 2,
+        }}
+      />
 
       <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", pointerEvents: "auto" }}>
         {/* Page number */}

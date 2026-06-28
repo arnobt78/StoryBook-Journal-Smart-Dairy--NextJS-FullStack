@@ -42,6 +42,7 @@ import { BookEditorModal } from "@/components/journal/BookEditorModal";
 import { LeftPage } from "./LeftPage";
 import { RightPage } from "./RightPage";
 import { PageFlipOverlay } from "./PageFlip";
+import { SpreadCoilBinding } from "./SpreadCoilBinding";
 import { usePageFlip } from "@/hooks/usePageFlip";
 import { useBookTheme } from "@/hooks/useBookTheme";
 import { RippleButton } from "@/components/ui/ripple-button";
@@ -705,6 +706,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           re-enable `auto` only on their inner content stacks. */}
         {/* ── 3D BOOK: preserve-3d spread — shadow on wrapper, not filter (avoids shimmer) ── */}
         <div
+          className={isFlipping ? "spread-coil-flipping" : undefined}
           style={{
             display: "flex",
             alignItems: "stretch",
@@ -757,6 +759,8 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
             onDeleteEntry={() => setConfirmDeleteEntry(true)}
             canDeleteEntry={!isFlipping && !isWriting && !isDeleting}
           />
+
+          <SpreadCoilBinding />
 
           {/* ── PAGE FLIP: overlay mounts only during animation ── */}
           {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}

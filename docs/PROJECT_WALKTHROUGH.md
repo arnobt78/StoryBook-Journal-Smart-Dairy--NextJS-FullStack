@@ -390,7 +390,18 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 17. Related docs
+## 17. C4 UI Wave 12 — Spiral coil seam (2026-06-28)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Coil overlay | `SpreadCoilBinding.tsx` | Bronze spring loops on seam; absolute — no flex gap |
+| Auth + journal | `AuthBookShell.tsx`, `BookSpread.tsx` | Flush `left \| right`; coil always mounted |
+| Seam blend | `globals.css`, `LeftPage`, `RightPage` | `.spread-seam-curl-*` gradients into coil |
+| Flip smooth | `PageFlip.tsx`, `usePageFlip.ts` | Left-edge seam strip; 80ms settle before unmount |
+
+---
+
+## 18. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -401,4 +412,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-28 — C4 Wave 11 footer pin + gutter crease; lint/typecheck/24 Vitest/build PASS.*
+*Last reviewed: 2026-06-28 — C4 Wave 12 spiral coil seam; lint/typecheck/24 Vitest/build PASS.*

@@ -445,31 +445,54 @@ body {
   }
 }
 
-/* Persistent center crease between auth spread leaves — stays mounted during flip */
-.auth-spread-gutter {
-  flex-shrink: 0;
-  align-self: stretch;
-  width: 16px;
-  z-index: 5;
+/* Spiral wire coil overlay — absolute on seam; pages stay flush (no flex gap) */
+.spread-coil-binding {
+  position: absolute;
+  top: 0;
+  left: calc(var(--spine-w, 22px) + var(--page-w, 360px) - 7px);
+  width: 14px;
+  height: var(--page-h, 540px);
+  z-index: 8;
   pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    rgba(100, 50, 10, 0.14) 0%,
-    rgba(60, 30, 8, 0.28) 48%,
-    rgba(100, 50, 10, 0.14) 100%
-  );
-  box-shadow:
-    inset 4px 0 8px rgba(80, 40, 10, 0.12),
-    inset -4px 0 8px rgba(80, 40, 10, 0.12);
-  transition: opacity 0.28s ease-in-out, box-shadow 0.28s ease-in-out;
+  filter: drop-shadow(0 0 6px rgba(80, 40, 10, 0.12));
+  transition: filter 0.28s ease-in-out;
 }
 
-/* Flip / route-settle phase — slightly deepen crease while overlay or hold-cover active */
-.auth-spread-flipping .auth-spread-gutter {
-  opacity: 1;
-  box-shadow:
-    inset 5px 0 12px rgba(60, 30, 8, 0.18),
-    inset -5px 0 12px rgba(60, 30, 8, 0.18);
+/* Seam edge blend — page curls fade into coil (auth + journal) */
+.spread-seam-curl-left {
+  background: linear-gradient(
+    to left,
+    rgba(90, 45, 10, 0.1) 0%,
+    rgba(100, 50, 10, 0.06) 35%,
+    transparent 100%
+  ) !important;
+  width: 32px !important;
+}
+
+.spread-seam-curl-right {
+  background: linear-gradient(
+    to right,
+    rgba(90, 45, 10, 0.09) 0%,
+    rgba(100, 50, 10, 0.05) 35%,
+    transparent 100%
+  ) !important;
+  width: 32px !important;
+}
+
+@keyframes spreadCoilPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(80, 40, 10, 0.12));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(60, 30, 8, 0.2));
+  }
+}
+
+/* Flip / route-settle — deepen coil shadow smoothly */
+.spread-coil-flipping .spread-coil-binding {
+  animation: spreadCoilPulse 0.65s ease-in-out;
+  filter: drop-shadow(0 0 12px rgba(60, 30, 8, 0.22));
 }
 
 @keyframes authHoldFadeIn {
@@ -507,8 +530,9 @@ body {
   .auth-page-hold-cover {
     animation: none;
   }
-  .auth-spread-gutter {
-    transition: none;
+  .spread-coil-flipping .spread-coil-binding {
+    animation: none;
+    filter: drop-shadow(0 0 8px rgba(60, 30, 8, 0.18));
   }
 }
 

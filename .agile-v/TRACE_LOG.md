@@ -26,3 +26,4 @@
 | 2026-06-28T14:00:00Z | ui-wave9 | build-agent-js | C4 Wave 9: useAuthBookNavigation, unified auth-form-contents stagger, remount keys, 22 Vitest PASS | REQ-0029–0030 | CR-0005 |
 | 2026-06-28T14:20:00Z | ui-wave10 | build-agent-js | C4 Wave 10: auth-stagger-row explicit indices, AuthFormField, footer stagger, 24 Vitest PASS | REQ-0029–0030 | CR-0005 |
 | 2026-06-28T14:38:00Z | ui-wave11 | build-agent-js | C4 Wave 11: footer bottom pin, auth-spread-gutter, hold-cover fade, PageFlip depth; 24 Vitest PASS | REQ-0029–0030 | CR-0005 |
+| 2026-06-28T14:45:00Z | ui-wave12 | build-agent-js | C4 Wave 12: SpreadCoilBinding flush seam, removed flex gutter, 80ms flip settle; 24 Vitest PASS | REQ-0029–0030 | CR-0005 |

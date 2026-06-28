@@ -51,12 +51,18 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
         position: "absolute", left: "58px", top: 0, bottom: 0, width: "1px",
         background: "rgba(220,100,80,.18)", pointerEvents: "none", zIndex: 0,
       }} />
-      {/* Right curl shadow toward spine */}
-      <div style={{
-        position: "absolute", right: 0, top: 0, bottom: 0, width: "28px",
-        background: "linear-gradient(to left, rgba(100,50,10,.12) 0%, transparent 100%)",
-        pointerEvents: "none", zIndex: 2,
-      }} />
+      {/* Right curl shadow toward coil seam */}
+      <div
+        className="spread-seam-curl-left"
+        style={{
+          position: "absolute",
+          right: 0,
+          top: 0,
+          bottom: 0,
+          pointerEvents: "none",
+          zIndex: 2,
+        }}
+      />
 
       <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", pointerEvents: "auto" }}>
         {/* Page number */}

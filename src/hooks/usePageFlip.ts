@@ -6,7 +6,7 @@
  * Hook lifecycle:
  *   mount → idle (`isFlipping=false`, `flipDir=null`)
  *   triggerFlip(dir) → ref guard + state → CSS overlay animates FLIP_MS
- *   setTimeout(onComplete) → reset state → caller may router.push
+ *   onComplete at FLIP_MS; overlay unmounts after SETTLE_MS for seam handoff
  *   resetFlip() → abort timer if route unmounts mid-animation
  *
  * usePageFlip — shared page-flip state for BookSpread and AuthBookShell.
@@ -29,11 +29,14 @@ interface UsePageFlipReturn {
 
 /** Must match the animation duration in PageFlip.tsx CSS keyframes. */
 const FLIP_MS = 650;
+/** Brief hold after animation so coil seam stays continuous before overlay unmounts. */
+const SETTLE_MS = 80;
 
 export function usePageFlip(): UsePageFlipReturn {
   const [isFlipping, setIsFlipping] = useState(false);
   const [flipDir, setFlipDir] = useState<FlipDirection | null>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const flipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /**
    * Synchronous ref guard — state reads inside closures can be stale
@@ -48,21 +51,29 @@ export function usePageFlip(): UsePageFlipReturn {
     setFlipDir(dir);
     setIsFlipping(true);
 
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
+    if (flipTimer.current) clearTimeout(flipTimer.current);
+    if (settleTimer.current) clearTimeout(settleTimer.current);
+    flipTimer.current = setTimeout(() => {
       onComplete?.();
-      flippingRef.current = false;
-      setIsFlipping(false);
-      setFlipDir(null);
-      timer.current = null;
+      settleTimer.current = setTimeout(() => {
+        flippingRef.current = false;
+        setIsFlipping(false);
+        setFlipDir(null);
+        flipTimer.current = null;
+        settleTimer.current = null;
+      }, SETTLE_MS);
     }, FLIP_MS);
   }, []);
 
   /** Force-reset if a navigation unmount cut the animation short. */
   const resetFlip = useCallback(() => {
-    if (timer.current) {
-      clearTimeout(timer.current);
-      timer.current = null;
+    if (flipTimer.current) {
+      clearTimeout(flipTimer.current);
+      flipTimer.current = null;
+    }
+    if (settleTimer.current) {
+      clearTimeout(settleTimer.current);
+      settleTimer.current = null;
     }
     flippingRef.current = false;
     setIsFlipping(false);

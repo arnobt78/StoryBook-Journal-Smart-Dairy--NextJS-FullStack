@@ -74,6 +74,22 @@ export function PageFlipOverlay({ direction }: PageFlipProps) {
           pointerEvents: "none", zIndex: 30,
         }}
       >
+        {/* Left seam edge — blends with SpreadCoilBinding during mid-turn */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: "14px",
+            background:
+              "linear-gradient(to right, rgba(90,45,10,.14) 0%, rgba(100,50,10,.06) 40%, transparent 100%)",
+            pointerEvents: "none",
+            zIndex: 3,
+            transform: "translateZ(1px)",
+          }}
+        />
         {/* Front face — right-page paper */}
         <div style={{
           position: "absolute", inset: 0,

@@ -10,10 +10,9 @@
  *     with a pure-CSS `auth-shell-root` keyframe that completes in 500ms and
  *     produces no stacking context once finished.
  *
- *  2. Spread layout: **spine (cover edge) | left page | gutter crease | right page** — the brown
- *     strip is the outer binding on the left (like a closed cover edge), not a bar between the
- *     two leaves. `.auth-spread-gutter` is a persistent center crease so gutter depth does not
- *     collapse when the flip overlay covers the right page.
+ *  2. Spread layout: **spine | left | right** (flush leaves) + `SpreadCoilBinding` overlay on
+ *     the center seam. The brown strip is the outer binding on the left — not a flex gap between
+ *     pages. Coil + page inset shadows give depth without separating the spread.
  *
  *  3. Spread transform is `perspective` only (no rotateX/Y on the row): those tilts
  *     with `preserve-3d` caused sub-pixel “vibrating” strokes after the flip sheet
@@ -33,6 +32,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { Sparkles, Zap } from "lucide-react";
 import { PageFlipOverlay } from "@/components/journal/PageFlip";
+import { SpreadCoilBinding } from "@/components/journal/SpreadCoilBinding";
 import {
   normalizeAuthPath,
   useAuthBookNavigation,
@@ -198,7 +198,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
         <div
           className={
             spreadFlipping
-              ? "auth-book-glow auth-spread-flipping"
+              ? "auth-book-glow spread-coil-flipping"
               : "auth-book-glow"
           }
           style={{
@@ -274,16 +274,14 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                 zIndex: 0,
               }}
             />
-            {/* Right curl shadow */}
+            {/* Right curl shadow — blends into center coil */}
             <div
+              className="spread-seam-curl-left"
               style={{
                 position: "absolute",
                 right: 0,
                 top: 0,
                 bottom: 0,
-                width: "28px",
-                background:
-                  "linear-gradient(to left,rgba(100,50,10,.12) 0%,transparent 100%)",
                 pointerEvents: "none",
                 zIndex: 1,
               }}
@@ -453,9 +451,6 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
             </div>
           </div>
 
-          {/* Center fold crease — always mounted; complements page inset shadows during flip */}
-          <div aria-hidden className="auth-spread-gutter" />
-
           {/* ── RIGHT PAGE ── */}
           {/* Same hit-testing rationale as the left page shell (see comment above). */}
           <div
@@ -484,16 +479,14 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                 zIndex: 0,
               }}
             />
-            {/* Left curl */}
+            {/* Left curl — blends into center coil */}
             <div
+              className="spread-seam-curl-right"
               style={{
                 position: "absolute",
                 left: 0,
                 top: 0,
                 bottom: 0,
-                width: "28px",
-                background:
-                  "linear-gradient(to right,rgba(100,50,10,.1) 0%,transparent 100%)",
                 pointerEvents: "none",
                 zIndex: 1,
               }}
@@ -533,6 +526,9 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
               </div>
             </div>
           </div>
+
+          {/* Spiral wire coil — absolute overlay on seam; never unmounts during flip */}
+          <SpreadCoilBinding />
 
           {/* Paper hold — masks right page until destination RSC renders after flip */}
           {awaitingRoute && !isFlipping && (
