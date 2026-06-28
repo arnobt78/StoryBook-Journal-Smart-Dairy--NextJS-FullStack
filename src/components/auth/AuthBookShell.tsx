@@ -30,9 +30,10 @@
  *    fires in `triggerFlip` onComplete (after animation, not during).
  *  AUTH FORMS — `{children}` is LoginForm or RegisterForm on the right page only.
  */
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { BookPlus, KeyRound } from "lucide-react";
 import { PageFlipOverlay } from "@/components/journal/PageFlip";
 import { usePageFlip } from "@/hooks/usePageFlip";
 import { RippleButton } from "@/components/ui/ripple-button";
@@ -45,6 +46,16 @@ const AUTH_BRAND_PHRASES = [
   "Every memory preserved",
   "Write. Reflect. Remember.",
 ] as const;
+
+/** Left-page marketing icon — leather amber on cream paper, matches book palette */
+const AUTH_LEFT_ICON_STYLE: CSSProperties = {
+  width: 28,
+  height: 28,
+  marginTop: "10px",
+  color: "rgba(160,85,20,.78)",
+  filter: "drop-shadow(0 1px 5px rgba(120,60,10,.28))",
+  display: "block",
+};
 
 const BOOK_COLOR = "#8b4513";
 
@@ -144,7 +155,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
           <div
             style={{
               position: "absolute",
-              top: "-70px",
+              top: "-74px",
               left: "50%",
               transform: "translateX(-50%)",
               display: "flex",
@@ -171,19 +182,22 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
               StoryBook
             </div>
 
-            {/* Rotating branding subtitle — IM Fell italic, subtle gold, no shine (keeps it readable at small size) */}
+            {/* Rotating branding subtitle — Dancing Script matches StoryBook title; bright gold, no shine */}
             <RotatingTypewriterText
               texts={[...AUTH_BRAND_PHRASES]}
               noShine
               style={{
                 marginTop: "4px",
-                fontFamily: "'IM Fell English', serif",
+                fontFamily: "'Dancing Script', cursive",
+                fontWeight: 700,
                 fontStyle: "italic",
-                fontSize: "11px",
-                color: "rgba(255,185,90,.65)",
+                fontSize: "13px",
+                color: "rgba(255,205,120,.92)",
                 whiteSpace: "nowrap",
                 minHeight: "1.3em",
-                letterSpacing: "0.04em",
+                letterSpacing: "0.02em",
+                textShadow:
+                  "0 0 16px rgba(255,165,60,.4), 0 1px 4px rgba(0,0,0,.35)",
               }}
             />
           </div>
@@ -337,16 +351,19 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                   >
                     {leftIsRegister ? "New chapter" : "Returning reader"}
                   </p>
-                  <div
-                    style={{
-                      fontSize: "34px",
-                      marginTop: "10px",
-                      lineHeight: 1,
-                    }}
-                    aria-hidden
-                  >
-                    {leftIsRegister ? "✨" : "🔑"}
-                  </div>
+                  {leftIsRegister ? (
+                    <BookPlus
+                      aria-hidden
+                      style={AUTH_LEFT_ICON_STYLE}
+                      strokeWidth={1.5}
+                    />
+                  ) : (
+                    <KeyRound
+                      aria-hidden
+                      style={AUTH_LEFT_ICON_STYLE}
+                      strokeWidth={1.5}
+                    />
+                  )}
                   <h2
                     style={{
                       fontFamily: "'Playfair Display',serif",
