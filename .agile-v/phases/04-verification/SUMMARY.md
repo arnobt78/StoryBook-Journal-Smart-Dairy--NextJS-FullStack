@@ -14,7 +14,7 @@
 - **Unit:** 24 Vitest PASS (2026-06-28)
 - **Lint + typecheck:** PASS (2026-06-28)
 - **Build:** PASS (2026-06-28)
-- **Wave 10 audit:** full-row auth stagger via `authStaggerRowProps`; footer + form fields fixed
+- **Wave 10 audit:** `authStaggerRowProps` + `.auth-stagger-row`; no dead `auth-form-contents` in src; docs synced
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
 

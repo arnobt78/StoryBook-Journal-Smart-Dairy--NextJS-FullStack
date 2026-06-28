@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-28T14:20:00Z |
-| **Updated By** | agile-v-core (C4 Wave 10) |
+| **Last Updated** | 2026-06-28T14:25:00Z |
+| **Updated By** | agile-v-core (Wave 10 audit PASS) |
 
 ## Stage checklist
 

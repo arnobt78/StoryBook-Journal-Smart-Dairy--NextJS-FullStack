@@ -349,7 +349,7 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 | Area | Files | Details |
 |------|-------|---------|
-| Row stagger CSS | `globals.css` | `authRowIn` replaces opacity-only `authReveal`; shared 12-slot timing for `.auth-stagger`, `.auth-form-stagger`, `.auth-right-stagger`, `.landing-enter-stagger`; `prefers-reduced-motion` |
+| Row stagger CSS | `globals.css` | `authRowIn`; `.auth-stagger` containers; `.landing-enter-stagger`; `prefers-reduced-motion` |
 | Auth flip nav | `AuthBookShell.tsx` | `router.push` at flip start; `navTarget` + `.auth-page-hold-cover` until pathname matches; `contentReady` hides content then remounts stagger via `key={pathname}` |
 | Landing entrance | `BookCover.tsx` | `.landing-enter-stagger` wraps typewriter hint + CTA row (2-step stair) |
 
@@ -362,7 +362,7 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 | Area | Files | Details |
 |------|-------|---------|
 | Nav hook | `useAuthBookNavigation.ts` | Extracted flip nav; browser-back reset; `authStaggerRemountKey` + `authBrandStaggerKey` |
-| Unified stagger | `LoginForm.tsx`, `RegisterForm.tsx`, `globals.css` | `.auth-form-contents` (`display:contents`) — single `.auth-right-stagger` timeline |
+| Stagger prep | `LoginForm.tsx`, `RegisterForm.tsx` | Attempted unified nth-child timeline (superseded Wave 10) |
 | Tests | `hooks/__tests__/useAuthBookNavigation.test.ts` | 6 Vitest cases for remount key helpers |
 | Tooling | `.gitignore` | Ignore auto-generated `next-env.d.ts` |
 
