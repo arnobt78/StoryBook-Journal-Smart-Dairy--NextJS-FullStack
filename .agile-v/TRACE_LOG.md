@@ -23,3 +23,4 @@
 | 2026-06-28T12:30:00Z | ui-wave3 | build-agent-js | C4 UI Polish Wave 3: fonts self-hosted, landing redesign, auth spotlight, dashboard glow, nav pill; 16 Vitest PASS | REQ-0005, REQ-0004, REQ-0002, REQ-0006 | CR-0005 |
 | 2026-06-28T12:33:00Z | audit-w3 | red-team-verifier | Wave 3 deep audit: 2 fixes (marginTop wrapper, shelfItemIn rotateY→translateY); all CSS+font cross-checked; lint/typecheck/test/build PASS; docs updated | REQ-0024 | DEC-0031 |
 | 2026-06-28T13:52:00Z | ui-wave8 | build-agent-js | C4 Wave 8: authRowIn stagger, early flip push + hold cover, landing-enter-stagger; lint/typecheck/test/build PASS | REQ-0029–0030 | CR-0005 |
+| 2026-06-28T14:00:00Z | ui-wave9 | build-agent-js | C4 Wave 9: useAuthBookNavigation, unified auth-form-contents stagger, remount keys, 22 Vitest PASS | REQ-0029–0030 | CR-0005 |

@@ -357,7 +357,18 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 14. Related docs
+## 14. C4 UI Wave 9 — Auth stagger consistency (2026-06-28)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Nav hook | `useAuthBookNavigation.ts` | Extracted flip nav; browser-back reset; `authStaggerRemountKey` + `authBrandStaggerKey` |
+| Unified stagger | `LoginForm.tsx`, `RegisterForm.tsx`, `globals.css` | `.auth-form-contents` (`display:contents`) — single `.auth-right-stagger` timeline |
+| Tests | `hooks/__tests__/useAuthBookNavigation.test.ts` | 6 Vitest cases for remount key helpers |
+| Tooling | `.gitignore` | Ignore auto-generated `next-env.d.ts` |
+
+---
+
+## 15. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -368,4 +379,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-28 — C4 Wave 8 auth stagger + flip fix; lint/typecheck/16 Vitest/build PASS.*
+*Last reviewed: 2026-06-28 — C4 Wave 9 auth stagger consistency; lint/typecheck/22 Vitest/build PASS.*

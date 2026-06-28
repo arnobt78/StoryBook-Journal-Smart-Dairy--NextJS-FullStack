@@ -129,7 +129,8 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
   };
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form-stagger">
+    /* display:contents merges form rows into AuthBookShell .auth-right-stagger nth-child chain */
+    <form onSubmit={handleSubmit} className="auth-form-contents">
       {demoLoginEnabled && (
         <div style={{ position: "relative", zIndex: 40, marginBottom: "12px" }} className="auth-field-compact">
           <p style={{ ...fieldLabelStyle, margin: "0 0 8px" }}>Test Account To Login With</p>

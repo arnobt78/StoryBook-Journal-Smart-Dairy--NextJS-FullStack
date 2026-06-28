@@ -68,7 +68,8 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form-stagger">
+    /* display:contents merges form rows into AuthBookShell .auth-right-stagger nth-child chain */
+    <form onSubmit={handleSubmit} className="auth-form-contents">
       <Field label="Your Name">
         <input
           type="text"

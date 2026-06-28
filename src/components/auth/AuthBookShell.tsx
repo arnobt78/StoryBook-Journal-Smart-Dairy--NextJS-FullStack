@@ -20,20 +20,23 @@
  *     unmounted. Pointer-events: `none` on page shells + `auto` on inner stacks (same
  *     pattern as dashboard). Row stagger via `.auth-stagger` / `.auth-right-stagger`.
  *
- *  4. Route push fires at flip START (prefetched); hold cover masks slow RSC; rows
- *     stagger in when `contentReady` (no post-flip source-page flash).
+ *  4. Route push + nav lock live in `useAuthBookNavigation`; hold cover masks slow RSC;
+ *     stagger remount keys (`authStaggerRemountKey`) force row animation when contentReady.
  *
  * ── WALKTHROUGH: auth book shell + page flip ──
  *  3D BOOK — spine | left marketing | right form; `preserve-3d` without row tilt.
- *  PAGE FLIP — login ↔ register uses same `PageFlipOverlay` as journal; `router.push`
- *    at flip start; `.auth-page-hold-cover` until pathname matches navTarget.
+ *  PAGE FLIP — login ↔ register uses same `PageFlipOverlay` as journal; nav logic in
+ *    `useAuthBookNavigation` (early push, hold cover, stagger remount keys).
  *  AUTH FORMS — `{children}` is LoginForm or RegisterForm on the right page only.
  */
 import type { CSSProperties, ReactNode } from "react";
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Sparkles, Zap } from "lucide-react";
 import { PageFlipOverlay } from "@/components/journal/PageFlip";
+import {
+  normalizeAuthPath,
+  useAuthBookNavigation,
+} from "@/hooks/useAuthBookNavigation";
 import { usePageFlip } from "@/hooks/usePageFlip";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { RotatingTypewriterText } from "@/components/animations/RotatingTypewriterText";
@@ -87,73 +90,20 @@ const AUTH_LEFT_ICON_STYLE: CSSProperties = {
 
 const BOOK_COLOR = "#8b4513";
 
-type AuthRoute = "/login" | "/register";
-
-function normalizeAuthPath(p: string): string {
-  if (p.length > 1 && p.endsWith("/")) return p.slice(0, -1);
-  return p;
-}
-
 export function AuthBookShell({ children }: { children: ReactNode }) {
   const pathname = normalizeAuthPath(usePathname());
-  const router = useRouter();
   const { isFlipping, flipDir, triggerFlip } = usePageFlip();
 
-  /** Destination route while cross-auth navigation is in flight */
-  const [navTarget, setNavTarget] = useState<AuthRoute | null>(null);
-  /** Source pathname for left-page copy during the flip animation */
-  const [flipSourcePath, setFlipSourcePath] = useState<string | null>(null);
-
-  /** Warm the opposite auth route so RSC payload is ready when the flip starts. */
-  useEffect(() => {
-    if (pathname === "/login") router.prefetch("/register");
-    if (pathname === "/register") router.prefetch("/login");
-  }, [pathname, router]);
-
-  /** Clear nav lock once Next.js pathname matches the pushed destination */
-  useEffect(() => {
-    if (navTarget && pathname === navTarget) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- router pathname sync
-      setNavTarget(null);
-    }
-  }, [pathname, navTarget]);
-
-  /**
-   * Navigate to /register (forward flip).
-   * Push at flip start; hold cover + hidden content until RSC settles; then stagger in.
-   */
-  const goRegister = () => {
-    if (pathname === "/register" || isFlipping) return;
-    setFlipSourcePath(pathname);
-    setNavTarget("/register");
-    router.push("/register");
-    triggerFlip("fwd", () => {
-      setFlipSourcePath(null);
-    });
-  };
-
-  /**
-   * Navigate to /login (backward flip).
-   * Same early-push + hold-cover pattern as goRegister.
-   */
-  const goLogin = () => {
-    if (pathname === "/login" || isFlipping) return;
-    setFlipSourcePath(pathname);
-    setNavTarget("/login");
-    router.push("/login");
-    triggerFlip("bwd", () => {
-      setFlipSourcePath(null);
-    });
-  };
-
-  const awaitingRoute = navTarget !== null && pathname !== navTarget;
-  const contentReady = !isFlipping && !awaitingRoute;
-  const displayPath =
-    isFlipping && flipSourcePath ? flipSourcePath : pathname;
-  const leftIsRegister = displayPath === "/register";
-
-  /* While a cross-auth navigation is in flight, keep footer controls idle. */
-  const authNavBusy = isFlipping || awaitingRoute;
+  const {
+    goLogin,
+    goRegister,
+    awaitingRoute,
+    contentReady,
+    leftIsRegister,
+    authNavBusy,
+    staggerRemountKey,
+    brandStaggerKey,
+  } = useAuthBookNavigation({ pathname, isFlipping, triggerFlip });
 
   /* Footer link shows the OPPOSITE of current pathname */
   const showRegisterLink = pathname === "/login";
@@ -170,7 +120,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
           {/* Book branding block — StoryBook + rotating phrase inline on one row (wraps on narrow viewports) */}
           <div
             className="auth-stagger"
-            key={pathname}
+            key={brandStaggerKey}
             style={{
               position: "absolute",
               top: "-48px",
@@ -338,7 +288,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                 {/* Left marketing copy — row stagger when contentReady (translateY, not opacity-only) */}
                 <div
                   className={contentReady ? "auth-stagger" : undefined}
-                  key={pathname}
+                  key={staggerRemountKey}
                   style={{
                     flex: "1 1 auto",
                     minHeight: 0,
@@ -556,7 +506,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
               >
                 <div
                   className={contentReady ? "auth-right-stagger" : undefined}
-                  key={pathname}
+                  key={staggerRemountKey}
                   style={{
                     display: "flex",
                     flexDirection: "column",
