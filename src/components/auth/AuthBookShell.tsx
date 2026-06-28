@@ -33,7 +33,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { BookPlus, KeyRound } from "lucide-react";
+import { Sparkles, Zap } from "lucide-react";
 import { PageFlipOverlay } from "@/components/journal/PageFlip";
 import { usePageFlip } from "@/hooks/usePageFlip";
 import { RippleButton } from "@/components/ui/ripple-button";
@@ -47,14 +47,43 @@ const AUTH_BRAND_PHRASES = [
   "Write. Reflect. Remember.",
 ] as const;
 
-/** Left-page marketing icon — leather amber on cream paper, matches book palette */
+/** Shared Dancing Script branding — title + inline rotating subtitle use identical size */
+const AUTH_BRAND_TEXT_STYLE: CSSProperties = {
+  fontFamily: "'Dancing Script', cursive",
+  fontWeight: 700,
+  fontStyle: "italic",
+  fontSize: "20px",
+  color: "rgba(255,205,120,.92)",
+  letterSpacing: "0.02em",
+  textShadow:
+    "0 0 22px rgba(255,165,60,.5), 0 2px 8px rgba(0,0,0,.45)",
+  lineHeight: 1.2,
+};
+
+/** Radial amber orb behind left-page Lucide icon — sibling blur, not on preserve-3d parent */
+const AUTH_LEFT_ICON_SPOTLIGHT: CSSProperties = {
+  position: "absolute",
+  width: "52px",
+  height: "52px",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  background:
+    "radial-gradient(ellipse at 50% 50%, rgba(255,165,55,.32) 0%, rgba(255,130,35,.14) 48%, transparent 72%)",
+  filter: "blur(14px)",
+  borderRadius: "50%",
+  pointerEvents: "none",
+};
+
 const AUTH_LEFT_ICON_STYLE: CSSProperties = {
   width: 28,
   height: 28,
-  marginTop: "10px",
-  color: "rgba(160,85,20,.78)",
-  filter: "drop-shadow(0 1px 5px rgba(120,60,10,.28))",
+  color: "rgba(160,85,20,.82)",
+  filter:
+    "drop-shadow(0 0 10px rgba(255,155,50,.42)) drop-shadow(0 1px 5px rgba(120,60,10,.28))",
   display: "block",
+  position: "relative",
+  zIndex: 1,
 };
 
 const BOOK_COLOR = "#8b4513";
@@ -150,54 +179,40 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
     {/* No `filter` here: parent filter + child `preserve-3d` repaints every frame and
         reads as edge “vibration” after the flip overlay unmounts; shadow lives on spread. */}
     <div style={{ position: "relative" }}>
-          {/* Book branding block above spread — Dancing Script + rotating subtitle.
-              top:-70px reserves space for both the title and rotating subtitle line. */}
+          {/* Book branding block — StoryBook + rotating phrase inline on one row (wraps on narrow viewports) */}
           <div
             style={{
               position: "absolute",
-              top: "-74px",
+              top: "-48px",
               left: "50%",
               transform: "translateX(-50%)",
               display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 0,
+              flexDirection: "row",
+              flexWrap: "wrap",
+              alignItems: "baseline",
+              justifyContent: "center",
+              gap: "0 8px",
+              maxWidth:
+                "min(96vw, calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 40px))",
               pointerEvents: "none",
             }}
           >
-            {/* "StoryBook" — Dancing Script matches the cover title font, bright leather gold */}
-            <div
-              style={{
-                fontFamily: "'Dancing Script', cursive",
-                fontWeight: 700,
-                fontStyle: "italic",
-                fontSize: "20px",
-                color: "rgba(255,205,120,.9)",
-                whiteSpace: "nowrap",
-                textShadow:
-                  "0 0 22px rgba(255,165,60,.5), 0 2px 8px rgba(0,0,0,.45)",
-                letterSpacing: "0.02em",
-              }}
+            <span style={AUTH_BRAND_TEXT_STYLE}>StoryBook</span>
+            <span
+              aria-hidden
+              style={{ ...AUTH_BRAND_TEXT_STYLE, opacity: 0.5 }}
             >
-              StoryBook
-            </div>
-
-            {/* Rotating branding subtitle — Dancing Script matches StoryBook title; bright gold, no shine */}
+              ·
+            </span>
+            {/* Inline rotating phrase — same 20px Dancing Script as title; minWidth limits layout shift */}
             <RotatingTypewriterText
               texts={[...AUTH_BRAND_PHRASES]}
               noShine
               style={{
-                marginTop: "4px",
-                fontFamily: "'Dancing Script', cursive",
-                fontWeight: 700,
-                fontStyle: "italic",
-                fontSize: "13px",
-                color: "rgba(255,205,120,.92)",
+                ...AUTH_BRAND_TEXT_STYLE,
                 whiteSpace: "nowrap",
-                minHeight: "1.3em",
-                letterSpacing: "0.02em",
-                textShadow:
-                  "0 0 16px rgba(255,165,60,.4), 0 1px 4px rgba(0,0,0,.35)",
+                minHeight: "1.2em",
+                minWidth: "clamp(140px, 22vw, 240px)",
               }}
             />
           </div>
@@ -351,19 +366,29 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                   >
                     {leftIsRegister ? "New chapter" : "Returning reader"}
                   </p>
-                  {leftIsRegister ? (
-                    <BookPlus
-                      aria-hidden
-                      style={AUTH_LEFT_ICON_STYLE}
-                      strokeWidth={1.5}
-                    />
-                  ) : (
-                    <KeyRound
-                      aria-hidden
-                      style={AUTH_LEFT_ICON_STYLE}
-                      strokeWidth={1.5}
-                    />
-                  )}
+                  {/* Left-page icon — Sparkles (register) / Zap (login) with amber spotlight orb */}
+                  <div
+                    style={{
+                      position: "relative",
+                      marginTop: "10px",
+                      width: "40px",
+                      height: "40px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    aria-hidden
+                  >
+                    <div style={AUTH_LEFT_ICON_SPOTLIGHT} />
+                    {leftIsRegister ? (
+                      <Sparkles
+                        style={AUTH_LEFT_ICON_STYLE}
+                        strokeWidth={1.5}
+                      />
+                    ) : (
+                      <Zap style={AUTH_LEFT_ICON_STYLE} strokeWidth={1.5} />
+                    )}
+                  </div>
                   <h2
                     style={{
                       fontFamily: "'Playfair Display',serif",
