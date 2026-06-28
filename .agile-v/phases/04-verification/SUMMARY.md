@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Cycle | **C4** |
-| Revision | C4-ui-wave14-2026-06-28 |
+| Revision | C4-ui-wave13-2026-06-28 (Wave 14 reverted) |
 | Completed | **Partial** (static + unit + build PASS; e2e NOT RUN) |
-| Date | 2026-06-28 (Wave 14) |
+| Date | 2026-06-28 (Wave 14 revert audit) |
 | Agent | red-team-verifier (static) |
 
 ## Verification result
@@ -14,7 +14,7 @@
 - **Unit:** 24 Vitest PASS (2026-06-28)
 - **Lint + typecheck:** PASS (2026-06-28)
 - **Build:** PASS (2026-06-28)
-- **Wave 14 audit:** coil z35 above flip; rings visible during turn; Wave 13 flip unchanged
+- **Wave 14 revert:** z35 overlay reverted; Wave 13 coil z8 + dual flip canonical
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
 

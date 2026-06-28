@@ -34,8 +34,8 @@ DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills
 
 ## Wave 14 (2026-06-28)
 
-- **REQ-0029/0030:** Coil z35 above flip overlay — rings visible during page turn
+- **REVERTED** — z35 coil overlay broke seam; restored Wave 13
 
 ## Verification
 
-16 Vitest · lint · typecheck · build PASS · TC-0031–0035 static PASS
+24 Vitest · lint · typecheck · build PASS · TC-0031–0035 static PASS

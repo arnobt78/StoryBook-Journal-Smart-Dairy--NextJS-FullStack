@@ -2,8 +2,8 @@
  * SpreadCoilBinding — spiral wire coil overlay on the center seam of an open book.
  *
  * Absolutely positioned on the spread row (spine | left | right) so pages stay
- * flush with zero flex gap. z-index 35 (see globals.css) keeps rings visible above
- * PageFlipOverlay — the turning sheet passes underneath, like a real spiral binding.
+ * flush with zero flex gap. The coil never unmounts during page flip — avoids the
+ * gutter “collapse / flash” that a flex gutter bar caused in Wave 11.
  *
  * Parent spread should use `.spread-coil-flipping` while flip or auth hold is active
  * so CSS can deepen seam shadows smoothly (see globals.css).

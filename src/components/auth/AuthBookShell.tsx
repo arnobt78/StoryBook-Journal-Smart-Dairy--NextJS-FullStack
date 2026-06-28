@@ -527,16 +527,19 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
             </div>
           </div>
 
+          {/* Spiral wire coil — absolute overlay on seam; never unmounts during flip */}
+          <SpreadCoilBinding />
+
           {/* Paper hold — masks right page until destination RSC renders after flip */}
           {awaitingRoute && !isFlipping && (
             <div aria-hidden className="auth-page-hold-cover" />
           )}
 
+          {/* Page flip overlay — sibling of pages, same preserve-3d parent.
+                position:relative on this container ensures top:0;right:0 lands
+                on the right page's area, not the outer title/shadow wrapper. */}
           {/* ── PAGE FLIP: same overlay component as journal BookSpread ── */}
           {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
-
-          {/* Coil above flip plane (z35) — rings fixed at seam; page rotates underneath */}
-          <SpreadCoilBinding />
         </div>
       </div>
     </div>

@@ -410,13 +410,9 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 19. C4 UI Wave 14 — Coil visible during flip (2026-06-28)
+## 19. C4 UI Wave 14 — reverted (2026-06-28)
 
-| Area | Files | Details |
-|------|-------|---------|
-| Z-order | `globals.css` | `--spread-coil-z: 35` above flip/hold (30) |
-| DOM order | `AuthBookShell.tsx`, `BookSpread.tsx` | `SpreadCoilBinding` last in spread row |
-| Effect | — | Fixed rings at seam; page sweeps underneath |
+Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + blank spread. Mid-flip coil partial hide accepted.
 
 ---
 
@@ -431,4 +427,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-28 — C4 Wave 14 coil above flip; lint/typecheck/24 Vitest/build PASS.*
+*Last reviewed: 2026-06-28 — Wave 14 reverted; Wave 13 canonical; lint/typecheck/24 Vitest/build PASS.*

@@ -445,23 +445,17 @@ body {
   }
 }
 
-/* Spiral wire coil — above flip overlay so rings stay visible while page turns under them */
+/* Spiral wire coil overlay — absolute on seam; pages stay flush (no flex gap) */
 .spread-coil-binding {
-  --spread-coil-z: 35;
   position: absolute;
   top: 0;
   left: calc(var(--spine-w, 22px) + var(--page-w, 360px) - 7px);
   width: 14px;
   height: var(--page-h, 540px);
-  z-index: var(--spread-coil-z);
+  z-index: 8;
   pointer-events: none;
   filter: drop-shadow(0 0 8px rgba(80, 40, 10, 0.14));
-  box-shadow:
-    -3px 0 8px rgba(60, 30, 8, 0.12),
-    3px 0 8px rgba(60, 30, 8, 0.12);
-  transition:
-    filter 0.28s ease-in-out,
-    box-shadow 0.28s ease-in-out;
+  transition: filter 0.28s ease-in-out;
 }
 
 /* Seam edge blend — page curls fade into coil (auth + journal) */
@@ -485,12 +479,9 @@ body {
   width: 32px !important;
 }
 
-/* Flip / route-settle — deepen seam crease via transition only (no pulse) */
+/* Flip / route-settle — soft filter step via transition (no pulse keyframes) */
 .spread-coil-flipping .spread-coil-binding {
   filter: drop-shadow(0 0 10px rgba(60, 30, 8, 0.18));
-  box-shadow:
-    -4px 0 12px rgba(60, 30, 8, 0.16),
-    4px 0 12px rgba(60, 30, 8, 0.16);
 }
 
 @keyframes authHoldFadeIn {
@@ -530,9 +521,6 @@ body {
   }
   .spread-coil-flipping .spread-coil-binding {
     filter: drop-shadow(0 0 8px rgba(60, 30, 8, 0.16));
-    box-shadow:
-      -3px 0 8px rgba(60, 30, 8, 0.12),
-      3px 0 8px rgba(60, 30, 8, 0.12);
   }
 }
 

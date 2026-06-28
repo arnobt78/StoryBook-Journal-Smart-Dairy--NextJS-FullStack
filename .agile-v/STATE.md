@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave14-2026-06-28 |
-| **Last commit** | `047e611` — feat(ui) C4 Wave 14 coil visible above flip |
+| **Revision** | C4-ui-wave13-2026-06-28 (Wave 14 reverted) |
+| **Last commit** | pending — revert Wave 14 coil to Wave 13 |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-28T15:07:00Z |
-| **Updated By** | agile-v-core (C4 Wave 14) |
+| **Last Updated** | 2026-06-28T15:24:00Z |
+| **Updated By** | agile-v-core (Wave 14 revert audit) |
 
 ## Stage checklist
 
@@ -59,7 +59,7 @@
 | Footer bottom pin + gutter flip polish | REQ-0029–0030 | ✅ Wave 11 |
 | Spiral coil seam (flush pages, auth + journal) | REQ-0029–0030 | ✅ Wave 12 |
 | Even flip + subtle shadow depth (no kick) | REQ-0029–0030 | ✅ Wave 13 |
-| Coil above flip plane (visible during turn) | REQ-0029–0030 | ✅ Wave 14 |
+| Coil above flip (Wave 14) | REQ-0029–0030 | ❌ reverted — Wave 13 kept |
 
 ## Backlog
 
