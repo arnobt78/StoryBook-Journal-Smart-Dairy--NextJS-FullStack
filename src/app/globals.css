@@ -1,4 +1,113 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap");
+/* ─── Self-hosted fonts — no Google dependency, eliminates FOUT on refresh ────
+   All WOFF2 files live in /public/fonts/ (downloaded at setup, served locally).
+   font-display:swap shows fallback immediately, swaps when font is ready.
+──────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/playfair-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/playfair-500.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/playfair-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/playfair-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/playfair-400i.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/playfair-600i.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Lora";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/lora-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Lora";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/lora-500.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Lora";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/lora-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Lora";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/lora-400i.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Lora";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/lora-500i.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IM Fell English";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/imfell-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IM Fell English";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/imfell-400i.woff2") format("woff2");
+}
+/* Dancing Script — signature/calligraphic style used on landing cover */
+@font-face {
+  font-family: "Dancing Script";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/dancing-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Dancing Script";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/dancing-700.woff2") format("woff2");
+}
 
 @tailwind base;
 @tailwind components;
@@ -476,10 +585,19 @@ body {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 160, 60, 0.06);
 }
 
+/* Action buttons inside journal read/write footers — brighter leather gold */
 .leather-glass-action-btn {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+  color: rgba(255, 205, 140, 0.92);
+  text-shadow: 0 0 8px rgba(255, 160, 60, 0.28);
   box-shadow: 0 6px 20px rgba(139, 69, 19, 0.1);
+  transition: color 0.2s, text-shadow 0.2s, box-shadow 0.2s;
+}
+.leather-glass-action-btn:hover:not(:disabled) {
+  color: rgba(255, 225, 165, 1);
+  text-shadow: 0 0 14px rgba(255, 185, 80, 0.5);
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.15), 0 0 16px rgba(255, 160, 60, 0.18);
 }
 
 /* Demo menu row — equal height for user + clear rows */
@@ -852,3 +970,104 @@ body {
 .float-y {
   animation: floatY 4s ease-in-out infinite;
 }
+
+/* ─── Text shimmer — gold metallic sweep via background-clip: text ──────────
+   Used on landing TypewriterText hint. Coexists with .breathe (opacity only).
+──────────────────────────────────────────────────────────────────────────── */
+@keyframes textShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+.text-shine {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 165, 60, 0.75) 0%,
+    rgba(255, 230, 160, 1) 38%,
+    rgba(255, 215, 130, 0.95) 50%,
+    rgba(255, 230, 160, 1) 62%,
+    rgba(255, 165, 60, 0.75) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 3.5s linear infinite;
+}
+
+/* ─── CTA splash / splatter glow — outer amber glow around button groups ──── */
+.cta-splash-glow {
+  filter: drop-shadow(0 0 12px rgba(255, 155, 50, 0.32))
+    drop-shadow(0 0 28px rgba(255, 120, 30, 0.16))
+    drop-shadow(0 6px 44px rgba(190, 75, 10, 0.1));
+  transition: filter 0.35s ease;
+}
+.cta-splash-glow:hover {
+  filter: drop-shadow(0 0 20px rgba(255, 180, 70, 0.5))
+    drop-shadow(0 0 44px rgba(255, 130, 40, 0.26))
+    drop-shadow(0 8px 64px rgba(200, 88, 15, 0.18));
+}
+
+/* ─── Auth book glow — ambient leather spotlight around open spread ─────────
+   Applied to the outer box-shadow of the spread row in AuthBookShell.
+──────────────────────────────────────────────────────────────────────────── */
+.auth-book-glow {
+  box-shadow:
+    0 28px 56px rgba(0, 0, 0, 0.5),
+    0 0 70px rgba(139, 69, 19, 0.2),
+    0 0 130px rgba(90, 40, 10, 0.1);
+}
+
+/* ─── Dashboard header entrance ─────────────────────────────────────────── */
+@keyframes headerFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.header-fade-up {
+  animation: headerFadeUp 0.55s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.header-fade-up:nth-child(1) {
+  animation-delay: 0s;
+}
+.header-fade-up:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+/* ─── Shelf book stagger — each spine/slot fans in on dashboard mount ───────
+   Uses 3-D rotate so books "rise from the shelf" into view.
+──────────────────────────────────────────────────────────────────────────── */
+@keyframes shelfItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.93);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.shelf-stagger > * {
+  animation: shelfItemIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.shelf-stagger > *:nth-child(1) { animation-delay: 0.04s; }
+.shelf-stagger > *:nth-child(2) { animation-delay: 0.1s; }
+.shelf-stagger > *:nth-child(3) { animation-delay: 0.16s; }
+.shelf-stagger > *:nth-child(4) { animation-delay: 0.22s; }
+.shelf-stagger > *:nth-child(5) { animation-delay: 0.28s; }
+.shelf-stagger > *:nth-child(6) { animation-delay: 0.34s; }
+.shelf-stagger > *:nth-child(7) { animation-delay: 0.4s; }
+.shelf-stagger > *:nth-child(8) { animation-delay: 0.46s; }
+.shelf-stagger > *:nth-child(9) { animation-delay: 0.52s; }
+.shelf-stagger > *:nth-child(10) { animation-delay: 0.58s; }
+.shelf-stagger > *:nth-child(11) { animation-delay: 0.62s; }
+.shelf-stagger > *:nth-child(12) { animation-delay: 0.66s; }
+.shelf-stagger > *:nth-child(n + 13) { animation-delay: 0.7s; }

@@ -311,56 +311,86 @@ export function LandingCover() {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
+                  gap: 0,
                   transition: "opacity 0.4s ease",
+                  padding: "0 14%",
                 }}
               >
+                {/* Floating ornament — open-book glyph with leather filter */}
                 <div
                   className="float-y"
                   style={{
-                    fontSize: "clamp(22px, calc(var(--cover-w) * 0.11), 42px)",
-                    opacity: 0.55,
-                    filter: "sepia(1) brightness(.8)",
+                    fontSize: "clamp(24px, calc(var(--cover-w) * 0.13), 48px)",
+                    lineHeight: 1,
+                    filter:
+                      "sepia(1) saturate(0.6) brightness(0.75) drop-shadow(0 2px 6px rgba(0,0,0,.5))",
                   }}
+                  aria-hidden
                 >
-                  ❧
+                  📖
                 </div>
+
+                {/* "StoryBook" — Playfair Display italic, gold */}
                 <div
                   style={{
                     fontFamily: "'Playfair Display', serif",
                     fontStyle: "italic",
-                    fontSize: "clamp(22px, calc(var(--cover-w) * 0.108), 40px)",
-                    color: "rgba(255,205,130,.88)",
+                    fontSize: "clamp(22px, calc(var(--cover-w) * 0.112), 42px)",
+                    color: "rgba(255,210,135,.92)",
                     textAlign: "center",
-                    padding: "0 12%",
-                    lineHeight: 1.25,
-                    textShadow: "0 3px 12px rgba(0,0,0,.5)",
-                    margin: "10px 0",
+                    lineHeight: 1.2,
+                    textShadow:
+                      "0 2px 10px rgba(0,0,0,.55), 0 0 28px rgba(255,180,80,.18)",
+                    marginTop: "10px",
+                    letterSpacing: "0.01em",
                   }}
                 >
                   StoryBook
                 </div>
+
+                {/* "Journal" — Dancing Script signature font, lighter amber */}
                 <div
                   style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontStyle: "italic",
-                    fontSize: "clamp(15px, calc(var(--cover-w) * 0.058), 24px)",
-                    color: "rgba(255,195,110,.65)",
+                    fontFamily: "'Dancing Script', cursive",
+                    fontWeight: 700,
+                    fontSize: "clamp(18px, calc(var(--cover-w) * 0.09), 36px)",
+                    color: "rgba(255,195,100,.82)",
                     textAlign: "center",
-                    padding: "0 12%",
+                    lineHeight: 1.1,
+                    textShadow: "0 2px 12px rgba(0,0,0,.4)",
+                    marginTop: "2px",
+                    letterSpacing: "0.02em",
                   }}
                 >
                   Journal
                 </div>
+
+                {/* Decorative thin rule */}
+                <div
+                  style={{
+                    width: "55%",
+                    height: "1px",
+                    background:
+                      "linear-gradient(90deg, transparent, rgba(255,175,70,.35), transparent)",
+                    margin: "10px 0 8px",
+                    flexShrink: 0,
+                  }}
+                  aria-hidden
+                />
+
+                {/* Subtitle — replaces year row */}
                 <div
                   style={{
                     fontFamily: "'IM Fell English', serif",
-                    fontSize: "clamp(12px, calc(var(--cover-w) * 0.042), 18px)",
-                    letterSpacing: "0.35em",
-                    color: "rgba(255,170,70,.5)",
-                    marginTop: "8px",
+                    fontStyle: "italic",
+                    fontSize: "clamp(9px, calc(var(--cover-w) * 0.038), 13px)",
+                    letterSpacing: "0.12em",
+                    color: "rgba(255,175,80,.45)",
+                    textAlign: "center",
+                    lineHeight: 1.5,
                   }}
                 >
-                  2 0 2 6
+                  Your private collection of moments
                 </div>
               </div>
             </div>
@@ -395,15 +425,42 @@ export function LandingCover() {
         </div>
       </div>
 
-      {/* Typewriter hint — pulses after typing completes */}
-      <TypewriterText
-        text="Open to begin your story"
-        paused={coverOpening}
-        pausedText="Opening your journal…"
-      />
-
-      {/* Auth CTAs — inline-flex shine wrap avoids pill stretch in flex row */}
+      {/* Glassmorphic spotlight + typewriter hint — spotlight glow sits behind the text.
+          marginTop replaces TypewriterText's own marginTop (overridden to 0 below). */}
       <div
+        style={{
+          position: "relative",
+          marginTop: "40px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {/* Radial amber spotlight behind hint text */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            width: "340px",
+            height: "90px",
+            background:
+              "radial-gradient(ellipse at 50% 50%, rgba(255,165,55,.22) 0%, rgba(255,130,35,.1) 45%, transparent 72%)",
+            filter: "blur(20px)",
+            borderRadius: "50%",
+            pointerEvents: "none",
+          }}
+        />
+        <TypewriterText
+          text="Open to begin your story"
+          paused={coverOpening}
+          pausedText="Opening your journal…"
+          style={{ marginTop: 0 }}
+        />
+      </div>
+
+      {/* Auth CTAs — splash/splatter glow via .cta-splash-glow; inline-flex shine wrap avoids pill stretch */}
+      <div
+        className="cta-splash-glow"
         style={{
           marginTop: "28px",
           display: "flex",

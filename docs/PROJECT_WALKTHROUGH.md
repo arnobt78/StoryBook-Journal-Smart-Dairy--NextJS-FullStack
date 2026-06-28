@@ -319,7 +319,33 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 12. Related docs
+## 12. C4 UI Polish Wave 3 (2026-06-28)
+
+### What changed
+| Area | Files | Details |
+|------|-------|---------|
+| Self-hosted fonts | `public/fonts/` (15 WOFF2), `src/app/globals.css` | Replaced Google Fonts `@import` with `@font-face`; fonts: Playfair Display, Lora, IM Fell English, Dancing Script; `font-display:swap`; no external dependency |
+| Landing cover | `BookCover.tsx`, `TypewriterText.tsx` | Dancing Script "Journal" title, open-book emoji ornament, subtitle; `.text-shine` gold shimmer on typewriter hint (coexists with `.breathe` opacity pulse); radial amber spotlight orb behind hint; `.cta-splash-glow` on CTA row |
+| Auth spotlight | `AuthBookShell.tsx` | Radial leather glow `div` (`zIndex:0`) behind open spread; `.auth-book-glow` box-shadow class; `zIndex:1` on spread preserves preserve-3d context |
+| Dashboard glow | `BookShelf.tsx` | `.header-fade-up` stagger on greeting+h1; `.shelf-stagger` (12 slots) cascading on book grid; cover-color reactive `box-shadow` on `BookSpine` (`${book.coverColor}55` 8-digit hex); brighter edit/delete buttons |
+| Nav pill | `BookSpread.tsx` | `.cta-splash-glow` on journal nav pill; brightened action button colors + `text-shadow` |
+
+### New CSS classes (all in `globals.css`)
+| Class | Purpose |
+|-------|---------|
+| `.text-shine` | Gold shimmer via `background-clip:text` on TypewriterText |
+| `.cta-splash-glow` | Amber `drop-shadow` on CTA group and nav pill |
+| `.auth-book-glow` | Leather ambient `box-shadow` on auth spread |
+| `.header-fade-up` | 2-step staggered fade-in (`nth-child(1,2)`) for dashboard header |
+| `.shelf-stagger > *` | 12-slot staggered `shelfItemIn` (translateY+scale, no rotateY) |
+
+### Audit fixes applied
+- Added `marginTop: "40px"` on spotlight wrapper div in `BookCover.tsx` — typewriter hint gap was lost when `TypewriterText`'s own `marginTop` was overridden to 0.
+- Changed `shelfItemIn` from `rotateY(-10deg)` to `translateY(28px) scale(0.93)` — no `perspective` context on shelf grid; rotateY would render as flat tilt.
+
+---
+
+## 13. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -330,4 +356,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-07 — wave 2 + auth contrast; lint/typecheck/test/build pass.*
+*Last reviewed: 2026-06-28 — C4 Wave 3 fonts+glows+stagger; lint/typecheck/16 Vitest/build PASS.*

@@ -12,6 +12,8 @@ const config: Config = {
         playfair: ["Playfair Display", "serif"],
         lora: ["Lora", "serif"],
         fell: ["IM Fell English", "serif"],
+        /** Calligraphic signature font — used on landing cover "Journal" word */
+        "dancing-script": ["Dancing Script", "cursive"],
       },
       colors: {
         paper: {

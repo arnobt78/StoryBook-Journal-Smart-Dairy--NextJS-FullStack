@@ -755,9 +755,9 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
         </div>
 
-        {/* Navigation bar */}
+        {/* Navigation bar — cta-splash-glow adds outer leather amber glow on the pill */}
         <div
-          className="leather-glass-nav-pill"
+          className="leather-glass-nav-pill cta-splash-glow"
           style={{
             position: "absolute",
             bottom: "-80px",
@@ -798,9 +798,10 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
             style={{
               fontFamily: "'IM Fell English',serif",
               fontSize: "12px",
-              color: "rgba(255,175,90,.45)",
+              color: "rgba(255,195,110,.75)",
               minWidth: "70px",
               textAlign: "center",
+              textShadow: "0 0 8px rgba(255,165,60,.25)",
             }}
           >
             {currentIdx + 1} of {entries.length}
@@ -826,15 +827,16 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
               fontSize: "9.5px",
               letterSpacing: "2px",
               textTransform: "uppercase",
-              background: "rgba(160,85,30,.22)",
-              color: "rgba(255,185,100,.65)",
-              border: "1px solid rgba(160,85,30,.28)",
+              background: "rgba(160,85,30,.25)",
+              color: "rgba(255,210,130,.9)",
+              border: "1px solid rgba(190,105,40,.38)",
               padding: "5px 15px",
               borderRadius: "20px",
               cursor: "pointer",
               opacity: isFlipping || isWriting ? 0.35 : 1,
               transition: "all .2s",
               flexShrink: 0,
+              textShadow: "0 0 8px rgba(255,175,70,.3)",
             }}
           >
             New Entry
@@ -852,14 +854,15 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
               fontSize: "9px",
               letterSpacing: "1.5px",
               textTransform: "uppercase",
-              background: "rgba(160,85,30,.18)",
-              color: "rgba(255,185,100,.6)",
-              border: "1px solid rgba(160,85,30,.25)",
+              background: "rgba(160,85,30,.2)",
+              color: "rgba(255,210,130,.88)",
+              border: "1px solid rgba(185,100,38,.36)",
               padding: "5px 12px",
               borderRadius: "20px",
               cursor: "pointer",
               opacity: isFlipping || isWriting || isSavingBook || isDeleting ? 0.35 : 1,
               flexShrink: 0,
+              textShadow: "0 0 8px rgba(255,175,70,.28)",
             }}
           >
             Edit journal
@@ -876,14 +879,15 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
               fontSize: "9px",
               letterSpacing: "1.5px",
               textTransform: "uppercase",
-              background: "transparent",
-              color: "rgba(255,140,90,.45)",
-              border: "1px solid rgba(255,120,60,.15)",
+              background: "rgba(100,30,10,.15)",
+              color: "rgba(255,165,110,.82)",
+              border: "1px solid rgba(220,100,60,.28)",
               padding: "5px 12px",
               borderRadius: "20px",
               cursor: "pointer",
               opacity: isFlipping || isWriting || isDeleting ? 0.35 : 1,
               flexShrink: 0,
+              textShadow: "0 0 8px rgba(255,130,80,.3)",
             }}
           >
             Remove journal

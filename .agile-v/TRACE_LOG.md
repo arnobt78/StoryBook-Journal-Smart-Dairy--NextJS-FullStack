@@ -19,3 +19,6 @@
 | 2026-06-01T22:00:00Z | cr-0005 | ux-spec-author | C4 UI polish wave 1+2 started | REQ-0029–0030 | CHANGE_LOG.md |
 | 2026-06-07T00:30:00Z | verify | red-team-verifier | Prisma audit tags [] on Midnight Thoughts | REQ-0031 | DEC-0021 |
 | 2026-06-07T00:45:00Z | bootstrap-c4 | agile-v-bootstrap | C4 STATE/REQ/DEC/VAL refresh; cursor rule | REQ-0024 | STATE.md |
+| 2026-06-28T12:00:00Z | activate | agile-v-core | Session activation sync; PLAYBOOK.md created; verify PASS | REQ-0024 | PLAYBOOK.md |
+| 2026-06-28T12:30:00Z | ui-wave3 | build-agent-js | C4 UI Polish Wave 3: fonts self-hosted, landing redesign, auth spotlight, dashboard glow, nav pill; 16 Vitest PASS | REQ-0005, REQ-0004, REQ-0002, REQ-0006 | CR-0005 |
+| 2026-06-28T12:33:00Z | audit-w3 | red-team-verifier | Wave 3 deep audit: 2 fixes (marginTop wrapper, shelfItemIn rotateY→translateY); all CSS+font cross-checked; lint/typecheck/test/build PASS; docs updated | REQ-0024 | DEC-0031 |

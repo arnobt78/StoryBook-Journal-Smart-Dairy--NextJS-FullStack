@@ -183,32 +183,38 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
     <div style={{ maxWidth: "900px", margin: "0 auto" }}>
       <div style={{ marginBottom: "48px" }}>
         <p
+          className="header-fade-up"
           style={{
             fontFamily: "'IM Fell English',serif",
             fontSize: "13px",
-            color: "rgba(255,170,70,.4)",
+            color: "rgba(255,185,90,.7)",
             letterSpacing: "3px",
             textTransform: "uppercase",
             margin: 0,
+            textShadow: "0 0 18px rgba(255,155,50,.25)",
           }}
         >
           {greeting}
         </p>
         <h1
+          className="header-fade-up"
           style={{
             fontFamily: "'Playfair Display',serif",
             fontStyle: "italic",
             fontSize: "38px",
-            color: "rgba(255,205,130,.88)",
+            color: "rgba(255,215,155,.95)",
             margin: "6px 0 0",
             lineHeight: 1.1,
+            textShadow: "0 2px 16px rgba(200,120,40,.2)",
           }}
         >
           {userName}&rsquo;s Journals
         </h1>
       </div>
 
+      {/* shelf-stagger: each book spine and the New Journal slot fan in with cascading delay */}
       <div
+        className="shelf-stagger"
         style={{
           display: "flex",
           flexWrap: "wrap",
@@ -265,7 +271,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
             style={{
               fontFamily: "'Lora',serif",
               fontSize: "10px",
-              color: "rgba(255,170,70,.3)",
+              color: "rgba(255,178,75,.55)",
               letterSpacing: "1.5px",
               textTransform: "uppercase",
             }}
@@ -289,7 +295,8 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
                 style={{
                   fontFamily: "'Playfair Display',serif",
                   fontSize: "32px",
-                  color: "rgba(255,195,100,.7)",
+                  color: "rgba(255,210,125,.88)",
+                  textShadow: "0 0 20px rgba(255,170,60,.2)",
                 }}
               >
                 {stat.value}
@@ -298,7 +305,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
                 style={{
                   fontFamily: "'Lora',serif",
                   fontSize: "11px",
-                  color: "rgba(255,160,60,.35)",
+                  color: "rgba(255,175,80,.62)",
                   letterSpacing: "2px",
                   textTransform: "uppercase",
                 }}
@@ -392,14 +399,16 @@ function BookSpine({
           width: "22px",
           height: "22px",
           borderRadius: "50%",
-          border: "1px solid rgba(255,160,60,.25)",
-          background: "rgba(16,6,1,.88)",
-          color: "rgba(255,200,120,.75)",
+          border: "1px solid rgba(255,170,70,.5)",
+          background: "rgba(20,8,1,.92)",
+          color: "rgba(255,220,145,1)",
           fontSize: "10px",
           lineHeight: 1,
           cursor: "pointer",
           opacity: hovered ? 1 : 0,
-          transition: "opacity .2s",
+          transition: "opacity .2s, box-shadow .2s",
+          textShadow: "0 0 8px rgba(255,185,80,.65)",
+          boxShadow: "0 0 10px rgba(255,160,60,.28), inset 0 0 4px rgba(255,185,80,.12)",
         }}
       >
         ✎
@@ -419,14 +428,16 @@ function BookSpine({
           width: "22px",
           height: "22px",
           borderRadius: "50%",
-          border: "1px solid rgba(255,120,80,.25)",
-          background: "rgba(16,6,1,.88)",
-          color: "rgba(255,160,100,.7)",
+          border: "1px solid rgba(255,140,90,.45)",
+          background: "rgba(20,8,1,.92)",
+          color: "rgba(255,185,135,1)",
           fontSize: "11px",
           lineHeight: 1,
           cursor: "pointer",
           opacity: hovered ? 1 : 0,
-          transition: "opacity .2s",
+          transition: "opacity .2s, box-shadow .2s",
+          textShadow: "0 0 8px rgba(255,120,80,.55)",
+          boxShadow: "0 0 10px rgba(255,100,60,.22)",
         }}
       >
         ×
@@ -448,9 +459,10 @@ function BookSpine({
             position: "relative",
             background: `linear-gradient(155deg, color-mix(in srgb,${book.coverColor} 60%,#000) 0%, ${book.coverColor} 40%, color-mix(in srgb,${book.coverColor} 70%,#3d1a06) 100%)`,
             borderRadius: "3px 8px 8px 3px",
+            /* Cover-color reactive glow: base shadow + book's own color radiates on hover */
             boxShadow: hovered
-              ? `-6px 0 20px rgba(0,0,0,.5), 12px 20px 50px rgba(0,0,0,.7), inset -3px 0 8px rgba(0,0,0,.3)`
-              : `-4px 0 12px rgba(0,0,0,.4), 6px 8px 30px rgba(0,0,0,.6)`,
+              ? `-6px 0 20px rgba(0,0,0,.5), 12px 20px 50px rgba(0,0,0,.7), inset -3px 0 8px rgba(0,0,0,.3), 0 0 32px ${book.coverColor}55, 0 0 64px ${book.coverColor}22`
+              : `-4px 0 12px rgba(0,0,0,.4), 6px 8px 30px rgba(0,0,0,.6), 0 0 18px ${book.coverColor}33`,
             transform: hovered
               ? "translateY(-10px) rotateY(-4deg)"
               : "translateY(0) rotateY(0)",
@@ -510,12 +522,13 @@ function BookSpine({
             {book.title}
           </div>
         </div>
-        <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center" }}>
           <div
             style={{
               fontFamily: "'Playfair Display',serif",
               fontSize: "12px",
-              color: "rgba(255,200,130,.65)",
+              color: "rgba(255,218,162,.88)",
+              textShadow: "0 0 10px rgba(255,180,70,.18)",
             }}
           >
             {book.title}
@@ -524,7 +537,7 @@ function BookSpine({
             style={{
               fontFamily: "'Lora',serif",
               fontSize: "10px",
-              color: "rgba(255,160,60,.3)",
+              color: "rgba(255,178,85,.6)",
               marginTop: "2px",
             }}
           >

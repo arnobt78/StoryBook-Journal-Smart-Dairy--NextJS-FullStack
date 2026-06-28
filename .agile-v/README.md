@@ -9,12 +9,13 @@ Living **AQMS** for this repository.
 ## Quick start
 
 1. **`STATE.md`** — cycle **C4**, stage, gates
-2. **`REQUIREMENTS.md`** — REQ-0001–**0031**
+2. **`PLAYBOOK.md`** — Infinity Loop + session protocol
+3. **`REQUIREMENTS.md`** — REQ-0001–**0031**
 3. **`skills/SKILLS_INDEX.md`** — 24 agent manifests
 4. **`DECISION_LOG.md`** — append-only decisions
 5. Human Gate → **`CHECKPOINTS.md`** + **`APPROVALS.md`**
 
-## C4 snapshot (2026-06-07)
+## C4 snapshot (2026-06-28)
 
 | Metric | Value |
 |--------|-------|
@@ -22,10 +23,11 @@ Living **AQMS** for this repository.
 | Artifacts | ART-0001–**0078** |
 | Test cases | TC-0001–**0035** |
 | Skills | 24 in `skills/` |
-| Vitest | **16 PASS** |
+| Vitest | **16 PASS** (2026-06-28) |
 | Stage | 4 Verification |
-| Commit | `8f88e90` |
+| Commit | `3b932c9` |
 | Gate 2 | PENDING (REQ-0021 CI e2e) |
+| Playbook | **`PLAYBOOK.md`** — session start + Infinity Loop |
 
 ## Cycles
 

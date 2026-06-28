@@ -147,18 +147,40 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
             StoryBook
           </div>
 
+          {/* Center spotlight — radial leather glow behind the open diary layout.
+              pointer-events:none + zIndex:0 keeps it behind the book pages entirely. */}
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 100px)",
+              height: "calc(var(--page-h, 540px) + 90px)",
+              background:
+                "radial-gradient(ellipse at 50% 50%, rgba(139,69,19,.28) 0%, rgba(90,40,10,.15) 38%, transparent 68%)",
+              filter: "blur(36px)",
+              borderRadius: "50%",
+              pointerEvents: "none",
+              zIndex: 0,
+            }}
+          />
+
           {/* Book spread: `pointer-events: none` on the 3-D row; order is spine | left | right
               so leather reads as the outer left binding, not a brown bar mid-spread.
-              Perspective only — no rotateX/Y on this row. Inner page stacks use `auto`. */}
+              Perspective only — no rotateX/Y on this row. Inner page stacks use `auto`.
+              auth-book-glow: adds ambient leather box-shadow around the outer layout. */}
           <div
+            className="auth-book-glow"
             style={{
               display: "flex",
               alignItems: "stretch",
               transformStyle: "preserve-3d",
               transform: "perspective(2400px)",
               position: "relative",
+              zIndex: 1,
               pointerEvents: "none",
-              boxShadow: "0 28px 56px rgba(0,0,0,.45)",
             }}
           >
             {/* Outer spine / cover edge — left background strip (not center gutter). */}

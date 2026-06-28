@@ -6,7 +6,7 @@
     "repository": "https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack",
     "cycle": "C4",
     "revision": "C4-ui-tags-2026-06-07",
-    "last_commit": "8f88e90",
+    "last_commit": "3b932c9",
     "tech_stack": [
       "Next.js 16 App Router",
       "React 19",
@@ -27,6 +27,7 @@
     "build_manifest": ".agile-v/BUILD_MANIFEST.md",
     "test_spec": ".agile-v/TEST_SPEC.md",
     "state": ".agile-v/STATE.md",
+    "playbook": ".agile-v/PLAYBOOK.md",
     "skills_index": ".agile-v/skills/SKILLS_INDEX.md",
     "cursor_rule": ".cursor/rules/agile-v.mdc",
     "source_root": "src/"

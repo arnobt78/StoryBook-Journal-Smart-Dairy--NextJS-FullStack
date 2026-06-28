@@ -5,7 +5,7 @@
 | **Cycle** | C4 |
 | **Revision** | C4-ui-tags-2026-06-07 |
 | **eval_gate_status** | **CONDITIONAL** |
-| **Last run** | 2026-06-07T00:45:00Z |
+| **Last run** | 2026-06-28T12:00:00Z |
 | **Waiver** | none |
 
 ## Eval checklist (C1)
@@ -22,7 +22,8 @@
 | Static Red Team | PASS | 14 TC PASS static |
 | Stage 3 synthesis | PASS | commit 72bb670 |
 | E2E regression executed | **FAIL** | REQ-0021 — e2e not in CI |
-| Vitest unit | PASS | 16 tests 2026-06-07 |
+| Vitest unit | PASS | 16 tests 2026-06-28 |
+| Lint + typecheck | PASS | 2026-06-28 |
 | Lint + typecheck + build | PASS | 2026-06-07 |
 | C4 tag UX TC-0034–0035 | PASS | static + DB audit |
 | Policy POLICY.yaml honored | PASS | Cursor rule `.cursor/rules/agile-v.mdc` |

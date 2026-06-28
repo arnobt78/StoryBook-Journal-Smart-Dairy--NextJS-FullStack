@@ -26,15 +26,21 @@ export function TypewriterText({
   const { display, isComplete } = useTypewriter(text, { enabled: !paused });
   const shown = paused ? (pausedText ?? text) : display;
 
+  /* text-shine applies gold shimmer via background-clip:text — coexists with breathe (opacity only) */
   return (
     <div
-      className={[isComplete && !paused ? "breathe" : "", className].filter(Boolean).join(" ")}
+      className={[
+        "text-shine",
+        isComplete && !paused ? "breathe" : "",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       style={{
         marginTop: "44px",
         fontFamily: "'IM Fell English', serif",
         fontStyle: "italic",
         fontSize: "clamp(13px, 3.5vw, 16px)",
-        color: "rgba(255,180,90,.55)",
         minHeight: "1.4em",
         ...style,
       }}

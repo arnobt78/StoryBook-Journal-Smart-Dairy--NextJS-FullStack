@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-tags-2026-06-07 |
-| **Last commit** | `8f88e90` — editable tag pills |
+| **Revision** | C4-ui-wave3-2026-06-28 |
+| **Last commit** | pending — feat(ui) C4 Wave 3: fonts, glow, stagger animations |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-07T00:45:00Z |
-| **Updated By** | agile-v-bootstrap (C4 re-baseline) |
+| **Last Updated** | 2026-06-28T12:33:00Z |
+| **Updated By** | agile-v-core (C4 Wave 3 audit + commit) |
 
 ## Stage checklist
 
@@ -26,7 +26,7 @@
 | 1 Requirements | **COMPLETE** | REQ-0001–0031; CR-0001–0005 |
 | 2 Validation | **COMPLETE** | `phases/02-validation/SUMMARY.md` |
 | 3 Synthesis | **COMPLETE** | ART-0001–0078; commits 7d3c3ed→8f88e90 |
-| 4 Verification | **IN_PROGRESS** | 16 Vitest PASS; lint/typecheck/build PASS |
+| 4 Verification | **IN_PROGRESS** | 16 Vitest PASS; lint/typecheck PASS (2026-06-28) |
 | 5 Acceptance | NOT_STARTED | — |
 
 ## Cycle rollup
@@ -38,7 +38,7 @@
 | C3 | Consistency hardening | 7d3c3ed | REQ-0007, 0014, 0017–0018, 0021 |
 | C4 | UI polish + leather glass + entry tags | 91bea2a→8f88e90 | REQ-0029–0031 |
 
-## C4 implemented (2026-06-07)
+## C4 implemented (2026-06-07 → 2026-06-28)
 
 | Area | REQ | Status |
 |------|-----|--------|
@@ -47,6 +47,11 @@
 | Entry tags display/edit/persist | REQ-0031 | ✅ |
 | Invalidation single entry | REQ-0007 | ✅ unchanged |
 | Vitest | REQ-0021 | ✅ 16 unit |
+| Self-hosted fonts (15 WOFF2) | REQ-0029 | ✅ Wave 3 |
+| Landing cover redesign + glows | REQ-0029 | ✅ Wave 3 |
+| Auth book spotlight | REQ-0030 | ✅ Wave 3 |
+| Dashboard glow + stagger | REQ-0030 | ✅ Wave 3 |
+| Nav pill glow + action brightness | REQ-0030 | ✅ Wave 3 |
 
 ## Backlog
 
@@ -54,7 +59,7 @@ REQ-0021 full e2e in CI · REQ-0019 Pino/Sentry · REQ-0009 prod demo gate · RE
 
 ## Resume protocol
 
-1. Read this file + `.cursor/rules/agile-v.mdc`.
+1. Read this file + **`PLAYBOOK.md`** + `.cursor/rules/agile-v.mdc`.
 2. Load `agile-v-core` skill; domain per `skills/SKILLS_INDEX.md`.
 3. If `CHECKPOINTS.md` has `PENDING`, match `resume_token` in `APPROVALS.md`.
 4. Load only current `phases/XX-*/` files.

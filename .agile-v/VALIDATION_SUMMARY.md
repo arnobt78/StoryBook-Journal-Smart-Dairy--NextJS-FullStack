@@ -3,11 +3,11 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-tags-2026-06-07 |
-| **Status** | Stage 4 static complete; Gate 2 pending |
+| **Revision** | C4-ui-wave3-2026-06-28 |
+| **Status** | Stage 4 static complete; Wave 3 audit PASS; Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
-| **Last Updated** | 2026-06-07T00:45:00Z |
+| **Last Updated** | 2026-06-28T12:33:00Z |
 | **Verifier** | red-team-verifier (static) |
 
 ## Evidence Summary
@@ -35,15 +35,18 @@ Gate 2 NOT READY — REQ-0021 full e2e in CI; REQ-0009 prod demo gate
 | TC-0033 | REQ-0030 | code audit | **PASS** (AvatarRing + RippleButton radius) |
 | TC-0034 | REQ-0031 | db query + unit | **PASS** (mergePendingTag; Prisma audit) |
 | TC-0035 | REQ-0031 | code audit | **PASS** (TagsEditor × remove; minHeight:0) |
+| TC-0036 | REQ-0029 | code audit | **PASS** Wave 3: self-hosted fonts, cover redesign, spotlight glow |
+| TC-0037 | REQ-0030 | code audit | **PASS** Wave 3: auth spotlight, dashboard stagger, nav pill glow |
+| TC-0038 | REQ-0024 | code audit | **PASS** Wave 3 audit: 2 micro-fixes; all CSS+fonts cross-checked; build PASS |
 
-## Tooling (2026-06-07)
+## Tooling (2026-06-28)
 
 | Check | Result |
 |-------|--------|
 | `npm run lint` | PASS |
 | `npm run typecheck` | PASS |
 | `npm run test` | PASS (16 Vitest) |
-| `npm run build` | PASS |
+| `npm run build` | PASS (2026-06-28) |
 
 ## Prior cycles (archived summary)
 

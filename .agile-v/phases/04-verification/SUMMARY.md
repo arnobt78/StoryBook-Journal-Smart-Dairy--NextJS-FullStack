@@ -2,23 +2,26 @@
 
 | Field | Value |
 |-------|-------|
-| Cycle | C1 |
-| Revision | C1-bootstrap-2026-06-01-r2 |
-| Completed | **Partial** (static only) |
-| Date | 2026-06-01 |
-| Agent | red-team-verifier |
+| Cycle | **C4** |
+| Revision | C4-ui-wave3-2026-06-28 |
+| Completed | **Partial** (static + unit + build PASS; e2e NOT RUN) |
+| Date | 2026-06-28 (Wave 3 audit) |
+| Agent | red-team-verifier (static) |
 
 ## Verification result
 
-- **Static audit:** 14 TC PASS, 2 FLAG, 0 FAIL
+- **Static audit:** TC-0031–0038 PASS (REQ-0024, REQ-0029–0031)
+- **Unit:** 16 Vitest PASS (2026-06-28)
+- **Lint + typecheck:** PASS (2026-06-28)
+- **Build:** PASS (2026-06-28)
+- **Wave 3 audit:** 2 micro-fixes; 5 CSS classes + 15 fonts cross-checked
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
-- **Tooling:** lint + typecheck + build PASS
 
 ## Evidence
 
-VALIDATION_SUMMARY.md, EVAL_RESULTS.md, TEST_SPEC.md @ r2.
+VALIDATION_SUMMARY.md, EVAL_RESULTS.md, TEST_SPEC.md @ C4.
 
 ## Next
 
-REQ-0021 Playwright; live TC-0017; axe TC-0023; GATE-0002.
+REQ-0021 Playwright in CI; live TC-0017 offline sync; axe TC-0023; GATE-0002 when eval PASS.
