@@ -8,7 +8,7 @@
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-ui-wave10-2026-06-28 |
-| **Last commit** | pending — feat(ui) C4 Wave 10: full-row auth stagger |
+| **Last commit** | `4be21bc` — feat(ui) C4 Wave 10: full-row auth stagger |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
