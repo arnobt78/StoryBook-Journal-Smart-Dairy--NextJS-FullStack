@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Cycle | **C4** |
-| Revision | C4-ui-wave3-2026-06-28 |
+| Revision | C4-ui-wave8-2026-06-28 |
 | Completed | **Partial** (static + unit + build PASS; e2e NOT RUN) |
-| Date | 2026-06-28 (Wave 3 audit) |
+| Date | 2026-06-28 (Wave 8 audit) |
 | Agent | red-team-verifier (static) |
 
 ## Verification result
@@ -14,7 +14,7 @@
 - **Unit:** 16 Vitest PASS (2026-06-28)
 - **Lint + typecheck:** PASS (2026-06-28)
 - **Build:** PASS (2026-06-28)
-- **Wave 3 audit:** 2 micro-fixes; 5 CSS classes + 15 fonts cross-checked
+- **Wave 8 audit:** auth stagger + flip nav sync; no query/SSR regressions; lint/typecheck/build PASS
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
 

@@ -585,65 +585,67 @@ export function LandingCover() {
         </div>
       </div>
 
-      {/* Glassmorphic spotlight + rotating typewriter hint — spotlight glow sits behind the text.
-          marginTop on wrapper replaces the component's own marginTop (overridden to 0 inside). */}
-      <div
-        style={{
-          position: "relative",
-          marginTop: "40px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {/* Radial amber spotlight behind hint text */}
+      {/* Below-cover entrance stagger — hint row then CTA row */}
+      <div className="landing-enter-stagger">
+        {/* Glassmorphic spotlight + rotating typewriter hint — spotlight glow sits behind the text.
+            marginTop on wrapper replaces the component's own marginTop (overridden to 0 inside). */}
         <div
-          aria-hidden
           style={{
-            position: "absolute",
-            width: "340px",
-            height: "90px",
-            background:
-              "radial-gradient(ellipse at 50% 50%, rgba(255,165,55,.22) 0%, rgba(255,130,35,.1) 45%, transparent 72%)",
-            filter: "blur(20px)",
-            borderRadius: "50%",
-            pointerEvents: "none",
+            position: "relative",
+            marginTop: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-        />
-        {/* Rotating phrases cycle: type → hold → erase → next phrase */}
-        <RotatingTypewriterText
-          texts={[
-            "Open to begin your story",
-            "Every day is a new chapter",
-            "Write what you feel today",
-            "Your memories, preserved forever",
-            "Turn the page and begin",
-          ]}
-          paused={coverOpening}
-          pausedText="Opening your journal…"
-          style={{
-            marginTop: 0,
-            fontFamily: "'IM Fell English', serif",
-            fontStyle: "italic",
-            fontSize: "clamp(13px, 3.5vw, 16px)",
-            minHeight: "1.4em",
-          }}
-        />
-      </div>
+        >
+          {/* Radial amber spotlight behind hint text */}
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              width: "340px",
+              height: "90px",
+              background:
+                "radial-gradient(ellipse at 50% 50%, rgba(255,165,55,.22) 0%, rgba(255,130,35,.1) 45%, transparent 72%)",
+              filter: "blur(20px)",
+              borderRadius: "50%",
+              pointerEvents: "none",
+            }}
+          />
+          {/* Rotating phrases cycle: type → hold → erase → next phrase */}
+          <RotatingTypewriterText
+            texts={[
+              "Open to begin your story",
+              "Every day is a new chapter",
+              "Write what you feel today",
+              "Your memories, preserved forever",
+              "Turn the page and begin",
+            ]}
+            paused={coverOpening}
+            pausedText="Opening your journal…"
+            style={{
+              marginTop: 0,
+              fontFamily: "'IM Fell English', serif",
+              fontStyle: "italic",
+              fontSize: "clamp(13px, 3.5vw, 16px)",
+              minHeight: "1.4em",
+            }}
+          />
+        </div>
 
-      {/* Auth CTAs — splash/splatter glow via .cta-splash-glow; inline-flex shine wrap avoids pill stretch */}
-      <div
-        className="cta-splash-glow"
-        style={{
-          marginTop: "28px",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "14px",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "0 16px",
-        }}
-      >
+        {/* Auth CTAs — splash/splatter glow via .cta-splash-glow; inline-flex shine wrap avoids pill stretch */}
+        <div
+          className="cta-splash-glow"
+          style={{
+            marginTop: "28px",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "14px",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0 16px",
+          }}
+        >
         <RippleButton
           type="button"
           icon={PenLine}
@@ -676,6 +678,7 @@ export function LandingCover() {
         >
           Sign In
         </RippleButton>
+      </div>
       </div>
     </div>
   );

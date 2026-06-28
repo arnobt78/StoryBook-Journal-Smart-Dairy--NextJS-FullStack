@@ -18,20 +18,19 @@
  *  3. Spread transform is `perspective` only (no rotateX/Y on the row): those tilts
  *     with `preserve-3d` caused sub-pixel “vibrating” strokes after the flip sheet
  *     unmounted. Pointer-events: `none` on page shells + `auto` on inner stacks (same
- *     pattern as dashboard). Left copy skips `.auth-stagger`. Page size uses global
- *     `:root` `--page-w` / `--page-h`; auth `layout` centers the shell in the viewport.
+ *     pattern as dashboard). Row stagger via `.auth-stagger` / `.auth-right-stagger`.
  *
- *  4. Route push fires AFTER flip completes (onComplete callback) so the new RSC
- *     renders behind the overlay's back-face — no blank-then-pop flash.
+ *  4. Route push fires at flip START (prefetched); hold cover masks slow RSC; rows
+ *     stagger in when `contentReady` (no post-flip source-page flash).
  *
  * ── WALKTHROUGH: auth book shell + page flip ──
  *  3D BOOK — spine | left marketing | right form; `preserve-3d` without row tilt.
  *  PAGE FLIP — login ↔ register uses same `PageFlipOverlay` as journal; `router.push`
- *    fires in `triggerFlip` onComplete (after animation, not during).
+ *    at flip start; `.auth-page-hold-cover` until pathname matches navTarget.
  *  AUTH FORMS — `{children}` is LoginForm or RegisterForm on the right page only.
  */
 import type { CSSProperties, ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Sparkles, Zap } from "lucide-react";
 import { PageFlipOverlay } from "@/components/journal/PageFlip";
@@ -88,9 +87,7 @@ const AUTH_LEFT_ICON_STYLE: CSSProperties = {
 
 const BOOK_COLOR = "#8b4513";
 
-/** Push fires immediately after flip completes (0 ms), so the new RSC renders
- *  behind the overlay's back-face — eliminates the blank-then-flash. */
-const POST_FLIP_PUSH_MS = 0;
+type AuthRoute = "/login" | "/register";
 
 function normalizeAuthPath(p: string): string {
   if (p.length > 1 && p.endsWith("/")) return p.slice(0, -1);
@@ -102,70 +99,61 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { isFlipping, flipDir, triggerFlip } = usePageFlip();
 
-  /**
-   * Snapshot of pathname when a flip is armed.
-   * Left-page text reads this during a flip to avoid swapping labels
-   * at the router.push boundary (which fires under the overlay).
-   */
-  const [flipFromPath, setFlipFromPath] = useState<string | null>(null);
-  const routeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** Destination route while cross-auth navigation is in flight */
+  const [navTarget, setNavTarget] = useState<AuthRoute | null>(null);
+  /** Source pathname for left-page copy during the flip animation */
+  const [flipSourcePath, setFlipSourcePath] = useState<string | null>(null);
 
-  /** Warm the opposite auth route so RSC payload is ready when the flip ends. */
+  /** Warm the opposite auth route so RSC payload is ready when the flip starts. */
   useEffect(() => {
     if (pathname === "/login") router.prefetch("/register");
     if (pathname === "/register") router.prefetch("/login");
   }, [pathname, router]);
 
-  const clearPendingNav = () => {
-    if (routeTimer.current) {
-      clearTimeout(routeTimer.current);
-      routeTimer.current = null;
+  /** Clear nav lock once Next.js pathname matches the pushed destination */
+  useEffect(() => {
+    if (navTarget && pathname === navTarget) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- router pathname sync
+      setNavTarget(null);
     }
-  };
+  }, [pathname, navTarget]);
 
   /**
    * Navigate to /register (forward flip).
-   * Push fires in onComplete — AFTER flip animation ends — so RSC renders
-   * behind the overlay's back-face (no flash).
+   * Push at flip start; hold cover + hidden content until RSC settles; then stagger in.
    */
   const goRegister = () => {
-    if (pathname === "/register") return;
-    clearPendingNav();
-    setFlipFromPath(pathname);
+    if (pathname === "/register" || isFlipping) return;
+    setFlipSourcePath(pathname);
+    setNavTarget("/register");
+    router.push("/register");
     triggerFlip("fwd", () => {
-      setFlipFromPath(null);
-      routeTimer.current = setTimeout(
-        () => router.push("/register"),
-        POST_FLIP_PUSH_MS
-      );
+      setFlipSourcePath(null);
     });
   };
 
   /**
    * Navigate to /login (backward flip).
-   * Same push-after-complete pattern as goRegister.
+   * Same early-push + hold-cover pattern as goRegister.
    */
   const goLogin = () => {
-    if (pathname === "/login") return;
-    clearPendingNav();
-    setFlipFromPath(pathname);
+    if (pathname === "/login" || isFlipping) return;
+    setFlipSourcePath(pathname);
+    setNavTarget("/login");
+    router.push("/login");
     triggerFlip("bwd", () => {
-      setFlipFromPath(null);
-      routeTimer.current = setTimeout(
-        () => router.push("/login"),
-        POST_FLIP_PUSH_MS
-      );
+      setFlipSourcePath(null);
     });
   };
 
-  /* While a cross-auth navigation is in flight, keep footer controls idle. */
-  const authNavBusy = isFlipping;
+  const awaitingRoute = navTarget !== null && pathname !== navTarget;
+  const contentReady = !isFlipping && !awaitingRoute;
+  const displayPath =
+    isFlipping && flipSourcePath ? flipSourcePath : pathname;
+  const leftIsRegister = displayPath === "/register";
 
-  /* Left page copy depends on which route we're currently SHOWING */
-  const leftIsRegister =
-    isFlipping && flipFromPath !== null
-      ? flipFromPath === "/register"
-      : pathname === "/register";
+  /* While a cross-auth navigation is in flight, keep footer controls idle. */
+  const authNavBusy = isFlipping || awaitingRoute;
 
   /* Footer link shows the OPPOSITE of current pathname */
   const showRegisterLink = pathname === "/login";
@@ -181,6 +169,8 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
     <div style={{ position: "relative" }}>
           {/* Book branding block — StoryBook + rotating phrase inline on one row (wraps on narrow viewports) */}
           <div
+            className="auth-stagger"
+            key={pathname}
             style={{
               position: "absolute",
               top: "-48px",
@@ -345,13 +335,16 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                   pointerEvents: "auto",
                 }}
               >
-                {/* Left marketing copy — no `.auth-stagger`: avoids opacity+flex “pop” on paint. */}
+                {/* Left marketing copy — row stagger when contentReady (translateY, not opacity-only) */}
                 <div
+                  className={contentReady ? "auth-stagger" : undefined}
+                  key={pathname}
                   style={{
                     flex: "1 1 auto",
                     minHeight: 0,
                     display: "flex",
                     flexDirection: "column",
+                    visibility: contentReady ? "visible" : "hidden",
                   }}
                 >
                   <p
@@ -561,9 +554,26 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                 }}
                 className="auth-right-scroll"
               >
-                {children}
+                <div
+                  className={contentReady ? "auth-right-stagger" : undefined}
+                  key={pathname}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    minHeight: 0,
+                    flex: 1,
+                    visibility: contentReady ? "visible" : "hidden",
+                  }}
+                >
+                  {children}
+                </div>
               </div>
             </div>
+
+            {/* Paper hold — masks right page until destination RSC renders after flip */}
+            {awaitingRoute && !isFlipping && (
+              <div aria-hidden className="auth-page-hold-cover" />
+            )}
 
             {/* Page flip overlay — sibling of pages, same preserve-3d parent.
                 position:relative on this container ensures top:0;right:0 lands

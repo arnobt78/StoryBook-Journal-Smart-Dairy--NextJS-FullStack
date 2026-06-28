@@ -345,7 +345,19 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-## 13. Related docs
+## 13. C4 UI Wave 8 — Auth stagger + flip flash fix (2026-06-28)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Row stagger CSS | `globals.css` | `authRowIn` replaces opacity-only `authReveal`; shared 12-slot timing for `.auth-stagger`, `.auth-form-stagger`, `.auth-right-stagger`, `.landing-enter-stagger`; `prefers-reduced-motion` |
+| Auth flip nav | `AuthBookShell.tsx` | `router.push` at flip start; `navTarget` + `.auth-page-hold-cover` until pathname matches; `contentReady` hides content then remounts stagger via `key={pathname}` |
+| Landing entrance | `BookCover.tsx` | `.landing-enter-stagger` wraps typewriter hint + CTA row (2-step stair) |
+
+**Out of scope (unchanged):** TanStack invalidation, `force-dynamic`, login/register `page.tsx` — visual-only wave.
+
+---
+
+## 14. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -356,4 +368,4 @@ That is the full loop: **terminal → Postgres in Docker → DB + user + schema 
 
 ---
 
-*Last reviewed: 2026-06-28 — C4 Wave 3 fonts+glows+stagger; lint/typecheck/16 Vitest/build PASS.*
+*Last reviewed: 2026-06-28 — C4 Wave 8 auth stagger + flip fix; lint/typecheck/16 Vitest/build PASS.*

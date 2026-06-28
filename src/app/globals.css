@@ -389,69 +389,132 @@ body {
   border-radius: inherit;
 }
 
-/* ─── Auth reveal stagger (left page text blocks) ────────────── */
-@keyframes authReveal {
+/* ─── Auth + landing row entrance stagger (translateY + opacity, ease in/out) ── */
+@keyframes authRowIn {
   from {
     opacity: 0;
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
-.auth-stagger > * {
-  animation: authReveal 0.42s ease-out both;
+
+/* Shared stagger timing — 60ms steps, 12 slots */
+.auth-stagger > *,
+.auth-form-stagger > *,
+.auth-right-stagger > *,
+.landing-enter-stagger > * {
+  animation: authRowIn 0.48s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
-.auth-stagger > *:nth-child(1) {
+.auth-stagger > *:nth-child(1),
+.auth-form-stagger > *:nth-child(1),
+.auth-right-stagger > *:nth-child(1),
+.landing-enter-stagger > *:nth-child(1) {
   animation-delay: 0s;
 }
-.auth-stagger > *:nth-child(2) {
+.auth-stagger > *:nth-child(2),
+.auth-form-stagger > *:nth-child(2),
+.auth-right-stagger > *:nth-child(2),
+.landing-enter-stagger > *:nth-child(2) {
   animation-delay: 0.06s;
 }
-.auth-stagger > *:nth-child(3) {
+.auth-stagger > *:nth-child(3),
+.auth-form-stagger > *:nth-child(3),
+.auth-right-stagger > *:nth-child(3),
+.landing-enter-stagger > *:nth-child(3) {
   animation-delay: 0.12s;
 }
-.auth-stagger > *:nth-child(4) {
+.auth-stagger > *:nth-child(4),
+.auth-form-stagger > *:nth-child(4),
+.auth-right-stagger > *:nth-child(4),
+.landing-enter-stagger > *:nth-child(4) {
   animation-delay: 0.18s;
 }
-.auth-stagger > *:nth-child(5) {
+.auth-stagger > *:nth-child(5),
+.auth-form-stagger > *:nth-child(5),
+.auth-right-stagger > *:nth-child(5),
+.landing-enter-stagger > *:nth-child(5) {
   animation-delay: 0.24s;
 }
-.auth-stagger > *:nth-child(6) {
+.auth-stagger > *:nth-child(6),
+.auth-form-stagger > *:nth-child(6),
+.auth-right-stagger > *:nth-child(6),
+.landing-enter-stagger > *:nth-child(6) {
   animation-delay: 0.3s;
 }
-.auth-stagger > *:nth-child(7) {
+.auth-stagger > *:nth-child(7),
+.auth-form-stagger > *:nth-child(7),
+.auth-right-stagger > *:nth-child(7),
+.landing-enter-stagger > *:nth-child(7) {
   animation-delay: 0.36s;
 }
-.auth-stagger > *:nth-child(8) {
+.auth-stagger > *:nth-child(8),
+.auth-form-stagger > *:nth-child(8),
+.auth-right-stagger > *:nth-child(8),
+.landing-enter-stagger > *:nth-child(8) {
   animation-delay: 0.42s;
 }
-.auth-stagger > *:nth-child(9) {
+.auth-stagger > *:nth-child(9),
+.auth-form-stagger > *:nth-child(9),
+.auth-right-stagger > *:nth-child(9),
+.landing-enter-stagger > *:nth-child(9) {
   animation-delay: 0.48s;
 }
-.auth-stagger > *:nth-child(10) {
+.auth-stagger > *:nth-child(10),
+.auth-form-stagger > *:nth-child(10),
+.auth-right-stagger > *:nth-child(10),
+.landing-enter-stagger > *:nth-child(10) {
   animation-delay: 0.54s;
 }
+.auth-stagger > *:nth-child(11),
+.auth-form-stagger > *:nth-child(11),
+.auth-right-stagger > *:nth-child(11),
+.landing-enter-stagger > *:nth-child(11) {
+  animation-delay: 0.6s;
+}
+.auth-stagger > *:nth-child(12),
+.auth-form-stagger > *:nth-child(12),
+.auth-right-stagger > *:nth-child(12),
+.landing-enter-stagger > *:nth-child(12) {
+  animation-delay: 0.66s;
+}
+.auth-stagger > *:nth-child(n + 13),
+.auth-form-stagger > *:nth-child(n + 13),
+.auth-right-stagger > *:nth-child(n + 13),
+.landing-enter-stagger > *:nth-child(n + 13) {
+  animation-delay: 0.72s;
+}
 
-.auth-form-stagger > * {
-  animation: authReveal 0.4s ease-out both;
+@media (prefers-reduced-motion: reduce) {
+  .auth-stagger > *,
+  .auth-form-stagger > *,
+  .auth-right-stagger > *,
+  .landing-enter-stagger > * {
+    animation: none !important;
+  }
 }
-.auth-form-stagger > *:nth-child(1) {
-  animation-delay: 0.05s;
-}
-.auth-form-stagger > *:nth-child(2) {
-  animation-delay: 0.12s;
-}
-.auth-form-stagger > *:nth-child(3) {
-  animation-delay: 0.19s;
-}
-.auth-form-stagger > *:nth-child(4) {
-  animation-delay: 0.26s;
-}
-.auth-form-stagger > *:nth-child(5) {
-  animation-delay: 0.33s;
-}
-.auth-form-stagger > *:nth-child(6) {
-  animation-delay: 0.4s;
+
+/* Static paper sheet — covers right page while RSC loads after flip (no old form flash) */
+.auth-page-hold-cover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--page-w, 360px);
+  height: var(--page-h, 540px);
+  z-index: 30;
+  pointer-events: none;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(to left, #e8dcc9 0%, #f4ecda 60%, #ede0c8 100%);
+  box-shadow: inset 10px 0 24px rgba(120, 70, 20, 0.1);
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    rgba(120, 80, 30, 0.1) 27px,
+    rgba(120, 80, 30, 0.1) 28px
+  );
+  background-position: 0 52px;
 }
 
 /* Auth right page — scroll fallback when viewport is very short */

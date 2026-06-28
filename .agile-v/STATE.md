@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave3-2026-06-28 |
-| **Last commit** | pending — feat(ui) C4 Wave 3: fonts, glow, stagger animations |
+| **Revision** | C4-ui-wave8-2026-06-28 |
+| **Last commit** | pending — feat(ui) C4 Wave 8: auth stagger + flip flash fix |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-28T12:33:00Z |
-| **Updated By** | agile-v-core (C4 Wave 3 audit + commit) |
+| **Last Updated** | 2026-06-28T13:52:00Z |
+| **Updated By** | agile-v-core (C4 Wave 8 audit + commit) |
 
 ## Stage checklist
 
@@ -52,6 +52,8 @@
 | Auth book spotlight | REQ-0030 | ✅ Wave 3 |
 | Dashboard glow + stagger | REQ-0030 | ✅ Wave 3 |
 | Nav pill glow + action brightness | REQ-0030 | ✅ Wave 3 |
+| Auth row stagger + flip flash fix | REQ-0029–0030 | ✅ Wave 8 |
+| Landing hint/CTA stagger | REQ-0029 | ✅ Wave 8 |
 
 ## Backlog
 
