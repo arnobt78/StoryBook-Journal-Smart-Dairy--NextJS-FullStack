@@ -36,6 +36,7 @@ import { ConfirmDialog } from "@/components/feedback/ConfirmDialog";
 import { BookEditorModal } from "@/components/journal/BookEditorModal";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { TypewriterText } from "@/components/animations/TypewriterText";
+import { CoverIcon } from "@/components/journal/CoverIcon";
 import {
   bookCoverGlowVars,
   DASHBOARD_BRAND_TEXT_STYLE,
@@ -474,22 +475,18 @@ function BookSpine({
               borderRadius: "2px",
             }}
           />
-          <span style={{ fontSize: "22px", zIndex: 1, marginBottom: "8px" }}>
-            {book.coverEmoji}
-          </span>
+          <CoverIcon
+            id={book.coverEmoji}
+            size={20}
+            className="journal-spine-cover-icon"
+          />
           <div
+            className="journal-spine-title-script"
             style={{
-              fontFamily: "'Playfair Display',serif",
-              fontStyle: "italic",
-              fontSize: "12px",
-              color: "rgba(255,220,160,.85)",
-              textAlign: "center",
               padding: "0 10px",
-              lineHeight: 1.3,
-              zIndex: 1,
-              writingMode: "vertical-rl",
-              textOrientation: "mixed",
-              transform: "rotate(180deg)",
+              maxHeight: "55%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {book.title}

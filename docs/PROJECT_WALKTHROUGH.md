@@ -439,7 +439,20 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 22. Related docs
+## 22. C4 UI Wave 17 — Journal dialog + shelf spine (2026-06-29)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Dialog primitive | `ui/dialog.tsx`, `globals.css` | Radix Dialog; `.journal-paper-dialog` 90vw/90vh |
+| Book editor | `BookEditorModal.tsx` | Titles, color tick, theme preview, Lucide icons, mini spine |
+| Cover icons | `cover-icons.ts`, `CoverIcon.tsx` | Slug in `coverEmoji`; legacy emoji mapped |
+| Confirm | `ConfirmDialog.tsx` | Shared Dialog shell + button hover glow |
+| Shelf spine | `BookShelf.tsx`, `globals.css` | Rotated icon + Dancing Script title |
+| Tests | `cover-icon.test.ts`, `validations.test.ts` | 31 Vitest PASS |
+
+---
+
+## 23. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -450,4 +463,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-06-29 — C4 Wave 16 spine glow tune; lint/typecheck/24 Vitest/build PASS.*
+*Last reviewed: 2026-06-29 — C4 Wave 17 journal dialog; lint/typecheck/31 Vitest/build PASS.*

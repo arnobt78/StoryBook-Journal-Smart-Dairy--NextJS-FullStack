@@ -1,19 +1,25 @@
 "use client";
 
 /**
- * Shared create/edit journal modal — used on the shelf and in the reader nav.
- * Parent handles POST/PATCH + journalSubtree invalidation after onSubmit.
- *
- * ── WALKTHROUGH ──
- *  Pure UI shell: no fetch here. BookShelf / BookSpread pass `onSubmit` that may
- *  route online PATCH/POST or offline queue (`enqueuePatchBookOffline`). Parent `key`
- *  remounts form state when switching create vs edit targets.
+ * Shared create/edit journal modal — shelf + reader nav.
+ * Parent handles POST/PATCH + notifyJournalCacheUpdated after onSubmit.
  */
-import type { CSSProperties } from "react";
 import { useState } from "react";
-import { COVER_COLORS, COVER_EMOJIS } from "@/constants";
+import { Check } from "lucide-react";
+import { COVER_COLORS } from "@/constants";
+import { COVER_ICONS } from "@/constants/cover-icons";
 import { BOOK_THEMES } from "@/constants/themes";
 import { RippleButton } from "@/components/ui/ripple-button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { CoverIcon } from "@/components/journal/CoverIcon";
+import { BookThemePreview } from "@/components/journal/BookThemePreview";
 import {
   DEFAULT_BOOK_FORM,
   type BookFormValues,
@@ -36,20 +42,24 @@ export function BookEditorModal({
   onClose,
   onSubmit,
 }: BookEditorModalProps) {
-  if (!open) return null;
-
   return (
-    <BookEditorForm
-      mode={mode}
-      initialValues={initialValues}
-      loading={loading}
-      onClose={onClose}
-      onSubmit={onSubmit}
-    />
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        if (!next && !loading) onClose();
+      }}
+    >
+      <BookEditorForm
+        mode={mode}
+        initialValues={initialValues}
+        loading={loading}
+        onClose={onClose}
+        onSubmit={onSubmit}
+      />
+    </Dialog>
   );
 }
 
-/** Inner form — remount via parent `key` when opening create vs edit targets */
 function BookEditorForm({
   mode,
   initialValues,
@@ -61,7 +71,12 @@ function BookEditorForm({
     () => initialValues ?? DEFAULT_BOOK_FORM,
   );
 
-  const title = mode === "create" ? "New Journal" : "Edit Journal";
+  const dialogTitle =
+    mode === "create" ? "Start a new journal" : `Edit ${form.title || "journal"}`;
+  const dialogSubtitle =
+    mode === "create"
+      ? "Name it, pick a cover, and choose how your pages will feel."
+      : "Changes apply across your shelf and reader instantly.";
   const submitLabel =
     mode === "create"
       ? loading
@@ -76,222 +91,189 @@ function BookEditorForm({
     onSubmit(form);
   };
 
+  const spineTitle = form.title.trim() || "My Journal";
+
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="book-editor-title"
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,.7)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 100,
-        padding: "20px",
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget && !loading) onClose();
-      }}
+    <DialogContent
+      className="journal-paper-dialog"
+      onPointerDownOutside={(e) => loading && e.preventDefault()}
+      onEscapeKeyDown={(e) => loading && e.preventDefault()}
     >
-      <div
-        style={{
-          background: "rgba(244,236,218,.97)",
-          borderRadius: "8px",
-          padding: "36px",
-          width: "100%",
-          maxWidth: "420px",
-          boxShadow: "0 20px 60px rgba(0,0,0,.6)",
-        }}
-      >
-        <h2
-          id="book-editor-title"
-          style={{
-            fontFamily: "'Playfair Display',serif",
-            fontSize: "22px",
-            color: "rgba(35,14,3,.85)",
-            margin: "0 0 24px",
-          }}
-        >
-          {title}
-        </h2>
-        <label style={labelStyle}>Title</label>
-        <input
-          style={inputStyle}
-          placeholder="My Journal"
-          value={form.title}
-          onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-        />
-        <label style={labelStyle}>Description (optional)</label>
-        <input
-          style={inputStyle}
-          placeholder="A place for my thoughts…"
-          value={form.description}
-          onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-        />
-        <label style={labelStyle}>Cover Color</label>
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            flexWrap: "wrap",
-            marginBottom: "16px",
-          }}
-        >
-          {COVER_COLORS.map((c) => (
-            <RippleButton
-              key={c.value}
-              type="button"
-              aria-label={c.label}
-              onClick={() => setForm((f) => ({ ...f, coverColor: c.value }))}
-              style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "4px",
-                background: c.value,
-                cursor: "pointer",
-                border:
-                  form.coverColor === c.value
-                    ? "3px solid rgba(35,14,3,.6)"
-                    : "3px solid transparent",
-                transition: "border .15s",
-                padding: 0,
-              }}
+      <DialogHeader>
+        <DialogTitle>{dialogTitle}</DialogTitle>
+        <DialogDescription>{dialogSubtitle}</DialogDescription>
+      </DialogHeader>
+
+      <div className="journal-dialog-body">
+        <div className="journal-editor-grid">
+          <div className="journal-editor-form-col">
+            <label className="journal-editor-label" htmlFor="book-title">
+              Title
+            </label>
+            <input
+              id="book-title"
+              className="journal-editor-input"
+              placeholder="My Journal"
+              value={form.title}
+              onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             />
-          ))}
-        </div>
-        <label style={labelStyle}>Page Theme</label>
-        <div
-          style={{
-            display: "flex",
-            gap: "6px",
-            flexWrap: "wrap",
-            marginBottom: "16px",
-          }}
-        >
-          {BOOK_THEMES.map((theme) => (
-            <RippleButton
-              key={theme.id}
-              type="button"
-              onClick={() => setForm((f) => ({ ...f, theme: theme.id }))}
+
+            <label className="journal-editor-label" htmlFor="book-description">
+              Description (optional)
+            </label>
+            <input
+              id="book-description"
+              className="journal-editor-input"
+              placeholder="A place for my thoughts…"
+              value={form.description}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, description: e.target.value }))
+              }
+            />
+
+            <span className="journal-editor-label">Cover Color</span>
+            <div
               style={{
-                fontFamily: "'Lora',serif",
-                fontSize: "10px",
-                letterSpacing: "1px",
-                textTransform: "uppercase",
-                background:
-                  form.theme === theme.id ? "rgba(120,70,20,.14)" : "rgba(120,70,20,.06)",
-                border:
-                  form.theme === theme.id
-                    ? "1px solid rgba(120,70,20,.35)"
-                    : "1px solid rgba(120,70,20,.15)",
-                borderRadius: "20px",
-                padding: "5px 10px",
-                cursor: "pointer",
-                color: "rgba(45,20,5,.75)",
+                display: "flex",
+                gap: "8px",
+                flexWrap: "wrap",
+                marginBottom: "16px",
               }}
             >
-              {theme.label}
-            </RippleButton>
-          ))}
-        </div>
-        <label style={labelStyle}>Cover Emoji</label>
-        <div
-          style={{
-            display: "flex",
-            gap: "6px",
-            flexWrap: "wrap",
-            marginBottom: "24px",
-          }}
-        >
-          {COVER_EMOJIS.map((emoji) => (
-            <RippleButton
-              key={emoji}
-              type="button"
-              onClick={() => setForm((f) => ({ ...f, coverEmoji: emoji }))}
+              {COVER_COLORS.map((c) => {
+                const selected = form.coverColor === c.value;
+                return (
+                  <RippleButton
+                    key={c.value}
+                    type="button"
+                    aria-label={c.label}
+                    aria-pressed={selected}
+                    onClick={() =>
+                      setForm((f) => ({ ...f, coverColor: c.value }))
+                    }
+                    className={`journal-color-swatch${
+                      selected ? " journal-color-swatch--selected" : ""
+                    }`}
+                    style={{ background: c.value }}
+                  >
+                    {selected ? (
+                      <span className="journal-color-swatch-check">
+                        <Check size={16} strokeWidth={3} />
+                      </span>
+                    ) : null}
+                  </RippleButton>
+                );
+              })}
+            </div>
+
+            <span className="journal-editor-label">Page Theme</span>
+            <div
               style={{
-                fontSize: "18px",
-                background:
-                  form.coverEmoji === emoji ? "rgba(120,70,20,.12)" : "none",
-                border:
-                  form.coverEmoji === emoji
-                    ? "1px solid rgba(120,70,20,.3)"
-                    : "1px solid transparent",
-                borderRadius: "6px",
-                padding: "3px 6px",
-                cursor: "pointer",
+                display: "flex",
+                gap: "6px",
+                flexWrap: "wrap",
+                marginBottom: "12px",
               }}
             >
-              {emoji}
-            </RippleButton>
-          ))}
-        </div>
-        <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
-          <RippleButton type="button" disabled={loading} onClick={onClose} style={cancelBtn}>
-            Cancel
-          </RippleButton>
-          <RippleButton
-            type="button"
-            onClick={handleSubmit}
-            disabled={!form.title.trim() || loading}
-            shine
-            style={submitBtn}
-          >
-            {submitLabel}
-          </RippleButton>
+              {BOOK_THEMES.map((theme) => {
+                const selected = form.theme === theme.id;
+                return (
+                  <RippleButton
+                    key={theme.id}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => setForm((f) => ({ ...f, theme: theme.id }))}
+                    className={`journal-theme-chip${
+                      selected
+                        ? " journal-theme-chip--selected"
+                        : " journal-theme-chip--idle"
+                    }`}
+                  >
+                    {theme.label}
+                  </RippleButton>
+                );
+              })}
+            </div>
+            <BookThemePreview themeId={form.theme} />
+
+            <span
+              className="journal-editor-label"
+              style={{ marginTop: "20px", display: "block" }}
+            >
+              Cover Icon
+            </span>
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                flexWrap: "wrap",
+                marginBottom: "8px",
+              }}
+            >
+              {COVER_ICONS.map(({ id, label, Icon }) => {
+                const selected = form.coverEmoji === id;
+                return (
+                  <RippleButton
+                    key={id}
+                    type="button"
+                    aria-label={label}
+                    aria-pressed={selected}
+                    onClick={() => setForm((f) => ({ ...f, coverEmoji: id }))}
+                    className={`journal-cover-icon-btn${
+                      selected ? " journal-cover-icon-btn--selected" : ""
+                    }`}
+                  >
+                    <Icon size={20} strokeWidth={1.75} />
+                  </RippleButton>
+                );
+              })}
+            </div>
+          </div>
+
+          <aside className="journal-editor-preview-col" aria-hidden>
+            <p
+              className="journal-editor-label"
+              style={{ marginBottom: 0, textAlign: "center" }}
+            >
+              Shelf preview
+            </p>
+            <div
+              className="journal-mini-spine"
+              style={{
+                background: `linear-gradient(155deg, color-mix(in srgb,${form.coverColor} 60%,#000) 0%, ${form.coverColor} 40%, color-mix(in srgb,${form.coverColor} 70%,#3d1a06) 100%)`,
+              }}
+            >
+              <CoverIcon
+                id={form.coverEmoji}
+                size={22}
+                className="journal-mini-spine-icon"
+              />
+              <span className="journal-mini-spine-title">{spineTitle}</span>
+            </div>
+          </aside>
         </div>
       </div>
-    </div>
+
+      <DialogFooter>
+        <RippleButton
+          type="button"
+          disabled={loading}
+          onClick={onClose}
+          className="journal-dialog-btn-cancel"
+        >
+          Cancel
+        </RippleButton>
+        <RippleButton
+          type="button"
+          onClick={handleSubmit}
+          disabled={!form.title.trim() || loading}
+          shine
+          className="journal-dialog-btn-primary"
+        >
+          {submitLabel}
+        </RippleButton>
+      </DialogFooter>
+    </DialogContent>
   );
 }
-
-const labelStyle: CSSProperties = {
-  display: "block",
-  fontFamily: "'Lora',serif",
-  fontSize: "10px",
-  letterSpacing: "2px",
-  textTransform: "uppercase",
-  color: "rgba(100,55,20,.5)",
-  marginBottom: "6px",
-};
-
-const inputStyle: CSSProperties = {
-  width: "100%",
-  fontFamily: "'Lora',serif",
-  fontSize: "13px",
-  background: "rgba(120,70,20,.06)",
-  border: "1px solid rgba(120,70,20,.2)",
-  borderRadius: "4px",
-  padding: "10px 12px",
-  outline: "none",
-  color: "rgba(35,14,3,.8)",
-  marginBottom: "16px",
-};
-
-const cancelBtn: CSSProperties = {
-  fontFamily: "'Lora',serif",
-  fontSize: "11px",
-  letterSpacing: "1.5px",
-  textTransform: "uppercase",
-  background: "transparent",
-  color: "rgba(100,55,20,.55)",
-  border: "1px solid rgba(120,70,20,.22)",
-  padding: "8px 18px",
-  borderRadius: "3px",
-  cursor: "pointer",
-};
-
-const submitBtn: CSSProperties = {
-  fontFamily: "'Lora',serif",
-  fontSize: "11px",
-  letterSpacing: "1.5px",
-  textTransform: "uppercase",
-  background: "rgba(90,40,10,.82)",
-  color: "rgba(255,215,150,.92)",
-  border: "none",
-  padding: "8px 20px",
-  borderRadius: "3px",
-  cursor: "pointer",
-};

@@ -34,7 +34,7 @@ async function ensureTestUser() {
   const book = await prisma.journalBook.create({
     data: {
       userId: user.id, title: "My Journal", slug: "my-journal",
-      coverColor: "#8b4513", coverEmoji: "📖",
+      coverColor: "#8b4513", coverEmoji: "book-open",
     },
   });
   await prisma.journalEntry.create({
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
     const book = await prisma.journalBook.create({
       data: {
         userId: user.id, title: "My Journal", slug: bookSlug,
-        coverColor: "#8b4513", coverEmoji: "📖",
+        coverColor: "#8b4513", coverEmoji: "book-open",
         description: "A place for my thoughts.",
       },
     });

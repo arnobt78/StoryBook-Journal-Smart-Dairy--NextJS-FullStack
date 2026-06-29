@@ -34,7 +34,7 @@ async function main() {
       title: "My Journal",
       slug: "my-journal",
       coverColor: "#8b4513",
-      coverEmoji: "📖",
+      coverEmoji: "book-open",
       description: "A place for my thoughts.",
     },
   });

@@ -3,6 +3,7 @@
  * Single validation source prevents drift between frontend payloads and server expectations.
  */
 import { z } from "zod";
+import { isAllowedCoverIcon } from "@/constants/cover-icons";
 
 /** POST /api/auth/register */
 export const registerSchema = z.object({
@@ -22,7 +23,10 @@ export const createBookSchema = z.object({
   title: z.string().min(1, "Title is required").max(100),
   description: z.string().max(300).optional(),
   coverColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).default("#8b4513"),
-  coverEmoji: z.string().default("📖"),
+  coverEmoji: z
+    .string()
+    .refine(isAllowedCoverIcon, "Invalid cover icon")
+    .default("book-open"),
   theme: z
     .enum(["warm-paper", "dark-academia", "midnight-journal", "soft-minimal", "vintage-diary"])
     .default("warm-paper"),

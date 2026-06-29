@@ -18,6 +18,7 @@ import {
 import { queryKeys } from "@/lib/query-keys";
 import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
 import { updateJournalBook } from "@/lib/journal-api";
+import { CoverIcon } from "@/components/journal/CoverIcon";
 import { getNextBookThemeId, getBookThemeLabel } from "@/lib/book-theme-cycle";
 import { appToast } from "@/lib/app-toast";
 import { useActiveJournalBook } from "@/hooks/useActiveJournalBook";
@@ -139,7 +140,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                   value={b.title}
                   onSelect={() => run(() => router.push(`/journal/${b.id}`))}
                 >
-                  <span>{b.coverEmoji}</span>
+                  <CoverIcon id={b.coverEmoji} size={14} />
                   <span>{b.title}</span>
                 </CommandItem>
               ))}

@@ -24,11 +24,6 @@ export const COVER_COLORS = [
   { label: "Sage",        value: "#3d5a47" },
 ];
 
-export const COVER_EMOJIS = [
-  "📖", "📔", "📒", "📓", "📕", "📗", "📘", "📙",
-  "✨", "🌙", "🌿", "❤️", "🔥", "☕", "🎵", "🌊",
-];
-
 /** Debounce before PATCH /api/entries — balances UX vs server load */
 export const AUTOSAVE_DELAY = 2000;
 

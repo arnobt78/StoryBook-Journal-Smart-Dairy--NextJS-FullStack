@@ -72,7 +72,7 @@ export async function provisionOAuthUser(params: {
         title: "My Journal",
         slug: bookSlug,
         coverColor: "#8b4513",
-        coverEmoji: "📖",
+        coverEmoji: "book-open",
         description: "A place for my thoughts.",
       },
     });

@@ -19,10 +19,25 @@ describe("createBookSchema", () => {
     if (r.success) expect(r.data.theme).toBe("warm-paper");
   });
 
-  it("rejects invalid theme", () => {
+  it("defaults cover icon to book-open slug", () => {
+    const r = createBookSchema.safeParse({ title: "Test" });
+    expect(r.success).toBe(true);
+    if (r.success) expect(r.data.coverEmoji).toBe("book-open");
+  });
+
+  it("accepts cover icon slug and legacy emoji", () => {
+    expect(createBookSchema.safeParse({ title: "A", coverEmoji: "feather" }).success).toBe(
+      true,
+    );
+    expect(createBookSchema.safeParse({ title: "A", coverEmoji: "📖" }).success).toBe(
+      true,
+    );
+  });
+
+  it("rejects invalid cover icon", () => {
     const r = createBookSchema.safeParse({
       title: "X",
-      theme: "neon-punk",
+      coverEmoji: "invalid-icon",
     });
     expect(r.success).toBe(false);
   });
