@@ -8,7 +8,7 @@
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-ui-wave17-2026-06-29 |
-| **Last commit** | `c2b6f1d` — feat(ui) C4 Wave 17 journal dialog |
+| **Last commit** | `6196593` — feat(ui) C4 Wave 17 journal dialog |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
