@@ -40,6 +40,10 @@ DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills
 
 - **REQ-0029/0030:** Dashboard nav/shelf/stat glows; Dancing Script; typewriter greeting; responsive spines
 
+## Wave 16 (2026-06-29)
+
+- **REQ-0029/0030:** New journal plus visibility; shelf hover spotlight; stat text-only glow
+
 ## Verification
 
 24 Vitest · lint · typecheck · build PASS · TC-0031–0035 static PASS

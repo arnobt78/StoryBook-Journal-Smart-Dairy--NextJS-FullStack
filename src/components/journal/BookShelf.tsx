@@ -233,38 +233,36 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
         ))}
 
         <div
+          className="dashboard-shelf-item dashboard-new-journal-click"
           onClick={() => {
             setCreateSession((n) => n + 1);
             setShowCreate(true);
           }}
-          style={{
-            cursor: "pointer",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "10px",
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setCreateSession((n) => n + 1);
+              setShowCreate(true);
+            }
           }}
+          role="button"
+          tabIndex={0}
         >
           <div
             style={{
-              width: "var(--shelf-spine-w, 80px)",
-              height: "var(--shelf-spine-h, 220px)",
-              background: "rgba(255,255,255,.04)",
-              border: "2px dashed rgba(255,160,60,.15)",
-              borderRadius: "3px 8px 8px 3px",
+              position: "relative",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
-              justifyContent: "center",
-              transition: "all .25s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(255,160,60,.07)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,.04)";
+              gap: "10px",
             }}
           >
-            <span style={{ fontSize: "24px", opacity: 0.3 }}>+</span>
+            <div aria-hidden className="dashboard-new-journal-spotlight" />
+            <div className="dashboard-new-journal-slot">
+              <span className="dashboard-new-journal-plus" aria-hidden>
+                +
+              </span>
+            </div>
           </div>
           <span
             style={{
@@ -289,7 +287,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
               value: books.reduce((s, b) => s + (b._count?.entries ?? 0), 0),
             },
           ].map((stat) => (
-            <div key={stat.label} className="dashboard-stat-card">
+            <div key={stat.label} className="dashboard-stat-glow">
               <div
                 style={{
                   fontFamily: "'Playfair Display',serif",
@@ -370,18 +368,12 @@ function BookSpine({
 
   return (
     <div
+      className="dashboard-shelf-item"
       onMouseEnter={() => {
         setHovered(true);
         onPrefetch();
       }}
       onMouseLeave={() => setHovered(false)}
-      style={{
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "10px",
-      }}
     >
       <RippleButton
         type="button"
@@ -441,17 +433,7 @@ function BookSpine({
       >
         ×
       </RippleButton>
-      <div
-        onClick={onClick}
-        style={{
-          cursor: "pointer",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "10px",
-          position: "relative",
-        }}
-      >
+      <div onClick={onClick} className="dashboard-spine-click">
         {/* Cover-color spotlight — blur sibling behind spine (not on preserve-3d ancestor) */}
         <div
           aria-hidden

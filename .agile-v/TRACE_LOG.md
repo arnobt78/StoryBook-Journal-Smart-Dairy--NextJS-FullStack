@@ -32,3 +32,4 @@
 | 2026-06-28T15:24:00Z | ui-wave14-revert | red-team-verifier | Revert Wave 14 coil to Wave 13; docs sync; lint/typecheck/test/build PASS | REQ-0029–0030 | CR-0005 |
 | 2026-06-28T12:02:00Z | activate | agile-v-core | Session activation; config.json sync; 24 Vitest PASS; resume C4 Stage 4 | REQ-0024 | PLAYBOOK.md |
 | 2026-06-29T12:20:00Z | ui-wave15 | build-agent-js | C4 Wave 15: dashboard glow, shelf scale, typewriter greeting; 24 Vitest PASS | REQ-0029–0030 | CR-0005 |
+| 2026-06-29T12:32:00Z | ui-wave16 | build-agent-js | C4 Wave 16: shelf hover glow, new journal plus, stat text spotlight; 24 Vitest PASS | REQ-0029–0030 | CR-0005 |

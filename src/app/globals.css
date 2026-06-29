@@ -1138,10 +1138,12 @@ body {
   animation-delay: 0.1s;
 }
 
-/* ─── C4 Wave 15 — dashboard shelf viewport + glow tokens ───────────────── */
+/* ─── C4 Wave 15–16 — dashboard shelf viewport + glow tokens ─────────────── */
 .dashboard-shelf-viewport {
   --shelf-spine-w: clamp(72px, 7.5vw, 104px);
   --shelf-spine-h: clamp(220px, min(52vh, 38vw), 380px);
+  --dashboard-dash-color: rgba(255, 160, 60, 0.15);
+  --dashboard-dash-color-hover: rgba(255, 178, 75, 0.55);
 }
 
 /* Nav logo + StoryBook — amber spotlight (filter on link wrapper, not preserve-3d child) */
@@ -1175,16 +1177,130 @@ body {
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
+  opacity: 0.85;
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease;
 }
 
-/* Stats blocks — individual amber spotlight panels */
-.dashboard-stat-card {
-  padding: 14px 22px;
-  border-radius: 12px;
-  background: rgba(255, 160, 60, 0.04);
+/* Shelf column wrapper — intensifies blur spotlight on hover */
+.dashboard-shelf-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-shelf-item:hover .dashboard-spine-spotlight {
+  opacity: 1;
+  filter: blur(32px) brightness(1.15);
+}
+
+/* Stats — text only; soft glow beneath numbers/labels (no card box) */
+.dashboard-stat-glow {
+  position: relative;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.dashboard-stat-glow::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 48px;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 150, 50, 0.18) 0%,
+    transparent 70%
+  );
+  filter: blur(14px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ─── C4 Wave 16 — new journal slot + hover outer glow ─────────────────── */
+.dashboard-new-journal-spotlight {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--shelf-spine-w, 80px) * 2.2);
+  height: calc(var(--shelf-spine-h, 220px) * 1.15);
+  transform: translate(-50%, -52%);
+  background: radial-gradient(
+    ellipse at 50% 55%,
+    rgba(255, 160, 60, 0.28) 0%,
+    transparent 68%
+  );
+  filter: blur(28px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dashboard-shelf-item:hover .dashboard-new-journal-spotlight {
+  opacity: 1;
+}
+
+.dashboard-new-journal-slot {
+  width: var(--shelf-spine-w, 80px);
+  height: var(--shelf-spine-h, 220px);
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px dashed var(--dashboard-dash-color);
+  border-radius: 3px 8px 8px 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+.dashboard-new-journal-slot:hover {
+  background: rgba(255, 160, 60, 0.07);
   box-shadow:
-    0 0 24px rgba(255, 150, 50, 0.14),
-    inset 0 0 18px rgba(255, 140, 40, 0.06);
+    0 0 28px rgba(255, 160, 60, 0.22),
+    0 0 56px rgba(255, 140, 40, 0.12);
+}
+
+.dashboard-new-journal-plus {
+  font-size: 24px;
+  line-height: 1;
+  color: var(--dashboard-dash-color);
+  opacity: 1;
+  transition:
+    color 0.25s ease,
+    text-shadow 0.25s ease;
+}
+
+.dashboard-new-journal-slot:hover .dashboard-new-journal-plus {
+  color: var(--dashboard-dash-color-hover);
+  text-shadow: 0 0 12px rgba(255, 160, 60, 0.35);
+}
+
+.dashboard-new-journal-click {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-spine-click {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
 }
 
 /* Greeting typewriter — override landing defaults */

@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Cycle | **C4** |
-| Revision | C4-ui-wave15-2026-06-29 |
+| Revision | C4-ui-wave16-2026-06-29 |
 | Completed | **Partial** (static + unit + build PASS; e2e NOT RUN) |
-| Date | 2026-06-29 (Wave 15) |
+| Date | 2026-06-29 (Wave 16) |
 | Agent | red-team-verifier (static) |
 
 ## Verification result
@@ -14,7 +14,7 @@
 - **Unit:** 24 Vitest PASS (2026-06-28)
 - **Lint + typecheck:** PASS (2026-06-28)
 - **Build:** PASS (2026-06-28)
-- **Wave 15 audit:** dashboard glow, shelf scale, typewriter greeting; 24 Vitest PASS
+- **Wave 16 audit:** new journal plus, shelf hover spotlight, stat text glow; 24 Vitest PASS
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
 

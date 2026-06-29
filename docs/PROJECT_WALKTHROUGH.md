@@ -428,7 +428,17 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 21. Related docs
+## 21. C4 UI Wave 16 — Shelf hover + stat glow (2026-06-29)
+
+| Area | Files | Details |
+|------|-------|---------|
+| New journal plus | `globals.css`, `BookShelf.tsx` | Dash-color `+`; hover glow on slot |
+| Shelf hover | `globals.css` | `.dashboard-shelf-item` spotlight intensify |
+| Stats | `globals.css`, `BookShelf.tsx` | `.dashboard-stat-glow` — no card box |
+
+---
+
+## 22. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -439,4 +449,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-06-29 — C4 Wave 15 dashboard; lint/typecheck/24 Vitest/build PASS.*
+*Last reviewed: 2026-06-29 — C4 Wave 16 shelf hover; lint/typecheck/24 Vitest/build PASS.*

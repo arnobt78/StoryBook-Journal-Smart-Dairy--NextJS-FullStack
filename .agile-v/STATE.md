@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave15-2026-06-29 |
-| **Last commit** | `a383e55` — feat(ui) C4 Wave 15 dashboard polish |
+| **Revision** | C4-ui-wave16-2026-06-29 |
+| **Last commit** | pending — Wave 16 shelf hover |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -61,6 +61,7 @@
 | Even flip + subtle shadow depth (no kick) | REQ-0029–0030 | ✅ Wave 13 |
 | Coil above flip (Wave 14) | REQ-0029–0030 | ❌ reverted — Wave 13 kept |
 | Dashboard glow + shelf scale + typewriter | REQ-0029–0030 | ✅ Wave 15 |
+| Shelf hover glow + stat text spotlight | REQ-0029–0030 | ✅ Wave 16 |
 
 ## Backlog
 
