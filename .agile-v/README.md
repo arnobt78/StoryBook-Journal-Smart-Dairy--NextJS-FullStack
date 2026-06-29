@@ -1,6 +1,6 @@
 # Agile V — StoryBook Journal
 
-<!-- Cycle: C4 | Revision: C4-ui-tags-2026-06-07 | Standard: Agile V 1.4 -->
+<!-- Cycle: C4 | Revision: C4-ui-wave13-2026-06-28 | Standard: Agile V 1.4 -->
 
 Living **AQMS** for this repository.
 

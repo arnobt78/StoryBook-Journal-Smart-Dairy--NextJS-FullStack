@@ -30,3 +30,4 @@
 | 2026-06-28T15:01:00Z | ui-wave13 | build-agent-js | C4 Wave 13: dual flip rotate+shadow, steady coil glow, no kick; 24 Vitest PASS | REQ-0029–0030 | CR-0005 |
 | 2026-06-28T15:07:00Z | ui-wave14 | build-agent-js | C4 Wave 14: coil z35 above flip (later reverted) | REQ-0029–0030 | CR-0005 |
 | 2026-06-28T15:24:00Z | ui-wave14-revert | red-team-verifier | Revert Wave 14 coil to Wave 13; docs sync; lint/typecheck/test/build PASS | REQ-0029–0030 | CR-0005 |
+| 2026-06-28T12:02:00Z | activate | agile-v-core | Session activation; config.json sync; 24 Vitest PASS; resume C4 Stage 4 | REQ-0024 | PLAYBOOK.md |

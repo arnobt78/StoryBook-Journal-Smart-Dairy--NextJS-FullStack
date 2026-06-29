@@ -3,11 +3,11 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-wave3-2026-06-28 |
-| **Status** | Stage 4 static complete; Wave 3 audit PASS; Gate 2 pending e2e |
+| **Revision** | C4-ui-wave13-2026-06-28 (Wave 14 reverted) |
+| **Status** | Stage 4 static complete; Wave 13 canonical; Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
-| **Last Updated** | 2026-06-28T12:33:00Z |
+| **Last Updated** | 2026-06-28T12:02:00Z |
 | **Verifier** | red-team-verifier (static) |
 
 ## Evidence Summary
