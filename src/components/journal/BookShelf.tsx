@@ -448,38 +448,36 @@ function BookSpine({
               : "translateY(0) rotateY(0)",
           }}
         >
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: "10px",
-              background: "rgba(0,0,0,.3)",
-              borderRadius: "3px 0 0 3px",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "repeating-linear-gradient(160deg,transparent 0,transparent 6px,rgba(0,0,0,.03) 6px,rgba(0,0,0,.03) 7px)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              inset: "10px 8px 10px 14px",
-              border: "1px solid rgba(255,255,255,.1)",
-              borderRadius: "2px",
-            }}
-          />
-          <BookSpineMark
-            iconId={book.coverEmoji}
-            title={book.title}
-            iconSize={20}
-          />
+          <div aria-hidden className="dashboard-spine-slot-inner">
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: "10px",
+                background: "rgba(0,0,0,.3)",
+                borderRadius: "3px 0 0 3px",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "repeating-linear-gradient(160deg,transparent 0,transparent 6px,rgba(0,0,0,.03) 6px,rgba(0,0,0,.03) 7px)",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: "10px 8px 10px 14px",
+                border: "1px solid rgba(255,255,255,.1)",
+                borderRadius: "2px",
+              }}
+            />
+          </div>
+          <BookSpineMark iconId={book.coverEmoji} title={book.title} />
         </div>
           <div style={{ textAlign: "center" }}>
           <div

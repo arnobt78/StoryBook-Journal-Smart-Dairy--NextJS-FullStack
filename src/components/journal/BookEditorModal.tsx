@@ -245,11 +245,7 @@ function BookEditorForm({
                 background: `linear-gradient(155deg, color-mix(in srgb,${form.coverColor} 60%,#000) 0%, ${form.coverColor} 40%, color-mix(in srgb,${form.coverColor} 70%,#3d1a06) 100%)`,
               }}
             >
-              <BookSpineMark
-                iconId={form.coverEmoji}
-                title={spineTitle}
-                iconSize={24}
-              />
+              <BookSpineMark iconId={form.coverEmoji} title={spineTitle} />
             </div>
           </aside>
         </div>

@@ -1207,11 +1207,20 @@ body {
   justify-content: center;
   padding-top: 0;
   gap: 0;
-  overflow: hidden;
+  overflow: visible;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   box-shadow:
     -4px 0 12px rgba(0, 0, 0, 0.4),
     6px 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Leather texture overlays — clipped inside; outer slot keeps hover glow visible */
+.dashboard-spine-slot-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .dashboard-shelf-item:hover .dashboard-spine-slot {
@@ -1445,6 +1454,7 @@ body {
   overflow: visible;
   display: flex;
   flex-direction: column;
+  gap: 0;
 }
 
 .journal-paper-dialog--compact {
@@ -1493,6 +1503,10 @@ body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  padding-inline: clamp(18px, 3vw, 24px);
+  margin-inline: calc(-1 * clamp(18px, 3vw, 24px));
+  padding-bottom: 16px;
 }
 
 .journal-dialog-footer {
@@ -1500,9 +1514,10 @@ body {
   display: flex;
   gap: 10px;
   justify-content: flex-end;
-  margin-top: 20px;
+  margin-top: 0;
   padding-top: 16px;
   border-top: 1px solid rgba(120, 70, 20, 0.1);
+  background: inherit;
 }
 
 .journal-paper-dialog--dark .journal-dialog-footer {
@@ -1598,7 +1613,6 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
-  height: 100%;
   min-height: 0;
 }
 
@@ -1610,9 +1624,7 @@ body {
 
 .journal-editor-form-col {
   min-height: 0;
-  overflow-x: visible;
-  overflow-y: auto;
-  padding-right: 4px;
+  overflow: visible;
 }
 
 .journal-editor-preview-col {
@@ -1671,8 +1683,8 @@ body {
 }
 
 .journal-picker-pad {
-  padding: 10px 8px;
-  margin: 0 -8px 12px;
+  padding: 12px clamp(14px, 2vw, 18px);
+  margin: 0 0 12px;
   overflow: visible;
 }
 
@@ -1798,33 +1810,37 @@ body {
     0 0 24px rgba(255, 160, 60, 0.08);
 }
 
-/* Icon beside vertical title — centered on spine (shelf + editor preview) */
+/* Icon beside vertical title — single inline axis on spine (shelf + editor preview) */
 .journal-spine-mark {
-  display: flex;
-  flex-direction: row;
+  display: inline-flex;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: clamp(4px, 0.6vw, 8px);
   z-index: 1;
+  max-height: 85%;
   max-width: 90%;
-  max-height: 75%;
 }
 
 .journal-spine-mark-icon {
-  transform: rotate(-90deg);
+  transform: rotate(90deg);
   color: rgba(255, 220, 160, 0.92);
   filter: drop-shadow(0 0 6px rgba(255, 180, 80, 0.35));
   flex-shrink: 0;
+  width: clamp(14px, 2.2vw, 22px);
+  height: clamp(14px, 2.2vw, 22px);
 }
 
 .journal-spine-mark-title {
   font-family: "Dancing Script", cursive;
   font-weight: 700;
-  font-size: clamp(10px, 1.2vw, 14px);
+  font-size: clamp(10px, 1.4vw, 15px);
   color: rgba(255, 220, 160, 0.9);
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
+  writing-mode: inherit;
+  text-orientation: inherit;
+  transform: none;
   text-align: center;
   line-height: 1.2;
   overflow: hidden;
@@ -1834,6 +1850,7 @@ body {
 
 .journal-theme-preview {
   margin-top: 4px;
+  margin-inline: 4px;
   padding: 6px;
   border-radius: 8px;
   overflow: visible;

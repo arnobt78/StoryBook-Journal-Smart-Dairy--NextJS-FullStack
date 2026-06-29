@@ -23,7 +23,7 @@ export function BookSpineMark({
     <div className={className ? `journal-spine-mark ${className}` : "journal-spine-mark"}>
       <CoverIcon
         id={iconId}
-        size={iconSize}
+        {...(iconSize != null ? { size: iconSize } : {})}
         className="journal-spine-mark-icon"
       />
       <span className="journal-spine-mark-title">{title}</span>
