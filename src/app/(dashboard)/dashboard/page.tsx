@@ -26,6 +26,7 @@ export default async function DashboardPage() {
 
   return (
     <div
+      className="dashboard-shelf-viewport"
       style={{
         minHeight: "calc(100vh - 64px)",
         background:

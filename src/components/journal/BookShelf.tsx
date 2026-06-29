@@ -10,7 +10,7 @@
  *  Optimistic TanStack cache updates immediately; `refreshCount()` bumps the nav badge.
  *  Hover prefetch (`useJournalPrefetch`) warms book detail before navigation.
  */
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
@@ -35,6 +35,11 @@ import {
 import { ConfirmDialog } from "@/components/feedback/ConfirmDialog";
 import { BookEditorModal } from "@/components/journal/BookEditorModal";
 import { RippleButton } from "@/components/ui/ripple-button";
+import { TypewriterText } from "@/components/animations/TypewriterText";
+import {
+  DASHBOARD_BRAND_TEXT_STYLE,
+  DASHBOARD_TITLE_SIZE,
+} from "@/lib/dashboard-styles";
 
 interface BookShelfProps {
   books: (JournalBook & { _count?: { entries: number } })[];
@@ -182,37 +187,30 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
   return (
     <div style={{ maxWidth: "900px", margin: "0 auto" }}>
       <div style={{ marginBottom: "48px" }}>
-        <p
-          className="header-fade-up"
+        <TypewriterText
+          text={greeting}
+          className="dashboard-greeting-typewriter"
           style={{
-            fontFamily: "'IM Fell English',serif",
-            fontSize: "13px",
-            color: "rgba(255,185,90,.7)",
-            letterSpacing: "3px",
-            textTransform: "uppercase",
-            margin: 0,
-            textShadow: "0 0 18px rgba(255,155,50,.25)",
+            fontFamily: "'IM Fell English', serif",
+            minHeight: "1.4em",
           }}
-        >
-          {greeting}
-        </p>
+        />
         <h1
-          className="header-fade-up"
+          className="dashboard-title-ease"
           style={{
-            fontFamily: "'Playfair Display',serif",
-            fontStyle: "italic",
-            fontSize: "38px",
+            ...DASHBOARD_BRAND_TEXT_STYLE,
+            fontSize: DASHBOARD_TITLE_SIZE,
             color: "rgba(255,215,155,.95)",
-            margin: "6px 0 0",
+            margin: "8px 0 0",
             lineHeight: 1.1,
-            textShadow: "0 2px 16px rgba(200,120,40,.2)",
+            textShadow: "0 2px 20px rgba(200,120,40,.28)",
           }}
         >
           {userName}&rsquo;s Journals
         </h1>
       </div>
 
-      {/* shelf-stagger: each book spine and the New Journal slot fan in with cascading delay */}
+      {/* shelf-stagger: responsive spine vars from .dashboard-shelf-viewport parent */}
       <div
         className="shelf-stagger"
         style={{
@@ -220,6 +218,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
           flexWrap: "wrap",
           gap: "32px",
           alignItems: "flex-end",
+          minHeight: "clamp(280px, 55vh, 520px)",
         }}
       >
         {books.map((book) => (
@@ -248,8 +247,8 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
         >
           <div
             style={{
-              width: "80px",
-              height: "220px",
+              width: "var(--shelf-spine-w, 80px)",
+              height: "var(--shelf-spine-h, 220px)",
               background: "rgba(255,255,255,.04)",
               border: "2px dashed rgba(255,160,60,.15)",
               borderRadius: "3px 8px 8px 3px",
@@ -290,7 +289,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
               value: books.reduce((s, b) => s + (b._count?.entries ?? 0), 0),
             },
           ].map((stat) => (
-            <div key={stat.label}>
+            <div key={stat.label} className="dashboard-stat-card">
               <div
                 style={{
                   fontFamily: "'Playfair Display',serif",
@@ -450,19 +449,30 @@ function BookSpine({
           flexDirection: "column",
           alignItems: "center",
           gap: "10px",
+          position: "relative",
         }}
       >
+        {/* Cover-color spotlight — blur sibling behind spine (not on preserve-3d ancestor) */}
+        <div
+          aria-hidden
+          className="dashboard-spine-spotlight"
+          style={
+            {
+              "--book-glow-color": book.coverColor,
+            } as CSSProperties
+          }
+        />
         <div
           style={{
-            width: "80px",
-            height: "220px",
+            width: "var(--shelf-spine-w, 80px)",
+            height: "var(--shelf-spine-h, 220px)",
             position: "relative",
+            zIndex: 1,
             background: `linear-gradient(155deg, color-mix(in srgb,${book.coverColor} 60%,#000) 0%, ${book.coverColor} 40%, color-mix(in srgb,${book.coverColor} 70%,#3d1a06) 100%)`,
             borderRadius: "3px 8px 8px 3px",
-            /* Cover-color reactive glow: base shadow + book's own color radiates on hover */
             boxShadow: hovered
               ? `-6px 0 20px rgba(0,0,0,.5), 12px 20px 50px rgba(0,0,0,.7), inset -3px 0 8px rgba(0,0,0,.3), 0 0 32px ${book.coverColor}55, 0 0 64px ${book.coverColor}22`
-              : `-4px 0 12px rgba(0,0,0,.4), 6px 8px 30px rgba(0,0,0,.6), 0 0 18px ${book.coverColor}33`,
+              : `-4px 0 12px rgba(0,0,0,.4), 6px 8px 30px rgba(0,0,0,.6), 0 0 28px ${book.coverColor}44`,
             transform: hovered
               ? "translateY(-10px) rotateY(-4deg)"
               : "translateY(0) rotateY(0)",

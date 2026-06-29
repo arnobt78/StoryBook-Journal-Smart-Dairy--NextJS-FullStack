@@ -37,6 +37,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AvatarRing } from "@/components/ui/AvatarRing";
 import { appToast } from "@/lib/app-toast";
+import {
+  DASHBOARD_BRAND_TEXT_STYLE,
+  DASHBOARD_NAV_BRAND_SIZE,
+} from "@/lib/dashboard-styles";
 import { useOfflineSync } from "@/context/OfflineSyncContext";
 
 interface DashboardNavProps {
@@ -168,6 +172,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
         {/* Logo: static SVG from /public for zero layout shift (fixed width/height). */}
         <Link
           href="/dashboard"
+          className="dashboard-nav-brand"
           style={{
             textDecoration: "none",
             display: "flex",
@@ -187,10 +192,9 @@ export function DashboardNav({ user }: DashboardNavProps) {
           />
           <span
             style={{
-              fontFamily: "'Playfair Display',serif",
-              fontStyle: "italic",
-              fontSize: "18px",
-              color: "rgba(255,205,130,.88)",
+              ...DASHBOARD_BRAND_TEXT_STYLE,
+              fontSize: DASHBOARD_NAV_BRAND_SIZE,
+              color: "rgba(255,205,130,.92)",
             }}
           >
             StoryBook
@@ -223,7 +227,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 type="button"
                 aria-label="Open account menu"
                 disabled={signingOut}
-                className="flex shrink-0 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 outline-none ring-offset-2 ring-offset-transparent transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[rgba(255,205,130,0.45)] disabled:cursor-default disabled:opacity-40"
+                className="dashboard-nav-avatar-glow flex shrink-0 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 outline-none ring-offset-2 ring-offset-transparent transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[rgba(255,205,130,0.45)] disabled:cursor-default disabled:opacity-40"
                 style={{ width: 40, height: 40, borderRadius: "50%" }}
               >
                 <AvatarRing

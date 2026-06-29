@@ -416,7 +416,19 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 20. Related docs
+## 20. C4 UI Wave 15 — Dashboard polish (2026-06-29)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Footer color | `auth-form-styles.ts` | `AUTH_LEFT_BODY_COLOR` on prompt text |
+| Nav glow + font | `DashboardNav.tsx`, `dashboard-styles.ts` | Dancing Script; brand + avatar spotlight |
+| Shelf scale | `globals.css`, `BookShelf.tsx` | `--shelf-spine-w/h`; per-spine color halo |
+| Greeting | `BookShelf.tsx` | `TypewriterText` + `.dashboard-title-ease` |
+| Stats | `BookShelf.tsx` | `.dashboard-stat-card` |
+
+---
+
+## 21. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -427,4 +439,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-06-28 — Wave 14 reverted; Wave 13 canonical; lint/typecheck/24 Vitest/build PASS.*
+*Last reviewed: 2026-06-29 — C4 Wave 15 dashboard; lint/typecheck/24 Vitest/build PASS.*

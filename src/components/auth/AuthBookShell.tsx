@@ -41,6 +41,7 @@ import { usePageFlip } from "@/hooks/usePageFlip";
 import { authStaggerRowProps } from "@/lib/auth-stagger";
 import {
   AUTH_FOOTER_LINK_CLASS,
+  AUTH_LEFT_BODY_COLOR,
   authFooterLinkStyle,
   authFooterPromptStyle,
 } from "@/lib/auth-form-styles";
@@ -377,7 +378,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                         fontFamily: "'Lora',serif",
                         fontSize: "12px",
                         fontStyle: "italic",
-                        color: "rgba(100,55,20,.55)",
+                        color: AUTH_LEFT_BODY_COLOR,
                         marginTop: "12px",
                         lineHeight: 1.65,
                       },

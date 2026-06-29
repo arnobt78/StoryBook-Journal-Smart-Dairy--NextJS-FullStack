@@ -1138,6 +1138,91 @@ body {
   animation-delay: 0.1s;
 }
 
+/* ─── C4 Wave 15 — dashboard shelf viewport + glow tokens ───────────────── */
+.dashboard-shelf-viewport {
+  --shelf-spine-w: clamp(72px, 7.5vw, 104px);
+  --shelf-spine-h: clamp(220px, min(52vh, 38vw), 380px);
+}
+
+/* Nav logo + StoryBook — amber spotlight (filter on link wrapper, not preserve-3d child) */
+.dashboard-nav-brand {
+  filter: drop-shadow(0 0 10px rgba(255, 160, 60, 0.35))
+    drop-shadow(0 0 22px rgba(255, 140, 40, 0.18));
+}
+
+/* Profile trigger — outer leather spotlight ring beyond AvatarRing */
+.dashboard-nav-avatar-glow {
+  border-radius: 50%;
+  box-shadow:
+    0 0 18px rgba(255, 160, 60, 0.32),
+    0 0 36px rgba(139, 69, 19, 0.22);
+}
+
+/* Per-spine color halo — sibling blur div behind each BookSpine (--book-glow-color inline) */
+.dashboard-spine-spotlight {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--shelf-spine-w, 80px) * 2.2);
+  height: calc(var(--shelf-spine-h, 220px) * 1.15);
+  transform: translate(-50%, -52%);
+  background: radial-gradient(
+    ellipse at 50% 55%,
+    color-mix(in srgb, var(--book-glow-color, #8b4513) 42%, transparent) 0%,
+    transparent 68%
+  );
+  filter: blur(28px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Stats blocks — individual amber spotlight panels */
+.dashboard-stat-card {
+  padding: 14px 22px;
+  border-radius: 12px;
+  background: rgba(255, 160, 60, 0.04);
+  box-shadow:
+    0 0 24px rgba(255, 150, 50, 0.14),
+    inset 0 0 18px rgba(255, 140, 40, 0.06);
+}
+
+/* Greeting typewriter — override landing defaults */
+.dashboard-greeting-typewriter {
+  margin-top: 0 !important;
+  font-style: normal !important;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 13px !important;
+  color: rgba(255, 185, 90, 0.7);
+  text-shadow: 0 0 18px rgba(255, 155, 50, 0.25);
+  background: none !important;
+  -webkit-text-fill-color: unset !important;
+}
+
+@keyframes dashboardTitleIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-title-ease {
+  animation: dashboardTitleIn 0.85s ease-in-out 0.4s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-title-ease {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ─── Shelf book stagger — each spine/slot fans in on dashboard mount ───────
    Uses 3-D rotate so books "rise from the shelf" into view.
 ──────────────────────────────────────────────────────────────────────────── */

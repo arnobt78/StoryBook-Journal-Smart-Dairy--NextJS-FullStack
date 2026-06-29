@@ -36,6 +36,10 @@ DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills
 
 - **REVERTED** — z35 coil overlay broke seam; restored Wave 13
 
+## Wave 15 (2026-06-29)
+
+- **REQ-0029/0030:** Dashboard nav/shelf/stat glows; Dancing Script; typewriter greeting; responsive spines
+
 ## Verification
 
 24 Vitest · lint · typecheck · build PASS · TC-0031–0035 static PASS

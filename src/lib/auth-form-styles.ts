@@ -102,11 +102,14 @@ export const fieldLabelStyle: CSSProperties = {
   marginBottom: "6px",
 };
 
-/** Left-page footer prompt — darker than body copy for readability */
+/** Left-page marketing body + footer prompt — shared muted brown */
+export const AUTH_LEFT_BODY_COLOR = "rgba(100,55,20,.55)";
+
+/** Left-page footer prompt — matches marketing body copy color */
 export const authFooterPromptStyle: CSSProperties = {
   fontFamily: "'Lora', serif",
   fontSize: "12px",
-  color: "rgba(55,28,8,.78)",
+  color: AUTH_LEFT_BODY_COLOR,
   margin: 0,
 };
 

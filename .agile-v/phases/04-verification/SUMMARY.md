@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Cycle | **C4** |
-| Revision | C4-ui-wave13-2026-06-28 (Wave 14 reverted) |
+| Revision | C4-ui-wave15-2026-06-29 |
 | Completed | **Partial** (static + unit + build PASS; e2e NOT RUN) |
-| Date | 2026-06-28 (Wave 14 revert audit) |
+| Date | 2026-06-29 (Wave 15) |
 | Agent | red-team-verifier (static) |
 
 ## Verification result
@@ -14,7 +14,7 @@
 - **Unit:** 24 Vitest PASS (2026-06-28)
 - **Lint + typecheck:** PASS (2026-06-28)
 - **Build:** PASS (2026-06-28)
-- **Wave 14 revert:** z35 overlay reverted; Wave 13 coil z8 + dual flip canonical
+- **Wave 15 audit:** dashboard glow, shelf scale, typewriter greeting; 24 Vitest PASS
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
 
