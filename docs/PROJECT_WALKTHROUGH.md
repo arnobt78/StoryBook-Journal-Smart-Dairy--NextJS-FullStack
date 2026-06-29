@@ -424,7 +424,7 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 | Nav glow + font | `DashboardNav.tsx`, `dashboard-styles.ts` | Dancing Script; brand + avatar spotlight |
 | Shelf scale | `globals.css`, `BookShelf.tsx` | `--shelf-spine-w/h`; per-spine color halo |
 | Greeting | `BookShelf.tsx` | `TypewriterText` + `.dashboard-title-ease` |
-| Stats | `BookShelf.tsx` | `.dashboard-stat-card` |
+| Stats | `BookShelf.tsx` | `.dashboard-stat-glow` (supersedes `.dashboard-stat-card`) |
 
 ---
 
@@ -433,7 +433,8 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 | Area | Files | Details |
 |------|-------|---------|
 | New journal plus | `globals.css`, `BookShelf.tsx` | Dash-color `+`; hover glow on slot |
-| Shelf hover | `globals.css` | `.dashboard-shelf-item` spotlight intensify |
+| Shelf hover | `globals.css`, `BookShelf.tsx` | `.dashboard-shelf-item`; spotlight 0→1 |
+| Spine glow tune | `globals.css`, `dashboard-styles.ts` | `bookCoverGlowVars()` hex-alpha; `.dashboard-spine-slot` + `drop-shadow`; tight 28/56px range |
 | Stats | `globals.css`, `BookShelf.tsx` | `.dashboard-stat-glow` — no card box |
 
 ---
@@ -449,4 +450,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-06-29 — C4 Wave 16 shelf hover; lint/typecheck/24 Vitest/build PASS.*
+*Last reviewed: 2026-06-29 — C4 Wave 16 spine glow tune; lint/typecheck/24 Vitest/build PASS.*

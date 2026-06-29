@@ -10,7 +10,7 @@
  *  Optimistic TanStack cache updates immediately; `refreshCount()` bumps the nav badge.
  *  Hover prefetch (`useJournalPrefetch`) warms book detail before navigation.
  */
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
@@ -37,6 +37,7 @@ import { BookEditorModal } from "@/components/journal/BookEditorModal";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { TypewriterText } from "@/components/animations/TypewriterText";
 import {
+  bookCoverGlowVars,
   DASHBOARD_BRAND_TEXT_STYLE,
   DASHBOARD_TITLE_SIZE,
 } from "@/lib/dashboard-styles";
@@ -369,6 +370,7 @@ function BookSpine({
   return (
     <div
       className="dashboard-shelf-item"
+      style={bookCoverGlowVars(book.coverColor)}
       onMouseEnter={() => {
         setHovered(true);
         onPrefetch();
@@ -435,35 +437,14 @@ function BookSpine({
       </RippleButton>
       <div onClick={onClick} className="dashboard-spine-click">
         {/* Cover-color spotlight — blur sibling behind spine (not on preserve-3d ancestor) */}
+        <div aria-hidden className="dashboard-spine-spotlight" />
         <div
-          aria-hidden
-          className="dashboard-spine-spotlight"
-          style={
-            {
-              "--book-glow-color": book.coverColor,
-            } as CSSProperties
-          }
-        />
-        <div
+          className="dashboard-spine-slot"
           style={{
-            width: "var(--shelf-spine-w, 80px)",
-            height: "var(--shelf-spine-h, 220px)",
-            position: "relative",
-            zIndex: 1,
             background: `linear-gradient(155deg, color-mix(in srgb,${book.coverColor} 60%,#000) 0%, ${book.coverColor} 40%, color-mix(in srgb,${book.coverColor} 70%,#3d1a06) 100%)`,
-            borderRadius: "3px 8px 8px 3px",
-            boxShadow: hovered
-              ? `-6px 0 20px rgba(0,0,0,.5), 12px 20px 50px rgba(0,0,0,.7), inset -3px 0 8px rgba(0,0,0,.3), 0 0 32px ${book.coverColor}55, 0 0 64px ${book.coverColor}22`
-              : `-4px 0 12px rgba(0,0,0,.4), 6px 8px 30px rgba(0,0,0,.6), 0 0 28px ${book.coverColor}44`,
             transform: hovered
               ? "translateY(-10px) rotateY(-4deg)"
               : "translateY(0) rotateY(0)",
-            transition: "all .3s cubic-bezier(.23,1,.32,1)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
           }}
         >
           <div

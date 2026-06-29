@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave16-2026-06-29 |
-| **Last commit** | `20ddf87` — feat(ui) C4 Wave 16 shelf hover glow |
+| **Revision** | C4-ui-wave16-glow-tune-2026-06-29 |
+| **Last commit** | `d1bd552` — feat(ui) C4 Wave 16 spine glow tune |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-29T12:20:00Z |
-| **Updated By** | build-agent-js (C4 Wave 15) |
+| **Last Updated** | 2026-06-29T13:00:00Z |
+| **Updated By** | build-agent-js (C4 Wave 16 glow tune) |
 
 ## Stage checklist
 
@@ -26,7 +26,7 @@
 | 1 Requirements | **COMPLETE** | REQ-0001–0031; CR-0001–0005 |
 | 2 Validation | **COMPLETE** | `phases/02-validation/SUMMARY.md` |
 | 3 Synthesis | **COMPLETE** | ART-0001–0078; commits 7d3c3ed→8f88e90 |
-| 4 Verification | **IN_PROGRESS** | 24 Vitest PASS; lint/typecheck PASS (2026-06-28) |
+| 4 Verification | **IN_PROGRESS** | 24 Vitest PASS; lint/typecheck/build PASS (2026-06-29) |
 | 5 Acceptance | NOT_STARTED | — |
 
 ## Cycle rollup
@@ -62,6 +62,7 @@
 | Coil above flip (Wave 14) | REQ-0029–0030 | ❌ reverted — Wave 13 kept |
 | Dashboard glow + shelf scale + typewriter | REQ-0029–0030 | ✅ Wave 15 |
 | Shelf hover glow + stat text spotlight | REQ-0029–0030 | ✅ Wave 16 |
+| Spine glow tune (hex-alpha + drop-shadow) | REQ-0029–0030 | ✅ Wave 16 |
 
 ## Backlog
 
