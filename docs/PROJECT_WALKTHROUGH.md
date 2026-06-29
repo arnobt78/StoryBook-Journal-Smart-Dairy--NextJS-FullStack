@@ -452,7 +452,19 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 23. Related docs
+## 23. C4 UI Wave 17b — Dialog + spine polish (2026-06-29)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Dialog 90% | `globals.css` | `90vw` × `90vh`; subtitle `margin: 0` |
+| BookSpineMark | `BookSpineMark.tsx`, `BookShelf.tsx` | Icon `-90deg` beside title, centered |
+| Glow unclip | `globals.css`, `BookEditorModal.tsx` | `.journal-picker-pad`; auth-style inputs |
+| Preview scale | `globals.css` | Responsive mini-spine + theme preview |
+| Icons | `cover-icons.ts` | 27 Lucide icons |
+
+---
+
+## 24. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -463,4 +475,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-06-29 — C4 Wave 17 journal dialog; lint/typecheck/31 Vitest/build PASS.*
+*Last reviewed: 2026-06-29 — C4 Wave 17b; lint/typecheck/31 Vitest/build PASS.*

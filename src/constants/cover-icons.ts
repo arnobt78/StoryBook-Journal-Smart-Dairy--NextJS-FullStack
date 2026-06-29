@@ -4,23 +4,33 @@
  */
 import type { LucideIcon } from "lucide-react";
 import {
-  BookOpen,
+  Anchor,
   BookMarked,
-  Feather,
-  Moon,
-  Flame,
+  BookOpen,
+  Camera,
   Coffee,
-  Music,
-  Waves,
+  Compass,
+  Feather,
+  Flame,
+  Flower2,
+  Gem,
+  Globe,
   Heart,
   Leaf,
-  Star,
-  PenLine,
-  Compass,
-  Sparkles,
-  Sun,
   Mountain,
+  Music,
+  Palette,
+  PenLine,
   Plane,
+  Rainbow,
+  Scroll,
+  Sparkles,
+  Star,
+  Sun,
+  TreePine,
+  Waves,
+  Zap,
+  Moon,
 } from "lucide-react";
 
 export type CoverIconId =
@@ -40,7 +50,17 @@ export type CoverIconId =
   | "sparkles"
   | "sun"
   | "mountain"
-  | "plane";
+  | "plane"
+  | "camera"
+  | "palette"
+  | "globe"
+  | "tree-pine"
+  | "flower"
+  | "zap"
+  | "rainbow"
+  | "anchor"
+  | "gem"
+  | "scroll";
 
 export const DEFAULT_COVER_ICON_ID: CoverIconId = "book-open";
 
@@ -55,6 +75,7 @@ export const COVER_ICONS: CoverIconDef[] = [
   { id: "book-marked", label: "Bookmarked", Icon: BookMarked },
   { id: "feather", label: "Feather", Icon: Feather },
   { id: "pen-line", label: "Pen", Icon: PenLine },
+  { id: "scroll", label: "Scroll", Icon: Scroll },
   { id: "moon", label: "Moon", Icon: Moon },
   { id: "sun", label: "Sun", Icon: Sun },
   { id: "star", label: "Star", Icon: Star },
@@ -62,12 +83,21 @@ export const COVER_ICONS: CoverIconDef[] = [
   { id: "flame", label: "Flame", Icon: Flame },
   { id: "heart", label: "Heart", Icon: Heart },
   { id: "leaf", label: "Leaf", Icon: Leaf },
+  { id: "flower", label: "Flower", Icon: Flower2 },
+  { id: "tree-pine", label: "Pine", Icon: TreePine },
   { id: "coffee", label: "Coffee", Icon: Coffee },
   { id: "music", label: "Music", Icon: Music },
   { id: "waves", label: "Waves", Icon: Waves },
   { id: "compass", label: "Compass", Icon: Compass },
   { id: "mountain", label: "Mountain", Icon: Mountain },
   { id: "plane", label: "Travel", Icon: Plane },
+  { id: "camera", label: "Camera", Icon: Camera },
+  { id: "palette", label: "Palette", Icon: Palette },
+  { id: "globe", label: "Globe", Icon: Globe },
+  { id: "zap", label: "Energy", Icon: Zap },
+  { id: "rainbow", label: "Rainbow", Icon: Rainbow },
+  { id: "anchor", label: "Anchor", Icon: Anchor },
+  { id: "gem", label: "Gem", Icon: Gem },
 ];
 
 const COVER_ICON_BY_ID = new Map(COVER_ICONS.map((c) => [c.id, c]));

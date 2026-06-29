@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave17-2026-06-29 |
-| **Last commit** | `6196593` — feat(ui) C4 Wave 17 journal dialog |
+| **Revision** | C4-ui-wave17b-2026-06-29 |
+| **Last commit** | `3c085fd` — fix(ui) C4 Wave 17b dialog spine polish |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -64,6 +64,7 @@
 | Shelf hover glow + stat text spotlight | REQ-0029–0030 | ✅ Wave 16 |
 | Spine glow tune (hex-alpha + drop-shadow) | REQ-0029–0030 | ✅ Wave 16 |
 | Journal dialog + Lucide cover icons | REQ-0029–0030 | ✅ Wave 17 |
+| Dialog 90% + spine mark + glow unclip | REQ-0029–0030 | ✅ Wave 17b |
 
 ## Backlog
 

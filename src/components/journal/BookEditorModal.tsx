@@ -18,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { CoverIcon } from "@/components/journal/CoverIcon";
+import { BookSpineMark } from "@/components/journal/BookSpineMark";
 import { BookThemePreview } from "@/components/journal/BookThemePreview";
 import {
   DEFAULT_BOOK_FORM,
@@ -133,14 +133,14 @@ function BookEditorForm({
             />
 
             <span className="journal-editor-label">Cover Color</span>
-            <div
-              style={{
-                display: "flex",
-                gap: "8px",
-                flexWrap: "wrap",
-                marginBottom: "16px",
-              }}
-            >
+            <div className="journal-picker-pad">
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexWrap: "wrap",
+                }}
+              >
               {COVER_COLORS.map((c) => {
                 const selected = form.coverColor === c.value;
                 return (
@@ -165,17 +165,19 @@ function BookEditorForm({
                   </RippleButton>
                 );
               })}
+              </div>
             </div>
 
             <span className="journal-editor-label">Page Theme</span>
-            <div
-              style={{
-                display: "flex",
-                gap: "6px",
-                flexWrap: "wrap",
-                marginBottom: "12px",
-              }}
-            >
+            <div className="journal-picker-pad">
+              <div
+                style={{
+                  display: "flex",
+                  gap: "8px",
+                  flexWrap: "wrap",
+                  marginBottom: "8px",
+                }}
+              >
               {BOOK_THEMES.map((theme) => {
                 const selected = form.theme === theme.id;
                 return (
@@ -194,23 +196,21 @@ function BookEditorForm({
                   </RippleButton>
                 );
               })}
+              </div>
+              <BookThemePreview themeId={form.theme} />
             </div>
-            <BookThemePreview themeId={form.theme} />
 
-            <span
-              className="journal-editor-label"
-              style={{ marginTop: "20px", display: "block" }}
-            >
+            <span className="journal-editor-label" style={{ marginTop: "8px", display: "block" }}>
               Cover Icon
             </span>
-            <div
-              style={{
-                display: "flex",
-                gap: "8px",
-                flexWrap: "wrap",
-                marginBottom: "8px",
-              }}
-            >
+            <div className="journal-picker-pad">
+              <div
+                style={{
+                  display: "flex",
+                  gap: "8px",
+                  flexWrap: "wrap",
+                }}
+              >
               {COVER_ICONS.map(({ id, label, Icon }) => {
                 const selected = form.coverEmoji === id;
                 return (
@@ -228,6 +228,7 @@ function BookEditorForm({
                   </RippleButton>
                 );
               })}
+              </div>
             </div>
           </div>
 
@@ -244,12 +245,11 @@ function BookEditorForm({
                 background: `linear-gradient(155deg, color-mix(in srgb,${form.coverColor} 60%,#000) 0%, ${form.coverColor} 40%, color-mix(in srgb,${form.coverColor} 70%,#3d1a06) 100%)`,
               }}
             >
-              <CoverIcon
-                id={form.coverEmoji}
-                size={22}
-                className="journal-mini-spine-icon"
+              <BookSpineMark
+                iconId={form.coverEmoji}
+                title={spineTitle}
+                iconSize={24}
               />
-              <span className="journal-mini-spine-title">{spineTitle}</span>
             </div>
           </aside>
         </div>
