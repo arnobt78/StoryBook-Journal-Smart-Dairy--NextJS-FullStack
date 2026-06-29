@@ -8,7 +8,7 @@
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-ui-wave17b-2026-06-29 |
-| **Last commit** | `3c085fd` — fix(ui) C4 Wave 17b dialog spine polish |
+| **Last commit** | `32ae020` — fix(ui) C4 Wave 17b dialog spine polish |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
