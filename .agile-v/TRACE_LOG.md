@@ -39,3 +39,5 @@
 | 2026-06-29T15:50:00Z | activate | agile-v-core | Session activation; AQMS sync STATE/MANIFEST/VAL to Wave 17c; resume C4 Stage 4 | REQ-0024 | STATE.md |
 | 2026-06-29T13:45:00Z | ui-wave18 | build-agent-js | C4 Wave 18: auth-landing-handoff, auth book enter CSS, AuthBookShell wire; 34 Vitest PASS | REQ-0005, REQ-0029 | CR-0005 |
 | 2026-06-29T14:20:00Z | ui-wave18c-d | build-agent-js | C4 Wave 18c–18d: parallel stagger + greeting timing; 41 Vitest PASS | REQ-0005, REQ-0029 | CR-0005 |
+| 2026-06-29T17:25:00Z | ui-wave22 | build-agent-js | C4 Wave 22: JournalBottomNav, confirm priority stack; 55 Vitest PASS | REQ-0029–0030 | DEC-0047 |
+| 2026-06-29T17:37:00Z | ui-wave23 | build-agent-js | C4 Wave 23: defer delete confirm, nav wrap, shelf glow unclip; lint/typecheck/test/build PASS | REQ-0029–0030 | DEC-0048 |
