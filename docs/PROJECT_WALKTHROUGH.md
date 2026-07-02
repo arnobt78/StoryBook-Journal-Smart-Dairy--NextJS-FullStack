@@ -464,15 +464,16 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 25. C4 UI Waves 18–18d — Landing → auth choreography (2026-06-29)
+## 25. C4 UI Waves 18–18e — Landing → auth choreography (2026-06-29)
 
 | Wave | Files | Details |
 |------|-------|---------|
 | 18 | `auth-landing-handoff.ts`, `globals.css`, `AuthBookShell.tsx` | sessionStorage + `data-auth-from-landing`; `authBookShellEnter` 0.9s |
 | 18c | `auth-stagger.ts`, `globals.css` | Revert phased tiers; parallel row stagger (same index = same delay) |
-| 18d | `BookCover.tsx` | Greeting 900ms → hold 350ms → fade 400ms → `router.push` at 1650ms; handoff at push |
+| 18d | `BookCover.tsx` | Greeting 900ms → hold 350ms → fade starts 1250ms; handoff at push |
+| 18e | `BookCover.tsx`, `globals.css` | Nav overlap 220ms (`router.push` 1430ms); shell `-80ms` preroll |
 
-**Timing constants (BookCover):** `COVER_INNER_TEXT_*` 450+450ms · `COVER_EXIT_START_MS` 1250 · `COVER_OPEN_MS` 1650.
+**Timing constants (BookCover):** `COVER_EXIT_START_MS` 1250 · `COVER_OPEN_MS` 1430 · `COVER_NAV_OVERLAP_MS` 220.
 
 **Out of scope:** invalidation, PageFlip, direct `/login` stagger (60ms default).
 
@@ -489,4 +490,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-06-29 — C4 Wave 18d; lint/typecheck/41 Vitest/build PASS.*
+*Last reviewed: 2026-06-29 — C4 Wave 18e; lint/typecheck/41 Vitest/build PASS.*

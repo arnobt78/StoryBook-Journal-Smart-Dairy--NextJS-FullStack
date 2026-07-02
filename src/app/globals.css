@@ -430,7 +430,9 @@ body {
 
 /* Left-page footer cross-route link — amber text-shadow glow on hover (no underline) */
 .auth-footer-link {
-  transition: color 0.25s ease, text-shadow 0.25s ease;
+  transition:
+    color 0.25s ease,
+    text-shadow 0.25s ease;
 }
 .auth-footer-link:hover:not(:disabled) {
   color: rgba(160, 85, 25, 0.95);
@@ -535,16 +537,8 @@ body {
  */
 .book-viewport-80,
 .auth-book-viewport {
-  --page-w: clamp(
-    240px,
-    calc((80vw - var(--spine-w, 22px)) / 2),
-    720px
-  );
-  --page-h: clamp(
-    420px,
-    calc(80vh - 56px),
-    920px
-  );
+  --page-w: clamp(240px, calc((80vw - var(--spine-w, 22px)) / 2), 720px);
+  --page-h: clamp(420px, calc(80vh - 56px), 920px);
 }
 
 /* Landing cover container — enables container queries for scaled typography */
@@ -564,7 +558,11 @@ body {
 
 /* ─── Leather glassmorphism (docs/UI_STYLING_GUIDE.md — amber/leather variant) ── */
 .leather-glass-panel {
-  background: linear-gradient(135deg, rgba(244, 236, 218, 0.92), rgba(240, 228, 210, 0.88));
+  background: linear-gradient(
+    135deg,
+    rgba(244, 236, 218, 0.92),
+    rgba(240, 228, 210, 0.88)
+  );
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 160, 60, 0.22);
@@ -572,7 +570,11 @@ body {
 }
 
 .leather-glass-btn {
-  background: linear-gradient(135deg, rgba(90, 40, 10, 0.88), rgba(70, 32, 8, 0.82));
+  background: linear-gradient(
+    135deg,
+    rgba(90, 40, 10, 0.88),
+    rgba(70, 32, 8, 0.82)
+  );
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 160, 60, 0.25);
@@ -586,7 +588,11 @@ body {
 }
 
 .leather-glass-btn-outline {
-  background: linear-gradient(135deg, rgba(120, 70, 20, 0.1), rgba(90, 40, 10, 0.04));
+  background: linear-gradient(
+    135deg,
+    rgba(120, 70, 20, 0.1),
+    rgba(90, 40, 10, 0.04)
+  );
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 160, 60, 0.22);
@@ -646,7 +652,9 @@ body {
 .leather-avatar-ring {
   border: 2px solid rgba(139, 69, 19, 0.55);
   border-radius: 50%;
-  box-shadow: 0 0 12px rgba(255, 160, 60, 0.28), inset 0 0 8px rgba(90, 40, 10, 0.12);
+  box-shadow:
+    0 0 12px rgba(255, 160, 60, 0.28),
+    inset 0 0 8px rgba(90, 40, 10, 0.12);
   overflow: hidden;
   flex-shrink: 0;
   display: flex;
@@ -659,7 +667,9 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 160, 60, 0.12) !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 160, 60, 0.06);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.45),
+    0 0 20px rgba(255, 160, 60, 0.06);
 }
 
 /* Action buttons inside journal read/write footers — brighter leather gold */
@@ -669,12 +679,17 @@ body {
   color: rgba(255, 205, 140, 0.92);
   text-shadow: 0 0 8px rgba(255, 160, 60, 0.28);
   box-shadow: 0 6px 20px rgba(139, 69, 19, 0.1);
-  transition: color 0.2s, text-shadow 0.2s, box-shadow 0.2s;
+  transition:
+    color 0.2s,
+    text-shadow 0.2s,
+    box-shadow 0.2s;
 }
 .leather-glass-action-btn:hover:not(:disabled) {
   color: rgba(255, 225, 165, 1);
   text-shadow: 0 0 14px rgba(255, 185, 80, 0.5);
-  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.15), 0 0 16px rgba(255, 160, 60, 0.18);
+  box-shadow:
+    0 6px 20px rgba(139, 69, 19, 0.15),
+    0 0 16px rgba(255, 160, 60, 0.18);
 }
 
 /* Demo menu row — equal height for user + clear rows */
@@ -1118,7 +1133,7 @@ body {
 html[data-auth-from-landing="1"] .auth-book-enter-shell {
   opacity: 0;
   transform-origin: center center;
-  animation: authBookShellEnter 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: authBookShellEnter 0.9s cubic-bezier(0.23, 1, 0.32, 1) -120ms both;
   will-change: opacity, transform;
 }
 
@@ -1126,8 +1141,8 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell {
 html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   animation: authRowIn 0.45s cubic-bezier(0.23, 1, 0.32, 1) both !important;
   animation-delay: calc(
-    var(--auth-landing-stagger-start-ms, 100ms) +
-      var(--auth-stagger-i, 0) * var(--auth-landing-stagger-step-ms, 50ms)
+    var(--auth-landing-stagger-start-ms, 100ms) + var(--auth-stagger-i, 0) *
+      var(--auth-landing-stagger-step-ms, 50ms)
   ) !important;
 }
 
@@ -1391,8 +1406,7 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
 }
 
 .dashboard-shelf-item:hover .dashboard-spine-click {
-  filter:
-    drop-shadow(0 0 6px var(--book-glow-ring, rgba(255, 160, 60, 0.35)))
+  filter: drop-shadow(0 0 6px var(--book-glow-ring, rgba(255, 160, 60, 0.35)))
     drop-shadow(0 0 14px var(--book-glow-halo, rgba(255, 160, 60, 0.18)));
 }
 
@@ -1448,19 +1462,45 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
 .shelf-stagger > * {
   animation: shelfItemIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
-.shelf-stagger > *:nth-child(1) { animation-delay: 0.04s; }
-.shelf-stagger > *:nth-child(2) { animation-delay: 0.1s; }
-.shelf-stagger > *:nth-child(3) { animation-delay: 0.16s; }
-.shelf-stagger > *:nth-child(4) { animation-delay: 0.22s; }
-.shelf-stagger > *:nth-child(5) { animation-delay: 0.28s; }
-.shelf-stagger > *:nth-child(6) { animation-delay: 0.34s; }
-.shelf-stagger > *:nth-child(7) { animation-delay: 0.4s; }
-.shelf-stagger > *:nth-child(8) { animation-delay: 0.46s; }
-.shelf-stagger > *:nth-child(9) { animation-delay: 0.52s; }
-.shelf-stagger > *:nth-child(10) { animation-delay: 0.58s; }
-.shelf-stagger > *:nth-child(11) { animation-delay: 0.62s; }
-.shelf-stagger > *:nth-child(12) { animation-delay: 0.66s; }
-.shelf-stagger > *:nth-child(n + 13) { animation-delay: 0.7s; }
+.shelf-stagger > *:nth-child(1) {
+  animation-delay: 0.04s;
+}
+.shelf-stagger > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.shelf-stagger > *:nth-child(3) {
+  animation-delay: 0.16s;
+}
+.shelf-stagger > *:nth-child(4) {
+  animation-delay: 0.22s;
+}
+.shelf-stagger > *:nth-child(5) {
+  animation-delay: 0.28s;
+}
+.shelf-stagger > *:nth-child(6) {
+  animation-delay: 0.34s;
+}
+.shelf-stagger > *:nth-child(7) {
+  animation-delay: 0.4s;
+}
+.shelf-stagger > *:nth-child(8) {
+  animation-delay: 0.46s;
+}
+.shelf-stagger > *:nth-child(9) {
+  animation-delay: 0.52s;
+}
+.shelf-stagger > *:nth-child(10) {
+  animation-delay: 0.58s;
+}
+.shelf-stagger > *:nth-child(11) {
+  animation-delay: 0.62s;
+}
+.shelf-stagger > *:nth-child(12) {
+  animation-delay: 0.66s;
+}
+.shelf-stagger > *:nth-child(n + 13) {
+  animation-delay: 0.7s;
+}
 
 /* ─── C4 Wave 17 — journal paper dialog (create/edit + confirm) ─────────── */
 .journal-dialog-overlay {
@@ -1590,7 +1630,9 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   background: rgba(120, 70, 20, 0.08);
   color: rgba(80, 45, 12, 0.65);
   cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .journal-dialog-close:hover {
@@ -1966,4 +2008,3 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
     transform: translate(-50%, -48%) scale(0.97);
   }
 }
-

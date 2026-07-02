@@ -44,3 +44,4 @@
 | 2026-06-29T14:30:00Z | DEC-0040 | C4 | build-agent-js | Wave 18b: phased stagger tiers (brand/left/right) + CSS vars from auth-landing-handoff | Shell enter 1s alone; left at +1000ms; form at +1540ms; direct /login unchanged | REQ-0005, REQ-0029 |
 | 2026-06-29T15:00:00Z | DEC-0041 | C4 | build-agent-js | Wave 18c: revert 18b phases → unified parallel stagger riding shell enter | Same index left/right animate together; start +100ms; no opacity lock; shell 0.9s | REQ-0005, REQ-0029 |
 | 2026-06-29T14:25:00Z | DEC-0042 | C4 | build-agent-js | Wave 18d: landing greeting hold + delayed nav (1650ms) before auth mount | Exit fade at 1250ms; handoff at router.push only | REQ-0005, REQ-0029 |
+| 2026-06-29T14:35:00Z | DEC-0043 | C4 | build-agent-js | Wave 18e: nav overlap 220ms + shell -80ms preroll | router.push at 1430ms during fade; no empty flash | REQ-0005, REQ-0029 |

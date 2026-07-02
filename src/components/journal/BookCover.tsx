@@ -13,7 +13,7 @@
  *          edge — exactly like a real book cover hinging open.
  *       c. `.cover-fold-sheet` inner pages fan open behind the hinge.
  *       d. `.cover-title-stack` fades out as the cover swings away.
- *  3. Navigate: after greeting hold + landing fade, set handoff and router.push.
+ *  3. Navigate: crossfade — handoff + router.push overlaps landing fade tail (Wave 18e).
  *
  * The book is split into three z-layers:
  *   z-index 1 — `.cover-pages-bg`   : cream page stack (always behind the cover)
@@ -54,8 +54,12 @@ const COVER_EXIT_FADE_MS = 400;
 /** Start fading landing only after inner-page greeting finishes + hold */
 const COVER_EXIT_START_MS = COVER_INNER_TEXT_DONE_MS + COVER_GREETING_HOLD_MS;
 
-/** Navigate after landing fade completes — auth mounts on opaque handoff */
-const COVER_OPEN_MS = COVER_EXIT_START_MS + COVER_EXIT_FADE_MS;
+/** Start auth nav before landing fade ends — crossfade hides RSC mount gap */
+const COVER_NAV_OVERLAP_MS = 300;
+
+/** Navigate while landing still fading — auth ease-in overlaps exit tail */
+const COVER_OPEN_MS =
+  COVER_EXIT_START_MS + COVER_EXIT_FADE_MS - COVER_NAV_OVERLAP_MS;
 
 export function LandingCover() {
   const router = useRouter();
@@ -84,7 +88,7 @@ export function LandingCover() {
         router.push(href);
       }, COVER_OPEN_MS);
     },
-    [coverOpening, router]
+    [coverOpening, router],
   );
 
   /** Typography only — no display/textAlign (would override RippleButton inline-flex row) */
@@ -354,8 +358,8 @@ export function LandingCover() {
                   maxWidth: "88%",
                 }}
               >
-                Every great story begins with a single word. Open your heart — let the
-                pages speak.
+                Every great story begins with a single word. Open your heart —
+                let the pages speak.
               </div>
               <div
                 aria-hidden
@@ -590,7 +594,8 @@ export function LandingCover() {
                     maxWidth: "90%",
                   }}
                 >
-                  &ldquo;Not all who wander are lost, but all who write are found.&rdquo;
+                  &ldquo;Not all who wander are lost, but all who write are
+                  found.&rdquo;
                 </div>
                 <div
                   aria-hidden
@@ -669,39 +674,39 @@ export function LandingCover() {
             padding: "0 16px",
           }}
         >
-        <RippleButton
-          type="button"
-          icon={PenLine}
-          onClick={() => openAndNavigate("/register")}
-          shine
-          shineRadius={4}
-          className={LEATHER_GLASS_CLASS.buttonPrimary}
-          style={{
-            ...ctaTypography,
-            color: LEATHER_GLASS.buttonPrimary.color,
-            padding: "11px 26px",
-            borderRadius: "4px",
-            flexShrink: 0,
-          }}
-        >
-          Start Journaling
-        </RippleButton>
-        <RippleButton
-          type="button"
-          icon={LogIn}
-          onClick={() => openAndNavigate("/login")}
-          className={LEATHER_GLASS_CLASS.buttonOutline}
-          style={{
-            ...ctaTypography,
-            color: "rgba(255,205,130,.95)",
-            padding: "11px 26px",
-            borderRadius: "4px",
-            flexShrink: 0,
-          }}
-        >
-          Sign In
-        </RippleButton>
-      </div>
+          <RippleButton
+            type="button"
+            icon={PenLine}
+            onClick={() => openAndNavigate("/register")}
+            shine
+            shineRadius={4}
+            className={LEATHER_GLASS_CLASS.buttonPrimary}
+            style={{
+              ...ctaTypography,
+              color: LEATHER_GLASS.buttonPrimary.color,
+              padding: "11px 26px",
+              borderRadius: "4px",
+              flexShrink: 0,
+            }}
+          >
+            Start Journaling
+          </RippleButton>
+          <RippleButton
+            type="button"
+            icon={LogIn}
+            onClick={() => openAndNavigate("/login")}
+            className={LEATHER_GLASS_CLASS.buttonOutline}
+            style={{
+              ...ctaTypography,
+              color: "rgba(255,205,130,.95)",
+              padding: "11px 26px",
+              borderRadius: "4px",
+              flexShrink: 0,
+            }}
+          >
+            Sign In
+          </RippleButton>
+        </div>
       </div>
     </div>
   );

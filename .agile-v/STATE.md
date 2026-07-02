@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave18d-2026-06-29 |
-| **Last commit** | ed20ff7 — fix(ui) C4 Wave 18c–18d landing→auth choreography |
+| **Revision** | C4-ui-wave18e-2026-06-29 |
+| **Last commit** | (pending) — fix(ui) Wave 18e landing→auth crossfade |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -69,6 +69,7 @@
 | Landing→auth book enter (handoff + CSS) | REQ-0005, REQ-0029 | ✅ Wave 18 |
 | Landing→auth parallel sync stagger (revert 18b phases) | REQ-0005, REQ-0029 | ✅ Wave 18c |
 | Landing greeting hold before auth nav | REQ-0005, REQ-0029 | ✅ Wave 18d |
+| Landing→auth crossfade overlap | REQ-0005, REQ-0029 | ✅ Wave 18e |
 
 ## Backlog
 
