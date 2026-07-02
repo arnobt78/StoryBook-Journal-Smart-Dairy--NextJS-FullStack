@@ -8,7 +8,7 @@
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-ui-wave18d-2026-06-29 |
-| **Last commit** | (pending) — fix(ui) Wave 18c–18d landing→auth choreography |
+| **Last commit** | ed20ff7 — fix(ui) C4 Wave 18c–18d landing→auth choreography |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
