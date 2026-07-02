@@ -39,6 +39,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
 import { ConfirmDialog } from "@/components/feedback/ConfirmDialog";
 import { BookEditorModal } from "@/components/journal/BookEditorModal";
+import { BookSpreadHeader } from "@/components/journal/BookSpreadHeader";
 import { LeftPage } from "./LeftPage";
 import { RightPage } from "./RightPage";
 import { PageFlipOverlay } from "./PageFlip";
@@ -943,22 +944,12 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           onCancel={() => setConfirmDeleteBook(false)}
         />
 
-        {/* Book title label above spread */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-42px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            fontFamily: "'Playfair Display',serif",
-            fontStyle: "italic",
-            fontSize: "14px",
-            color: "rgba(255,200,130,.45)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {bookTitle}
-        </div>
+        {/* Golden branding above spread — icon, title, truncated description */}
+        <BookSpreadHeader
+          coverEmoji={book.coverEmoji}
+          title={book.title}
+          description={book.description}
+        />
       </div>
     </>
   );

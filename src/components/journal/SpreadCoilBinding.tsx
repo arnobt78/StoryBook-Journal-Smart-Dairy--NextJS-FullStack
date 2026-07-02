@@ -20,11 +20,18 @@ function coilLoopCenters(): number[] {
   );
 }
 
-export function SpreadCoilBinding() {
+type SpreadCoilBindingProps = {
+  className?: string;
+};
+
+export function SpreadCoilBinding({ className }: SpreadCoilBindingProps = {}) {
   const loops = coilLoopCenters();
 
   return (
-    <div aria-hidden className="spread-coil-binding">
+    <div
+      aria-hidden
+      className={["spread-coil-binding", className].filter(Boolean).join(" ")}
+    >
       <svg
         viewBox="0 0 14 540"
         preserveAspectRatio="none"

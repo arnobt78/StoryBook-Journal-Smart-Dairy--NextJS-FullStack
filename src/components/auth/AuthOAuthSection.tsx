@@ -38,7 +38,7 @@ export function AuthOAuthSection({
         <AuthOrSeparator label="or" compact />
       </div>
       <div {...authStaggerRowProps(googleStaggerIndex)}>
-        <GoogleSignInButton disabled={disabled} label={label} />
+        <GoogleSignInButton disabled={disabled} label={label} variant={variant} />
       </div>
     </>
   );

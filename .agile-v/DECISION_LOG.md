@@ -45,3 +45,6 @@
 | 2026-06-29T15:00:00Z | DEC-0041 | C4 | build-agent-js | Wave 18c: revert 18b phases → unified parallel stagger riding shell enter | Same index left/right animate together; start +100ms; no opacity lock; shell 0.9s | REQ-0005, REQ-0029 |
 | 2026-06-29T14:25:00Z | DEC-0042 | C4 | build-agent-js | Wave 18d: landing greeting hold + delayed nav (1650ms) before auth mount | Exit fade at 1250ms; handoff at router.push only | REQ-0005, REQ-0029 |
 | 2026-06-29T14:35:00Z | DEC-0043 | C4 | build-agent-js | Wave 18e: nav overlap 220ms + shell -80ms preroll | router.push at 1430ms during fade; no empty flash | REQ-0005, REQ-0029 |
+| 2026-06-29T16:00:00Z | DEC-0044 | C4 | build-agent-js | Wave 19: auth CTA hold loading until dashboard; AuthCtaSpinner | No finally reset after router.push; error-only setLoading(false) | REQ-0004, REQ-0005 |
+| 2026-06-29T17:00:00Z | DEC-0045 | C4 | build-agent-js | Wave 20: OAuthReturnSync welcome toast; LogoutBookCloseOverlay 360° | OAUTH_VARIANT_KEY; useSignOutWithBookClose for nav + ⌘K | REQ-0004, REQ-0005, REQ-0029 |
+| 2026-06-29T17:05:00Z | DEC-0046 | C4 | build-agent-js | Wave 21: journal-page-styles ink; BookSpreadHeader; Radix tooltip on shelf | book-brand-styles shared with auth; no new invalidation paths | REQ-0029–0030 |

@@ -4,6 +4,7 @@
  * Editable tag pills — click × to remove; pairs with "+ tag" input in write mode.
  */
 import { X } from "lucide-react";
+import { JOURNAL_INK_BODY, JOURNAL_INK_TAG, JOURNAL_INK_TAG_BORDER } from "@/lib/journal-page-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
 
 type JournalEntryTagsEditorProps = {
@@ -25,11 +26,11 @@ export function JournalEntryTagsEditor({ tags, onRemove }: JournalEntryTagsEdito
             gap: "4px",
             fontFamily: "'Lora',serif",
             fontSize: "10px",
-            color: "rgba(110,60,22,.75)",
+            color: JOURNAL_INK_TAG,
             background: "rgba(120,70,20,.09)",
             padding: "2px 6px 2px 8px",
             borderRadius: "20px",
-            border: "1px solid rgba(120,70,20,.22)",
+            border: `1px solid ${JOURNAL_INK_TAG_BORDER}`,
             flexShrink: 0,
           }}
         >
@@ -47,7 +48,7 @@ export function JournalEntryTagsEditor({ tags, onRemove }: JournalEntryTagsEdito
               border: "none",
               background: "transparent",
               cursor: "pointer",
-              color: "rgba(100,55,20,.55)",
+              color: JOURNAL_INK_BODY,
               lineHeight: 1,
               minWidth: 14,
               minHeight: 14,

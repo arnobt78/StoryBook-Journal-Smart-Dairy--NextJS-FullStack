@@ -9,25 +9,16 @@
  *    a portal without scroll-lock or width reflow — avoids navbar “jump” / layout shift.
  *  • Profile menu rows pair Lucide glyphs (`Activity`, `FileText`, `LogOut`) with labels
  *    for quick visual scanning next to API shortcuts and sign-out.
- *  • Book-close animation overlay on sign-out: faux leather cover before redirect.
- *  • Sign-out calls `queryClient.clear()` so TanStack Query drops all cached server state
- *    immediately (no full reload). After mutations elsewhere, call
- *    `notifyJournalCacheUpdated(queryClient)` so UI refetches without navigation.
+ *  • Sign-out delegates to `useSignOutWithBookClose` via `onSignOut` from DashboardClientShell.
  *
  * ── WALKTHROUGH ──
  *  OFFLINE — `{pendingCount} offline` badge from `OfflineSyncContext`; counts IndexedDB queue.
  *  SafeImage — avatar tries Google URL first; `fallbackSrc` Robohash on error (see safe-image.tsx).
- *  3D book — sign-out overlay plays faux leather cover slam before NextAuth redirect.
  */
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useQueryClient } from "@tanstack/react-query";
-import { signOut } from "next-auth/react";
 import { Activity, FileText, LogOut } from "lucide-react";
 import { RippleButton } from "@/components/ui/ripple-button";
-
-import { AUTH_STATE_KEY, OAUTH_PENDING_KEY } from "@/constants/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,278 +27,168 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AvatarRing } from "@/components/ui/AvatarRing";
-import { appToast } from "@/lib/app-toast";
 import {
   DASHBOARD_BRAND_TEXT_STYLE,
   DASHBOARD_NAV_BRAND_SIZE,
 } from "@/lib/dashboard-styles";
 import { useOfflineSync } from "@/context/OfflineSyncContext";
+import { resolveLogoutDisplayName } from "@/lib/logout-book-close";
 
 interface DashboardNavProps {
   user: { name?: string | null; email?: string | null; image?: string | null };
+  signingOut: boolean;
+  onSignOut: () => void | Promise<void>;
 }
 
-export function DashboardNav({ user }: DashboardNavProps) {
-  const queryClient = useQueryClient();
+export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps) {
   const { pendingCount } = useOfflineSync();
-  const [signingOut, setSigningOut] = useState(false);
-  const [closing, setClosing] = useState(false);
   const avatarSeed = user.email ?? user.name ?? "guest";
   const displayEmail = user.email ?? "—";
-  const displayName = user.name ?? user.email ?? "Reader";
-
-  /**
-   * Sign-out flow:
-   *  1. Show book-close overlay (leather cover slams shut, 750ms animation).
-   *  2. Clear TanStack Query cache during the animation (`clear()` removes all queries at once).
-   *  3. Call signOut — NextAuth clears cookies and redirects to `callbackUrl`.
-   */
-  const handleSignOut = async () => {
-    if (signingOut) return;
-    appToast.auth.goodbye(displayName);
-    setSigningOut(true);
-    setClosing(true);
-
-    /* Clear cache while the animation plays */
-    queryClient.clear();
-    if (typeof window !== "undefined") {
-      localStorage.removeItem(AUTH_STATE_KEY);
-      localStorage.removeItem(OAUTH_PENDING_KEY);
-    }
-
-    await new Promise<void>((resolve) => setTimeout(resolve, 750));
-    await signOut({ callbackUrl: "/" });
-  };
+  const displayName = resolveLogoutDisplayName(user);
 
   return (
-    <>
-      {/* ── Book-close logout overlay ── */}
-      {signingOut && (
-        <div
-          className={`book-close-overlay${closing ? "" : ""}`}
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 9999,
-            background:
-              "radial-gradient(ellipse at 50% 30%, #2e160a 0%, #1a0c05 55%, #0e0603 100%)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            gap: "24px",
-          }}
-        >
-          {/* Faux leather cover slamming shut */}
-          <div
-            className="book-close-cover"
-            style={{
-              width: "220px",
-              height: "310px",
-              background:
-                "linear-gradient(155deg,#5d2e0c 0%,#8b4513 25%,#70380f 55%,#3d1a06 100%)",
-              borderRadius: "3px 12px 12px 3px",
-              boxShadow:
-                "-8px 0 24px rgba(0,0,0,.55), 10px 12px 50px rgba(0,0,0,.75)",
-              position: "relative",
-              overflow: "hidden",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 0,
-                width: "22px",
-                background:
-                  "linear-gradient(90deg,#1e0c03 0%,#4a2008 40%,#6b3410 60%,#4a2008 100%)",
-              }}
-            />
-            <div
-              style={{
-                fontFamily: "'Playfair Display',serif",
-                fontStyle: "italic",
-                fontSize: "22px",
-                color: "rgba(255,205,130,.75)",
-                paddingLeft: "18px",
-                textAlign: "center",
-                lineHeight: 1.2,
-              }}
-            >
-              StoryBook
-            </div>
-          </div>
-          <div
-            style={{
-              fontFamily: "'IM Fell English',serif",
-              fontStyle: "italic",
-              fontSize: "14px",
-              color: "rgba(255,180,90,.45)",
-            }}
-          >
-            Closing your journal…
-          </div>
-        </div>
-      )}
-
-      {/* ── Nav bar ── */}
-      <nav
+    <nav
+      style={{
+        height: "64px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "0 32px",
+        background: "transparent",
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+      }}
+    >
+      <Link
+        href="/dashboard"
+        className="dashboard-nav-brand"
         style={{
-          height: "64px",
+          textDecoration: "none",
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 32px",
-          background: "transparent",
-          // borderBottom: "1px solid rgba(255,160,60,.07)",
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
+          gap: "10px",
         }}
       >
-        {/* Logo: static SVG from /public for zero layout shift (fixed width/height). */}
-        <Link
-          href="/dashboard"
-          className="dashboard-nav-brand"
+        <Image
+          src="/dairy-1.svg"
+          alt=""
+          width={24}
+          height={24}
+          unoptimized
+          className="shrink-0 object-contain"
+          style={{ width: 24, height: 24, display: "block" }}
+          priority
+        />
+        <span
           style={{
-            textDecoration: "none",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
+            ...DASHBOARD_BRAND_TEXT_STYLE,
+            fontSize: DASHBOARD_NAV_BRAND_SIZE,
+            color: "rgba(255,205,130,.92)",
           }}
         >
-          <Image
-            src="/dairy-1.svg"
-            alt=""
-            width={24}
-            height={24}
-            unoptimized
-            className="shrink-0 object-contain"
-            style={{ width: 24, height: 24, display: "block" }}
-            priority
-          />
+          StoryBook
+        </span>
+      </Link>
+
+      <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+        {pendingCount > 0 && (
           <span
+            title={`${pendingCount} change${pendingCount === 1 ? "" : "s"} waiting to sync`}
             style={{
-              ...DASHBOARD_BRAND_TEXT_STYLE,
-              fontSize: DASHBOARD_NAV_BRAND_SIZE,
-              color: "rgba(255,205,130,.92)",
+              fontFamily: "'IM Fell English',serif",
+              fontSize: "10px",
+              letterSpacing: "1px",
+              color: "rgba(255,185,100,.65)",
+              background: "rgba(160,85,30,.22)",
+              border: "1px solid rgba(160,85,30,.28)",
+              padding: "3px 9px",
+              borderRadius: "12px",
             }}
           >
-            StoryBook
+            {pendingCount} offline
           </span>
-        </Link>
-
-        {/* Profile: dropdown trigger keeps fixed footprint; menu content is portaled. */}
-        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-        {/* ── OFFLINE: pending sync queue count from IndexedDB ── */}
-          {pendingCount > 0 && (
-            <span
-              title={`${pendingCount} change${pendingCount === 1 ? "" : "s"} waiting to sync`}
-              style={{
-                fontFamily: "'IM Fell English',serif",
-                fontSize: "10px",
-                letterSpacing: "1px",
-                color: "rgba(255,185,100,.65)",
-                background: "rgba(160,85,30,.22)",
-                border: "1px solid rgba(160,85,30,.28)",
-                padding: "3px 9px",
-                borderRadius: "12px",
-              }}
+        )}
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <RippleButton
+              type="button"
+              aria-label="Open account menu"
+              disabled={signingOut}
+              className="dashboard-nav-avatar-glow flex shrink-0 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 outline-none ring-offset-2 ring-offset-transparent transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[rgba(255,205,130,0.45)] disabled:cursor-default disabled:opacity-40"
+              style={{ width: 40, height: 40, borderRadius: "50%" }}
             >
-              {pendingCount} offline
-            </span>
-          )}
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <RippleButton
-                type="button"
-                aria-label="Open account menu"
-                disabled={signingOut}
-                className="dashboard-nav-avatar-glow flex shrink-0 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 outline-none ring-offset-2 ring-offset-transparent transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[rgba(255,205,130,0.45)] disabled:cursor-default disabled:opacity-40"
-                style={{ width: 40, height: 40, borderRadius: "50%" }}
+              <AvatarRing
+                src={user.image}
+                seed={avatarSeed}
+                size={36}
+                alt={user.name ?? "User avatar"}
+              />
+            </RippleButton>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end" sideOffset={8} className="min-w-[15rem]">
+            <div className="px-3 pt-2 font-lora text-sm font-medium text-[rgba(255,205,130,0.88)]">
+              {displayName}
+            </div>
+            <div className="px-3 pb-2 font-lora text-xs leading-snug text-paper-light/55">
+              {displayEmail}
+            </div>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem asChild>
+              <Link
+                href="/api/health"
+                target="_blank"
+                rel="noopener noreferrer"
+                prefetch={false}
+                className="flex cursor-pointer items-center gap-2 font-lora"
               >
-                <AvatarRing
-                  src={user.image}
-                  seed={avatarSeed}
-                  size={36}
-                  alt={user.name ?? "User avatar"}
-                />
-              </RippleButton>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent
-              align="end"
-              sideOffset={8}
-              className="min-w-[15rem]"
-            >
-              {/* Read-only header: email first, then display name (separate line). */}
-              <div className="px-3 pt-2 font-lora text-sm font-medium text-[rgba(255,205,130,0.88)]">
-                {displayName}
-              </div>
-              <div className="px-3 pb-2  font-lora text-xs leading-snug text-paper-light/55">
-                {displayEmail}
-              </div>
-
-              <DropdownMenuSeparator />
-
-              {/* API links open in a new tab so the dashboard shell stays mounted. */}
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/api/health"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  prefetch={false}
-                  className="flex cursor-pointer items-center gap-2 font-lora"
-                >
-                  <Activity
-                    className="size-4 shrink-0 text-[rgba(255,205,130,0.72)]"
-                    strokeWidth={2}
-                    aria-hidden
-                  />
-                  API Status
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/api/books"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  prefetch={false}
-                  className="flex cursor-pointer items-center gap-2 font-lora"
-                >
-                  <FileText
-                    className="size-4 shrink-0 text-[rgba(255,205,130,0.72)]"
-                    strokeWidth={2}
-                    aria-hidden
-                  />
-                  API Document
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem
-                className="flex cursor-pointer items-center gap-2 font-lora text-[rgba(255,200,140,0.92)] focus:bg-white/10"
-                disabled={signingOut}
-                onSelect={() => {
-                  void handleSignOut();
-                }}
-              >
-                <LogOut
+                <Activity
                   className="size-4 shrink-0 text-[rgba(255,205,130,0.72)]"
                   strokeWidth={2}
                   aria-hidden
                 />
-                {signingOut ? "Signing out…" : "Sign out"}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </nav>
-    </>
+                API Status
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                href="/api/books"
+                target="_blank"
+                rel="noopener noreferrer"
+                prefetch={false}
+                className="flex cursor-pointer items-center gap-2 font-lora"
+              >
+                <FileText
+                  className="size-4 shrink-0 text-[rgba(255,205,130,0.72)]"
+                  strokeWidth={2}
+                  aria-hidden
+                />
+                API Document
+              </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center gap-2 font-lora text-[rgba(255,200,140,0.92)] focus:bg-white/10"
+              disabled={signingOut}
+              onSelect={() => {
+                void onSignOut();
+              }}
+            >
+              <LogOut
+                className="size-4 shrink-0 text-[rgba(255,205,130,0.72)]"
+                strokeWidth={2}
+                aria-hidden
+              />
+              {signingOut ? "Signing out…" : "Sign out"}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </nav>
   );
 }

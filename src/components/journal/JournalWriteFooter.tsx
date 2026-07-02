@@ -5,6 +5,7 @@
  * Responsive flex-wrap row; high-contrast AI button for cream paper background.
  */
 import { AlignLeft, Check, Sparkles, X } from "lucide-react";
+import { JOURNAL_INK_BODY } from "@/lib/journal-page-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
 
 type JournalWriteFooterProps = {
@@ -35,7 +36,7 @@ export function JournalWriteFooter({
           gap: "6px",
           fontFamily: "'Lora',serif",
           fontSize: "10px",
-          color: "rgba(100,55,20,.45)",
+          color: JOURNAL_INK_BODY,
           flexShrink: 0,
         }}
       >

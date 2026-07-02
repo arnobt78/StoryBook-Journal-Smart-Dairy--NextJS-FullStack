@@ -51,6 +51,7 @@ import {
   authFooterLinkStyle,
   authFooterPromptStyle,
 } from "@/lib/auth-form-styles";
+import { BOOK_BRAND_GOLD_TEXT_STYLE } from "@/lib/book-brand-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { RotatingTypewriterText } from "@/components/animations/RotatingTypewriterText";
 
@@ -63,16 +64,7 @@ const AUTH_BRAND_PHRASES = [
 ] as const;
 
 /** Shared Dancing Script branding — title + inline rotating subtitle use identical size */
-const AUTH_BRAND_TEXT_STYLE: CSSProperties = {
-  fontFamily: "'Dancing Script', cursive",
-  fontWeight: 700,
-  fontStyle: "italic",
-  fontSize: "20px",
-  color: "rgba(255,205,120,.92)",
-  letterSpacing: "0.02em",
-  textShadow: "0 0 22px rgba(255,165,60,.5), 0 2px 8px rgba(0,0,0,.45)",
-  lineHeight: 1.2,
-};
+const AUTH_BRAND_TEXT_STYLE = BOOK_BRAND_GOLD_TEXT_STYLE;
 
 /** Radial amber orb behind left-page Lucide icon — sibling blur, not on preserve-3d parent */
 const AUTH_LEFT_ICON_SPOTLIGHT: CSSProperties = {

@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave18e-2026-06-29 |
-| **Last commit** | (pending) — fix(ui) Wave 18e landing→auth crossfade |
+| **Revision** | C4-ui-wave21-2026-06-29 |
+| **Last commit** | (pending) — feat(ui) Wave 20–21 logout + journal readability |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-29T15:00:00Z |
-| **Updated By** | build-agent-js (C4 Wave 18c) |
+| **Last Updated** | 2026-06-29T17:05:00Z |
+| **Updated By** | build-agent-js (C4 Wave 21) |
 
 ## Stage checklist
 
@@ -26,7 +26,7 @@
 | 1 Requirements | **COMPLETE** | REQ-0001–0031; CR-0001–0005 |
 | 2 Validation | **COMPLETE** | `phases/02-validation/SUMMARY.md` |
 | 3 Synthesis | **COMPLETE** | ART-0001–0078; commits 7d3c3ed→8f88e90 |
-| 4 Verification | **IN_PROGRESS** | 41 Vitest PASS; lint/typecheck/build PASS (2026-06-29) |
+| 4 Verification | **IN_PROGRESS** | 55 Vitest PASS; lint/typecheck/build PASS (2026-06-29) |
 | 5 Acceptance | NOT_STARTED | — |
 
 ## Cycle rollup
@@ -46,7 +46,7 @@
 | Leather glass wave 2 | REQ-0030 | ✅ |
 | Entry tags display/edit/persist | REQ-0031 | ✅ |
 | Invalidation single entry | REQ-0007 | ✅ unchanged |
-| Vitest | REQ-0021 | ✅ 41 unit |
+| Vitest | REQ-0021 | ✅ 55 unit |
 | Self-hosted fonts (15 WOFF2) | REQ-0029 | ✅ Wave 3 |
 | Landing cover redesign + glows | REQ-0029 | ✅ Wave 3 |
 | Auth book spotlight | REQ-0030 | ✅ Wave 3 |
@@ -70,6 +70,9 @@
 | Landing→auth parallel sync stagger (revert 18b phases) | REQ-0005, REQ-0029 | ✅ Wave 18c |
 | Landing greeting hold before auth nav | REQ-0005, REQ-0029 | ✅ Wave 18d |
 | Landing→auth crossfade overlap | REQ-0005, REQ-0029 | ✅ Wave 18e |
+| Auth CTA loading until dashboard | REQ-0004, REQ-0005 | ✅ Wave 19 |
+| OAuth welcome toast + logout 3D | REQ-0004, REQ-0005, REQ-0029 | ✅ Wave 20 |
+| Journal ink + golden header + tooltips | REQ-0029–0030 | ✅ Wave 21 |
 
 ## Backlog
 

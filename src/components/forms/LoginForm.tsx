@@ -25,10 +25,9 @@ import {
   fieldLabelStyle,
   inputClassName,
   inputStyle,
-  primaryCtaClassName,
-  primaryCtaStyle,
 } from "@/lib/auth-form-styles";
 import { AuthFormField } from "@/components/auth/AuthFormField";
+import { AuthFormSubmitButton } from "@/components/auth/AuthFormSubmitButton";
 import { AuthOAuthSection } from "@/components/auth/AuthOAuthSection";
 import { DemoAccountMenuRow } from "@/components/auth/DemoAccountMenuRow";
 import { RippleButton } from "@/components/ui/ripple-button";
@@ -130,16 +129,16 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
       });
       if (res?.error) {
         setError("Invalid email or password");
-      } else {
-        const displayName = form.email.split("@")[0] || "Reader";
-        appToast.auth.welcomeBack(displayName);
-        await notifyJournalCacheUpdated(queryClient);
-        router.push("/dashboard");
-        router.refresh();
+        setLoading(false);
+        return;
       }
+      const displayName = form.email.split("@")[0] || "Reader";
+      appToast.auth.welcomeBack(displayName);
+      await notifyJournalCacheUpdated(queryClient);
+      router.push("/dashboard");
+      router.refresh();
     } catch {
       setError("Something went wrong — please try again");
-    } finally {
       setLoading(false);
     }
   };
@@ -256,23 +255,13 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
         </p>
       )}
 
-      <RippleButton
-        {...authStaggerRowProps(stagger.cta, {
-          className: `w-full ${primaryCtaClassName}`,
-          style: {
-            ...primaryCtaStyle,
-            cursor: loading ? "not-allowed" : "pointer",
-            opacity: loading ? 0.7 : 1,
-          },
-        })}
-        type="submit"
-        disabled={loading}
+      <AuthFormSubmitButton
+        loading={loading}
+        idleLabel="Open My Journal"
+        pendingLabel="Opening…"
         icon={BookOpen}
-        shine
-        shineRadius={4}
-      >
-        {loading ? "Opening…" : "Open My Journal"}
-      </RippleButton>
+        staggerProps={authStaggerRowProps(stagger.cta)}
+      />
 
       <AuthOAuthSection
         googleEnabled={!!googleEnabled}

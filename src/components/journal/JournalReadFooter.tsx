@@ -6,6 +6,7 @@
  */
 import { AlignLeft, PencilLine, Trash2 } from "lucide-react";
 import type { JournalEntry } from "@/types";
+import { JOURNAL_INK_BODY } from "@/lib/journal-page-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
 
 type JournalReadFooterProps = {
@@ -43,7 +44,7 @@ export function JournalReadFooter({
           gap: "6px",
           fontFamily: "'Lora',serif",
           fontSize: "10px",
-          color: "rgba(100,55,20,.38)",
+          color: JOURNAL_INK_BODY,
           marginRight: "auto",
           flexShrink: 0,
         }}
@@ -96,7 +97,7 @@ export function JournalReadFooter({
             letterSpacing: "1.5px",
             textTransform: "uppercase",
             background: "transparent",
-            color: "rgba(100,55,20,.55)",
+            color: JOURNAL_INK_BODY,
             border: "1px solid rgba(120,70,20,.2)",
             padding: "4px 11px",
             borderRadius: "4px",

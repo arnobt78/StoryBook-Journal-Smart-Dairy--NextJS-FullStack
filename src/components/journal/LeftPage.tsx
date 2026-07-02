@@ -17,6 +17,16 @@
  *  3D hit-testing: outer shell is `pointerEvents: none`; scrollable inner stack is `auto`.
  */
 import type { JournalEntry } from "@/types";
+import {
+  JOURNAL_INK_BODY,
+  JOURNAL_INK_LIST_TITLE,
+  JOURNAL_INK_META,
+  JOURNAL_INK_PLACEHOLDER,
+  JOURNAL_INK_PREVIEW_BODY,
+  JOURNAL_INK_PREVIEW_TITLE,
+  journalPageNumberStyle,
+  journalSectionLabelStyle,
+} from "@/lib/journal-page-styles";
 import { stripHtml } from "@/lib/utils";
 
 interface LeftPageProps {
@@ -66,11 +76,7 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
 
       <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", pointerEvents: "auto" }}>
         {/* Page number */}
-        <div style={{
-          fontFamily: "'IM Fell English', serif", fontSize: "10px",
-          color: "rgba(100,60,25,.4)", textAlign: "center",
-          padding: "8px 0 3px", flexShrink: 0,
-        }}>
+        <div style={journalPageNumberStyle}>
           — {pageNumber} —
         </div>
 
@@ -79,18 +85,18 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
           {prevEntry ? (
             <div style={{ marginTop: "10px" }}>
               <SectionLabel>Previous</SectionLabel>
-              <div style={{ fontFamily: "'IM Fell English', serif", fontSize: "11px", color: "rgba(140,80,30,.55)", marginBottom: "4px" }}>
+              <div style={{ fontFamily: "'IM Fell English', serif", fontSize: "11px", color: JOURNAL_INK_META, marginBottom: "4px" }}>
                 {prevEntry.entryDate}
               </div>
               <div style={{
                 fontFamily: "'Playfair Display', serif", fontStyle: "italic",
-                fontSize: "17px", color: "rgba(45,20,5,.65)", lineHeight: 1.25, marginBottom: "8px",
+                fontSize: "17px", color: JOURNAL_INK_PREVIEW_TITLE, lineHeight: 1.25, marginBottom: "8px",
               }}>
                 {prevEntry.title}
               </div>
               <div style={{
                 fontFamily: "'Lora', serif", fontStyle: "italic",
-                fontSize: "11.5px", lineHeight: 1.85, color: "rgba(55,28,8,.5)",
+                fontSize: "11.5px", lineHeight: 1.85, color: JOURNAL_INK_PREVIEW_BODY,
               }}>
                 {stripHtml(prevEntry.content).slice(0, 180) || "No words written yet."}
                 {stripHtml(prevEntry.content).length > 180 ? "…" : ""}
@@ -102,7 +108,7 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
               }}>
                 <span style={{ fontSize: "13px" }}>{prevEntry.mood}</span>
                 <span style={{ fontSize: "13px" }}>{prevEntry.weather}</span>
-                <span style={{ fontFamily: "'Lora', serif", fontSize: "10px", color: "rgba(100,55,20,.38)", marginLeft: "auto" }}>
+                <span style={{ fontFamily: "'Lora', serif", fontSize: "10px", color: JOURNAL_INK_BODY, marginLeft: "auto" }}>
                   {prevEntry.wordCount} words
                 </span>
               </div>
@@ -113,7 +119,7 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
               <div style={{ fontSize: "16px", opacity: 0.15, textAlign: "center", margin: "8px 0" }}>✦ ✦ ✦</div>
               <div style={{
                 fontFamily: "'Lora', serif", fontStyle: "italic",
-                fontSize: "12px", color: "rgba(100,55,20,.35)", lineHeight: 1.9,
+                fontSize: "12px", color: JOURNAL_INK_BODY, lineHeight: 1.9,
               }}>
                 Every great story begins somewhere. This is where yours begins.
               </div>
@@ -125,7 +131,7 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
           <div style={{ marginTop: "20px" }}>
             <SectionLabel>All Entries</SectionLabel>
             {entries.length === 0 ? (
-              <div style={{ fontFamily: "'Lora', serif", fontStyle: "italic", fontSize: "11px", color: "rgba(100,55,20,.3)" }}>
+              <div style={{ fontFamily: "'Lora', serif", fontStyle: "italic", fontSize: "11px", color: JOURNAL_INK_PLACEHOLDER }}>
                 No entries yet
               </div>
             ) : (
@@ -145,10 +151,10 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{
                         fontFamily: "'Playfair Display', serif", fontSize: "11px",
-                        color: "rgba(45,20,5,.75)", whiteSpace: "nowrap",
+                        color: JOURNAL_INK_LIST_TITLE, whiteSpace: "nowrap",
                         overflow: "hidden", textOverflow: "ellipsis",
                       }}>{e.title}</div>
-                      <div style={{ fontFamily: "'Lora', serif", fontSize: "9.5px", color: "rgba(100,55,20,.4)" }}>
+                      <div style={{ fontFamily: "'Lora', serif", fontSize: "9.5px", color: JOURNAL_INK_META }}>
                         {e.entryDate}
                       </div>
                     </div>
@@ -170,8 +176,7 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div style={{
-      fontFamily: "'Lora', serif", fontSize: "8px", letterSpacing: "3.5px",
-      textTransform: "uppercase", color: "rgba(100,55,20,.35)",
+      ...journalSectionLabelStyle,
       display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px",
     }}>
       {children}

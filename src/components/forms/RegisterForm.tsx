@@ -15,12 +15,10 @@ import { authStaggerRowProps } from "@/lib/auth-stagger";
 import {
   inputClassName,
   inputStyle,
-  primaryCtaClassName,
-  primaryCtaStyle,
 } from "@/lib/auth-form-styles";
 import { AuthFormField } from "@/components/auth/AuthFormField";
+import { AuthFormSubmitButton } from "@/components/auth/AuthFormSubmitButton";
 import { AuthOAuthSection } from "@/components/auth/AuthOAuthSection";
-import { RippleButton } from "@/components/ui/ripple-button";
 
 /** Stagger row indices (page headers use 0–1) */
 const REGISTER_STAGGER = {
@@ -61,13 +59,19 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
       const json = await res.json();
       if (!json.success) {
         setError(json.message ?? "Registration failed");
+        setLoading(false);
         return;
       }
-      await signIn("credentials", {
+      const signInRes = await signIn("credentials", {
         email: form.email,
         password: form.password,
         redirect: false,
       });
+      if (signInRes?.error) {
+        setError("Account created but sign-in failed — please log in");
+        setLoading(false);
+        return;
+      }
       const name = form.displayName.trim() || form.email.split("@")[0] || "Writer";
       appToast.auth.registered(name);
       await notifyJournalCacheUpdated(queryClient);
@@ -75,7 +79,6 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
       router.refresh();
     } catch {
       setError("Something went wrong");
-    } finally {
       setLoading(false);
     }
   };
@@ -142,23 +145,13 @@ export function RegisterForm({ googleEnabled = false }: RegisterFormProps) {
           {error}
         </p>
       )}
-      <RippleButton
-        {...authStaggerRowProps(REGISTER_STAGGER.cta, {
-          className: `w-full ${primaryCtaClassName}`,
-          style: {
-            ...primaryCtaStyle,
-            cursor: loading ? "not-allowed" : "pointer",
-            opacity: loading ? 0.7 : 1,
-          },
-        })}
-        type="submit"
-        disabled={loading}
+      <AuthFormSubmitButton
+        loading={loading}
+        idleLabel="Begin My Story"
+        pendingLabel="Creating your journal…"
         icon={BookPlus}
-        shine
-        shineRadius={4}
-      >
-        {loading ? "Creating your journal…" : "Begin My Story"}
-      </RippleButton>
+        staggerProps={authStaggerRowProps(REGISTER_STAGGER.cta)}
+      />
 
       <AuthOAuthSection
         googleEnabled={!!googleEnabled}

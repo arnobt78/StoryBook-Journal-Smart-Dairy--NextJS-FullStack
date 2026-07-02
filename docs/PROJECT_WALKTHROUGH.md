@@ -145,6 +145,12 @@ Prisma models (`prisma/schema.prisma`):
 - **Session strategy:** JWT (`session: { strategy: "jwt" }`). User id is copied from DB user into the token and then into `session.user.id` via callbacks.
 - **Credentials login:** `authorize` loads user by email, bcrypt compare, updates `lastLoginAt`.
 - **Google OAuth:** When `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` (or legacy `GOOGLE_ID` / `GOOGLE_SECRET`) are set, **login and register** show Gmail **below** the primary button (`Open My Journal` / `Begin My Story`) via `AuthOAuthSection`. `signIn` callback → `provisionOAuthUser()` (Prisma user + welcome book on first login). Redirect `/dashboard`; `OAuthReturnSync` invalidates `journalSubtree()`.
+- **Auth CTA loading (Wave 19):** Credential submit keeps `loading` true (spinner + pending label) until the form unmounts on dashboard navigation — `setLoading(false)` only on API/sign-in errors. Google OAuth shows `AuthCtaSpinner` beside "Redirecting…".
+- **OAuth welcome toast (Wave 20):** `OAuthReturnSync` on dashboard mount reads `OAUTH_PENDING_KEY` + `OAUTH_VARIANT_KEY`; shows `welcomeBack` or `registered` then `notifyJournalCacheUpdated`.
+- **Logout animation (Wave 20):** `useSignOutWithBookClose` drives `LogoutBookCloseOverlay` (spread fold → hinge close → 360° orbit) for nav dropdown and ⌘K sign-out.
+- **Journal readability (Wave 21):** `journal-page-styles.ts` bumps spread ink to auth parity (`.45–.55`); wired in LeftPage, RightPage, footers, tags.
+- **Golden book header (Wave 21):** `BookSpreadHeader` above `BookSpread` — cover icon + Dancing Script title + truncated `description`; full meta on Radix tooltip hover.
+- **Shelf tooltips (Wave 21):** `BookShelf` spine hover shows title + description via `ui/tooltip.tsx`; `TooltipProvider` in `DashboardClientShell`.
 - **Auth layout:** `(auth)/layout.tsx` uses `.auth-book-viewport` — book spread ≈ **85vw × 85vh** (scoped `--page-w` / `--page-h`; dashboard journal keeps `:root` defaults). Both auth pages use `export const dynamic = "force-dynamic"` + `getAuthPageConfig()`.
 
 API routes consistently call `await auth()` and check `session?.user?.id` before Prisma calls, and use `userId` / `findFirst({ where: { id, userId }})` patterns to avoid cross-user access.

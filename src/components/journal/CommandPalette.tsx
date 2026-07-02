@@ -6,7 +6,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { signOut } from "next-auth/react";
 import {
   Command,
   CommandEmpty,
@@ -29,9 +28,16 @@ import type { JournalBook } from "@/types";
 type CommandPaletteProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSignOut: () => void | Promise<void>;
+  signingOut?: boolean;
 };
 
-export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
+export function CommandPalette({
+  open,
+  onOpenChange,
+  onSignOut,
+  signingOut = false,
+}: CommandPaletteProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [query, setQuery] = useState("");
@@ -156,8 +162,11 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               <CommandItem onSelect={() => run(() => router.push("/dashboard"))}>
                 Open shelf
               </CommandItem>
-              <CommandItem onSelect={() => run(() => signOut({ callbackUrl: "/" }))}>
-                Sign out
+              <CommandItem
+                disabled={signingOut}
+                onSelect={() => run(() => void onSignOut())}
+              >
+                {signingOut ? "Signing out…" : "Sign out"}
               </CommandItem>
             </CommandGroup>
           </CommandList>

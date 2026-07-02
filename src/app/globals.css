@@ -138,7 +138,7 @@
   --leather-light: #d2691e;
   --ink-primary: rgba(35, 14, 3, 0.82);
   --ink-secondary: rgba(55, 28, 8, 0.6);
-  --ink-faint: rgba(100, 55, 20, 0.38);
+  --ink-faint: rgba(100, 55, 20, 0.45);
   --ink-ghost: rgba(100, 55, 20, 0.25);
   --rule-line: rgba(120, 80, 30, 0.1);
   --margin-line: rgba(220, 100, 80, 0.18);
@@ -742,6 +742,17 @@ body {
   box-sizing: border-box;
 }
 
+@keyframes authCtaSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.auth-cta-spinner {
+  animation: authCtaSpin 0.75s linear infinite;
+  flex-shrink: 0;
+}
+
 /* Tighter field rhythm on auth forms — pairs with larger page tokens above */
 .book-viewport-80 form .auth-field,
 .auth-book-viewport form .auth-field {
@@ -938,17 +949,33 @@ body {
 }
 
 /* ─── Book close overlay (logout animation) ──────────────────── */
-@keyframes bookCoverClose {
+@keyframes logoutCoverHingeClose {
   0% {
-    transform: perspective(900px) rotateY(0deg) scaleX(1);
-    opacity: 1;
-  }
-  40% {
-    transform: perspective(900px) rotateY(-25deg) scaleX(0.92);
+    transform: rotateY(-165deg);
   }
   100% {
-    transform: perspective(900px) rotateY(-88deg) scaleX(0.1);
-    opacity: 0.4;
+    transform: rotateY(0deg);
+  }
+}
+@keyframes logoutBookOrbit360 {
+  0% {
+    transform: perspective(1000px) rotateY(0deg) rotateX(8deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(-360deg) rotateX(8deg);
+  }
+}
+
+@keyframes logoutHideInnerSpread {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes logoutShowLeatherShell {
+  to {
+    opacity: 1;
   }
 }
 @keyframes overlayFadeIn {
@@ -959,22 +986,403 @@ body {
     opacity: 1;
   }
 }
-@keyframes overlayFadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
 .book-close-overlay {
-  animation: overlayFadeIn 0.3s ease-out forwards;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 30%, #2e160a 0%, #1a0c05 55%, #0e0603 100%);
+  animation: overlayFadeIn 0.45s ease-out forwards;
 }
-.book-close-overlay.closing {
-  animation: overlayFadeOut 0.4s ease-in forwards;
+
+/* Same dynamic cover footprint as landing .landing-cover-viewport */
+.logout-cover-viewport {
+  --cover-w: min(70vw, calc(70vh * 240 / 340));
+  --cover-h: calc(var(--cover-w) * 340 / 240);
 }
-.book-close-cover {
-  animation: bookCoverClose 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+.logout-ambient-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 900px 500px at 50% 0%,
+    rgba(255, 180, 80, 0.05) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.logout-book-spotlight {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -52%);
+  width: calc(var(--cover-w) * 1.55);
+  height: calc(var(--cover-h) * 1.35);
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    rgba(139, 69, 19, 0.32) 0%,
+    rgba(90, 40, 10, 0.14) 45%,
+    transparent 68%
+  );
+  filter: blur(42px);
+  pointer-events: none;
+}
+
+.logout-book-column {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logout-book-stage {
+  position: relative;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.logout-book-orbit {
+  transform-style: preserve-3d;
+  animation: logoutBookOrbit360 var(--logout-orbit-ms, 1400ms)
+    cubic-bezier(0.23, 1, 0.32, 1) var(--logout-orbit-delay, 1270ms) forwards;
+}
+
+.logout-book-body {
+  position: relative;
+  width: var(--cover-w);
+  height: var(--cover-h);
+  border-radius: 3px 14px 14px 3px;
+  box-shadow:
+    -8px 0 24px rgba(0, 0, 0, 0.55),
+    10px 12px 50px rgba(0, 0, 0, 0.75),
+    inset -4px 0 10px rgba(0, 0, 0, 0.3);
+  transform-style: preserve-3d;
+  overflow: visible;
+}
+
+.logout-book-spine-fixed {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--cover-w) * 26 / 240);
+  background: linear-gradient(90deg, #1e0c03 0%, #4a2008 40%, #6b3410 60%, #4a2008 100%);
+  border-radius: 3px 0 0 3px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Right page stack — single cream surface (landing .cover page-bg) */
+.logout-page-stack {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--cover-w) * 26 / 240);
+  right: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, #f7f0e2 0%, #f0e6d4 50%, #e8dcc9 100%);
+  border-radius: 0 12px 12px 0;
+  overflow: hidden;
+}
+
+.logout-page-ruled {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    rgba(120, 80, 30, 0.06) 27px,
+    rgba(120, 80, 30, 0.06) 28px
+  );
+  background-position: 0 36px;
+  pointer-events: none;
+}
+
+.logout-right-page-inner {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 18% 12%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.logout-right-date {
+  margin: 0 0 10px;
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: clamp(8px, calc(var(--cover-w) * 0.032), 11px);
+  letter-spacing: 0.08em;
+  color: rgba(100, 55, 20, 0.45);
+}
+
+.logout-right-ornament {
+  font-size: clamp(10px, calc(var(--cover-w) * 0.038), 14px);
+  color: rgba(180, 110, 40, 0.55);
+  margin-bottom: 8px;
+}
+
+.logout-right-headline {
+  margin: 0 0 12px;
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-size: clamp(11px, calc(var(--cover-w) * 0.048), 16px);
+  color: rgba(80, 45, 12, 0.62);
+  line-height: 1.35;
+}
+
+.logout-right-body {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: clamp(8px, calc(var(--cover-w) * 0.028), 10px);
+  color: rgba(90, 50, 15, 0.48);
+  line-height: 1.65;
+  max-width: 88%;
+}
+
+.logout-book-leather-shell {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px 14px 14px 3px;
+  background: linear-gradient(155deg, #5d2e0c 0%, #8b4513 25%, #70380f 55%, #3d1a06 100%);
+  box-shadow:
+    -8px 0 24px rgba(0, 0, 0, 0.55),
+    10px 12px 50px rgba(0, 0, 0, 0.75);
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  animation: logoutShowLeatherShell 0.35s ease forwards;
+  animation-delay: var(--logout-orbit-delay, 1270ms);
+}
+
+.logout-page-stack {
+  animation: logoutHideInnerSpread 0.35s ease forwards;
+  animation-delay: var(--logout-orbit-delay, 1270ms);
+}
+
+.logout-cover-hinge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--cover-w) * 26 / 240);
+  right: 0;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transform: rotateY(-165deg);
+  z-index: 5;
+  animation: logoutCoverHingeClose var(--logout-hinge-ms, 720ms) cubic-bezier(0.23, 1, 0.32, 1)
+    var(--logout-hinge-delay, 550ms) forwards;
+}
+
+.logout-cover-front {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 0 12px 12px 0;
+  background: linear-gradient(155deg, #5d2e0c 0%, #8b4513 25%, #70380f 55%, #3d1a06 100%);
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.55), 10px 12px 50px rgba(0, 0, 0, 0.75);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-cover-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg);
+  background: linear-gradient(180deg, #f5ede0 0%, #f0e6d4 60%, #e8dcc9 100%);
+  border-radius: 0 12px 12px 0;
+  overflow: hidden;
+}
+
+/* Back cover exterior — leather during 360° orbit (inner welcome page stays for hinge-open phase) */
+.logout-cover-back-exterior {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 0 12px 12px 0;
+  background: linear-gradient(155deg, #5d2e0c 0%, #8b4513 25%, #70380f 55%, #3d1a06 100%);
+  animation: logoutShowLeatherShell 0.35s ease forwards;
+  animation-delay: var(--logout-orbit-delay, 1270ms);
+}
+
+.logout-cover-back .logout-page-ruled,
+.logout-cover-back .logout-left-page-inner {
+  animation: logoutHideInnerSpread 0.35s ease forwards;
+  animation-delay: var(--logout-orbit-delay, 1270ms);
+}
+
+.logout-cover-gold-border {
+  position: absolute;
+  inset: 16px;
+  border: 1px solid rgba(255, 170, 70, 0.2);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.logout-cover-leather-texture {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    160deg,
+    transparent 0,
+    transparent 6px,
+    rgba(0, 0, 0, 0.04) 6px,
+    rgba(0, 0, 0, 0.04) 7px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.logout-left-page-inner {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 18% 14%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.logout-left-icon {
+  width: 22px;
+  height: 22px;
+  color: rgba(120, 60, 15, 0.45);
+  margin-bottom: 10px;
+}
+
+.logout-left-welcome {
+  margin: 0 0 12px;
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(14px, calc(var(--cover-w) * 0.065), 22px);
+  color: rgba(120, 60, 15, 0.6);
+}
+
+.logout-left-quote {
+  margin: 0;
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: clamp(8px, calc(var(--cover-w) * 0.03), 11px);
+  color: rgba(90, 50, 15, 0.5);
+  line-height: 1.65;
+  max-width: 90%;
+}
+
+.logout-left-rule {
+  width: 50%;
+  height: 1px;
+  margin-top: 14px;
+  background: linear-gradient(90deg, transparent, rgba(180, 110, 40, 0.28), transparent);
+}
+
+.logout-cover-title-stack {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14%;
+  text-align: center;
+}
+
+.logout-cover-icon {
+  width: clamp(24px, calc(var(--cover-w) * 0.13), 44px);
+  height: clamp(24px, calc(var(--cover-w) * 0.13), 44px);
+  color: rgba(255, 195, 100, 0.78);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+.logout-cover-brand {
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(22px, calc(var(--cover-w) * 0.112), 42px);
+  color: rgba(255, 210, 135, 0.92);
+  line-height: 1.2;
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.55),
+    0 0 28px rgba(255, 180, 80, 0.18);
+  margin-top: 10px;
+  letter-spacing: 0.01em;
+}
+
+.logout-cover-subtitle {
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  font-size: clamp(18px, calc(var(--cover-w) * 0.09), 36px);
+  color: rgba(255, 195, 100, 0.82);
+  line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  margin-top: 2px;
+  letter-spacing: 0.02em;
+}
+
+.logout-cover-rule {
+  width: 55%;
+  height: 1px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, transparent, rgba(255, 175, 70, 0.35), transparent);
+}
+
+/* Landing hint parity — marginTop 40px + amber spotlight behind typewriter */
+.logout-hint-wrap {
+  position: relative;
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 420px);
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.logout-hint-spotlight {
+  position: absolute;
+  width: min(340px, 90vw);
+  height: 90px;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 165, 55, 0.22) 0%,
+    rgba(255, 130, 35, 0.1) 45%,
+    transparent 72%
+  );
+  filter: blur(20px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logout-book-orbit,
+  .logout-cover-hinge {
+    animation: none !important;
+  }
+  .logout-book-orbit {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  .logout-cover-hinge {
+    transform: rotateY(0deg);
+  }
 }
 
 /* ─── Ripple button effect ───────────────────────────────────── */
@@ -1103,6 +1511,116 @@ body {
     drop-shadow(0 8px 64px rgba(200, 88, 15, 0.18));
 }
 
+/* ─── Journal spread header — golden branding above open book ─────────────── */
+.book-spread-header-wrap {
+  position: absolute;
+  top: -48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 8px;
+  max-width: min(
+    96vw,
+    calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 40px)
+  );
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.book-spread-header-spotlight {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 280px;
+  height: 72px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 165, 55, 0.28) 0%,
+    rgba(255, 130, 35, 0.12) 48%,
+    transparent 72%
+  );
+  filter: blur(18px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.book-spread-header-row {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 8px;
+  max-width: 100%;
+  cursor: default;
+}
+
+.book-spread-header-desc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: min(42vw, 280px);
+}
+
+/* ─── Journal tooltip — leather panel for shelf + spread header ───────────── */
+.journal-tooltip-content {
+  z-index: 120;
+  max-width: min(92vw, 320px);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 170, 70, 0.35);
+  background: rgba(20, 8, 1, 0.94);
+  color: rgba(255, 218, 162, 0.92);
+  font-family: "Lora", serif;
+  font-size: 12px;
+  line-height: 1.55;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.45),
+    0 0 24px rgba(255, 140, 50, 0.18);
+  animation: journalTooltipIn 0.15s ease-out;
+}
+
+.journal-tooltip-title {
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 16px;
+  color: rgba(255, 205, 120, 0.95);
+  margin-bottom: 4px;
+  text-shadow: 0 0 12px rgba(255, 165, 60, 0.35);
+}
+
+.journal-tooltip-desc {
+  color: rgba(255, 200, 130, 0.78);
+}
+
+@keyframes journalTooltipIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Journal ink utilities — optional class bridge for cream paper text */
+.journal-ink-label {
+  color: rgba(100, 55, 20, 0.45);
+}
+
+.journal-ink-meta {
+  color: rgba(100, 55, 20, 0.55);
+}
+
 /* ─── Auth book glow — ambient leather spotlight around open spread ─────────
    box-shadow on the spread row; three concentric glow rings extend the leather
    ambient beyond the book's physical footprint so the halo is clearly visible.
@@ -1120,13 +1638,12 @@ body {
    the enter animation applies on the first auth paint (no React hydration flash).
 ──────────────────────────────────────────────────────────────────────────── */
 @keyframes authBookShellEnter {
+  /* Opacity only — scale was shifting absolute coil seam during enter (see debug H-subpixel) */
   0% {
     opacity: 0;
-    transform: scale(0.9) translateY(28px);
   }
   100% {
     opacity: 1;
-    transform: none;
   }
 }
 

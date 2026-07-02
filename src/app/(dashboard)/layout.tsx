@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { DashboardNav } from "@/components/layout/DashboardNav";
-import { DashboardCommandProvider } from "@/components/layout/DashboardCommandProvider";
-import { OAuthReturnSync } from "@/components/auth/OAuthReturnSync";
+import { DashboardClientShell } from "@/components/layout/DashboardClientShell";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
@@ -31,12 +29,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="dashboard-scroll">
-      {/* After Google OAuth return, invalidate journal queries so shelf is fresh */}
-      <OAuthReturnSync />
-      <DashboardNav user={session.user} />
-      <DashboardCommandProvider>
-        <main>{children}</main>
-      </DashboardCommandProvider>
+      <DashboardClientShell user={session.user}>{children}</DashboardClientShell>
     </div>
   );
 }

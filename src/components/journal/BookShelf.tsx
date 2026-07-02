@@ -38,6 +38,11 @@ import { RippleButton } from "@/components/ui/ripple-button";
 import { TypewriterText } from "@/components/animations/TypewriterText";
 import { BookSpineMark } from "@/components/journal/BookSpineMark";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   bookCoverGlowVars,
   DASHBOARD_BRAND_TEXT_STYLE,
   DASHBOARD_TITLE_SIZE,
@@ -436,72 +441,82 @@ function BookSpine({
       >
         ×
       </RippleButton>
-      <div onClick={onClick} className="dashboard-spine-click">
-        {/* Cover-color spotlight — blur sibling behind spine (not on preserve-3d ancestor) */}
-        <div aria-hidden className="dashboard-spine-spotlight" />
-        <div
-          className="dashboard-spine-slot"
-          style={{
-            background: `linear-gradient(155deg, color-mix(in srgb,${book.coverColor} 60%,#000) 0%, ${book.coverColor} 40%, color-mix(in srgb,${book.coverColor} 70%,#3d1a06) 100%)`,
-            transform: hovered
-              ? "translateY(-10px) rotateY(-4deg)"
-              : "translateY(0) rotateY(0)",
-          }}
-        >
-          <div aria-hidden className="dashboard-spine-slot-inner">
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div onClick={onClick} className="dashboard-spine-click">
+            {/* Cover-color spotlight — blur sibling behind spine (not on preserve-3d ancestor) */}
+            <div aria-hidden className="dashboard-spine-spotlight" />
             <div
+              className="dashboard-spine-slot"
               style={{
-                position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 0,
-                width: "10px",
-                background: "rgba(0,0,0,.3)",
-                borderRadius: "3px 0 0 3px",
+                background: `linear-gradient(155deg, color-mix(in srgb,${book.coverColor} 60%,#000) 0%, ${book.coverColor} 40%, color-mix(in srgb,${book.coverColor} 70%,#3d1a06) 100%)`,
+                transform: hovered
+                  ? "translateY(-10px) rotateY(-4deg)"
+                  : "translateY(0) rotateY(0)",
               }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "repeating-linear-gradient(160deg,transparent 0,transparent 6px,rgba(0,0,0,.03) 6px,rgba(0,0,0,.03) 7px)",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                inset: "10px 8px 10px 14px",
-                border: "1px solid rgba(255,255,255,.1)",
-                borderRadius: "2px",
-              }}
-            />
+            >
+              <div aria-hidden className="dashboard-spine-slot-inner">
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "10px",
+                    background: "rgba(0,0,0,.3)",
+                    borderRadius: "3px 0 0 3px",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background:
+                      "repeating-linear-gradient(160deg,transparent 0,transparent 6px,rgba(0,0,0,.03) 6px,rgba(0,0,0,.03) 7px)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: "10px 8px 10px 14px",
+                    border: "1px solid rgba(255,255,255,.1)",
+                    borderRadius: "2px",
+                  }}
+                />
+              </div>
+              <BookSpineMark iconId={book.coverEmoji} title={book.title} />
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  fontFamily: "'Playfair Display',serif",
+                  fontSize: "12px",
+                  color: "rgba(255,218,162,.88)",
+                  textShadow: "0 0 10px rgba(255,180,70,.18)",
+                }}
+              >
+                {book.title}
+              </div>
+              <div
+                style={{
+                  fontFamily: "'Lora',serif",
+                  fontSize: "10px",
+                  color: "rgba(255,178,85,.6)",
+                  marginTop: "2px",
+                }}
+              >
+                {book._count?.entries ?? 0} entries
+              </div>
+            </div>
           </div>
-          <BookSpineMark iconId={book.coverEmoji} title={book.title} />
-        </div>
-          <div style={{ textAlign: "center" }}>
-          <div
-            style={{
-              fontFamily: "'Playfair Display',serif",
-              fontSize: "12px",
-              color: "rgba(255,218,162,.88)",
-              textShadow: "0 0 10px rgba(255,180,70,.18)",
-            }}
-          >
-            {book.title}
-          </div>
-          <div
-            style={{
-              fontFamily: "'Lora',serif",
-              fontSize: "10px",
-              color: "rgba(255,178,85,.6)",
-              marginTop: "2px",
-            }}
-          >
-            {book._count?.entries ?? 0} entries
-          </div>
-        </div>
-      </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <div className="journal-tooltip-title">{book.title}</div>
+          {book.description?.trim() ? (
+            <div className="journal-tooltip-desc">{book.description.trim()}</div>
+          ) : null}
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 }

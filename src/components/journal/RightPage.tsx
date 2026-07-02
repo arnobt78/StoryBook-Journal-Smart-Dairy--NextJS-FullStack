@@ -22,6 +22,14 @@ import { useCallback, useState } from "react";
 import type { JournalEntry, EntryDraft } from "@/types";
 import { MOODS, WEATHERS } from "@/constants";
 import { mergePendingTag } from "@/lib/journal-tags";
+import {
+  JOURNAL_INK_BODY,
+  JOURNAL_INK_HEADING,
+  JOURNAL_INK_META,
+  JOURNAL_INK_PLACEHOLDER,
+  journalMiniLabelStyle,
+  journalPageNumberStyle,
+} from "@/lib/journal-page-styles";
 import { normalizeTags, wordCount } from "@/lib/utils";
 import { JournalEntryTags } from "@/components/journal/JournalEntryTags";
 import { JournalEntryTagsEditor } from "@/components/journal/JournalEntryTagsEditor";
@@ -42,7 +50,7 @@ const JournalEditor = dynamic(
           fontFamily: "'Lora',serif",
           fontStyle: "italic",
           fontSize: "12px",
-          color: "rgba(120,70,30,.32)",
+          color: JOURNAL_INK_PLACEHOLDER,
           paddingTop: 12,
         }}
       >
@@ -148,11 +156,7 @@ export function RightPage({
 
       <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", pointerEvents: "auto" }}>
         {/* Page number */}
-        <div style={{
-          fontFamily: "'IM Fell English',serif", fontSize: "10px",
-          color: "rgba(100,60,25,.4)", textAlign: "center",
-          padding: "8px 0 3px", flexShrink: 0,
-        }}>
+        <div style={journalPageNumberStyle}>
           — {pageNumber} —
         </div>
 
@@ -165,10 +169,10 @@ export function RightPage({
             <div style={{
               display: "flex", justifyContent: "space-between", alignItems: "baseline",
               fontFamily: "'IM Fell English',serif", fontSize: "11px",
-              color: "rgba(140,80,30,.55)", marginBottom: "2px",
+              color: JOURNAL_INK_META, marginBottom: "2px",
             }}>
               <span>{entry.entryDate}</span>
-              <span style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(170,95,35,.45)" }}>
+              <span style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: JOURNAL_INK_META }}>
                 {entry.weekday}
               </span>
             </div>
@@ -191,7 +195,7 @@ export function RightPage({
                 placeholder="Title your entry…"
                 style={{
                   fontFamily: "'Playfair Display',serif", fontStyle: "italic",
-                  fontSize: "21px", color: "rgba(35,14,3,.82)",
+                  fontSize: "21px", color: JOURNAL_INK_HEADING,
                   background: "transparent", border: "none", outline: "none",
                   width: "100%", lineHeight: 1.2, margin: "6px 0 8px",
                 }}
@@ -232,7 +236,7 @@ export function RightPage({
               />
 
               {isAiThinking && (
-                <div style={{ fontFamily: "'Lora',serif", fontStyle: "italic", fontSize: "11px", color: "rgba(100,55,20,.4)", marginTop: "4px" }}>
+                <div style={{ fontFamily: "'Lora',serif", fontStyle: "italic", fontSize: "11px", color: JOURNAL_INK_BODY, marginTop: "4px" }}>
                   Writing…
                 </div>
               )}
@@ -282,7 +286,7 @@ export function RightPage({
               {/* Title */}
               <div style={{
                 fontFamily: "'Playfair Display',serif", fontStyle: "italic",
-                fontSize: "22px", color: "rgba(35,14,3,.82)", lineHeight: 1.2,
+                fontSize: "22px", color: JOURNAL_INK_HEADING, lineHeight: 1.2,
                 margin: "6px 0 8px",
               }}>
                 {entry.title}
@@ -302,7 +306,7 @@ export function RightPage({
                   : (
                     <div style={{ textAlign: "center", paddingTop: "28px" }}>
                       <span style={{ fontSize: "28px", display: "block", opacity: 0.4, marginBottom: "10px" }}>✒</span>
-                      <span style={{ fontFamily: "'Lora',serif", fontStyle: "italic", fontSize: "12px", color: "rgba(120,70,30,.32)" }}>
+                      <span style={{ fontFamily: "'Lora',serif", fontStyle: "italic", fontSize: "12px", color: JOURNAL_INK_PLACEHOLDER }}>
                         This page awaits your words…
                       </span>
                     </div>
@@ -340,10 +344,7 @@ export function RightPage({
 
 function MiniLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{
-      fontFamily: "'Lora',serif", fontSize: "8px", letterSpacing: "2.5px",
-      textTransform: "uppercase", color: "rgba(100,55,20,.35)", marginBottom: "3px",
-    }}>
+    <div style={journalMiniLabelStyle}>
       {children}
     </div>
   );

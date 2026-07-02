@@ -5,6 +5,10 @@
  */
 export const AUTH_STATE_KEY = "navbar_was_authenticated";
 export const OAUTH_PENDING_KEY = "oauth_login_pending";
+/** Set before Google redirect — login vs register picks welcome vs registered toast */
+export const OAUTH_VARIANT_KEY = "oauth_login_variant";
+
+export type OAuthAuthVariant = "login" | "register";
 
 /** Demo account — matches prisma/seed.ts and register route ensureTestUser */
 export const TEST_ACCOUNT_EMAIL = "test@user.com";
