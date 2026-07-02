@@ -1,45 +1,52 @@
 # Cycle C4 — UI Polish + Entry Tags (active)
 
-**Status:** Stage 4 Verification — static PASS
+**Status:** Stage 4 Verification — static PASS · **Wave 23 shipped** · resume UI Wave 24+
 
 | Field | Value |
 |-------|-------|
 | CR | CR-0005 |
 | REQs | REQ-0029, REQ-0030, REQ-0031 |
-| Commits | `91bea2a` … `fe8f261` |
-| ARTs | ART-0068–0086 |
+| Commits | `91bea2a` … `7de8fc6` |
+| ARTs | ART-0068–0098 |
+| Unit tests | **55** Vitest PASS |
 
-## Deliverables
+## Core deliverables (REQ)
 
-- **REQ-0029:** UI polish wave 1 (cover, typewriter, footers, auth heights)
-- **REQ-0030:** Leather glass wave 2 (tokens, AvatarRing, OAuth paper btn)
-- **REQ-0031:** Tags persist/display/edit (mergePendingTag, TagsEditor)
+- **REQ-0029:** UI polish — landing, auth, dashboard, journal spread, nav, footers
+- **REQ-0030:** Leather glass tokens, glows, stagger, dialogs, tooltips
+- **REQ-0031:** Tags persist/display/edit (`mergePendingTag`, TagsEditor)
 
-## Key decisions
+## Recent waves (2026-06-29)
 
-DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills  
-DEC-0032–0037 — Journal dialog, Lucide icons, BookSpineMark, glow unclip (Waves 17–17c)
+| Wave | Summary | Key files |
+|------|---------|-----------|
+| 18–18e | Landing→auth handoff, parallel stagger, crossfade | `auth-landing-handoff.ts`, `BookCover.tsx` |
+| 19 | Auth CTA spinner until dashboard | `AuthFormSubmitButton`, `AuthCtaSpinner` |
+| 20 | OAuth welcome toast; logout 3D book close | `OAuthReturnSync`, `LogoutBookCloseOverlay` |
+| 21 | Journal ink; `BookSpreadHeader`; shelf tooltips | `journal-page-styles.ts`, `book-brand-styles.ts` |
+| 22 | `JournalBottomNav`; confirm `priority`; paper action hovers | `JournalBottomNav.tsx`, `ConfirmDialog` |
+| **23** | Defer delete confirm; nav flex-wrap; shelf glow outside button | `BookSpread`, `BookShelf`, `globals.css` |
 
-## Wave 15 (2026-06-29)
+## Wave 23 detail (latest)
 
-- **REQ-0029/0030:** Dashboard nav/shelf/stat glows; Dancing Script; typewriter greeting; responsive spines
+- **Problem:** Remove confirm lost when editor open (Radix z-index race); nav clipped; shelf glow square.
+- **Fix:** `pendingDeleteBookConfirm` / `pendingDeleteTarget` + effect after editor close; `.journal-nav-actions` wrap; `.journal-nav-shelf-slot` spotlight sibling.
+- **Decision:** DEC-0048
 
-## Wave 16 (2026-06-29)
+## Key decisions (index)
 
-- **REQ-0029/0030:** New journal plus visibility; shelf hover spotlight; stat text-only glow
+DEC-0021–0024 tags · DEC-0032–0037 dialog/spine (17–17c) · DEC-0041–0043 landing handoff · DEC-0044–0045 auth/OAuth · DEC-0046–0047 journal header/nav · **DEC-0048 Wave 23**
 
-## Wave 17 (2026-06-29)
+## Verification (2026-06-29)
 
-- **REQ-0029/0030:** Radix `dialog.tsx` journal paper modal; Lucide `cover-icons.ts`; `BookThemePreview`; `ConfirmDialog` shared shell
+lint · typecheck · **55** Vitest · build PASS · e2e NOT in CI
 
-## Wave 17b (2026-06-29)
+## Tomorrow — suggested UI focus
 
-- **REQ-0029/0030:** `BookSpineMark`; true 90vw×90vh; `.journal-picker-pad`; auth-style input glow; +10 icons
+1. Visual QA Wave 23 flows (manual).
+2. New screenshot issues → Wave 24 plan (ux-spec-author).
+3. Optional: Playwright case for edit→remove confirm defer.
 
-## Wave 17c (2026-06-29)
+## Out of scope for UI waves
 
-- **REQ-0029/0030:** Spine `writing-mode` inline axis; single dialog scroll; footer phantom line fix; `.dashboard-spine-slot-inner` hover glow
-
-## Verification
-
-31 Vitest · lint · typecheck · build PASS · TC-0031–0040 static PASS
+Cache invalidation paths · API routes · Prisma schema — unless REQ explicitly changes.

@@ -13,10 +13,9 @@
 ## Evidence Summary
 
 ```
-Scope: C4 REQ-0029–0031 + regression REQ-0007 | Traceability: 31 REQs, ART-0086
-Findings: PASS 22 static/unit | FLAG 2 | FAIL 0 | NOT RUN 15 e2e
-Decision Points: Dialog single-scroll unclip; spine writing-mode inline axis
-Log: 2026-06-29 | agile-v-core | Wave 17c sync | 31 Vitest PASS
+Scope: C4 REQ-0029–0031 + regression REQ-0007 | Traceability: 31 REQs, ART-0098
+Findings: PASS static/unit through Wave 23 | FAIL 0 | NOT RUN e2e in CI
+Log: 2026-06-29 | build-agent-js | Wave 23 | 55 Vitest PASS
 ```
 
 ## EvalGate (Gate 2)

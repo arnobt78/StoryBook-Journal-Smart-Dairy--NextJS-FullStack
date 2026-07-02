@@ -93,6 +93,15 @@
 | ART-0087 | C4 | lib | `src/lib/auth-landing-handoff.ts` + Wave 18–18d enter CSS | REQ-0005, REQ-0029 | implemented |
 | ART-0089 | C4 | component | `BookCover.tsx` landing greeting timing (Wave 18d) | REQ-0005, REQ-0029 | implemented |
 | ART-0088 | C4 | test | `src/lib/__tests__/auth-landing-handoff.test.ts` | REQ-0021 | implemented |
+| ART-0090 | C4 | lib | `src/lib/auth-stagger.ts`, `useAuthBookNavigation.ts` | REQ-0029–0030 | implemented |
+| ART-0091 | C4 | component | `AuthFormSubmitButton`, `AuthCtaSpinner` (Wave 19) | REQ-0004–0005 | implemented |
+| ART-0092 | C4 | component | `OAuthReturnSync`, `LogoutBookCloseOverlay`, `useSignOutWithBookClose` | REQ-0004–0005, REQ-0029 | implemented |
+| ART-0093 | C4 | lib+component | `journal-page-styles.ts`, `book-brand-styles.ts`, `BookSpreadHeader` | REQ-0029–0030 | implemented |
+| ART-0094 | C4 | ui | `src/components/ui/tooltip.tsx` + shelf/header tooltips | REQ-0029–0030 | implemented |
+| ART-0095 | C4 | component | `JournalBottomNav.tsx` | REQ-0029–0030 | implemented |
+| ART-0096 | C4 | lib | `journal-interaction-styles.ts` + `.journal-nav-*` CSS | REQ-0029–0030 | implemented |
+| ART-0097 | C4 | component | Wave 23 defer confirm in `BookSpread` + `BookShelf` | REQ-0029–0030 | implemented |
+| ART-0098 | C4 | styles | `globals.css` nav wrap + shelf-slot glow (Wave 23) | REQ-0029–0030 | implemented |
 
 ## Planned artifacts (backlog)
 

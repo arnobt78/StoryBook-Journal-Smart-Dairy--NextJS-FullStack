@@ -41,3 +41,4 @@
 | 2026-06-29T14:20:00Z | ui-wave18c-d | build-agent-js | C4 Wave 18c–18d: parallel stagger + greeting timing; 41 Vitest PASS | REQ-0005, REQ-0029 | CR-0005 |
 | 2026-06-29T17:25:00Z | ui-wave22 | build-agent-js | C4 Wave 22: JournalBottomNav, confirm priority stack; 55 Vitest PASS | REQ-0029–0030 | DEC-0047 |
 | 2026-06-29T17:37:00Z | ui-wave23 | build-agent-js | C4 Wave 23: defer delete confirm, nav wrap, shelf glow unclip; lint/typecheck/test/build PASS | REQ-0029–0030 | DEC-0048 |
+| 2026-06-28T18:00:00Z | session-close | build-agent-js | AQMS sync for tomorrow UI resume; STATE/C4/README/config/manifest updated | REQ-0024 | STATE.md |
