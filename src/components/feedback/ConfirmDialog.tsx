@@ -26,6 +26,8 @@ export type ConfirmDialogProps = {
   onCancel: () => void;
   /** paper = cream modal (shelf); dark = journal night theme */
   variant?: "paper" | "dark";
+  /** Stack above open editor modal (Wave 22 delete confirm) */
+  priority?: boolean;
 };
 
 export function ConfirmDialog({
@@ -38,6 +40,7 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
   variant = "paper",
+  priority = false,
 }: ConfirmDialogProps) {
   const isDark = variant === "dark";
 
@@ -49,6 +52,7 @@ export function ConfirmDialog({
       }}
     >
       <DialogContent
+        stackPriority={priority ? "confirm" : undefined}
         className={`journal-paper-dialog journal-paper-dialog--compact${
           isDark ? " journal-paper-dialog--dark" : ""
         }`}

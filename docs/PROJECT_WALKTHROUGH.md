@@ -151,6 +151,8 @@ Prisma models (`prisma/schema.prisma`):
 - **Journal readability (Wave 21):** `journal-page-styles.ts` bumps spread ink to auth parity (`.45–.55`); wired in LeftPage, RightPage, footers, tags.
 - **Golden book header (Wave 21):** `BookSpreadHeader` above `BookSpread` — cover icon + Dancing Script title + truncated `description`; full meta on Radix tooltip hover.
 - **Shelf tooltips (Wave 21):** `BookShelf` spine hover shows title + description via `ui/tooltip.tsx`; `TooltipProvider` in `DashboardClientShell`.
+- **Journal nav polish (Wave 22):** `JournalBottomNav` — `FilePlus`, shelf spotlight, per-button hover + tooltips; `.journal-paper-action-btn` darker hover on read footer.
+- **Confirm stacking (Wave 22):** `ConfirmDialog` `priority` prop; close `BookEditorModal` before delete confirm; paper dialog footer band removed.
 - **Auth layout:** `(auth)/layout.tsx` uses `.auth-book-viewport` — book spread ≈ **85vw × 85vh** (scoped `--page-w` / `--page-h`; dashboard journal keeps `:root` defaults). Both auth pages use `export const dynamic = "force-dynamic"` + `getAuthPageConfig()`.
 
 API routes consistently call `await auth()` and check `session?.user?.id` before Prisma calls, and use `userId` / `findFirst({ where: { id, userId }})` patterns to avoid cross-user access.

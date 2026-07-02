@@ -7,6 +7,7 @@
 import { AlignLeft, PencilLine, Trash2 } from "lucide-react";
 import type { JournalEntry } from "@/types";
 import { JOURNAL_INK_BODY } from "@/lib/journal-page-styles";
+import { JOURNAL_INTERACTION_CLASS as C } from "@/lib/journal-interaction-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
 
 type JournalReadFooterProps = {
@@ -67,20 +68,8 @@ export function JournalReadFooter({
             icon={Trash2}
             iconSize={13}
             onClick={onDeleteEntry}
-            className="leather-glass-action-btn"
-            style={{
-              fontFamily: "'Lora',serif",
-              fontSize: "9px",
-              letterSpacing: "1.5px",
-              textTransform: "uppercase",
-              background: "transparent",
-              color: "rgba(140,50,30,.6)",
-              border: "1px solid rgba(140,50,30,.25)",
-              padding: "4px 10px",
-              borderRadius: "4px",
-              cursor: "pointer",
-              flexShrink: 0,
-            }}
+            className={`${C.paperAction} ${C.paperActionDestructive}`}
+            style={{ fontSize: "9px", padding: "4px 10px" }}
           >
             Remove page
           </RippleButton>
@@ -90,20 +79,8 @@ export function JournalReadFooter({
           icon={PencilLine}
           iconSize={13}
           onClick={onStartWriting}
-          className="leather-glass-action-btn"
-          style={{
-            fontFamily: "'Lora',serif",
-            fontSize: "9.5px",
-            letterSpacing: "1.5px",
-            textTransform: "uppercase",
-            background: "transparent",
-            color: JOURNAL_INK_BODY,
-            border: "1px solid rgba(120,70,20,.2)",
-            padding: "4px 11px",
-            borderRadius: "4px",
-            cursor: "pointer",
-            flexShrink: 0,
-          }}
+          className={C.paperAction}
+          style={{ fontSize: "9.5px", padding: "4px 11px" }}
         >
           Edit
         </RippleButton>

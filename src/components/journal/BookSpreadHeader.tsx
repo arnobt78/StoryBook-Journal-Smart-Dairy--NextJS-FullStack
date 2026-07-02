@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/tooltip";
 import {
   BOOK_BRAND_GOLD_TEXT_STYLE,
-  BOOK_BRAND_ICON_STYLE,
   BOOK_BRAND_SEPARATOR_STYLE,
   BOOK_BRAND_SUBTITLE_STYLE,
   bookMetaNeedsTooltip,
@@ -39,7 +38,7 @@ export function BookSpreadHeader({
 
   const headerRow = (
     <div className="book-spread-header-row">
-      <span style={BOOK_BRAND_ICON_STYLE}>
+      <span className="book-spread-header-icon">
         <CoverIcon id={coverEmoji} size={18} />
       </span>
       <span style={BOOK_BRAND_GOLD_TEXT_STYLE}>{trimmedTitle}</span>

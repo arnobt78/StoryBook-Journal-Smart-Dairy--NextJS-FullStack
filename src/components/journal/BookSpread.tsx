@@ -30,16 +30,14 @@
  *  3D BOOK — flex row uses `transformStyle: preserve-3d` + mild perspective tilt;
  *    page shells set `pointerEvents: none` with inner stacks at `auto` (see Left/RightPage).
  */
-import type { ReactNode } from "react";
 import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { ChevronLeft, ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
 import { ConfirmDialog } from "@/components/feedback/ConfirmDialog";
 import { BookEditorModal } from "@/components/journal/BookEditorModal";
 import { BookSpreadHeader } from "@/components/journal/BookSpreadHeader";
+import { JournalBottomNav } from "@/components/journal/JournalBottomNav";
 import { LeftPage } from "./LeftPage";
 import { RightPage } from "./RightPage";
 import { PageFlipOverlay } from "./PageFlip";
@@ -117,6 +115,12 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     tags: [],
     location: "",
   });
+
+  /** Close editor before confirm so delete dialog stacks above BookEditorModal */
+  const openDeleteBookConfirm = useCallback(() => {
+    setShowEditBook(false);
+    setConfirmDeleteBook(true);
+  }, []);
 
   /* Track last flip direction so RightPage can apply the correct stagger class */
   const [lastFlipDir, setLastFlipDir] = useState<FlipDirection | null>(null);
@@ -643,7 +647,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           </RippleButton>
           <RippleButton
             type="button"
-            onClick={() => setConfirmDeleteBook(true)}
+            onClick={openDeleteBookConfirm}
             disabled={isFlipping || isWriting || isDeleting}
             style={{
               display: "block",
@@ -676,6 +680,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
         <ConfirmDialog
           open={confirmDeleteBook}
           variant="dark"
+          priority
           title="Remove this journal?"
           description={<>Every page in &ldquo;{bookTitle}&rdquo; will be permanently deleted.</>}
           confirmLabel="Remove journal"
@@ -767,144 +772,20 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
         </div>
 
-        {/* Navigation bar — cta-splash-glow adds outer leather amber glow on the pill */}
-        <div
-          className="leather-glass-nav-pill cta-splash-glow"
-          style={{
-            position: "absolute",
-            bottom: "-80px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            alignItems: "center",
-            gap: "14px",
-            padding: "10px 22px",
-            borderRadius: "50px",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {/* Vector shelf icon: same-origin `/public` asset, `unoptimized` keeps SVG decode cheap. */}
-          <NavBtn
-            onClick={() => router.push("/dashboard")}
-            title="Back to shelf"
-          >
-            <Image
-              src="/book-stack-2.svg"
-              alt=""
-              width={24}
-              height={24}
-              unoptimized
-              className="pointer-events-none block shrink-0 object-contain"
-              style={{ width: 24, height: 24, opacity: 0.88 }}
-            />
-          </NavBtn>
-          <Divider />
-          <NavBtn
-            onClick={goPrev}
-            disabled={currentIdx === 0 || isFlipping || isWriting}
-            title="Previous page"
-          >
-            <ChevronLeft size={18} strokeWidth={2} aria-hidden />
-          </NavBtn>
-          <span
-            style={{
-              fontFamily: "'IM Fell English',serif",
-              fontSize: "12px",
-              color: "rgba(255,195,110,.75)",
-              minWidth: "70px",
-              textAlign: "center",
-              textShadow: "0 0 8px rgba(255,165,60,.25)",
-            }}
-          >
-            {currentIdx + 1} of {entries.length}
-          </span>
-          <NavBtn
-            onClick={goNext}
-            disabled={
-              currentIdx === entries.length - 1 || isFlipping || isWriting
-            }
-            title="Next page"
-          >
-            <ChevronRight size={18} strokeWidth={2} aria-hidden />
-          </NavBtn>
-          <Divider />
-          <RippleButton
-            type="button"
-            icon={Plus}
-            iconSize={14}
-            onClick={newEntry}
-            disabled={isFlipping || isWriting}
-            style={{
-              fontFamily: "'Lora',serif",
-              fontSize: "9.5px",
-              letterSpacing: "2px",
-              textTransform: "uppercase",
-              background: "rgba(160,85,30,.25)",
-              color: "rgba(255,210,130,.9)",
-              border: "1px solid rgba(190,105,40,.38)",
-              padding: "5px 15px",
-              borderRadius: "20px",
-              cursor: "pointer",
-              opacity: isFlipping || isWriting ? 0.35 : 1,
-              transition: "all .2s",
-              flexShrink: 0,
-              textShadow: "0 0 8px rgba(255,175,70,.3)",
-            }}
-          >
-            New Entry
-          </RippleButton>
-          <Divider />
-          <RippleButton
-            type="button"
-            icon={Pencil}
-            iconSize={13}
-            onClick={() => setShowEditBook(true)}
-            disabled={isFlipping || isWriting || isSavingBook || isDeleting}
-            title="Edit journal"
-            style={{
-              fontFamily: "'Lora',serif",
-              fontSize: "9px",
-              letterSpacing: "1.5px",
-              textTransform: "uppercase",
-              background: "rgba(160,85,30,.2)",
-              color: "rgba(255,210,130,.88)",
-              border: "1px solid rgba(185,100,38,.36)",
-              padding: "5px 12px",
-              borderRadius: "20px",
-              cursor: "pointer",
-              opacity: isFlipping || isWriting || isSavingBook || isDeleting ? 0.35 : 1,
-              flexShrink: 0,
-              textShadow: "0 0 8px rgba(255,175,70,.28)",
-            }}
-          >
-            Edit journal
-          </RippleButton>
-          <RippleButton
-            type="button"
-            icon={Trash2}
-            iconSize={13}
-            onClick={() => setConfirmDeleteBook(true)}
-            disabled={isFlipping || isWriting || isDeleting}
-            title="Remove journal"
-            style={{
-              fontFamily: "'Lora',serif",
-              fontSize: "9px",
-              letterSpacing: "1.5px",
-              textTransform: "uppercase",
-              background: "rgba(100,30,10,.15)",
-              color: "rgba(255,165,110,.82)",
-              border: "1px solid rgba(220,100,60,.28)",
-              padding: "5px 12px",
-              borderRadius: "20px",
-              cursor: "pointer",
-              opacity: isFlipping || isWriting || isDeleting ? 0.35 : 1,
-              flexShrink: 0,
-              textShadow: "0 0 8px rgba(255,130,80,.3)",
-            }}
-          >
-            Remove journal
-          </RippleButton>
-        </div>
+        <JournalBottomNav
+          currentIdx={currentIdx}
+          entryCount={entries.length}
+          isFlipping={isFlipping}
+          isWriting={isWriting}
+          isSavingBook={isSavingBook}
+          isDeleting={isDeleting}
+          onBackToShelf={() => router.push("/dashboard")}
+          onPrev={goPrev}
+          onNext={goNext}
+          onNewEntry={newEntry}
+          onEditJournal={() => setShowEditBook(true)}
+          onRemoveJournal={openDeleteBookConfirm}
+        />
 
         <BookEditorModal
           key={`edit-${bookId}-${showEditBook}`}
@@ -918,6 +799,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
         <ConfirmDialog
           open={confirmDeleteEntry}
           variant="dark"
+          priority
           title="Remove this page?"
           description={
             <>
@@ -932,6 +814,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
         <ConfirmDialog
           open={confirmDeleteBook}
           variant="dark"
+          priority
           title="Remove this journal?"
           description={
             <>
@@ -952,54 +835,5 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
         />
       </div>
     </>
-  );
-}
-
-function NavBtn({
-  children,
-  onClick,
-  disabled,
-  title,
-}: {
-  children: ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
-  title?: string;
-}) {
-  return (
-    <RippleButton
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      title={title}
-      style={{
-        background: "none",
-        border: "none",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: disabled ? "default" : "pointer",
-        color: "rgba(255,175,90,.55)",
-        fontSize: "15px",
-        padding: "4px 8px",
-        borderRadius: "8px",
-        opacity: disabled ? 0.18 : 1,
-        transition: "all .2s",
-      }}
-    >
-      {children}
-    </RippleButton>
-  );
-}
-
-function Divider() {
-  return (
-    <div
-      style={{
-        width: "1px",
-        height: "14px",
-        background: "rgba(255,160,60,.3)",
-      }}
-    />
   );
 }

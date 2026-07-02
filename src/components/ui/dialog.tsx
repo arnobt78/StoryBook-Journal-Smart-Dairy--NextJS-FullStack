@@ -34,13 +34,23 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     showClose?: boolean;
+    /** Renders above editor modals (z-index 110/111) — use for delete confirms */
+    stackPriority?: "confirm";
   }
->(({ className, children, showClose = false, ...props }, ref) => (
+>(({ className, children, showClose = false, stackPriority, ...props }, ref) => (
   <DialogPortal>
-    <DialogOverlay />
+    <DialogOverlay
+      className={
+        stackPriority === "confirm" ? "journal-dialog-overlay--confirm" : undefined
+      }
+    />
     <DialogPrimitive.Content
       ref={ref}
-      className={cn("journal-dialog-content", className)}
+      className={cn(
+        "journal-dialog-content",
+        stackPriority === "confirm" && "journal-dialog-content--confirm",
+        className,
+      )}
       {...props}
     >
       {children}

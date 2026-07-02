@@ -1555,11 +1555,22 @@ body {
   z-index: 1;
   display: inline-flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
   gap: 0 8px;
   max-width: 100%;
   cursor: default;
+}
+
+.book-spread-header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: rgba(255, 195, 110, 0.88);
+  filter: drop-shadow(0 0 10px rgba(255, 155, 50, 0.42))
+    drop-shadow(0 1px 5px rgba(120, 60, 10, 0.28));
+  flex-shrink: 0;
 }
 
 .book-spread-header-desc {
@@ -1619,6 +1630,204 @@ body {
 
 .journal-ink-meta {
   color: rgba(100, 55, 20, 0.55);
+}
+
+/* ─── Wave 22 — cream paper action buttons (read/write footers) ─────────── */
+.journal-paper-action-btn {
+  font-family: "Lora", serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: rgba(100, 55, 20, 0.55);
+  border: 1px solid rgba(120, 70, 20, 0.2);
+  transition:
+    color 0.2s,
+    text-shadow 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+
+.journal-paper-action-btn--destructive {
+  color: rgba(140, 50, 30, 0.6);
+  border-color: rgba(140, 50, 30, 0.25);
+}
+
+.journal-paper-action-btn:hover:not(:disabled) {
+  color: rgba(35, 14, 3, 0.88);
+  text-shadow: 0 0 12px rgba(255, 165, 60, 0.35);
+  box-shadow: 0 0 14px rgba(255, 140, 50, 0.2);
+  border-color: rgba(120, 70, 20, 0.35);
+}
+
+.journal-paper-action-btn--destructive:hover:not(:disabled) {
+  color: rgba(90, 25, 15, 0.92);
+  text-shadow: 0 0 12px rgba(255, 120, 80, 0.35);
+  box-shadow: 0 0 14px rgba(220, 80, 50, 0.22);
+  border-color: rgba(140, 50, 30, 0.4);
+}
+
+/* ─── Wave 22 — journal bottom nav icon + pill buttons ───────────────────── */
+.journal-nav-icon-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255, 175, 90, 0.55);
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition:
+    color 0.2s,
+    text-shadow 0.2s,
+    box-shadow 0.2s,
+    opacity 0.2s;
+}
+
+.journal-nav-icon-btn:hover:not(:disabled) {
+  color: rgba(255, 220, 150, 1);
+  text-shadow: 0 0 14px rgba(255, 185, 80, 0.55);
+  box-shadow: 0 0 16px rgba(255, 160, 60, 0.22);
+}
+
+.journal-nav-icon-btn:disabled {
+  cursor: default;
+  opacity: 0.18;
+}
+
+.journal-nav-shelf-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.journal-nav-shelf-spotlight {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 52px;
+  height: 52px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 165, 55, 0.32) 0%,
+    rgba(255, 130, 35, 0.14) 48%,
+    transparent 72%
+  );
+  filter: blur(12px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+  transition: opacity 0.25s ease;
+}
+
+.journal-nav-shelf-wrap:hover .journal-nav-shelf-spotlight {
+  opacity: 1;
+}
+
+.journal-nav-shelf-icon {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  opacity: 0.88;
+  transition: opacity 0.2s, filter 0.2s;
+}
+
+.journal-nav-shelf-wrap:hover .journal-nav-shelf-icon {
+  opacity: 1;
+  filter: drop-shadow(0 0 10px rgba(255, 175, 70, 0.45));
+}
+
+.journal-nav-pill-btn {
+  font-family: "Lora", serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: rgba(160, 85, 30, 0.2);
+  color: rgba(255, 210, 130, 0.88);
+  border: 1px solid rgba(185, 100, 38, 0.36);
+  text-shadow: 0 0 8px rgba(255, 175, 70, 0.28);
+  transition:
+    color 0.2s,
+    background 0.2s,
+    border-color 0.2s,
+    text-shadow 0.2s,
+    box-shadow 0.2s,
+    opacity 0.2s;
+}
+
+.journal-nav-pill-btn:hover:not(:disabled) {
+  color: rgba(255, 235, 180, 1);
+  background: rgba(160, 85, 30, 0.32);
+  border-color: rgba(210, 120, 50, 0.5);
+  text-shadow: 0 0 14px rgba(255, 195, 90, 0.55);
+  box-shadow: 0 0 18px rgba(255, 160, 60, 0.28);
+}
+
+.journal-nav-pill-btn--new {
+  background: rgba(160, 85, 30, 0.25);
+  border-color: rgba(190, 105, 40, 0.38);
+  color: rgba(255, 210, 130, 0.9);
+}
+
+.journal-nav-pill-btn--destructive {
+  background: rgba(100, 30, 10, 0.15);
+  color: rgba(255, 165, 110, 0.82);
+  border-color: rgba(220, 100, 60, 0.28);
+  text-shadow: 0 0 8px rgba(255, 130, 80, 0.3);
+}
+
+.journal-nav-pill-btn--destructive:hover:not(:disabled) {
+  color: rgba(255, 200, 150, 1);
+  background: rgba(120, 35, 12, 0.28);
+  border-color: rgba(240, 110, 70, 0.45);
+  text-shadow: 0 0 14px rgba(255, 120, 80, 0.5);
+  box-shadow: 0 0 18px rgba(255, 100, 60, 0.28);
+}
+
+.journal-nav-pill-btn:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.journal-nav-divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 160, 60, 0.3);
+  flex-shrink: 0;
+}
+
+.journal-nav-page-count {
+  font-family: "IM Fell English", serif;
+  font-size: 12px;
+  color: rgba(255, 195, 110, 0.75);
+  min-width: 70px;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(255, 165, 60, 0.25);
+  flex-shrink: 0;
+}
+
+.journal-bottom-nav {
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 22px;
+  border-radius: 50px;
+  white-space: nowrap;
 }
 
 /* ─── Auth book glow — ambient leather spotlight around open spread ─────────
@@ -2028,6 +2237,10 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   animation: journalDialogOverlayIn 0.2s ease;
 }
 
+.journal-dialog-overlay--confirm {
+  z-index: 110;
+}
+
 .journal-dialog-overlay[data-state="closed"] {
   animation: journalDialogOverlayOut 0.15s ease forwards;
 }
@@ -2042,6 +2255,10 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   flex-direction: column;
   outline: none;
   animation: journalDialogContentIn 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.journal-dialog-content--confirm {
+  z-index: 111;
 }
 
 .journal-dialog-content[data-state="closed"] {
@@ -2127,6 +2344,13 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   padding-top: 16px;
   border-top: 1px solid rgba(120, 70, 20, 0.1);
   background: inherit;
+}
+
+/* Paper editor — footer blends with dialog body (no visible band) */
+.journal-paper-dialog:not(.journal-paper-dialog--compact) .journal-dialog-footer {
+  border-top: none;
+  background: transparent;
+  padding-top: 12px;
 }
 
 .journal-paper-dialog--dark .journal-dialog-footer {

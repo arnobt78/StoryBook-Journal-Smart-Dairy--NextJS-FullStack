@@ -235,7 +235,11 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
             onClick={() => router.push(`/journal/${book.id}`)}
             onPrefetch={() => prefetchBook(book.id)}
             onEdit={() => setEditTarget(book)}
-            onDelete={() => setDeleteTarget(book)}
+            onDelete={() => {
+              setShowCreate(false);
+              setEditTarget(null);
+              setDeleteTarget(book);
+            }}
           />
         ))}
 
@@ -340,6 +344,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
 
       <ConfirmDialog
         open={Boolean(deleteTarget)}
+        priority
         title="Remove this journal?"
         description={
           deleteTarget ? (

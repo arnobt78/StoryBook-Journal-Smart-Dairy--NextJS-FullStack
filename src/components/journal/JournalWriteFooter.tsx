@@ -6,6 +6,7 @@
  */
 import { AlignLeft, Check, Sparkles, X } from "lucide-react";
 import { JOURNAL_INK_BODY } from "@/lib/journal-page-styles";
+import { JOURNAL_INTERACTION_CLASS as C } from "@/lib/journal-interaction-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
 
 type JournalWriteFooterProps = {
@@ -74,19 +75,10 @@ export function JournalWriteFooter({
           icon={X}
           iconSize={13}
           onClick={onCancel}
-          className="leather-glass-action-btn"
+          className={C.paperAction}
           style={{
-            fontFamily: "'Lora',serif",
             fontSize: "9.5px",
-            letterSpacing: "1.5px",
-            textTransform: "uppercase",
-            background: "transparent",
-            color: "rgba(100,55,20,.55)",
-            border: "1px solid rgba(120,70,20,.22)",
             padding: "5px 12px",
-            borderRadius: "4px",
-            cursor: "pointer",
-            flexShrink: 0,
           }}
         >
           Cancel
