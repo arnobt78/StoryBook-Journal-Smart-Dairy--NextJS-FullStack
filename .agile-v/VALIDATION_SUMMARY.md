@@ -3,11 +3,11 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-wave17c-2026-06-29 |
-| **Status** | Stage 4 static complete; Waves 15–17c shipped; Gate 2 pending e2e |
+| **Revision** | C4-ui-wave23-2026-06-29 |
+| **Status** | Stage 4 static complete; Waves 1–23 shipped; Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
-| **Last Updated** | 2026-06-29T15:50:00Z |
+| **Last Updated** | 2026-06-28T18:00:00Z |
 | **Verifier** | red-team-verifier (static) + agile-v-core (sync) |
 
 ## Evidence Summary
