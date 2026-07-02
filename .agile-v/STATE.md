@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave22-2026-06-29 |
-| **Last commit** | ae6e7cc — feat(ui) Wave 22 journal nav + confirm stack |
+| **Revision** | C4-ui-wave23-2026-06-29 |
+| **Last commit** | (pending) — feat(ui) Wave 23 journal nav defer + wrap |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-29T17:25:00Z |
-| **Updated By** | build-agent-js (C4 Wave 22) |
+| **Last Updated** | 2026-06-29T17:35:00Z |
+| **Updated By** | build-agent-js (C4 Wave 23) |
 
 ## Stage checklist
 
@@ -74,6 +74,7 @@
 | OAuth welcome toast + logout 3D | REQ-0004, REQ-0005, REQ-0029 | ✅ Wave 20 |
 | Journal ink + golden header + tooltips | REQ-0029–0030 | ✅ Wave 21 |
 | Nav hovers + confirm stack + dialog footer | REQ-0029–0030 | ✅ Wave 22 |
+| Nav defer confirm + wrap + shelf glow unclip | REQ-0029–0030 | ✅ Wave 23 |
 
 ## Backlog
 

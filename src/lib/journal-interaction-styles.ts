@@ -8,6 +8,6 @@ export const JOURNAL_INTERACTION_CLASS = {
   navIcon: "journal-nav-icon-btn",
   navPill: "journal-nav-pill-btn",
   navPillDestructive: "journal-nav-pill-btn--destructive",
-  navShelfWrap: "journal-nav-shelf-wrap",
+  navShelfSlot: "journal-nav-shelf-slot",
   navShelfSpotlight: "journal-nav-shelf-spotlight",
 } as const;

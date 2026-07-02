@@ -49,3 +49,4 @@
 | 2026-06-29T17:00:00Z | DEC-0045 | C4 | build-agent-js | Wave 20: OAuthReturnSync welcome toast; LogoutBookCloseOverlay 360° | OAUTH_VARIANT_KEY; useSignOutWithBookClose for nav + ⌘K | REQ-0004, REQ-0005, REQ-0029 |
 | 2026-06-29T17:05:00Z | DEC-0046 | C4 | build-agent-js | Wave 21: journal-page-styles ink; BookSpreadHeader; Radix tooltip on shelf | book-brand-styles shared with auth; no new invalidation paths | REQ-0029–0030 |
 | 2026-06-29T17:25:00Z | DEC-0047 | C4 | build-agent-js | Wave 22: JournalBottomNav; paper-action hover; ConfirmDialog priority stack | Close editor before delete; z-index 110/111 above editor modal | REQ-0029–0030 |
+| 2026-06-29T17:35:00Z | DEC-0048 | C4 | build-agent-js | Wave 23: deferred delete confirm after editor exit; nav flex-wrap; shelf spotlight outside RippleButton | `pendingDeleteBookConfirm` effect; tooltips on icon controls only; `.journal-nav-actions` | REQ-0029–0030 |

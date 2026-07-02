@@ -10,7 +10,7 @@
  *  Optimistic TanStack cache updates immediately; `refreshCount()` bumps the nav badge.
  *  Hover prefetch (`useJournalPrefetch`) warms book detail before navigation.
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
@@ -69,6 +69,9 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
     (JournalBook & { _count?: { entries: number } }) | null
   >(null);
   const [deleteTarget, setDeleteTarget] = useState<
+    (JournalBook & { _count?: { entries: number } }) | null
+  >(null);
+  const [pendingDeleteTarget, setPendingDeleteTarget] = useState<
     (JournalBook & { _count?: { entries: number } }) | null
   >(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -191,6 +194,33 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
 
   const editorOpen = showCreate || Boolean(editTarget);
 
+  useEffect(() => {
+    if (!editorOpen && pendingDeleteTarget) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- wait for editor exit before confirm
+      setDeleteTarget(pendingDeleteTarget);
+      setPendingDeleteTarget(null);
+    }
+  }, [editorOpen, pendingDeleteTarget]);
+
+  const closeEditor = () => {
+    if (isSaving) return;
+    setShowCreate(false);
+    setEditTarget(null);
+    setPendingDeleteTarget(null);
+  };
+
+  const openDeleteConfirm = (
+    book: JournalBook & { _count?: { entries: number } },
+  ) => {
+    if (editorOpen) {
+      setPendingDeleteTarget(book);
+      setShowCreate(false);
+      setEditTarget(null);
+      return;
+    }
+    setDeleteTarget(book);
+  };
+
   return (
     <div style={{ maxWidth: "900px", margin: "0 auto" }}>
       <div style={{ marginBottom: "48px" }}>
@@ -235,11 +265,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
             onClick={() => router.push(`/journal/${book.id}`)}
             onPrefetch={() => prefetchBook(book.id)}
             onEdit={() => setEditTarget(book)}
-            onDelete={() => {
-              setShowCreate(false);
-              setEditTarget(null);
-              setDeleteTarget(book);
-            }}
+            onDelete={() => openDeleteConfirm(book)}
           />
         ))}
 
@@ -331,11 +357,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
         mode={editTarget ? "edit" : "create"}
         initialValues={editTarget ? bookToFormValues(editTarget) : undefined}
         loading={isSaving}
-        onClose={() => {
-          if (isSaving) return;
-          setShowCreate(false);
-          setEditTarget(null);
-        }}
+        onClose={closeEditor}
         onSubmit={(values) => {
           if (editTarget) void handleEdit(values);
           else void handleCreate(values);

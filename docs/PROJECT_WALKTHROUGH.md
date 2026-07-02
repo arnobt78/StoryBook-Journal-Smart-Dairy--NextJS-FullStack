@@ -153,6 +153,9 @@ Prisma models (`prisma/schema.prisma`):
 - **Shelf tooltips (Wave 21):** `BookShelf` spine hover shows title + description via `ui/tooltip.tsx`; `TooltipProvider` in `DashboardClientShell`.
 - **Journal nav polish (Wave 22):** `JournalBottomNav` — `FilePlus`, shelf spotlight, per-button hover + tooltips; `.journal-paper-action-btn` darker hover on read footer.
 - **Confirm stacking (Wave 22):** `ConfirmDialog` `priority` prop; close `BookEditorModal` before delete confirm; paper dialog footer band removed.
+- **Nav defer confirm (Wave 23):** `pendingDeleteBookConfirm` / `pendingDeleteTarget` — confirm opens after editor unmounts (fixes Radix z-index race).
+- **Nav layout (Wave 23):** `.journal-bottom-nav` flex-wrap + `max-width`; `.journal-nav-actions` groups New/Edit/Remove; tooltips on shelf + arrows only.
+- **Shelf glow (Wave 23):** Spotlight moved outside `RippleButton` (`.journal-nav-shelf-slot`); `overflow: visible` on nav pill.
 - **Auth layout:** `(auth)/layout.tsx` uses `.auth-book-viewport` — book spread ≈ **85vw × 85vh** (scoped `--page-w` / `--page-h`; dashboard journal keeps `:root` defaults). Both auth pages use `export const dynamic = "force-dynamic"` + `getAuthPageConfig()`.
 
 API routes consistently call `await auth()` and check `session?.user?.id` before Prisma calls, and use `userId` / `findFirst({ where: { id, userId }})` patterns to avoid cross-user access.

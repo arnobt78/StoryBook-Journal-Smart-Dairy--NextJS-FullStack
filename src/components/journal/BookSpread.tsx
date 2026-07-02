@@ -30,7 +30,7 @@
  *  3D BOOK — flex row uses `transformStyle: preserve-3d` + mild perspective tilt;
  *    page shells set `pointerEvents: none` with inner stacks at `auto` (see Left/RightPage).
  */
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
@@ -104,6 +104,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
   const [isAiThinking, setIsAiThinking] = useState(false);
   const [confirmDeleteEntry, setConfirmDeleteEntry] = useState(false);
   const [confirmDeleteBook, setConfirmDeleteBook] = useState(false);
+  const [pendingDeleteBookConfirm, setPendingDeleteBookConfirm] = useState(false);
   const [showEditBook, setShowEditBook] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSavingBook, setIsSavingBook] = useState(false);
@@ -116,11 +117,29 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     location: "",
   });
 
-  /** Close editor before confirm so delete dialog stacks above BookEditorModal */
-  const openDeleteBookConfirm = useCallback(() => {
+  const closeEditBook = useCallback(() => {
+    if (isSavingBook) return;
     setShowEditBook(false);
+    setPendingDeleteBookConfirm(false);
+  }, [isSavingBook]);
+
+  /** Defer confirm until editor unmounts so Radix dialog does not compete at z-index */
+  const openDeleteBookConfirm = useCallback(() => {
+    if (showEditBook) {
+      setPendingDeleteBookConfirm(true);
+      setShowEditBook(false);
+      return;
+    }
     setConfirmDeleteBook(true);
-  }, []);
+  }, [showEditBook]);
+
+  useEffect(() => {
+    if (!showEditBook && pendingDeleteBookConfirm) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- wait for editor exit before confirm
+      setPendingDeleteBookConfirm(false);
+      setConfirmDeleteBook(true);
+    }
+  }, [showEditBook, pendingDeleteBookConfirm]);
 
   /* Track last flip direction so RightPage can apply the correct stagger class */
   const [lastFlipDir, setLastFlipDir] = useState<FlipDirection | null>(null);
@@ -674,7 +693,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           mode="edit"
           initialValues={bookToFormValues(book)}
           loading={isSavingBook}
-          onClose={() => !isSavingBook && setShowEditBook(false)}
+          onClose={closeEditBook}
           onSubmit={(values) => void handleUpdateBook(values)}
         />
         <ConfirmDialog
@@ -793,7 +812,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           mode="edit"
           initialValues={bookToFormValues(book)}
           loading={isSavingBook}
-          onClose={() => !isSavingBook && setShowEditBook(false)}
+          onClose={closeEditBook}
           onSubmit={(values) => void handleUpdateBook(values)}
         />
         <ConfirmDialog

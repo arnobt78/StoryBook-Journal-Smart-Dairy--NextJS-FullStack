@@ -1698,19 +1698,24 @@ body {
   opacity: 0.18;
 }
 
-.journal-nav-shelf-wrap {
+.journal-nav-shelf-slot {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
+}
+
+.journal-nav-icon-btn--shelf {
+  overflow: visible !important;
 }
 
 .journal-nav-shelf-spotlight {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 52px;
-  height: 52px;
+  width: 64px;
+  height: 64px;
   transform: translate(-50%, -50%);
   background: radial-gradient(
     ellipse at 50% 50%,
@@ -1718,7 +1723,7 @@ body {
     rgba(255, 130, 35, 0.14) 48%,
     transparent 72%
   );
-  filter: blur(12px);
+  filter: blur(14px);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
@@ -1726,7 +1731,7 @@ body {
   transition: opacity 0.25s ease;
 }
 
-.journal-nav-shelf-wrap:hover .journal-nav-shelf-spotlight {
+.journal-nav-shelf-slot:hover .journal-nav-shelf-spotlight {
   opacity: 1;
 }
 
@@ -1741,7 +1746,7 @@ body {
   transition: opacity 0.2s, filter 0.2s;
 }
 
-.journal-nav-shelf-wrap:hover .journal-nav-shelf-icon {
+.journal-nav-shelf-slot:hover .journal-nav-shelf-icon {
   opacity: 1;
   filter: drop-shadow(0 0 10px rgba(255, 175, 70, 0.45));
 }
@@ -1823,11 +1828,30 @@ body {
   left: 50%;
   transform: translateX(-50%);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
-  padding: 10px 22px;
+  justify-content: center;
+  gap: clamp(8px, 2vw, 14px);
+  padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 22px);
   border-radius: 50px;
-  white-space: nowrap;
+  max-width: min(
+    96vw,
+    calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 80px)
+  );
+  width: max-content;
+  overflow: visible;
+}
+
+.journal-nav-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2vw, 14px);
+}
+
+.leather-glass-nav-pill.journal-bottom-nav {
+  overflow: visible;
 }
 
 /* ─── Auth book glow — ambient leather spotlight around open spread ─────────

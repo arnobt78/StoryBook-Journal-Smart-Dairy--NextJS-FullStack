@@ -2,7 +2,7 @@
 
 /**
  * Bottom navigation pill below the open journal spread — shelf shortcut, page
- * controls, and journal CRUD actions. Hover glow + Radix tooltips per control.
+ * controls, and journal CRUD actions. Hover glow + Radix tooltips on icon controls.
  */
 import type { ReactNode } from "react";
 import Image from "next/image";
@@ -56,9 +56,13 @@ export function JournalBottomNav({
   return (
     <div className="journal-bottom-nav leather-glass-nav-pill cta-splash-glow">
       <NavTooltip label="Back to shelf">
-        <RippleButton type="button" onClick={onBackToShelf} className={C.navIcon}>
-          <span className={C.navShelfWrap}>
-            <span aria-hidden className={C.navShelfSpotlight} />
+        <span className={C.navShelfSlot}>
+          <span aria-hidden className={C.navShelfSpotlight} />
+          <RippleButton
+            type="button"
+            onClick={onBackToShelf}
+            className={`${C.navIcon} journal-nav-icon-btn--shelf`}
+          >
             <Image
               src="/book-stack-2.svg"
               alt=""
@@ -67,8 +71,8 @@ export function JournalBottomNav({
               unoptimized
               className="journal-nav-shelf-icon pointer-events-none"
             />
-          </span>
-        </RippleButton>
+          </RippleButton>
+        </span>
       </NavTooltip>
 
       <div className="journal-nav-divider" aria-hidden />
@@ -101,7 +105,7 @@ export function JournalBottomNav({
 
       <div className="journal-nav-divider" aria-hidden />
 
-      <NavTooltip label="New entry">
+      <div className="journal-nav-actions">
         <RippleButton
           type="button"
           icon={FilePlus}
@@ -113,11 +117,9 @@ export function JournalBottomNav({
         >
           New Entry
         </RippleButton>
-      </NavTooltip>
 
-      <div className="journal-nav-divider" aria-hidden />
+        <div className="journal-nav-divider" aria-hidden />
 
-      <NavTooltip label="Edit journal">
         <RippleButton
           type="button"
           icon={Pencil}
@@ -129,9 +131,7 @@ export function JournalBottomNav({
         >
           Edit journal
         </RippleButton>
-      </NavTooltip>
 
-      <NavTooltip label="Remove journal">
         <RippleButton
           type="button"
           icon={Trash2}
@@ -143,7 +143,7 @@ export function JournalBottomNav({
         >
           Remove journal
         </RippleButton>
-      </NavTooltip>
+      </div>
     </div>
   );
 }
