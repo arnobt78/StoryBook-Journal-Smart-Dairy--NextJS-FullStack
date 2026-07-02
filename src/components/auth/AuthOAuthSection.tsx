@@ -30,7 +30,11 @@ export function AuthOAuthSection({
 
   return (
     <>
-      <div {...authStaggerRowProps(orStaggerIndex, { style: { marginTop: "14px" } })}>
+      <div
+        {...authStaggerRowProps(orStaggerIndex, {
+          style: { marginTop: "14px" },
+        })}
+      >
         <AuthOrSeparator label="or" compact />
       </div>
       <div {...authStaggerRowProps(googleStaggerIndex)}>

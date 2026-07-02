@@ -82,6 +82,17 @@
 | ART-0076 | C4 | component | `JournalEntryTagsEditor.tsx` | REQ-0031 | implemented |
 | ART-0077 | C4 | lib | `src/lib/journal-tags.ts` | REQ-0031 | implemented |
 | ART-0078 | C4 | config | `next.config.ts` prod-only static cache | REQ-0030 | implemented |
+| ART-0079 | C4 | ui | `src/components/ui/dialog.tsx` | REQ-0029–0030 | implemented |
+| ART-0080 | C4 | component | `src/components/journal/BookEditorModal.tsx` (Radix paper dialog) | REQ-0029–0030 | implemented |
+| ART-0081 | C4 | constants+ui | `src/constants/cover-icons.ts`, `CoverIcon.tsx` | REQ-0029–0030 | implemented |
+| ART-0082 | C4 | component | `src/components/journal/BookThemePreview.tsx` | REQ-0029–0030 | implemented |
+| ART-0083 | C4 | component | `src/components/journal/BookSpineMark.tsx` | REQ-0029–0030 | implemented |
+| ART-0084 | C4 | ui | `src/components/feedback/ConfirmDialog.tsx` (shared dialog shell) | REQ-0029–0030 | implemented |
+| ART-0085 | C4 | test | `src/lib/__tests__/cover-icon.test.ts` | REQ-0021 | implemented |
+| ART-0086 | C4 | styles | `globals.css` journal dialog + spine (Waves 17–17c) | REQ-0029–0030 | implemented |
+| ART-0087 | C4 | lib | `src/lib/auth-landing-handoff.ts` + Wave 18–18d enter CSS | REQ-0005, REQ-0029 | implemented |
+| ART-0089 | C4 | component | `BookCover.tsx` landing greeting timing (Wave 18d) | REQ-0005, REQ-0029 | implemented |
+| ART-0088 | C4 | test | `src/lib/__tests__/auth-landing-handoff.test.ts` | REQ-0021 | implemented |
 
 ## Planned artifacts (backlog)
 

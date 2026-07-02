@@ -14,4 +14,16 @@ describe("authStaggerRowProps", () => {
   it("uses index 0 for first row", () => {
     expect(authStaggerRowProps(0).style).toEqual({ "--auth-stagger-i": 0 });
   });
+
+  it("merges optional className and style", () => {
+    const props = authStaggerRowProps(2, {
+      className: "auth-field",
+      style: { marginBottom: "12px" },
+    });
+    expect(props.className).toBe("auth-stagger-row auth-field");
+    expect(props.style).toEqual({
+      "--auth-stagger-i": 2,
+      marginBottom: "12px",
+    });
+  });
 });

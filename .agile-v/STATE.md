@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave17b-2026-06-29 |
-| **Last commit** | `32ae020` — fix(ui) C4 Wave 17b dialog spine polish |
+| **Revision** | C4-ui-wave18d-2026-06-29 |
+| **Last commit** | (pending) — fix(ui) Wave 18c–18d landing→auth choreography |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,8 +16,8 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-06-29T13:30:00Z |
-| **Updated By** | build-agent-js (C4 Wave 17) |
+| **Last Updated** | 2026-06-29T15:00:00Z |
+| **Updated By** | build-agent-js (C4 Wave 18c) |
 
 ## Stage checklist
 
@@ -26,7 +26,7 @@
 | 1 Requirements | **COMPLETE** | REQ-0001–0031; CR-0001–0005 |
 | 2 Validation | **COMPLETE** | `phases/02-validation/SUMMARY.md` |
 | 3 Synthesis | **COMPLETE** | ART-0001–0078; commits 7d3c3ed→8f88e90 |
-| 4 Verification | **IN_PROGRESS** | 31 Vitest PASS; lint/typecheck/build PASS (2026-06-29) |
+| 4 Verification | **IN_PROGRESS** | 41 Vitest PASS; lint/typecheck/build PASS (2026-06-29) |
 | 5 Acceptance | NOT_STARTED | — |
 
 ## Cycle rollup
@@ -46,7 +46,7 @@
 | Leather glass wave 2 | REQ-0030 | ✅ |
 | Entry tags display/edit/persist | REQ-0031 | ✅ |
 | Invalidation single entry | REQ-0007 | ✅ unchanged |
-| Vitest | REQ-0021 | ✅ 24 unit |
+| Vitest | REQ-0021 | ✅ 41 unit |
 | Self-hosted fonts (15 WOFF2) | REQ-0029 | ✅ Wave 3 |
 | Landing cover redesign + glows | REQ-0029 | ✅ Wave 3 |
 | Auth book spotlight | REQ-0030 | ✅ Wave 3 |
@@ -65,6 +65,10 @@
 | Spine glow tune (hex-alpha + drop-shadow) | REQ-0029–0030 | ✅ Wave 16 |
 | Journal dialog + Lucide cover icons | REQ-0029–0030 | ✅ Wave 17 |
 | Dialog 90% + spine mark + glow unclip | REQ-0029–0030 | ✅ Wave 17b |
+| Spine inline + dialog glow/footer + shelf glow | REQ-0029–0030 | ✅ Wave 17c |
+| Landing→auth book enter (handoff + CSS) | REQ-0005, REQ-0029 | ✅ Wave 18 |
+| Landing→auth parallel sync stagger (revert 18b phases) | REQ-0005, REQ-0029 | ✅ Wave 18c |
+| Landing greeting hold before auth nav | REQ-0005, REQ-0029 | ✅ Wave 18d |
 
 ## Backlog
 

@@ -39,7 +39,13 @@
 | TC-0033 | C4 | REQ-0030 | Nav AvatarRing circular; toast center align | audit | **PASS** | 2026-06-07 |
 | TC-0034 | C4 | REQ-0031 | Tag PATCH persists to DB (mergePendingTag) | unit+db | **PASS** | 2026-06-07 |
 | TC-0035 | C4 | REQ-0031 | Tags visible on long entry; × removes in edit | audit | **PASS** | 2026-06-07 |
+| TC-0036 | C4 | REQ-0029 | Self-hosted fonts + landing cover redesign | audit | **PASS** | 2026-06-28 |
+| TC-0037 | C4 | REQ-0030 | Auth spotlight + dashboard stagger + nav pill | audit | **PASS** | 2026-06-28 |
+| TC-0038 | C4 | REQ-0024 | Wave 3 deep audit micro-fixes | audit | **PASS** | 2026-06-28 |
+| TC-0039 | C4 | REQ-0029–0030 | Radix journal dialog + Lucide cover icons + theme preview | audit+unit | **PASS** | 2026-06-29 |
+| TC-0040 | C4 | REQ-0029–0030 | BookSpineMark inline + dialog glow unclip + shelf glow | audit | **PASS** | 2026-06-29 |
+| TC-0041 | C4 | REQ-0005, REQ-0029 | Landing handoff + auth book enter CSS | unit+audit | **PASS** | 2026-06-29 |
 
 ## Regression baseline (Gate 2)
 
-TC-0001–0014 + TC-0021–0035 — **19 PASS static/unit, 1 FLAG, 15 NOT RUN e2e**
+TC-0001–0014 + TC-0021–0041 — **26 PASS static/unit, 1 FLAG, 15 NOT RUN e2e**

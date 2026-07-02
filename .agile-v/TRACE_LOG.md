@@ -33,3 +33,9 @@
 | 2026-06-28T12:02:00Z | activate | agile-v-core | Session activation; config.json sync; 24 Vitest PASS; resume C4 Stage 4 | REQ-0024 | PLAYBOOK.md |
 | 2026-06-29T12:20:00Z | ui-wave15 | build-agent-js | C4 Wave 15: dashboard glow, shelf scale, typewriter greeting; 24 Vitest PASS | REQ-0029–0030 | CR-0005 |
 | 2026-06-29T12:32:00Z | ui-wave16 | build-agent-js | C4 Wave 16: shelf hover glow, new journal plus, stat text spotlight; 24 Vitest PASS | REQ-0029–0030 | CR-0005 |
+| 2026-06-29T14:00:00Z | ui-wave17 | build-agent-js | C4 Wave 17: Radix journal dialog, Lucide cover icons, BookThemePreview, ConfirmDialog shell; cover-icon tests | REQ-0029–0030 | CR-0005 |
+| 2026-06-29T14:30:00Z | ui-wave17b | build-agent-js | C4 Wave 17b: BookSpineMark, 90vw/90vh dialog, picker-pad glow unclip, +10 icons | REQ-0029–0030 | CR-0005 |
+| 2026-06-29T15:45:00Z | ui-wave17c | build-agent-js | C4 Wave 17c: spine inline writing-mode, single dialog scroll, footer line fix, shelf glow inner wrapper; 31 Vitest PASS | REQ-0029–0030 | fe8f261 |
+| 2026-06-29T15:50:00Z | activate | agile-v-core | Session activation; AQMS sync STATE/MANIFEST/VAL to Wave 17c; resume C4 Stage 4 | REQ-0024 | STATE.md |
+| 2026-06-29T13:45:00Z | ui-wave18 | build-agent-js | C4 Wave 18: auth-landing-handoff, auth book enter CSS, AuthBookShell wire; 34 Vitest PASS | REQ-0005, REQ-0029 | CR-0005 |
+| 2026-06-29T14:20:00Z | ui-wave18c-d | build-agent-js | C4 Wave 18c–18d: parallel stagger + greeting timing; 41 Vitest PASS | REQ-0005, REQ-0029 | CR-0005 |

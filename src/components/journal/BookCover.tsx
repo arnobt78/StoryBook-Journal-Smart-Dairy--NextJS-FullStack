@@ -13,7 +13,7 @@
  *          edge — exactly like a real book cover hinging open.
  *       c. `.cover-fold-sheet` inner pages fan open behind the hinge.
  *       d. `.cover-title-stack` fades out as the cover swings away.
- *  3. Navigate: after COVER_OPEN_MS the router pushes the target route.
+ *  3. Navigate: after greeting hold + landing fade, set handoff and router.push.
  *
  * The book is split into three z-layers:
  *   z-index 1 — `.cover-pages-bg`   : cream page stack (always behind the cover)
@@ -37,14 +37,32 @@ import { BookOpen, LogIn, PenLine } from "lucide-react";
 import { RotatingTypewriterText } from "@/components/animations/RotatingTypewriterText";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { LEATHER_GLASS, LEATHER_GLASS_CLASS } from "@/lib/leather-glass-styles";
+import { setAuthLandingHandoff } from "@/lib/auth-landing-handoff";
 
-/** Total ms the cover animation plays before router.push fires. */
-const COVER_OPEN_MS = 900;
+/** Must match inline `.cover-inner-text` transition-delay + duration below */
+const COVER_INNER_TEXT_DELAY_MS = 450;
+const COVER_INNER_TEXT_DURATION_MS = 450;
+const COVER_INNER_TEXT_DONE_MS =
+  COVER_INNER_TEXT_DELAY_MS + COVER_INNER_TEXT_DURATION_MS;
+
+/** Brief hold after greeting is fully visible so users can read it */
+const COVER_GREETING_HOLD_MS = 350;
+
+/** Must match globals.css `.landing-cover-viewport` opacity transition (0.4s) */
+const COVER_EXIT_FADE_MS = 400;
+
+/** Start fading landing only after inner-page greeting finishes + hold */
+const COVER_EXIT_START_MS = COVER_INNER_TEXT_DONE_MS + COVER_GREETING_HOLD_MS;
+
+/** Navigate after landing fade completes — auth mounts on opaque handoff */
+const COVER_OPEN_MS = COVER_EXIT_START_MS + COVER_EXIT_FADE_MS;
 
 export function LandingCover() {
   const router = useRouter();
   const [coverOpening, setCoverOpening] = useState(false);
+  const [coverExiting, setCoverExiting] = useState(false);
   const navTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const exitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* Prefetch auth pages so navigation feels instant after the cover opens */
   useEffect(() => {
@@ -56,8 +74,13 @@ export function LandingCover() {
     (href: "/register" | "/login") => {
       if (coverOpening) return;
       setCoverOpening(true);
+      if (exitTimer.current) clearTimeout(exitTimer.current);
+      exitTimer.current = setTimeout(() => {
+        setCoverExiting(true);
+      }, COVER_EXIT_START_MS);
       if (navTimer.current) clearTimeout(navTimer.current);
       navTimer.current = setTimeout(() => {
+        setAuthLandingHandoff();
         router.push(href);
       }, COVER_OPEN_MS);
     },
@@ -72,7 +95,7 @@ export function LandingCover() {
     textTransform: "uppercase",
     cursor: coverOpening ? "default" : "pointer",
     pointerEvents: coverOpening ? "none" : "auto",
-    transition: "opacity 0.2s",
+    transition: "opacity 0.45s cubic-bezier(0.23, 1, 0.32, 1)",
     opacity: coverOpening ? 0.45 : 1,
   };
 
@@ -90,7 +113,7 @@ export function LandingCover() {
 
   return (
     <div
-      className="landing-cover-viewport"
+      className={`landing-cover-viewport${coverExiting ? " landing-cover-exiting" : ""}`}
       style={{
         position: "fixed",
         inset: 0,
@@ -197,16 +220,16 @@ export function LandingCover() {
         .cover-book-opening .cover-fold-sheet-l { transform: rotateY(-55deg); }
         .cover-book-opening .cover-fold-sheet-r { transform: rotateY(50deg); }
 
-        /* Welcome text on inner pages — hidden until cover starts opening (~450ms in) */
+        /* Welcome text on inner pages — hidden until cover starts opening */
         .cover-inner-text {
           opacity: 0;
           transform: translateY(10px);
-          transition: opacity 0.45s ease, transform 0.45s ease;
+          transition: opacity ${COVER_INNER_TEXT_DURATION_MS}ms ease, transform ${COVER_INNER_TEXT_DURATION_MS}ms ease;
         }
         .cover-book-opening .cover-inner-text {
           opacity: 1;
           transform: translateY(0);
-          transition-delay: 0.45s;
+          transition-delay: ${COVER_INNER_TEXT_DELAY_MS}ms;
         }
       `}</style>
 

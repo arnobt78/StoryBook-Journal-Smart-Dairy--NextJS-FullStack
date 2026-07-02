@@ -464,7 +464,21 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 24. Related docs
+## 25. C4 UI Waves 18–18d — Landing → auth choreography (2026-06-29)
+
+| Wave | Files | Details |
+|------|-------|---------|
+| 18 | `auth-landing-handoff.ts`, `globals.css`, `AuthBookShell.tsx` | sessionStorage + `data-auth-from-landing`; `authBookShellEnter` 0.9s |
+| 18c | `auth-stagger.ts`, `globals.css` | Revert phased tiers; parallel row stagger (same index = same delay) |
+| 18d | `BookCover.tsx` | Greeting 900ms → hold 350ms → fade 400ms → `router.push` at 1650ms; handoff at push |
+
+**Timing constants (BookCover):** `COVER_INNER_TEXT_*` 450+450ms · `COVER_EXIT_START_MS` 1250 · `COVER_OPEN_MS` 1650.
+
+**Out of scope:** invalidation, PageFlip, direct `/login` stagger (60ms default).
+
+---
+
+## 26. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -475,4 +489,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-06-29 — C4 Wave 17b; lint/typecheck/31 Vitest/build PASS.*
+*Last reviewed: 2026-06-29 — C4 Wave 18d; lint/typecheck/41 Vitest/build PASS.*

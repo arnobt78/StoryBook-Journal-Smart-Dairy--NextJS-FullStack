@@ -3,20 +3,20 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-wave13-2026-06-28 (Wave 14 reverted) |
-| **Status** | Stage 4 static complete; Wave 13 canonical; Gate 2 pending e2e |
+| **Revision** | C4-ui-wave17c-2026-06-29 |
+| **Status** | Stage 4 static complete; Waves 15–17c shipped; Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
-| **Last Updated** | 2026-06-28T12:02:00Z |
-| **Verifier** | red-team-verifier (static) |
+| **Last Updated** | 2026-06-29T15:50:00Z |
+| **Verifier** | red-team-verifier (static) + agile-v-core (sync) |
 
 ## Evidence Summary
 
 ```
-Scope: C4 REQ-0029–0031 + regression REQ-0007 | Traceability: 31 REQs, ART-0078
-Findings: PASS 18 static/unit | FLAG 2 | FAIL 0 | NOT RUN 15 e2e
-Decision Points: Tag DB audit confirmed [] before mergePendingTag fix
-Log: 2026-06-07 | agile-v-bootstrap | C4 re-baseline | 16 Vitest PASS
+Scope: C4 REQ-0029–0031 + regression REQ-0007 | Traceability: 31 REQs, ART-0086
+Findings: PASS 22 static/unit | FLAG 2 | FAIL 0 | NOT RUN 15 e2e
+Decision Points: Dialog single-scroll unclip; spine writing-mode inline axis
+Log: 2026-06-29 | agile-v-core | Wave 17c sync | 31 Vitest PASS
 ```
 
 ## EvalGate (Gate 2)
@@ -38,20 +38,22 @@ Gate 2 NOT READY — REQ-0021 full e2e in CI; REQ-0009 prod demo gate
 | TC-0036 | REQ-0029 | code audit | **PASS** Wave 3: self-hosted fonts, cover redesign, spotlight glow |
 | TC-0037 | REQ-0030 | code audit | **PASS** Wave 3: auth spotlight, dashboard stagger, nav pill glow |
 | TC-0038 | REQ-0024 | code audit | **PASS** Wave 3 audit: 2 micro-fixes; all CSS+fonts cross-checked; build PASS |
+| TC-0039 | REQ-0029–0030 | code audit | **PASS** Wave 17: Radix dialog, Lucide cover icons, BookThemePreview |
+| TC-0040 | REQ-0029–0030 | code audit | **PASS** Wave 17b–17c: BookSpineMark inline, dialog glow unclip, shelf glow |
 
-## Tooling (2026-06-28)
+## Tooling (2026-06-29)
 
 | Check | Result |
 |-------|--------|
 | `npm run lint` | PASS |
 | `npm run typecheck` | PASS |
-| `npm run test` | PASS (16 Vitest) |
-| `npm run build` | PASS (2026-06-28) |
+| `npm run test` | PASS (31 Vitest) |
+| `npm run build` | PASS (2026-06-29) |
 
 ## Prior cycles (archived summary)
 
-- **C1–C3:** See `VALIDATION_SUMMARY_C1-C3.md` note in `cycles/` — 14 static TC PASS baseline.
+- **C1–C3:** See `cycles/` READMEs — 14 static TC PASS baseline.
 
 ## Human Gate 2 readiness
 
-**NOT READY** — REQ-0021 CI e2e; live offline TC-0017; REQ-0009 prod demo disable.
+**NOT READY** — REQ-0021 CI e2e; live TC-0017 offline sync; REQ-0009 prod demo disable.

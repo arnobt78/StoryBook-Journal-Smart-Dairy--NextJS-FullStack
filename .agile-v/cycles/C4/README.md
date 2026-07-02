@@ -6,8 +6,8 @@
 |-------|-------|
 | CR | CR-0005 |
 | REQs | REQ-0029, REQ-0030, REQ-0031 |
-| Commits | `91bea2a` … `8f88e90` |
-| ARTs | ART-0068–0078 |
+| Commits | `91bea2a` … `fe8f261` |
+| ARTs | ART-0068–0086 |
 
 ## Deliverables
 
@@ -17,24 +17,8 @@
 
 ## Key decisions
 
-DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills
-
-## Wave 10 (2026-06-28)
-
-- **REQ-0029/0030:** `.auth-stagger-row` explicit indices — footer, labels, inputs, CTA, OR, Google
-- **Tests:** 24 Vitest (2 new auth-stagger helper tests)
-
-## Wave 12 (2026-06-28)
-
-- **REQ-0029/0030:** `SpreadCoilBinding` overlay coil; removed `.auth-spread-gutter` flex gap
-
-## Wave 13 (2026-06-28)
-
-- **REQ-0029/0030:** PageFlip dual animation (linear rotate + shadow depth); steady coil glow
-
-## Wave 14 (2026-06-28)
-
-- **REVERTED** — z35 coil overlay broke seam; restored Wave 13
+DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills  
+DEC-0032–0037 — Journal dialog, Lucide icons, BookSpineMark, glow unclip (Waves 17–17c)
 
 ## Wave 15 (2026-06-29)
 
@@ -44,6 +28,18 @@ DEC-0021–0024 — DB tag audit, mergePendingTag, flex clip fix, editable pills
 
 - **REQ-0029/0030:** New journal plus visibility; shelf hover spotlight; stat text-only glow
 
+## Wave 17 (2026-06-29)
+
+- **REQ-0029/0030:** Radix `dialog.tsx` journal paper modal; Lucide `cover-icons.ts`; `BookThemePreview`; `ConfirmDialog` shared shell
+
+## Wave 17b (2026-06-29)
+
+- **REQ-0029/0030:** `BookSpineMark`; true 90vw×90vh; `.journal-picker-pad`; auth-style input glow; +10 icons
+
+## Wave 17c (2026-06-29)
+
+- **REQ-0029/0030:** Spine `writing-mode` inline axis; single dialog scroll; footer phantom line fix; `.dashboard-spine-slot-inner` hover glow
+
 ## Verification
 
-24 Vitest · lint · typecheck · build PASS · TC-0031–0035 static PASS
+31 Vitest · lint · typecheck · build PASS · TC-0031–0040 static PASS

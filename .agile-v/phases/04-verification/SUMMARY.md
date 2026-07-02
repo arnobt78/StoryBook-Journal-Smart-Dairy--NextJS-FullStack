@@ -3,18 +3,18 @@
 | Field | Value |
 |-------|-------|
 | Cycle | **C4** |
-| Revision | C4-ui-wave16-2026-06-29 |
+| Revision | C4-ui-wave17c-2026-06-29 |
 | Completed | **Partial** (static + unit + build PASS; e2e NOT RUN) |
-| Date | 2026-06-29 (Wave 16) |
-| Agent | red-team-verifier (static) |
+| Date | 2026-06-29 (Wave 17c) |
+| Agent | agile-v-core (activation sync) |
 
 ## Verification result
 
-- **Static audit:** TC-0031–0038 PASS (REQ-0024, REQ-0029–0031)
-- **Unit:** 24 Vitest PASS (2026-06-28)
-- **Lint + typecheck:** PASS (2026-06-28)
-- **Build:** PASS (2026-06-28)
-- **Wave 16 audit:** new journal plus, shelf hover spotlight, stat text glow; 24 Vitest PASS
+- **Static audit:** TC-0031–0040 PASS (REQ-0024, REQ-0029–0031)
+- **Unit:** 31 Vitest PASS (2026-06-29)
+- **Lint + typecheck:** PASS (2026-06-29)
+- **Build:** PASS (2026-06-29)
+- **Wave 17c:** spine inline, dialog glow unclip, footer line, shelf glow inner wrapper
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
 - **eval_gate_status:** CONDITIONAL
 

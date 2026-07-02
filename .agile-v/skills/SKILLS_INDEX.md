@@ -33,7 +33,9 @@
 
 **Always:** 01 → 02 → 07 → 11 → **13** → 18 → 19 → 20 → 04
 
-**C4 active REQs:** REQ-0029–0031 (UI polish, leather glass, entry tags)
+**C4 active REQs:** REQ-0029–0031 (UI polish, leather glass, entry tags, journal dialog)
+
+**Last wave:** 17c — `fe8f261` spine inline + dialog glow unclip
 
 ## Traceability
 

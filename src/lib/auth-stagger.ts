@@ -8,17 +8,18 @@ export const AUTH_STAGGER_ROW_CLASS = "auth-stagger-row";
 
 /**
  * Deterministic stagger props for one row (SSR + client safe — no auto-counter).
- * Pass optional `className` / `style` extras — they merge without dropping `--auth-stagger-i`.
+ * Landing parallel delays come from globals.css when `data-auth-from-landing` is set.
  */
 export function authStaggerRowProps(
   index: number,
-  extras?: { className?: string; style?: CSSProperties },
+  extras?: {
+    className?: string;
+    style?: CSSProperties;
+  },
 ): { className: string; style: CSSProperties } {
-  const className = extras?.className
-    ? `${AUTH_STAGGER_ROW_CLASS} ${extras.className}`
-    : AUTH_STAGGER_ROW_CLASS;
+  const parts = [AUTH_STAGGER_ROW_CLASS, extras?.className].filter(Boolean);
   return {
-    className,
+    className: parts.join(" "),
     style: {
       ["--auth-stagger-i" as string]: index,
       ...extras?.style,

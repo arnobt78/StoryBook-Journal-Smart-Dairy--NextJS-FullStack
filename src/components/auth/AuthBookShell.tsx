@@ -4,22 +4,21 @@
  * AuthBookShell — wraps /login and /register in a two-page open-book spread.
  *
  * Key design decisions:
- *  1. No opacity-driven intro wrapper. The old approach (`opacity: 0 → 1` via React
- *     state + useEffect) created a temporary stacking context (opacity < 1) that
- *     flattened the inner `preserve-3d` context on every page load. It's replaced
- *     with a pure-CSS `auth-shell-root` keyframe that completes in 500ms and
- *     produces no stacking context once finished.
+ *  1. No opacity wrapper on the preserve-3d spread row — stacking contexts flatten 3D
+ *     and break pointer events after animations complete.
+ *  2. Landing → auth enter: `data-auth-from-landing` drives parallel row stagger with
+ *     shell enter. Cleared after AUTH_LANDING_TOTAL_MS. Login ↔ register flip unchanged.
  *
- *  2. Spread layout: **spine | left | right** (flush leaves) + `SpreadCoilBinding` overlay on
+ *  3. Spread layout: **spine | left | right** (flush leaves) + `SpreadCoilBinding` overlay on
  *     the center seam. The brown strip is the outer binding on the left — not a flex gap between
  *     pages. Coil + page inset shadows give depth without separating the spread.
  *
- *  3. Spread transform is `perspective` only (no rotateX/Y on the row): those tilts
+ *  4. Spread transform is `perspective` only (no rotateX/Y on the row): those tilts
  *     with `preserve-3d` caused sub-pixel “vibrating” strokes after the flip sheet
  *     unmounted. Pointer-events: `none` on page shells + `auto` on inner stacks (same
  *     pattern as dashboard). Row stagger via explicit `.auth-stagger-row` indices.
  *
- *  4. Route push + nav lock live in `useAuthBookNavigation`; hold cover masks slow RSC;
+ *  5. Route push + nav lock live in `useAuthBookNavigation`; hold cover masks slow RSC;
  *     stagger remount keys (`authStaggerRemountKey`) force row animation when contentReady.
  *
  * ── WALKTHROUGH: auth book shell + page flip ──
@@ -29,6 +28,7 @@
  *  AUTH FORMS — `{children}` is LoginForm or RegisterForm on the right page only.
  */
 import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Sparkles, Zap } from "lucide-react";
 import { PageFlipOverlay } from "@/components/journal/PageFlip";
@@ -39,6 +39,12 @@ import {
 } from "@/hooks/useAuthBookNavigation";
 import { usePageFlip } from "@/hooks/usePageFlip";
 import { authStaggerRowProps } from "@/lib/auth-stagger";
+import {
+  AUTH_LANDING_TOTAL_MS,
+  applyAuthLandingCssVars,
+  clearAuthLandingHandoff,
+  hasAuthLandingHandoff,
+} from "@/lib/auth-landing-handoff";
 import {
   AUTH_FOOTER_LINK_CLASS,
   AUTH_LEFT_BODY_COLOR,
@@ -100,6 +106,20 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
   const pathname = normalizeAuthPath(usePathname());
   const { isFlipping, flipDir, triggerFlip } = usePageFlip();
 
+  useLayoutEffect(() => {
+    if (!hasAuthLandingHandoff()) return;
+    applyAuthLandingCssVars();
+  }, []);
+
+  useEffect(() => {
+    if (!hasAuthLandingHandoff()) return;
+    const t = window.setTimeout(
+      () => clearAuthLandingHandoff(),
+      AUTH_LANDING_TOTAL_MS,
+    );
+    return () => window.clearTimeout(t);
+  }, []);
+
   const {
     goLogin,
     goRegister,
@@ -125,7 +145,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
     <div>
       {/* No `filter` here: parent filter + child `preserve-3d` repaints every frame and
         reads as edge “vibration” after the flip overlay unmounts; shadow lives on spread. */}
-      <div style={{ position: "relative" }}>
+      <div className="auth-book-enter-shell" style={{ position: "relative" }}>
         {/* Book branding block — StoryBook + rotating phrase inline on one row (wraps on narrow viewports) */}
         <div
           key={brandStaggerKey}

@@ -554,6 +554,12 @@ body {
   container-type: inline-size;
   padding: clamp(32px, 5vh, 56px) 16px;
   box-sizing: border-box;
+  transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.landing-cover-viewport.landing-cover-exiting {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ─── Leather glassmorphism (docs/UI_STYLING_GUIDE.md — amber/leather variant) ── */
@@ -1092,6 +1098,52 @@ body {
     0 0 90px rgba(139, 69, 19, 0.38),
     0 0 180px rgba(90, 40, 10, 0.22),
     0 0 280px rgba(70, 30, 8, 0.12);
+}
+
+/* ─── C4 Wave 18 — landing → auth book enter (landing CTAs only) ───────────
+   html[data-auth-from-landing] is set on documentElement before router.push so
+   the enter animation applies on the first auth paint (no React hydration flash).
+──────────────────────────────────────────────────────────────────────────── */
+@keyframes authBookShellEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(28px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+html[data-auth-from-landing="1"] .auth-book-enter-shell {
+  opacity: 0;
+  transform-origin: center center;
+  animation: authBookShellEnter 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+  will-change: opacity, transform;
+}
+
+/* Landing: rows ride with shell — parallel paired stagger (same index = same delay) */
+html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
+  animation: authRowIn 0.45s cubic-bezier(0.23, 1, 0.32, 1) both !important;
+  animation-delay: calc(
+    var(--auth-landing-stagger-start-ms, 100ms) +
+      var(--auth-stagger-i, 0) * var(--auth-landing-stagger-step-ms, 50ms)
+  ) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-auth-from-landing="1"] .auth-book-enter-shell {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
+    animation: authRowIn 0.48s cubic-bezier(0.23, 1, 0.32, 1) both !important;
+    animation-delay: calc(var(--auth-stagger-i, 0) * 60ms) !important;
+  }
+  .landing-cover-viewport.landing-cover-exiting {
+    opacity: 1;
+  }
 }
 
 /* ─── Journal spread spotlight — leather ambient behind the open book in BookSpread.
