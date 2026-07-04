@@ -4,18 +4,31 @@
  * RightPage — the journal entry view/edit panel.
  *
  * READ mode:  Renders HTML content via dangerouslySetInnerHTML (TipTap output).
- *             Page-stagger animation classes applied after flip completes.
+ *             Row entrance wave replays after every flip (see ROW STAGGER below).
  * WRITE mode: Textarea-based editor with mood/weather pickers, tag input,
  *             word count, AI Assist button.
  *
  * Sizing: driven by CSS custom properties --page-w / --page-h so the entire
  * book scales responsively from the root :root rule in globals.css.
  *
- * ── WALKTHROUGH: page flip stagger (right leaf) ──
- *  After flip completes, `flipDir` from BookSpread drives CSS classes
- *  `page-stagger-fwd` / `page-stagger-bwd` on read-mode content so lines animate in.
- *  Stagger is suppressed while `isFlipping` or `isWriting` to avoid fighting the overlay.
- *  Write mode is controlled here; autosave/offline persistence live in BookSpread.
+ * ── ANTI-FLASH (mirrors AuthBookShell's contentReady technique) ──
+ *  `PageFlipOverlay` only covers this page's face while rotating; `isFlipping` also
+ *  hides this content-stack via `visibility` (never `display`, so no layout shift) for
+ *  the whole 650ms+80ms flip — same gate as auth's `contentReady`. Only the static
+ *  paper shell (ruled lines, margin, seam curl) stays visible underneath, so no stale
+ *  text is ever revealed mid-turn. `BookSpread` remounts this component
+ *  (`key={entryStaggerKey}` on BookSpread's Fragment wrapper) once per flip so read-mode rows replay their
+ *  `journalStaggerRowProps` entrance wave the instant the flip reveals them — in sync
+ *  with `LeftPage`, which remounts on the same key. Write mode is controlled here;
+ *  autosave/offline persistence live in BookSpread.
+ *
+ * ── ROW STAGGER (mount + every flip) ──
+ *  Date/weekday row is index 0 (always rendered above read/write). Read-mode rows
+ *  continue: title(1), body(2), tags(3, only when present), footer(4). This local
+ *  counter runs in lockstep with BookSpreadHeader (0..2, mount-only) and LeftPage
+ *  (0..5+) — both restart at 0 and share the same 60ms step, so left/right cascade
+ *  together on initial mount AND after every page turn (remount key), matching the
+ *  auth login/register effect exactly.
  */
 import dynamic from "next/dynamic";
 import { useCallback, useState } from "react";
@@ -30,10 +43,10 @@ import {
   journalMiniLabelStyle,
   journalPageNumberStyle,
 } from "@/lib/journal-page-styles";
+import { journalStaggerRowProps } from "@/lib/journal-stagger";
 import { normalizeTags, wordCount } from "@/lib/utils";
 import { JournalEntryTags } from "@/components/journal/JournalEntryTags";
 import { JournalEntryTagsEditor } from "@/components/journal/JournalEntryTagsEditor";
-import type { FlipDirection } from "@/types";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { JournalReadFooter } from "@/components/journal/JournalReadFooter";
 import { JournalWriteFooter } from "@/components/journal/JournalWriteFooter";
@@ -66,7 +79,7 @@ interface RightPageProps {
   isWriting: boolean;
   draft: EntryDraft;
   isSaving: boolean;
-  flipDir: FlipDirection | null;
+  /** Hides real content via `visibility` for the flip duration — see ANTI-FLASH note above. */
   isFlipping: boolean;
   onStartWriting: () => void;
   onDraftChange: (field: keyof EntryDraft, value: string | string[]) => void;
@@ -82,7 +95,7 @@ interface RightPageProps {
 
 export function RightPage({
   entry, pageNumber, isWriting, draft, isSaving,
-  flipDir, isFlipping,
+  isFlipping,
   onStartWriting, onDraftChange, onSave, onCancel, onAiAssist, isAiThinking,
   onDeleteEntry, canDeleteEntry = true,
 }: RightPageProps) {
@@ -119,11 +132,6 @@ export function RightPage({
     onSave({ tags });
   };
 
-  /* Stagger class applied after flip so content lines animate in sequentially */
-  const staggerClass = !isFlipping && !isWriting
-    ? (flipDir === "fwd" ? "page-stagger-fwd" : flipDir === "bwd" ? "page-stagger-bwd" : "")
-    : "";
-
   return (
     /* Outer shell ignores pointer hits — same 3-D hit-testing rationale as `LeftPage`. */
     <div style={{
@@ -154,7 +162,11 @@ export function RightPage({
         }}
       />
 
-      <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", pointerEvents: "auto" }}>
+      <div style={{
+        position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", pointerEvents: "auto",
+        /* ANTI-FLASH: hide real content during flip — see file header comment */
+        visibility: isFlipping ? "hidden" : "visible",
+      }}>
         {/* Page number */}
         <div style={journalPageNumberStyle}>
           — {pageNumber} —
@@ -164,13 +176,17 @@ export function RightPage({
           flex: 1, display: "flex", flexDirection: "column",
           overflow: "hidden", padding: "2px 24px 12px",
         }}>
-          {/* Date header */}
+          {/* Date header — always index 0, whether entering read or write mode */}
           <div style={{ flexShrink: 0 }}>
-            <div style={{
-              display: "flex", justifyContent: "space-between", alignItems: "baseline",
-              fontFamily: "'IM Fell English',serif", fontSize: "11px",
-              color: JOURNAL_INK_META, marginBottom: "2px",
-            }}>
+            <div
+              {...journalStaggerRowProps(0, {
+                style: {
+                  display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                  fontFamily: "'IM Fell English',serif", fontSize: "11px",
+                  color: JOURNAL_INK_META, marginBottom: "2px",
+                },
+              })}
+            >
               <span>{entry.entryDate}</span>
               <span style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: JOURNAL_INK_META }}>
                 {entry.weekday}
@@ -279,28 +295,41 @@ export function RightPage({
               />
             </div>
           ) : (
-            /* ── READ MODE with stagger animation ── */
-            <div className={staggerClass} style={{
+            /* ── READ MODE — journal-stagger-row entrance replays on every mount AND every
+               flip via BookSpread's Fragment `key={entryStaggerKey}` ── */
+            <div style={{
               flex: 1, display: "flex", flexDirection: "column", minHeight: 0,
             }}>
               {/* Title */}
-              <div style={{
-                fontFamily: "'Playfair Display',serif", fontStyle: "italic",
-                fontSize: "22px", color: JOURNAL_INK_HEADING, lineHeight: 1.2,
-                margin: "6px 0 8px",
-              }}>
+              <div
+                {...journalStaggerRowProps(1, {
+                  style: {
+                    fontFamily: "'Playfair Display',serif", fontStyle: "italic",
+                    fontSize: "22px", color: JOURNAL_INK_HEADING, lineHeight: 1.2,
+                    margin: "6px 0 8px",
+                  },
+                })}
+              >
                 {entry.title}
               </div>
 
-              {/* Divider */}
-              <div style={{ height: "1px", background: "linear-gradient(to right,rgba(120,70,20,.25),transparent)", marginBottom: "12px", flexShrink: 0 }} />
+              {/* Divider — shares the title's index so it fades in with it */}
+              <div
+                {...journalStaggerRowProps(1, {
+                  style: { height: "1px", background: "linear-gradient(to right,rgba(120,70,20,.25),transparent)", marginBottom: "12px", flexShrink: 0 },
+                })}
+              />
 
               {/* Body — minHeight:0 lets long entries scroll; tags/footer stay visible */}
-              <div style={{
-                fontFamily: "'Lora',serif", fontSize: "13px", lineHeight: 1.92,
-                color: "rgba(35,14,3,.78)", flex: 1, minHeight: 0, overflowY: "auto",
-                scrollbarWidth: "none",
-              }}>
+              <div
+                {...journalStaggerRowProps(2, {
+                  style: {
+                    fontFamily: "'Lora',serif", fontSize: "13px", lineHeight: 1.92,
+                    color: "rgba(35,14,3,.78)", flex: 1, minHeight: 0, overflowY: "auto",
+                    scrollbarWidth: "none",
+                  },
+                })}
+              >
                 {entry.content
                   ? <div className="journal-prose" dangerouslySetInnerHTML={{ __html: entry.content }} />
                   : (
@@ -315,25 +344,29 @@ export function RightPage({
 
               {entryTags.length > 0 && (
                 <div
-                  className="journal-entry-tags"
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "4px",
-                    marginTop: "10px",
-                    flexShrink: 0,
-                  }}
+                  {...journalStaggerRowProps(3, {
+                    className: "journal-entry-tags",
+                    style: {
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "4px",
+                      marginTop: "10px",
+                      flexShrink: 0,
+                    },
+                  })}
                 >
                   <JournalEntryTags tags={entryTags} />
                 </div>
               )}
 
-              <JournalReadFooter
-                entry={entry}
-                onStartWriting={onStartWriting}
-                onDeleteEntry={onDeleteEntry}
-                canDeleteEntry={canDeleteEntry}
-              />
+              <div {...journalStaggerRowProps(4, { style: { flexShrink: 0 } })}>
+                <JournalReadFooter
+                  entry={entry}
+                  onStartWriting={onStartWriting}
+                  onDeleteEntry={onDeleteEntry}
+                  canDeleteEntry={canDeleteEntry}
+                />
+              </div>
             </div>
           )}
         </div>

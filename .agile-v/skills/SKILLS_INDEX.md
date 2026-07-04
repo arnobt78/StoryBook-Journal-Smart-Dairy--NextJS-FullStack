@@ -35,7 +35,7 @@
 
 **C4 active REQs:** REQ-0029–0031 (UI polish, leather glass, entry tags, journal dialog)
 
-**Last wave:** 17c — `fe8f261` spine inline + dialog glow unclip
+**Last wave:** 26 — flip anti-flash (`visibility` gate + `entryStaggerKey` remount) + `?entry=` refresh persistence, uncommitted on top of `bb7612b` + Wave 24 (journal book row stagger)
 
 ## Traceability
 

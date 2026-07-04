@@ -3,6 +3,11 @@
 /**
  * Golden branding row above the open journal spread — mirrors auth "StoryBook · …"
  * layout with cover icon, title, and truncated description. Full meta on hover via Tooltip.
+ *
+ * Row stagger: icon/title/description each carry their own `journalStaggerRowProps`
+ * index (0/1/2) so this header cascades in lockstep with LeftPage/RightPage on every
+ * mount (shelf click or hard refresh) — same "independent-counter-same-step" pattern
+ * as AuthBookShell's branding block (see journal-stagger.ts).
  */
 import { CoverIcon } from "@/components/journal/CoverIcon";
 import {
@@ -17,6 +22,7 @@ import {
   bookMetaNeedsTooltip,
   truncateBookMeta,
 } from "@/lib/book-brand-styles";
+import { journalStaggerRowProps } from "@/lib/journal-stagger";
 
 type BookSpreadHeaderProps = {
   coverEmoji: string;
@@ -38,16 +44,28 @@ export function BookSpreadHeader({
 
   const headerRow = (
     <div className="book-spread-header-row">
-      <span className="book-spread-header-icon">
+      <span
+        {...journalStaggerRowProps(0, { className: "book-spread-header-icon" })}
+      >
         <CoverIcon id={coverEmoji} size={18} />
       </span>
-      <span style={BOOK_BRAND_GOLD_TEXT_STYLE}>{trimmedTitle}</span>
+      <span {...journalStaggerRowProps(1, { style: BOOK_BRAND_GOLD_TEXT_STYLE })}>
+        {trimmedTitle}
+      </span>
       {displayDesc ? (
         <>
-          <span style={BOOK_BRAND_SEPARATOR_STYLE} aria-hidden>
+          <span
+            {...journalStaggerRowProps(2, { style: BOOK_BRAND_SEPARATOR_STYLE })}
+            aria-hidden
+          >
             ·
           </span>
-          <span className="book-spread-header-desc" style={BOOK_BRAND_SUBTITLE_STYLE}>
+          <span
+            {...journalStaggerRowProps(2, {
+              className: "book-spread-header-desc",
+              style: BOOK_BRAND_SUBTITLE_STYLE,
+            })}
+          >
             {displayDesc}
           </span>
         </>

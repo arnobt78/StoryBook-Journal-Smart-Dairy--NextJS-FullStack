@@ -97,6 +97,14 @@ npm run test:e2e:install && npm run dev && npm run test:e2e
 - **REQ-0019** — Pino/Sentry observability
 - **REQ-0022** — axe accessibility audit
 
+## Current resume (2026-07-04)
+
+- **main:** `bb7612b` (Wave 23) + uncommitted Wave 24 (journal book row stagger, this session)
+- **Stage 4** IN_PROGRESS · **eval_gate_status:** CONDITIONAL
+- **Stash:** shelf→journal handoff / `/insights` / refresh-flash WIP — not on branch (referenced as "Wave 24–25" in `CLAUDE.md`; distinct from the on-disk Wave 24 above; see DEC-0049)
+- **Wave 24 (this session):** `journal-stagger.ts` + `BookSpreadHeader`/`LeftPage`/`RightPage` row wiring — 58 Vitest PASS, lint/typecheck PASS (see DEC-0050)
+- **Next work:** only with parent REQ-XXXX via Infinity Loop
+
 ## Evidence Summary template
 
 ```

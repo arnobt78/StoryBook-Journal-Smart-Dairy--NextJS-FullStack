@@ -42,3 +42,7 @@
 | 2026-06-29T17:25:00Z | ui-wave22 | build-agent-js | C4 Wave 22: JournalBottomNav, confirm priority stack; 55 Vitest PASS | REQ-0029–0030 | DEC-0047 |
 | 2026-06-29T17:37:00Z | ui-wave23 | build-agent-js | C4 Wave 23: defer delete confirm, nav wrap, shelf glow unclip; lint/typecheck/test/build PASS | REQ-0029–0030 | DEC-0048 |
 | 2026-06-28T18:00:00Z | session-close | build-agent-js | AQMS sync for tomorrow UI resume; STATE/C4/README/config/manifest updated | REQ-0024 | STATE.md |
+| 2026-07-04T08:50:00Z | activate | agile-v-core | Session reactivation; main=bb7612b; 55 Vitest PASS; stash WIP; prod vs dev flash note | REQ-0024 | DEC-0049 |
+| 2026-07-04T09:15:00Z | ui-wave24 | build-agent-js | C4 Wave 24: journal-stagger.ts + header/left/right row wiring; 58 Vitest PASS; lint/typecheck PASS | REQ-0029–0030 | DEC-0050 |
+| 2026-07-04T11:55:00Z | ui-wave26 | build-agent-js | C4 Wave 26: flip anti-flash + `?entry=` persistence; 67 Vitest PASS | REQ-0002, REQ-0003, REQ-0029–0030 | DEC-0051, DEC-0052 |
+| 2026-07-04T12:20:00Z | ui-wave26b | build-agent-js | Fragment key fix — duplicate sibling keys on flip; user-verified | REQ-0029–0030 | DEC-0053 |

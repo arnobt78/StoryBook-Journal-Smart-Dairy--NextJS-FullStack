@@ -15,6 +15,26 @@
  *  (mounted in BookSpread) rotates over the right page. Entry list clicks call
  *  `onNavigate(idx)` which triggers flip-then-focus in the parent.
  *  3D hit-testing: outer shell is `pointerEvents: none`; scrollable inner stack is `auto`.
+ *
+ * ── ANTI-FLASH (mirrors AuthBookShell's contentReady technique) ──
+ *  `PageFlipOverlay` only covers the right page — the left leaf has no overlay of its
+ *  own. `isFlipping` hides this content-stack via `visibility` (never `display`, so no
+ *  layout shift) for the whole 650ms+80ms flip, same as auth's `contentReady` gate.
+ *  Only the static paper shell above (ruled lines, margin, seam curl) stays visible,
+ *  so no stale/jumping text is ever painted mid-turn. `BookSpread` also remounts this
+ *  (`key={entryStaggerKey}` on BookSpread's Fragment wrapper) once per flip so `journalStaggerRowProps` rows
+ *  replay their entrance wave in sync with `RightPage` once the flip reveals it.
+ *
+ * ── ROW STAGGER (mount only) ──
+ *  Preview block rows use `journalStaggerRowProps(0..4)`; "All Entries" label is
+ *  index 5; entry list rows continue at `Math.min(6 + i, 16)` (clamped so a long
+ *  list doesn't push the wave out for seconds — mirrors the shelf-stagger cap
+ *  pattern). This local counter runs in lockstep with BookSpreadHeader (0..2) and
+ *  RightPage (0..4) — all three restart at 0 and share the same 60ms step, so
+ *  corresponding rows across header/left/right fire together on every mount
+ *  (shelf click or hard refresh), matching the auth login/register page effect.
+ *  Fires once per BookSpread mount only — entries keep stable `key={e.id}` so
+ *  subsequent same-book navigation does not replay this entrance.
  */
 import type { JournalEntry } from "@/types";
 import {
@@ -27,7 +47,12 @@ import {
   journalPageNumberStyle,
   journalSectionLabelStyle,
 } from "@/lib/journal-page-styles";
+import { journalStaggerRowProps } from "@/lib/journal-stagger";
 import { stripHtml } from "@/lib/utils";
+
+/** Entry list rows continue the left-page counter but clamp so long lists don't stretch the wave out. */
+const ENTRY_LIST_STAGGER_START = 6;
+const ENTRY_LIST_STAGGER_CAP = 16;
 
 interface LeftPageProps {
   currentEntry: JournalEntry;
@@ -36,9 +61,11 @@ interface LeftPageProps {
   currentIdx: number;
   pageNumber: number;
   onNavigate: (idx: number) => void;
+  /** Hides real content via `visibility` for the flip duration — see ANTI-FLASH note above. */
+  isFlipping: boolean;
 }
 
-export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigate }: LeftPageProps) {
+export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigate, isFlipping }: LeftPageProps) {
   return (
     /* Outer shell ignores pointer hits (see `BookSpread` comment): 3-D AABB can overlap sibling page. */
     <div style={{
@@ -74,7 +101,11 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
         }}
       />
 
-      <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", pointerEvents: "auto" }}>
+      <div style={{
+        position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", pointerEvents: "auto",
+        /* ANTI-FLASH: hide real content during flip — see file header comment */
+        visibility: isFlipping ? "hidden" : "visible",
+      }}>
         {/* Page number */}
         <div style={journalPageNumberStyle}>
           — {pageNumber} —
@@ -84,28 +115,44 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
           {/* Previous entry preview */}
           {prevEntry ? (
             <div style={{ marginTop: "10px" }}>
-              <SectionLabel>Previous</SectionLabel>
-              <div style={{ fontFamily: "'IM Fell English', serif", fontSize: "11px", color: JOURNAL_INK_META, marginBottom: "4px" }}>
+              <SectionLabel index={0}>Previous</SectionLabel>
+              <div
+                {...journalStaggerRowProps(1, {
+                  style: { fontFamily: "'IM Fell English', serif", fontSize: "11px", color: JOURNAL_INK_META, marginBottom: "4px" },
+                })}
+              >
                 {prevEntry.entryDate}
               </div>
-              <div style={{
-                fontFamily: "'Playfair Display', serif", fontStyle: "italic",
-                fontSize: "17px", color: JOURNAL_INK_PREVIEW_TITLE, lineHeight: 1.25, marginBottom: "8px",
-              }}>
+              <div
+                {...journalStaggerRowProps(2, {
+                  style: {
+                    fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+                    fontSize: "17px", color: JOURNAL_INK_PREVIEW_TITLE, lineHeight: 1.25, marginBottom: "8px",
+                  },
+                })}
+              >
                 {prevEntry.title}
               </div>
-              <div style={{
-                fontFamily: "'Lora', serif", fontStyle: "italic",
-                fontSize: "11.5px", lineHeight: 1.85, color: JOURNAL_INK_PREVIEW_BODY,
-              }}>
+              <div
+                {...journalStaggerRowProps(3, {
+                  style: {
+                    fontFamily: "'Lora', serif", fontStyle: "italic",
+                    fontSize: "11.5px", lineHeight: 1.85, color: JOURNAL_INK_PREVIEW_BODY,
+                  },
+                })}
+              >
                 {stripHtml(prevEntry.content).slice(0, 180) || "No words written yet."}
                 {stripHtml(prevEntry.content).length > 180 ? "…" : ""}
               </div>
-              <div style={{
-                display: "flex", alignItems: "center", gap: "6px",
-                marginTop: "10px", paddingTop: "8px",
-                borderTop: "1px solid rgba(120,70,20,.12)",
-              }}>
+              <div
+                {...journalStaggerRowProps(4, {
+                  style: {
+                    display: "flex", alignItems: "center", gap: "6px",
+                    marginTop: "10px", paddingTop: "8px",
+                    borderTop: "1px solid rgba(120,70,20,.12)",
+                  },
+                })}
+              >
                 <span style={{ fontSize: "13px" }}>{prevEntry.mood}</span>
                 <span style={{ fontSize: "13px" }}>{prevEntry.weather}</span>
                 <span style={{ fontFamily: "'Lora', serif", fontSize: "10px", color: JOURNAL_INK_BODY, marginLeft: "auto" }}>
@@ -115,53 +162,75 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
             </div>
           ) : (
             <div style={{ marginTop: "20px" }}>
-              <SectionLabel>Journal</SectionLabel>
-              <div style={{ fontSize: "16px", opacity: 0.15, textAlign: "center", margin: "8px 0" }}>✦ ✦ ✦</div>
-              <div style={{
-                fontFamily: "'Lora', serif", fontStyle: "italic",
-                fontSize: "12px", color: JOURNAL_INK_BODY, lineHeight: 1.9,
-              }}>
+              <SectionLabel index={0}>Journal</SectionLabel>
+              <div
+                {...journalStaggerRowProps(1, {
+                  style: { textAlign: "center", margin: "8px 0" },
+                })}
+              >
+                {/* Dimming applied on nested span — keeps final .15 opacity separate from the entrance animation's opacity:1 end state */}
+                <span style={{ fontSize: "16px", opacity: 0.15 }}>✦ ✦ ✦</span>
+              </div>
+              <div
+                {...journalStaggerRowProps(2, {
+                  style: {
+                    fontFamily: "'Lora', serif", fontStyle: "italic",
+                    fontSize: "12px", color: JOURNAL_INK_BODY, lineHeight: 1.9,
+                  },
+                })}
+              >
                 Every great story begins somewhere. This is where yours begins.
               </div>
             </div>
           )}
 
           {/* ── PAGE FLIP: entry list re-staggers after parent flip completes ── */}
-          {/* Entry list with stagger animation */}
+          {/* Entry list — mount-only row stagger continues the left-page counter (index 5+) */}
           <div style={{ marginTop: "20px" }}>
-            <SectionLabel>All Entries</SectionLabel>
+            <SectionLabel index={5}>All Entries</SectionLabel>
             {entries.length === 0 ? (
               <div style={{ fontFamily: "'Lora', serif", fontStyle: "italic", fontSize: "11px", color: JOURNAL_INK_PLACEHOLDER }}>
                 No entries yet
               </div>
             ) : (
-              <div className="entry-list-stagger">
+              <div>
                 {entries.map((e, i) => (
                   <div
                     key={e.id}
                     onClick={() => onNavigate(i)}
-                    style={{
-                      display: "flex", alignItems: "center", gap: "8px",
-                      padding: "7px 0", borderBottom: "1px solid rgba(120,70,20,.08)",
-                      cursor: "pointer", opacity: i === currentIdx ? 1 : 0.7,
-                      transition: "opacity .15s",
-                    }}
+                    {...journalStaggerRowProps(
+                      Math.min(ENTRY_LIST_STAGGER_START + i, ENTRY_LIST_STAGGER_CAP),
+                      {
+                        style: {
+                          padding: "7px 0", borderBottom: "1px solid rgba(120,70,20,.08)",
+                          cursor: "pointer",
+                        },
+                      },
+                    )}
                   >
-                    <span style={{ fontSize: "12px", flexShrink: 0 }}>{e.mood}</span>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{
-                        fontFamily: "'Playfair Display', serif", fontSize: "11px",
-                        color: JOURNAL_INK_LIST_TITLE, whiteSpace: "nowrap",
-                        overflow: "hidden", textOverflow: "ellipsis",
-                      }}>{e.title}</div>
-                      <div style={{ fontFamily: "'Lora', serif", fontSize: "9.5px", color: JOURNAL_INK_META }}>
-                        {e.entryDate}
-                      </div>
-                    </div>
+                    {/* Dimming for non-current rows lives on this nested wrapper — kept separate from
+                        the parent's entrance animation so its final opacity:1 fill doesn't clobber it. */}
                     <div style={{
-                      width: "5px", height: "5px", borderRadius: "50%", flexShrink: 0,
-                      background: i === currentIdx ? "rgba(170,90,30,.75)" : "rgba(120,70,20,.2)",
-                    }} />
+                      display: "flex", alignItems: "center", gap: "8px",
+                      opacity: i === currentIdx ? 1 : 0.7,
+                      transition: "opacity .15s",
+                    }}>
+                      <span style={{ fontSize: "12px", flexShrink: 0 }}>{e.mood}</span>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{
+                          fontFamily: "'Playfair Display', serif", fontSize: "11px",
+                          color: JOURNAL_INK_LIST_TITLE, whiteSpace: "nowrap",
+                          overflow: "hidden", textOverflow: "ellipsis",
+                        }}>{e.title}</div>
+                        <div style={{ fontFamily: "'Lora', serif", fontSize: "9.5px", color: JOURNAL_INK_META }}>
+                          {e.entryDate}
+                        </div>
+                      </div>
+                      <div style={{
+                        width: "5px", height: "5px", borderRadius: "50%", flexShrink: 0,
+                        background: i === currentIdx ? "rgba(170,90,30,.75)" : "rgba(120,70,20,.2)",
+                      }} />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -173,12 +242,16 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
   );
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({ children, index }: { children: React.ReactNode; index: number }) {
   return (
-    <div style={{
-      ...journalSectionLabelStyle,
-      display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px",
-    }}>
+    <div
+      {...journalStaggerRowProps(index, {
+        style: {
+          ...journalSectionLabelStyle,
+          display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px",
+        },
+      })}
+    >
       {children}
       <div style={{ flex: 1, height: "1px", background: "rgba(120,70,20,.15)" }} />
     </div>

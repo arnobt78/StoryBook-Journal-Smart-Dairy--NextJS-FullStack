@@ -3,19 +3,19 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-wave23-2026-06-29 |
-| **Status** | Stage 4 static complete; Waves 1–23 shipped; Gate 2 pending e2e |
+| **Revision** | C4-ui-wave26-2026-07-04 |
+| **Status** | Stage 4 static complete; Waves 1–26 shipped (24, 26 uncommitted); Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
-| **Last Updated** | 2026-06-28T18:00:00Z |
-| **Verifier** | red-team-verifier (static) + agile-v-core (sync) |
+| **Last Updated** | 2026-07-04T11:55:00Z |
+| **Verifier** | build-agent-js (Wave 26) + agile-v-core (sync) |
 
 ## Evidence Summary
 
 ```
-Scope: C4 REQ-0029–0031 + regression REQ-0007 | Traceability: 31 REQs, ART-0098
-Findings: PASS static/unit through Wave 23 | FAIL 0 | NOT RUN e2e in CI
-Log: 2026-06-29 | build-agent-js | Wave 23 | 55 Vitest PASS
+Scope: C4 REQ-0029–0031 + regression REQ-0002, REQ-0003, REQ-0007 | Traceability: 31 REQs, ART-0098
+Findings: PASS static/unit/build through Wave 26 | FAIL 0 | NOT RUN e2e in CI
+Log: 2026-07-04 | build-agent-js | Wave 26 | 67 Vitest PASS
 ```
 
 ## EvalGate (Gate 2)
@@ -39,15 +39,18 @@ Gate 2 NOT READY — REQ-0021 full e2e in CI; REQ-0009 prod demo gate
 | TC-0038 | REQ-0024 | code audit | **PASS** Wave 3 audit: 2 micro-fixes; all CSS+fonts cross-checked; build PASS |
 | TC-0039 | REQ-0029–0030 | code audit | **PASS** Wave 17: Radix dialog, Lucide cover icons, BookThemePreview |
 | TC-0040 | REQ-0029–0030 | code audit | **PASS** Wave 17b–17c: BookSpineMark inline, dialog glow unclip, shelf glow |
+| TC-0041 | REQ-0029–0030 | unit + code audit | **PASS** Wave 24: journal-stagger.ts (3 Vitest); header/left/right row wiring |
+| TC-0042 | REQ-0029–0030 | code audit | **PASS** Wave 26: LeftPage/RightPage `visibility` anti-flash gate mirrors AuthBookShell; `entryStaggerKey` remount replays stagger on both pages post-flip |
+| TC-0043 | REQ-0002, REQ-0003 | unit + code audit | **PASS** Wave 26: `journal-entry-url.ts` (9 Vitest); `?entry=` SSR resolution + `history.replaceState` mirror persists focused entry across hard refresh |
 
-## Tooling (2026-06-29)
+## Tooling (2026-07-04, Wave 26)
 
 | Check | Result |
 |-------|--------|
 | `npm run lint` | PASS |
 | `npm run typecheck` | PASS |
-| `npm run test` | PASS (31 Vitest) |
-| `npm run build` | PASS (2026-06-29) |
+| `npm run test` | PASS (67 Vitest, 2026-07-04 @ bb7612b + Wave 24–25) |
+| `npm run build` | PASS (2026-07-04, Turbopack — re-run this pass, all routes compile) |
 
 ## Prior cycles (archived summary)
 

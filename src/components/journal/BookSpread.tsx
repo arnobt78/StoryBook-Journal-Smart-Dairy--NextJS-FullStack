@@ -11,9 +11,13 @@
  *  • PATCH book metadata via BookEditorModal (shelf ✎ or reader “Edit journal”).
  *  • Books created via POST /api/books include a starter entry so `current` is never
  *    missing on first paint. Legacy books with zero entries show a one-tap seed UI.
- *  • `flipDir` is forwarded to RightPage so it can apply the correct CSS stagger
- *    class (`page-stagger-fwd` / `page-stagger-bwd`) after each flip completes.
+ *  • `entryStaggerKey` remounts LeftPage/RightPage once per page-turn so their
+ *    `journalStaggerRowProps` rows replay the entrance wave in sync on both pages
+ *    (see PAGE FLIP walkthrough below) — mirrors AuthBookShell's flip technique.
  *  • Shelf shortcut in the bottom nav uses `/book-stack-1.svg` (fixed pixel size, no CLS).
+ *  • `focusedEntryId` mirrors into the `?entry=` URL param (`journal-entry-url.ts`) via
+ *    `history.replaceState` so a hard refresh reopens on the same entry instead of
+ *    always defaulting to the newest one.
  *
  * Book sizing: all page/spine widths driven by CSS vars (--page-w, --page-h)
  * defined in globals.css :root so the entire spread scales responsively.
@@ -21,7 +25,11 @@
  * ── WALKTHROUGH: subsystems wired in this orchestrator ──
  *  PAGE FLIP — `usePageFlip()` owns `isFlipping` + `flipDir`. `navigate()` calls
  *    `triggerFlip(dir, onComplete)`; only after the animation callback runs do we
- *    swap `focusedEntryId`. `PageFlipOverlay` mounts as a sibling inside the 3-D row.
+ *    swap `focusedEntryId` AND bump `entryStaggerKey` (used as `key` on LeftPage/
+ *    RightPage so they remount and replay their stagger wave). `isFlipping` is also
+ *    passed down so both pages hide real content via `visibility` for the flip
+ *    duration (anti-flash — see LeftPage/RightPage file header comments).
+ *    `PageFlipOverlay` mounts as a sibling inside the 3-D row.
  *  AUTOSAVE — `useAutoSave` debounces PATCH to `/api/entries/:id` while `isWriting`.
  *    Paused during explicit Save (`isSaving`) or read mode. Clears IndexedDB draft on success.
  *  OFFLINE — `useOfflineEntryDraft` mirrors draft to IndexedDB; saves call
@@ -30,7 +38,7 @@
  *  3D BOOK — flex row uses `transformStyle: preserve-3d` + mild perspective tilt;
  *    page shells set `pointerEvents: none` with inner stacks at `auto` (see Left/RightPage).
  */
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { Fragment, useState, useCallback, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";
@@ -51,6 +59,7 @@ import { useOfflineIdRemap } from "@/hooks/useOfflineIdRemap";
 import { useOfflineSync } from "@/context/OfflineSyncContext";
 import { createAiAssistSessionId } from "@/lib/ai-assist";
 import { applyOptimisticEntryPatch } from "@/lib/journal-cache-optimistic";
+import { syncEntryUrlParam } from "@/lib/journal-entry-url";
 import { formatEntryDate, normalizeTags } from "@/lib/utils";
 import { queryKeys } from "@/lib/query-keys";
 import {
@@ -71,9 +80,11 @@ import type { FlipDirection } from "@/types";
 
 export interface BookSpreadProps {
   initialBook: JournalBook & { entries: JournalEntry[] };
+  /** Server-validated `?entry=` id (see `journal-entry-url.ts`) — null falls back to the newest entry. */
+  initialFocusedEntryId?: string | null;
 }
 
-export function BookSpread({ initialBook }: BookSpreadProps) {
+export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSpreadProps) {
   const bookId = initialBook.id;
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -94,11 +105,21 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
   const bookColor = book.coverColor;
   const bookThemeProps = useBookTheme(book.theme ?? "warm-paper");
 
+  /* ── ENTRY PERSISTENCE: prefer the server-resolved `?entry=` id; fall back to newest ── */
   const [focusedEntryId, setFocusedEntryId] = useState<string | null>(() => {
+    if (initialFocusedEntryId) return initialFocusedEntryId;
     const last =
       initialBook.entries[Math.max(0, initialBook.entries.length - 1)];
     return last?.id ?? null;
   });
+
+  /* Single call site mirrors every focus change (navigate/newEntry/delete-reassignment/
+     offline-remap) into `?entry=` — a hard refresh then reopens on the same entry via
+     the server-side resolution in page.tsx. `history.replaceState`, not the Next
+     router, so this never triggers a re-fetch (see journal-entry-url.ts). */
+  useEffect(() => {
+    syncEntryUrlParam(focusedEntryId);
+  }, [focusedEntryId]);
   const [isWriting, setIsWriting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isAiThinking, setIsAiThinking] = useState(false);
@@ -141,8 +162,10 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
     }
   }, [showEditBook, pendingDeleteBookConfirm]);
 
-  /* Track last flip direction so RightPage can apply the correct stagger class */
-  const [lastFlipDir, setLastFlipDir] = useState<FlipDirection | null>(null);
+  /* Bumped on every page-turn (navigate/newEntry) — used as `key` on a Fragment wrapping
+     LeftPage+RightPage so both remount and replay their stagger wave in sync.
+     NOT bumped on delete-reassignment or offline id remap (see file header comment). */
+  const [entryStaggerKey, setEntryStaggerKey] = useState(0);
   const { isFlipping, flipDir, triggerFlip } = usePageFlip();
 
   const remapFocusedEntry = useCallback((realEntryId: string) => {
@@ -206,7 +229,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
       const dir: FlipDirection = targetIdx > currentIdx ? "fwd" : "bwd";
       triggerFlip(dir, () => {
         setFocusedEntryId(nextId);
-        setLastFlipDir(dir);
+        setEntryStaggerKey((k) => k + 1);
       });
     },
     [currentIdx, entries, isFlipping, isWriting, triggerFlip],
@@ -329,7 +352,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
         });
         triggerFlip("fwd", () => {
           setFocusedEntryId(tempId);
-          setLastFlipDir("fwd");
+          setEntryStaggerKey((k) => k + 1);
           setDraft({
             title: "New Entry",
             content: "",
@@ -370,7 +393,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
       if (!newId) throw new Error();
       triggerFlip("fwd", () => {
         setFocusedEntryId(newId);
-        setLastFlipDir("fwd");
+        setEntryStaggerKey((k) => k + 1);
         setDraft({
           title: "New Entry",
           content: "",
@@ -392,7 +415,7 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
           });
           triggerFlip("fwd", () => {
             setFocusedEntryId(tempId);
-            setLastFlipDir("fwd");
+            setEntryStaggerKey((k) => k + 1);
             setDraft({
               title: "New Entry",
               content: "",
@@ -758,32 +781,37 @@ export function BookSpread({ initialBook }: BookSpreadProps) {
             }}
           />
 
-          <LeftPage
-            currentEntry={current}
-            prevEntry={prev}
-            entries={entries}
-            currentIdx={currentIdx}
-            pageNumber={currentIdx * 2 + 1}
-            onNavigate={navigate}
-          />
+          {/* Single keyed Fragment remounts both pages together for stagger replay.
+              Do NOT put the same numeric key on LeftPage + RightPage as siblings — React
+              warns "two children with the same key" and reconciliation breaks (triple-page glitch). */}
+          <Fragment key={entryStaggerKey}>
+            <LeftPage
+              currentEntry={current}
+              prevEntry={prev}
+              entries={entries}
+              currentIdx={currentIdx}
+              pageNumber={currentIdx * 2 + 1}
+              onNavigate={navigate}
+              isFlipping={isFlipping}
+            />
 
-          <RightPage
-            entry={current}
-            pageNumber={currentIdx * 2 + 2}
-            isWriting={isWriting}
-            draft={draft}
-            isSaving={isSaving}
-            flipDir={lastFlipDir}
-            isFlipping={isFlipping}
-            onStartWriting={startWriting}
-            onDraftChange={handleDraftChange}
-            onSave={saveEntry}
-            onCancel={() => setIsWriting(false)}
-            onAiAssist={aiAssist}
-            isAiThinking={isAiThinking}
-            onDeleteEntry={() => setConfirmDeleteEntry(true)}
-            canDeleteEntry={!isFlipping && !isWriting && !isDeleting}
-          />
+            <RightPage
+              entry={current}
+              pageNumber={currentIdx * 2 + 2}
+              isWriting={isWriting}
+              draft={draft}
+              isSaving={isSaving}
+              isFlipping={isFlipping}
+              onStartWriting={startWriting}
+              onDraftChange={handleDraftChange}
+              onSave={saveEntry}
+              onCancel={() => setIsWriting(false)}
+              onAiAssist={aiAssist}
+              isAiThinking={isAiThinking}
+              onDeleteEntry={() => setConfirmDeleteEntry(true)}
+              canDeleteEntry={!isFlipping && !isWriting && !isDeleting}
+            />
+          </Fragment>
 
           <SpreadCoilBinding />
 

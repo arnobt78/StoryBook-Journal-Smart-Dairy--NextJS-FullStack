@@ -72,6 +72,8 @@ src/lib/
   auth/get-auth-page-config.ts # SSR flags for login/register (force-dynamic)
   query-keys.ts               # journalSubtree() — single invalidation root
   journal-slug.ts             # resolveUniqueBookSlug / resolveUniqueEntrySlug on PATCH title change
+  journal-stagger.ts          # journalStaggerRowProps — row entrance wave (mirrors auth-stagger)
+  journal-entry-url.ts        # ?entry= SSR resolve + history.replaceState sync (refresh persistence)
   journal-cache-optimistic.ts # optimistic shelf/reader patches for offline writes
   journal-cache-notify.ts     # notifyJournalCacheUpdated (invalidate subtree; refetchType none when offline)
   journal-pubsub.ts           # Redis publish + list buffer for SSE poll
@@ -178,10 +180,12 @@ API routes consistently call `await auth()` and check `session?.user?.id` before
 
 ### 6.3 Journal reader
 
-1. `journal/[bookId]/page.tsx` is a **Server Component**: loads book + non-archived entries ordered by `createdAt` asc; maps `tags` from stored string via `parseTags`.
+1. `journal/[bookId]/page.tsx` is a **Server Component**: loads book + non-archived entries ordered by `createdAt` asc; maps `tags` from stored string via `parseTags`; resolves optional `?entry=` via `resolveInitialFocusedEntryId` (SSR-safe).
 2. `BookSpread` (client) holds **entries**, current index, write mode, draft, save state. It:
    - **Patches** the current entry via `PATCH /api/entries/[entryId]` on explicit save.
    - **Posts** new entries via `POST /api/entries` with client-supplied `entryDate` / `weekday` (API overwrites with `formatEntryDate()` anyway — minor redundancy).
+   - **Page flip (Wave 26):** `visibility` gate on left/right content during flip; `entryStaggerKey` on `<Fragment>` remounts both pages for stagger replay; `syncEntryUrlParam` mirrors focus to `?entry=` (no router round-trip per turn).
+   - **Row stagger (Wave 24):** `journalStaggerRowProps` on header + left/right rows (60ms step, reuses `authRowIn`).
 3. `useAutoSave` debounces PATCH; offline path uses optimistic cache + sync queue + `notifyJournalCacheUpdated`. `useOfflineEntryDraft` persists/restores drafts.
 4. Offline entry CREATE/PATCH/BOOK PATCH/BOOK CREATE all enqueue to IndexedDB; `DashboardNav` shows `{n} offline` badge; drain on `online` invalidates `journalSubtree`.
 5. Temp ids (`offline-entry-*`, `offline-book-*`) remap to server cuids via `useOfflineIdRemap` + sync events — reader focus preserved after sync.
@@ -490,7 +494,19 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 26. Related docs
+## 26. C4 UI Waves 24–26 — Journal stagger + flip + entry URL (2026-07-04)
+
+| Wave | Files | Details |
+|------|-------|---------|
+| 24 | `journal-stagger.ts`, `BookSpreadHeader`, `LeftPage`, `RightPage`, `globals.css` | Auth-style row stagger on mount; nested opacity wrappers |
+| 26 | `BookSpread`, `LeftPage`, `RightPage`, `journal-entry-url.ts`, `page.tsx` | Flip anti-flash (`visibility`); Fragment remount key; `?entry=` SSR + `replaceState` |
+| 26b | `BookSpread.tsx` | Fragment key fix — duplicate sibling keys caused triple-page glitch |
+
+**Out of scope:** invalidation paths unchanged; delete/offline remap does not bump remount key.
+
+---
+
+## 27. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -501,4 +517,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-06-29 — C4 Wave 18e; lint/typecheck/41 Vitest/build PASS.*
+*Last reviewed: 2026-07-04 — C4 Wave 24–26; lint/typecheck/67 Vitest/build PASS.*
