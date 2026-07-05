@@ -99,7 +99,7 @@ npm run test:e2e:install && npm run dev && npm run test:e2e
 
 ## Current resume (2026-07-05)
 
-- **main:** `7df4759` + Wave 31–32 pending commit
+- **main:** `72313b4` (Waves 1–32)
 - **Stage 4** IN_PROGRESS · **eval_gate_status:** CONDITIONAL
 - **Verify baseline:** 78 Vitest · lint · typecheck · build PASS
 - **Next work:** only with parent REQ-XXXX via Infinity Loop

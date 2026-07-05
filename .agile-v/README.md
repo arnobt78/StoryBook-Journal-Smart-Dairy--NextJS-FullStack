@@ -24,7 +24,7 @@ Living **AQMS** for this repository.
 | UI waves | **1–32** done |
 | Vitest | **78 PASS** |
 | Stage | 4 Verification |
-| Commit | pending Wave 31–32 |
+| Commit | `72313b4` |
 | Gate 2 | CONDITIONAL (REQ-0021 CI e2e) |
 
 ## Cycles

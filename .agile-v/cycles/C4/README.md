@@ -4,7 +4,7 @@
 
 | Field | Value |
 |-------|-------|
-| Commits | through `7df4759` + Wave 31–32 pending |
+| Commits | through `72313b4` |
 | Unit tests | **78** Vitest PASS |
 
 ## Core deliverables (REQ)

@@ -8,7 +8,7 @@
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-ui-wave32-2026-07-05 |
-| **Last commit** | `7df4759` + Wave 31–32 uncommitted |
+| **Last commit** | `72313b4` (Wave 31–32: theme ink + themed page flip) |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -22,7 +22,7 @@
 ## Resume (2026-07-05)
 
 1. Read this file → `cycles/C4/README.md` → `PLAYBOOK.md` → latest `DEC-0059`.
-2. **Code baseline:** `7df4759` + uncommitted Wave 31 (dark theme ink parity).
+2. **Code baseline:** `72313b4` — Waves 1–32 on `main`.
 3. **Next backlog:** REQ-0021 e2e CI.
 4. **Constraints:** `notifyJournalCacheUpdated` only; `force-dynamic`; SSR in `page.tsx`.
 5. Verify: `npm run lint && npm run typecheck && npm run test` (**78** Vitest) + `npm run build`.
@@ -46,8 +46,8 @@
 | 28 | Nav scroll isolation | `0544490` |
 | **29** | **Demo picker 3-zone trigger + chevron rotate** | `709087e` |
 | **30** | **Demo picker selected avatar + name** | `709087e` |
-| **31** | **Dark page theme ink parity (`bookThemeCssVars`)** | uncommitted |
-| **32** | **Theme-aware page flip overlay** | uncommitted |
+| **31** | **Dark page theme ink parity (`bookThemeCssVars`)** | `72313b4` |
+| **32** | **Theme-aware page flip overlay** | `72313b4` |
 
 ## Infinity Loop
 
