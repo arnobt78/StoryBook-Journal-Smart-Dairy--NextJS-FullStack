@@ -46,3 +46,6 @@
 | 2026-07-04T09:15:00Z | ui-wave24 | build-agent-js | C4 Wave 24: journal-stagger.ts + header/left/right row wiring; 58 Vitest PASS; lint/typecheck PASS | REQ-0029–0030 | DEC-0050 |
 | 2026-07-04T11:55:00Z | ui-wave26 | build-agent-js | C4 Wave 26: flip anti-flash + `?entry=` persistence; 67 Vitest PASS | REQ-0002, REQ-0003, REQ-0029–0030 | DEC-0051, DEC-0052 |
 | 2026-07-04T12:20:00Z | ui-wave26b | build-agent-js | Fragment key fix — duplicate sibling keys on flip; user-verified | REQ-0029–0030 | DEC-0053 |
+| 2026-07-05T08:58:00Z | activate | agile-v-core | Session activation; main=430e51f; 67 Vitest + lint + typecheck PASS; AQMS sync STATE/config/cursor rule | REQ-0024 | DEC-0054 |
+| 2026-07-05T09:04:00Z | ui-wave27 | build-agent-js | BookSpreadHeader gold desc inline + x-axis align; 68 Vitest PASS | REQ-0029–0030 | DEC-0055 |
+| 2026-07-05T09:15:00Z | ui-wave28 | build-agent-js | dashboard-shell nav scroll isolation + scrollbar-gutter stable; lint/typecheck/test PASS | REQ-0029–0030 | DEC-0056 |

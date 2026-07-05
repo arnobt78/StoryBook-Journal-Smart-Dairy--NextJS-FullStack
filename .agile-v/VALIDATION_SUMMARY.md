@@ -3,12 +3,12 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-wave26-2026-07-04 |
-| **Status** | Stage 4 static complete; Waves 1–26 shipped (24, 26 uncommitted); Gate 2 pending e2e |
+| **Revision** | C4-ui-wave28-2026-07-05 |
+| **Status** | Stage 4 static complete; Waves 1–28; Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
-| **Last Updated** | 2026-07-04T11:55:00Z |
-| **Verifier** | build-agent-js (Wave 26) + agile-v-core (sync) |
+| **Last Updated** | 2026-07-05T09:20:00Z |
+| **Verifier** | build-agent-js (Wave 27–28) |
 
 ## Evidence Summary
 
@@ -49,7 +49,7 @@ Gate 2 NOT READY — REQ-0021 full e2e in CI; REQ-0009 prod demo gate
 |-------|--------|
 | `npm run lint` | PASS |
 | `npm run typecheck` | PASS |
-| `npm run test` | PASS (67 Vitest, 2026-07-04 @ bb7612b + Wave 24–25) |
+| `npm run test` | PASS (68 Vitest, 2026-07-05 Wave 27–28) |
 | `npm run build` | PASS (2026-07-04, Turbopack — re-run this pass, all routes compile) |
 
 ## Prior cycles (archived summary)

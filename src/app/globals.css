@@ -342,11 +342,20 @@ body {
   padding-left: 1.4em;
 }
 
-/* ─── Dashboard scroll ───────────────────────────────────────── */
-.dashboard-scroll {
+/* ─── Dashboard shell — nav outside scroll (profile avatar shift fix) ─────── */
+.dashboard-shell {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard-scroll {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgba(120, 70, 20, 0.2) transparent;
 }
@@ -1413,8 +1422,8 @@ body {
   transform: translateX(-50%);
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  align-items: baseline;
+  flex-wrap: nowrap;
+  align-items: center;
   justify-content: center;
   gap: 0 8px;
   max-width: min(
@@ -1448,11 +1457,12 @@ body {
   position: relative;
   z-index: 1;
   display: inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   gap: 0 8px;
   max-width: 100%;
+  min-width: 0;
   cursor: default;
 }
 
@@ -1468,10 +1478,11 @@ body {
 }
 
 .book-spread-header-desc {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: min(42vw, 280px);
+  max-width: min(38vw, 240px);
 }
 
 /* ─── Journal tooltip — leather panel for shelf + spread header ───────────── */

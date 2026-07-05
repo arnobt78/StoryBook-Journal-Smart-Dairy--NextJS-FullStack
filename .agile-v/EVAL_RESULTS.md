@@ -5,7 +5,7 @@
 | **Cycle** | C4 |
 | **Revision** | C4-ui-wave26-2026-07-04 |
 | **eval_gate_status** | **CONDITIONAL** |
-| **Last run** | 2026-07-04T11:55:00Z |
+| **Last run** | 2026-07-05T08:58:00Z |
 | **Waiver** | none |
 
 ## Eval checklist (C4)
@@ -20,9 +20,9 @@
 | CR-0005 C4 UI synthesis | PASS | Waves 1–**26** |
 | Logic Gatekeeper Stage 2 | PASS | phases/02-validation/SUMMARY.md |
 | Static Red Team | PASS | TC-0031–0043 |
-| Stage 3 synthesis | PASS | through `bb7612b` + Wave 24–25 |
+| Stage 3 synthesis | PASS | through `430e51f` (Waves 24 + 26) |
 | E2E regression executed | **FAIL** | REQ-0021 — e2e not in CI |
-| Vitest unit | PASS | **67** tests 2026-07-04 @ bb7612b + Wave 24–25 |
+| Vitest unit | PASS | **68** tests 2026-07-05 |
 | Lint + typecheck + build | PASS | 2026-07-04 Wave 26 — all three re-run and PASS |
 | C4 tag UX TC-0034–0035 | PASS | static + DB audit |
 | C4 dialog/nav UX | PASS | Waves 17–23 static |

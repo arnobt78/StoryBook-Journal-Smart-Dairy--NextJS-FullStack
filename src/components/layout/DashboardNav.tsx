@@ -10,6 +10,8 @@
  *  • Profile menu rows pair Lucide glyphs (`Activity`, `FileText`, `LogOut`) with labels
  *    for quick visual scanning next to API shortcuts and sign-out.
  *  • Sign-out delegates to `useSignOutWithBookClose` via `onSignOut` from DashboardClientShell.
+ *  • Rendered **outside** `.dashboard-scroll` in `DashboardClientShell` — content scrollbar
+ *    gutter must not change nav inner width (shelf ↔ journal profile shift fix).
  *
  * ── WALKTHROUGH ──
  *  OFFLINE — `{pendingCount} offline` badge from `OfflineSyncContext`; counts IndexedDB queue.
@@ -55,8 +57,7 @@ export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps)
         justifyContent: "space-between",
         padding: "0 32px",
         background: "transparent",
-        position: "sticky",
-        top: 0,
+        flexShrink: 0,
         zIndex: 50,
       }}
     >

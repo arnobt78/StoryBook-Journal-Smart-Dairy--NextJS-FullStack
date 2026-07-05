@@ -16,14 +16,15 @@ export const BOOK_BRAND_GOLD_TEXT_STYLE: CSSProperties = {
   lineHeight: 1.2,
 };
 
-/** Truncated description segment beside golden title (auth body ink on dark bg) */
-export const BOOK_BRAND_SUBTITLE_STYLE: CSSProperties = {
-  fontFamily: "'Lora', serif",
-  fontSize: "12px",
-  color: "rgba(255,200,130,.72)",
-  letterSpacing: "0.02em",
-  lineHeight: 1.2,
-  textShadow: "0 0 12px rgba(255,150,50,.25)",
+/**
+ * Inline description beside golden title — same face/size as title (AuthBookShell parity).
+ * nowrap + ellipsis keep icon/title/desc on one horizontal axis in BookSpreadHeader.
+ */
+export const BOOK_BRAND_DESC_INLINE_STYLE: CSSProperties = {
+  ...BOOK_BRAND_GOLD_TEXT_STYLE,
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
 };
 
 /** Cover icon beside journal header title — warm leather stroke + amber glow */

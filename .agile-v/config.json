@@ -5,8 +5,8 @@
     "display_name": "StoryBook Journal",
     "repository": "https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack",
     "cycle": "C4",
-  "revision": "C4-ui-wave26-2026-07-04",
-  "last_commit": "bb7612b",
+  "revision": "C4-ui-wave28-2026-07-05",
+  "last_commit": "430e51f",
     "tech_stack": [
       "Next.js 16 App Router",
       "React 19",

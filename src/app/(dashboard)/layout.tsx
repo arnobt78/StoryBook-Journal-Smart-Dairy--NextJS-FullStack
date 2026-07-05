@@ -28,8 +28,6 @@ export default async function DashboardLayout({
   if (!session?.user?.id) redirect("/login");
 
   return (
-    <div className="dashboard-scroll">
-      <DashboardClientShell user={session.user}>{children}</DashboardClientShell>
-    </div>
+    <DashboardClientShell user={session.user}>{children}</DashboardClientShell>
   );
 }

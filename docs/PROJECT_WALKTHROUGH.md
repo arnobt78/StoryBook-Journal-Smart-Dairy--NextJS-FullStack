@@ -52,7 +52,7 @@ src/app/
   robots.ts                   # disallow /api, /dashboard, /journal; block AI scrapers
   (auth)/login, register      # Auth pages + forms
   (dashboard)/
-    layout.tsx                # Shell + nav
+    layout.tsx                # auth gate; DashboardClientShell (no outer scroll wrapper)
     dashboard/page.tsx        # SSR: list books, render BookShelf
     journal/[bookId]/page.tsx # SSR: load book + entries, render BookSpread
   api/
@@ -151,7 +151,8 @@ Prisma models (`prisma/schema.prisma`):
 - **OAuth welcome toast (Wave 20):** `OAuthReturnSync` on dashboard mount reads `OAUTH_PENDING_KEY` + `OAUTH_VARIANT_KEY`; shows `welcomeBack` or `registered` then `notifyJournalCacheUpdated`.
 - **Logout animation (Wave 20):** `useSignOutWithBookClose` drives `LogoutBookCloseOverlay` (spread fold → hinge close → 360° orbit) for nav dropdown and ⌘K sign-out.
 - **Journal readability (Wave 21):** `journal-page-styles.ts` bumps spread ink to auth parity (`.45–.55`); wired in LeftPage, RightPage, footers, tags.
-- **Golden book header (Wave 21):** `BookSpreadHeader` above `BookSpread` — cover icon + Dancing Script title + truncated `description`; full meta on Radix tooltip hover.
+- **Golden book header (Wave 21, 27):** `BookSpreadHeader` — icon + Dancing Script title + truncated description (same font, nowrap row); tooltip for full meta.
+- **Dashboard shell (Wave 28):** `DashboardClientShell` — `.dashboard-shell` (nav fixed height) + `.dashboard-scroll` (main only); prevents navbar profile shift when shelf scrollbar toggles.
 - **Shelf tooltips (Wave 21):** `BookShelf` spine hover shows title + description via `ui/tooltip.tsx`; `TooltipProvider` in `DashboardClientShell`.
 - **Journal nav polish (Wave 22):** `JournalBottomNav` — `FilePlus`, shelf spotlight, per-button hover + tooltips; `.journal-paper-action-btn` darker hover on read footer.
 - **Confirm stacking (Wave 22):** `ConfirmDialog` `priority` prop; close `BookEditorModal` before delete confirm; paper dialog footer band removed.
@@ -506,7 +507,18 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 27. Related docs
+## 27. C4 UI Waves 27–28 — Header parity + nav scroll isolation (2026-07-05)
+
+| Wave | Files | Details |
+|------|-------|---------|
+| 27 | `book-brand-styles.ts`, `BookSpreadHeader.tsx`, `globals.css`, `book-brand.test.ts` | Desc uses `BOOK_BRAND_DESC_INLINE_STYLE` (Dancing Script); x-axis nowrap align |
+| 28 | `DashboardClientShell.tsx`, `DashboardNav.tsx`, `(dashboard)/layout.tsx`, `globals.css` | Nav outside `.dashboard-scroll`; `scrollbar-gutter: stable`; profile avatar shift fix |
+
+**Out of scope:** SSR, TanStack invalidation, SSE — presentation/layout only.
+
+---
+
+## 28. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -517,4 +529,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-04 — C4 Wave 24–26; lint/typecheck/67 Vitest/build PASS.*
+*Last reviewed: 2026-07-05 — C4 Wave 27–28; lint/typecheck/68 Vitest/build PASS.*

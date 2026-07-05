@@ -1,8 +1,18 @@
 import { describe, expect, it } from "vitest";
 import {
+  BOOK_BRAND_DESC_INLINE_STYLE,
+  BOOK_BRAND_GOLD_TEXT_STYLE,
   bookMetaNeedsTooltip,
   truncateBookMeta,
 } from "@/lib/book-brand-styles";
+
+describe("BOOK_BRAND_DESC_INLINE_STYLE", () => {
+  it("uses the same font family as the golden title (auth parity)", () => {
+    expect(BOOK_BRAND_DESC_INLINE_STYLE.fontFamily).toBe(
+      BOOK_BRAND_GOLD_TEXT_STYLE.fontFamily,
+    );
+  });
+});
 
 describe("truncateBookMeta", () => {
   it("returns empty for null/blank", () => {

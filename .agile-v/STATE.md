@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave26-2026-07-04 |
-| **Last commit** | `bb7612b` + uncommitted Wave 24 (journal row stagger) + Wave 26 (flip anti-flash + entry persistence) |
+| **Revision** | C4-ui-wave28-2026-07-05 |
+| **Last commit** | pending — Wave 27–28 uncommitted on `430e51f` |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,14 +16,14 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-07-04T11:55:00Z |
-| **Updated By** | build-agent-js (Wave 26 — journal flip anti-flash + entry persistence) |
+| **Last Updated** | 2026-07-05T09:20:00Z |
+| **Updated By** | build-agent-js (Wave 27–28 + doc sync) |
 
-## Resume (2026-07-04)
+## Resume (2026-07-05)
 
-1. Read this file → `cycles/C4/README.md` → `PLAYBOOK.md` → latest `DEC-0052`.
-2. **Code baseline:** `bb7612b` (Wave 23) + Wave 24 (journal row stagger) + Wave 26 (flip anti-flash + `?entry=` persistence) — this session, uncommitted. The *separately named* "Wave 24–25" shelf-handoff/insights WIP referenced in `CLAUDE.md` remains in **git stash only** — not on disk/branch; do not confuse the two.
-3. **Production:** Vercel deploy matches `bb7612b`; no refresh flash reported in prod browser.
+1. Read this file → `cycles/C4/README.md` → `PLAYBOOK.md` → latest `DEC-0056`.
+2. **Code baseline:** `430e51f` + uncommitted Wave 27 (header brand) + Wave 28 (nav scroll isolation).
+3. **Production:** Vercel deploy pending sync to `430e51f`; prior `bb7612b` had no refresh flash in prod browser.
 4. **Localhost dev flash:** dev-mode artifact (Turbopack, cold session fetch, incognito no-cache) — **do not refactor** unless reproduced with `npm run build && npm start`.
 5. **Wave 26 fix:** page-turn flash was caused by `RightPage`/`LeftPage` content always being painted (no `visibility` gate) while the previous entry's text was still on screen during the 650ms flip — now hidden via `visibility` like `AuthBookShell`, and both pages remount on `entryStaggerKey` post-flip to replay the Wave-24 stagger together. Entry-selection-lost-on-refresh fixed via server-resolved `?entry=` param (`journal-entry-url.ts`) + `history.replaceState` mirror (no extra SSR round trip per flip).
 6. **Next backlog (REQ-gated):** REQ-0021 e2e CI · optional shelf-handoff/`/insights` recovery from stash (separate REQ scope) if requested.
@@ -37,7 +37,7 @@
 | 1 Requirements | **COMPLETE** | REQ-0001–0031; CR-0001–0005 |
 | 2 Validation | **COMPLETE** | `phases/02-validation/SUMMARY.md` |
 | 3 Synthesis | **COMPLETE** | ART-0001–0098; commits through `bb7612b` |
-| 4 Verification | **IN_PROGRESS** | 67 Vitest PASS (2026-07-04, +journal-entry-url); lint/typecheck/build PASS |
+| 4 Verification | **IN_PROGRESS** | **68** Vitest PASS (2026-07-05); lint/typecheck/build PASS |
 | 5 Acceptance | NOT_STARTED | — |
 
 ## Cycle rollup
@@ -63,8 +63,10 @@
 | 21 | Journal ink, golden header, shelf tooltips | 0029–0030 | — |
 | 22 | JournalBottomNav, confirm priority, paper actions | 0029–0030 | — |
 | **23** | **Defer delete confirm, nav wrap, shelf glow unclip** | **0029–0030** | **fe6abd9→bb7612b** |
-| **24** | **Journal book row stagger (header + left/right pages) — mirrors auth-stagger** | **0029–0030** | uncommitted, this session |
-| **26** | **Flip anti-flash (visibility gate + remount key) + `?entry=` persistence on refresh** | **0002–0003, 0029–0030** | uncommitted, this session |
+| **24** | **Journal book row stagger (header + left/right pages) — mirrors auth-stagger** | **0029–0030** | `430e51f` |
+| **26** | **Flip anti-flash + `?entry=` persistence** | **0002–0003, 0029–0030** | `430e51f` |
+| **27** | **Spread header desc Dancing Script parity + x-axis align** | **0029–0030** | uncommitted |
+| **28** | **Nav outside `.dashboard-scroll` — profile avatar shift fix** | **0029–0030** | uncommitted |
 
 ## C4 non-UI (stable — do not regress)
 

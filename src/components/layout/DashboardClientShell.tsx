@@ -3,6 +3,9 @@
 /**
  * Client shell for authenticated dashboard routes — OAuth sync, sign-out overlay,
  * nav, and command palette share one sign-out hook instance.
+ *
+ * Layout: `.dashboard-shell` flex column — nav sits **outside** `.dashboard-scroll`
+ * so the content scrollbar never shrinks the nav width (profile avatar shift fix).
  */
 import { OAuthReturnSync } from "@/components/auth/OAuthReturnSync";
 import { DashboardCommandProvider } from "@/components/layout/DashboardCommandProvider";
@@ -29,10 +32,14 @@ export function DashboardClientShell({ user, children }: DashboardClientShellPro
     <TooltipProvider delayDuration={200}>
       <OAuthReturnSync displayName={displayName} />
       <LogoutBookCloseOverlay active={signingOut} />
-      <DashboardNav user={user} signingOut={signingOut} onSignOut={handleSignOut} />
-      <DashboardCommandProvider onSignOut={handleSignOut} signingOut={signingOut}>
-        <main>{children}</main>
-      </DashboardCommandProvider>
+      <div className="dashboard-shell">
+        <DashboardNav user={user} signingOut={signingOut} onSignOut={handleSignOut} />
+        <div className="dashboard-scroll">
+          <DashboardCommandProvider onSignOut={handleSignOut} signingOut={signingOut}>
+            <main>{children}</main>
+          </DashboardCommandProvider>
+        </div>
+      </div>
     </TooltipProvider>
   );
 }
