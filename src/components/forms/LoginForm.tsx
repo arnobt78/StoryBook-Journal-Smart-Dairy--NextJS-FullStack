@@ -19,6 +19,10 @@ import { BookOpen, ChevronDown, Users } from "lucide-react";
 import { appToast } from "@/lib/app-toast";
 import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
 import { isDemoAccountSelected } from "@/lib/auth/demo-account";
+import {
+  DEMO_PICKER_LABEL_FULL,
+  DEMO_PICKER_LABEL_SHORT,
+} from "@/lib/auth-responsive-labels";
 import { authStaggerRowProps } from "@/lib/auth-stagger";
 import { robohashUrl } from "@/lib/robohash";
 import {
@@ -198,9 +202,18 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
               ) : (
                 <Users size={16} aria-hidden className="auth-demo-trigger__icon" />
               )}
-              <span className="auth-demo-trigger__label">
-                {demoSelected ? TEST_ACCOUNT_DISPLAY_NAME : "Select Demo Account"}
-              </span>
+              {demoSelected ? (
+                <span className="auth-demo-trigger__label">{TEST_ACCOUNT_DISPLAY_NAME}</span>
+              ) : (
+                <>
+                  <span className="auth-demo-trigger__label auth-responsive-label--full">
+                    {DEMO_PICKER_LABEL_FULL}
+                  </span>
+                  <span className="auth-demo-trigger__label auth-responsive-label--short">
+                    {DEMO_PICKER_LABEL_SHORT}
+                  </span>
+                </>
+              )}
               <ChevronDown
                 size={14}
                 aria-hidden

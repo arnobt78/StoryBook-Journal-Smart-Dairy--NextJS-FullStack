@@ -1,11 +1,11 @@
 # Cycle C4 — UI Polish + Entry Tags (active)
 
-**Status:** Stage 4 Verification — static PASS · Waves **1–32**
+**Status:** Stage 4 Verification — static PASS · Waves **1–40b**
 
 | Field | Value |
 |-------|-------|
-| Commits | through `72313b4` |
-| Unit tests | **78** Vitest PASS |
+| Commits | through `72313b4` + Waves 33–40b (this session) |
+| Unit tests | **90** Vitest PASS |
 
 ## Core deliverables (REQ)
 
@@ -31,6 +31,13 @@
 | **30** | Demo picker selected avatar + `TEST_ACCOUNT_DISPLAY_NAME` | `demo-account.ts`, `constants/auth.ts`, `LoginForm.tsx` |
 | **31** | Dark page theme ink — `bookThemeCssVars`, extended `BOOK_THEMES` | `book-theme-vars.ts`, `journal-page-styles.ts`, `LeftPage`, `RightPage`, `globals.css` |
 | **32** | Theme-aware page flip — `PageFlipOverlay` uses theme vars | `PageFlip.tsx`, `globals.css`, `themes.ts` |
+| **33** | Mobile horizontal scroll — `BookSpreadScrollPort` below 768px | `book-spread-scroll.ts`, `BookSpreadScrollPort.tsx`, `AuthBookShell`, `BookSpread`, `globals.css` |
+| **33b** | Auth padding parity + scroll bounds pin | `journal-page-styles.ts`, `AuthBookShell.tsx`, `globals.css` |
+| **34** | Mobile auth labels + shell pad + icon nav | `auth-responsive-labels.ts`, `LoginForm`, `JournalBottomNav`, `BookSpreadHeader` |
+| **35–38** | Mobile journal chrome, glass nav, spotlight bleed, edit X-scroll lock | `globals.css`, `BookSpread`, `JournalBottomNav`, footers |
+| **39** | md+ flip unclip — stable clip-margin + pinned inner width | `globals.css`, `BookSpreadScrollPort`, `book-spread-scroll.ts` |
+| **40** | Fixed nav overlay on journal md+ | `globals.css`, `DashboardClientShell` pattern |
+| **40b** | Journal nav+chrome padding; shelf single-viewport md+ | `globals.css`, `BookShelf` (`.dashboard-shelf-*`) |
 
 ## Wave 23 detail (latest on main)
 

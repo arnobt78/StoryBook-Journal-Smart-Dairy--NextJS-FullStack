@@ -7,7 +7,12 @@
  * Row stagger: icon (0) · title (1) · separator (1) · description (2) — mirrors
  * AuthBookShell's "StoryBook · phrase" indices so this header cascades in lockstep
  * with LeftPage/RightPage on every mount (see journal-stagger.ts).
- * Description uses BOOK_BRAND_DESC_INLINE_STYLE (same Dancing Script as title).
+ *
+ * Wave 35 mobile: icon + truncated title + · + truncated desc on one inline row
+ * (see `.book-spread-header-wrap` in globals.css).
+ * Wave 38 mobile journal: fixed positioning + z45 in CSS so spotlight bleeds through
+ * transparent nav — no component logic; journal-route-viewport rules only.
+ * Wave 39: vertically centered in chrome band between nav and book top edge.
  */
 import { CoverIcon } from "@/components/journal/CoverIcon";
 import {
@@ -44,18 +49,28 @@ export function BookSpreadHeader({
 
   const headerRow = (
     <div className="book-spread-header-row">
-      <span
-        {...journalStaggerRowProps(0, { className: "book-spread-header-icon" })}
-      >
-        <CoverIcon id={coverEmoji} size={18} />
-      </span>
-      <span {...journalStaggerRowProps(1, { style: BOOK_BRAND_GOLD_TEXT_STYLE })}>
-        {trimmedTitle}
-      </span>
+      <div className="book-spread-header-title-row">
+        <span
+          {...journalStaggerRowProps(0, { className: "book-spread-header-icon" })}
+        >
+          <CoverIcon id={coverEmoji} size={18} />
+        </span>
+        <span
+          {...journalStaggerRowProps(1, {
+            className: "book-spread-header-title",
+            style: BOOK_BRAND_GOLD_TEXT_STYLE,
+          })}
+        >
+          {trimmedTitle}
+        </span>
+      </div>
       {displayDesc ? (
         <>
           <span
-            {...journalStaggerRowProps(1, { style: BOOK_BRAND_SEPARATOR_STYLE })}
+            {...journalStaggerRowProps(1, {
+              className: "book-spread-header-sep",
+              style: BOOK_BRAND_SEPARATOR_STYLE,
+            })}
             aria-hidden
           >
             ·

@@ -4,6 +4,7 @@ import { redirect, notFound } from "next/navigation";
 import { BookSpread } from "@/components/journal/BookSpread";
 import { parseTags } from "@/lib/utils";
 import { resolveInitialFocusedEntryId } from "@/lib/journal-entry-url";
+import { JOURNAL_ROUTE_VIEWPORT_CLASS } from "@/lib/book-spread-scroll";
 import type { JournalBook, JournalEntry } from "@/types";
 
 interface PageProps {
@@ -61,18 +62,20 @@ export default async function JournalPage({ params, searchParams }: PageProps) {
   );
 
   return (
-    // Fixed viewport — matches journal reading mode (no document scroll)
+    // Wave 37 — full-bleed gradient + pad-top for nav; positioning in .journal-route-viewport CSS
     <div
-      className="book-viewport-80"
+      className={`book-viewport-80 ${JOURNAL_ROUTE_VIEWPORT_CLASS}`}
       style={{
-        position: "fixed",
-        inset: 0,
         background:
           "radial-gradient(ellipse at 50% 30%, #2e160a 0%, #1a0c05 55%, #0e0603 100%)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        overflow: "hidden",
+        width: "100%",
+        height: "100%",
+        minHeight: 0,
+        flex: 1,
+        boxSizing: "border-box",
       }}
     >
       <BookSpread initialBook={initialBook} initialFocusedEntryId={initialFocusedEntryId} />

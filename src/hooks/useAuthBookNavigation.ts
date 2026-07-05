@@ -22,12 +22,13 @@ export function authStaggerRemountKey(
   return contentReady ? pathname : (flipSourcePath ?? pathname);
 }
 
-/** Branding row key — stable during flip so top title does not re-stagger mid-animation. */
+/** Branding row key — keep source path during flip (no mid-flip remount); destination when ready. */
 export function authBrandStaggerKey(
   contentReady: boolean,
   pathname: string,
+  flipSourcePath: string | null,
 ): string {
-  return contentReady ? pathname : "auth-brand-hold";
+  return contentReady ? pathname : (flipSourcePath ?? pathname);
 }
 
 export function normalizeAuthPath(p: string): string {
@@ -129,7 +130,11 @@ export function useAuthBookNavigation({
     pathname,
     flipSourcePath,
   );
-  const brandStaggerKey = authBrandStaggerKey(contentReady, pathname);
+  const brandStaggerKey = authBrandStaggerKey(
+    contentReady,
+    pathname,
+    flipSourcePath,
+  );
 
   return {
     goLogin,

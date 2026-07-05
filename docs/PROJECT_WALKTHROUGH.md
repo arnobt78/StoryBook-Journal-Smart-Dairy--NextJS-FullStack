@@ -553,7 +553,68 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 32. Related docs
+## 32. C4 UI Wave 33 — Mobile horizontal scroll (2026-07-05)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Scroll port | `BookSpreadScrollPort.tsx`, `globals.css` | `.book-spread-scroll-port` — `overflow-x: auto` below 768px; `overscroll-behavior-x: contain` |
+| Auth + journal | `AuthBookShell.tsx`, `BookSpread.tsx` | Spotlight + 3D spread inside port; branding/nav outside (viewport-centered) |
+| Lib | `book-spread-scroll.ts` | Breakpoint 767px + spread width helper |
+| Shell | `.auth-book-enter-shell`, `.book-spread-shell` | Full width on mobile so absolute headers center on viewport |
+| Tests | `book-spread-scroll.test.ts` (4) | **82** Vitest total |
+
+**Out of scope:** flip animation, cache/API, SSR — UI-only.
+
+---
+
+## 33. C4 UI Wave 33b — Auth padding + scroll bounds (2026-07-05)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Auth pad | `journal-page-styles.ts`, `AuthBookShell.tsx` | `AUTH_LEFT_PAGE_CONTENT_PADDING` 22px sides; DRY ruled/margin layers |
+| Scroll | `globals.css`, `book-spread-scroll.ts` | Mobile inner width = spread; overflow hidden; spotlight/3D contained |
+| 3D | `BookSpread.tsx`, `globals.css` | `.book-spread-3d-row` / `--tilted`; no rotate on phone |
+| Tests | `book-spread-scroll.test.ts` (5) | **83** Vitest total |
+
+---
+
+## 35. C4 UI Wave 34 — Mobile auth labels + shell pad (2026-07-05)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Labels | `auth-responsive-labels.ts`, `LoginForm`, `GoogleSignInButton` | Demo "Demo account" / Gmail short on mobile |
+| Nav pad | `dashboard-styles.ts`, `DashboardNav.tsx`, `globals.css` | `.dashboard-shell-pad` px-2/md/lg |
+| Header | `BookSpreadHeader.tsx`, `globals.css` | Mobile stack + viewport pad |
+| Bottom nav | `JournalBottomNav.tsx`, `globals.css` | Icon-only CRUD row on phone |
+| Tests | `auth-responsive-labels.test.ts` (2) | **85** Vitest total |
+
+---
+
+## 36. C4 UI Waves 35–38 — Mobile journal chrome + nav (2026-07-05)
+
+| Area | Details |
+|------|---------|
+| 35 | Inline mobile header; 44px touch nav; read/write footer meta + icons |
+| 36 | Journal viewport below nav + chrome bands; scroll `:has` lock |
+| 37 | Glass nav on journal; scroll-port pan-x; header center |
+| 38 | Transparent nav (no backdrop-filter); spotlight bleed; edit single X-scroll |
+| Tests | **88** Vitest total |
+
+---
+
+## 37. C4 UI Wave 39–40b — md+ flip unclip + viewport fit (2026-07-05)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Flip unclip | `globals.css`, `BookSpreadScrollPort.tsx` | Stable `overflow: clip` + clip-margin; pinned inner width; flip z-index |
+| Fixed nav | `globals.css` | Journal md+ nav `position: fixed`; scroll 100vh |
+| Journal layout | `globals.css`, `BookSpread.tsx` | `padding-top: nav + chrome`; header no longer overlaps book |
+| Shelf viewport | `globals.css`, `BookShelf.tsx` | md+ single viewport; `--shelf-spine-h` from vh; `.dashboard-shelf-*` |
+| Tests | `book-spread-scroll.test.ts` (5), responsive label tests | **90** Vitest total |
+
+---
+
+## 38. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -564,4 +625,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-05 — C4 Wave 27–32; lint/typecheck/78 Vitest/build PASS.*
+*Last reviewed: 2026-07-05 — C4 Wave 40b; lint/typecheck/90 Vitest/build PASS.*

@@ -317,6 +317,19 @@ body {
   text-underline-offset: 2px;
 }
 
+/* Wave 38 — long tokens must not widen the page or trigger viewport X scroll in edit mode */
+.journal-editor {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.journal-editor .ProseMirror {
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 /* Read-mode HTML from TipTap — same typography as editor */
 .journal-prose {
   font-family: "Lora", serif;
@@ -358,6 +371,27 @@ body {
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgba(120, 70, 20, 0.2) transparent;
+}
+
+/* Wave 34 — responsive shell horizontal inset (px-2 / md:px-4 / lg:px-8) */
+.dashboard-shell-pad {
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .dashboard-shell-pad {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-shell-pad {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
 }
 
 /* ─── Book shine sweep (landing cover) ───────────────────────── */
@@ -587,6 +621,629 @@ body {
   --page-h: clamp(420px, calc(80vh - 56px), 920px);
 }
 
+/* Wave 37+ — route markers; immersive layout scoped in @media (max-width: 767px) */
+.journal-route-viewport {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.auth-route-viewport {
+  --auth-chrome-top: 52px;
+  --auth-chrome-bottom: 48px;
+}
+
+/* Journal open book — lock scroll; clip-margin bleeds 3D flip (md+ nav is fixed overlay, see below) */
+.dashboard-scroll:has(.journal-route-viewport) {
+  overflow: clip;
+  overflow-clip-margin: 160px 0 100px 0;
+  scrollbar-gutter: stable both-edges;
+}
+
+.dashboard-scroll:has(.journal-route-viewport) > main {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* md+ shelf — fill viewport below nav; inner shelf scroll flush to edge (no gutter inset) */
+@media (min-width: 768px) {
+  .dashboard-scroll:has(.dashboard-shelf-viewport) {
+    overflow: hidden;
+    scrollbar-gutter: stable both-edges;
+    flex: 1;
+    min-height: 0;
+    max-height: calc(100vh - var(--dashboard-nav-h, 64px));
+  }
+
+  .dashboard-scroll:has(.dashboard-shelf-viewport) > main {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.book-spread-shell {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Stage wraps header + shell as one flex child in `.journal-route-viewport` (Wave 40) */
+.journal-spread-stage {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ─── Wave 33 — mobile horizontal scroll for open book spread ───────────────
+   Below 768px the spread (2×--page-w + spine) often exceeds the viewport while
+   keeping readable page width. Auth + journal wrap the 3D row in
+   .book-spread-scroll-port; branding/nav stay outside (viewport-centered).
+   md+: overflow hidden, spread centered — no horizontal scroll.
+──────────────────────────────────────────────────────────────────────────── */
+.book-spread-scroll-port {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.book-spread-scroll-inner {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: max-content;
+  min-width: 100%;
+  margin-inline: auto;
+  scroll-snap-align: center;
+}
+
+@media (max-width: 767px) {
+  /* ── Phone: immersive fixed journal viewport + dashboard scroll lock ── */
+  .journal-route-viewport {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-top: var(--dashboard-nav-h, 64px);
+    box-sizing: border-box;
+    max-width: 100vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    overscroll-behavior: none;
+    touch-action: pan-y pinch-zoom;
+    z-index: 40;
+  }
+
+  .book-viewport-80.journal-route-viewport {
+    --dashboard-nav-h: 64px;
+    --journal-chrome-top: 52px;
+    --journal-chrome-bottom: 92px;
+    --page-h: clamp(
+      280px,
+      calc(
+        100dvh - var(--dashboard-nav-h) - var(--journal-chrome-top) -
+          var(--journal-chrome-bottom)
+      ),
+      920px
+    );
+  }
+
+  /* ── Phone: auth chrome bands + fixed header spotlight ── */
+  .auth-route-viewport {
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .book-viewport-80.auth-route-viewport {
+    --page-h: clamp(
+      280px,
+      calc(100dvh - var(--auth-chrome-top) - var(--auth-chrome-bottom)),
+      920px
+    );
+  }
+
+  .auth-route-viewport .auth-book-enter-shell {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: var(--auth-chrome-top, 52px);
+    padding-bottom: var(--auth-chrome-bottom, 48px);
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .auth-route-viewport .auth-spread-header-wrap {
+    position: fixed;
+    top: calc(var(--auth-chrome-top, 52px) / 2);
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 45;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    overflow: visible;
+    pointer-events: none;
+    padding-left: 8px;
+    padding-right: 8px;
+    box-sizing: border-box;
+  }
+
+  .auth-route-viewport .auth-spread-header-wrap .book-spread-header-row {
+    pointer-events: auto;
+  }
+
+  .auth-route-viewport .auth-spread-header-wrap .book-spread-header-spotlight {
+    height: 72px;
+    width: min(300px, 88vw);
+  }
+
+  .auth-route-viewport .auth-spread-header-row {
+    width: auto;
+    max-width: min(
+      96vw,
+      calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 24px)
+    );
+    justify-content: center;
+  }
+
+  .auth-route-viewport .auth-spread-header-title-row {
+    max-width: none;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .auth-route-viewport .auth-spread-header-phrase {
+    max-width: min(48vw, 220px);
+    flex: 0 1 auto;
+  }
+
+  .book-spread-scroll-port {
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(120, 70, 20, 0.2) transparent;
+    min-width: 0;
+    max-width: 100%;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+  }
+
+  .book-spread-scroll-port::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .book-spread-scroll-port::-webkit-scrollbar-thumb {
+    background: rgba(120, 70, 20, 0.2);
+    border-radius: 4px;
+  }
+
+  .book-spread-scroll-port::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Pin scroll width to the physical spread — spotlight + 3D tilt must not extend scrollWidth */
+  .book-spread-scroll-inner {
+    width: calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px));
+    min-width: unset;
+    overflow: hidden;
+  }
+
+  /* Halo fits book footprint on mobile so overflow:hidden does not clip harshly */
+  .book-spread-scroll-inner .journal-spread-spotlight,
+  .book-spread-scroll-inner .auth-spread-spotlight {
+    width: calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px));
+  }
+
+  /* Drop rotateX/Y on phone — tilt expands scroll/paint bounds past spread width */
+  .book-spread-scroll-inner .book-spread-3d-row,
+  .book-spread-scroll-inner .book-spread-3d-row--tilted {
+    transform: perspective(2000px);
+  }
+
+  /* Full-width shell so absolute branding/nav center on viewport, not spread */
+  .auth-book-enter-shell,
+  .book-spread-shell {
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  /* Wave 36/37 — journal chrome bands; scroll port is block X container (auth parity) */
+  .journal-route-viewport .book-spread-shell {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: var(--journal-chrome-top, 52px);
+    padding-bottom: var(--journal-chrome-bottom, 92px);
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .journal-route-viewport .book-spread-scroll-port {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Wave 38/39 — fixed header in chrome band center (nav bottom → book top) */
+  .journal-route-viewport .book-spread-header-wrap {
+    position: fixed;
+    top: calc(
+      var(--dashboard-nav-h, 64px) + var(--journal-chrome-top, 52px) / 2
+    );
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 45;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    overflow: visible;
+    pointer-events: none;
+    padding-left: 8px;
+    padding-right: 8px;
+    box-sizing: border-box;
+  }
+
+  .journal-route-viewport .book-spread-header-wrap .book-spread-header-row,
+  .journal-route-viewport .book-spread-header-wrap [aria-label] {
+    pointer-events: auto;
+  }
+
+  .journal-route-viewport .book-spread-header-spotlight {
+    height: 72px;
+    width: min(300px, 88vw);
+    top: 50%;
+  }
+
+  /* Centered inline cluster — not full-width left stretch (Wave 35 mobile default) */
+  .journal-route-viewport .book-spread-header-row {
+    width: auto;
+    max-width: min(
+      96vw,
+      calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 24px)
+    );
+    justify-content: center;
+  }
+
+  .journal-route-viewport .book-spread-header-title-row {
+    max-width: none;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .journal-route-viewport .book-spread-header-title {
+    max-width: min(38vw, 160px);
+  }
+
+  .journal-route-viewport .book-spread-header-desc {
+    max-width: min(44vw, 200px);
+    flex: 0 1 auto;
+  }
+
+  /* Flex min-width:auto on write footer must not widen the 3D row past --page-w */
+  .book-spread-3d-row > .journal-page-face {
+    min-width: 0;
+    max-width: var(--page-w, 360px);
+  }
+
+  .journal-route-viewport .journal-bottom-nav-outer {
+    bottom: 0;
+    padding-bottom: 4px;
+    box-sizing: border-box;
+  }
+
+  /* Auth scroll port flexes inside chrome bands on phone */
+  .auth-route-viewport .book-spread-scroll-port {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Phone flip — visible on book chain; dashboard-scroll stays hidden (see md+ / global rules) */
+  .book-spread-scroll-port:has(.spread-coil-flipping),
+  .book-spread-scroll-inner:has(.spread-coil-flipping),
+  .journal-route-viewport .book-spread-scroll-port:has(.spread-coil-flipping),
+  .journal-route-viewport .book-spread-shell:has(.spread-coil-flipping),
+  .auth-route-viewport .auth-book-enter-shell:has(.spread-coil-flipping),
+  .auth-route-viewport .book-spread-scroll-port:has(.spread-coil-flipping),
+  .auth-route-viewport:has(.spread-coil-flipping) {
+    overflow: visible;
+  }
+}
+
+/* Flip — unclip book chain on auth + journal (journal viewport is always visible on md+) */
+.book-spread-scroll-port:has(.spread-coil-flipping),
+.book-spread-scroll-inner:has(.spread-coil-flipping),
+.auth-route-viewport:has(.spread-coil-flipping) {
+  overflow: visible;
+}
+
+@media (min-width: 768px) {
+  /* Journal — fixed nav overlay (logo + avatar only); scroll fills viewport so flip is not cut at y=64 */
+  .dashboard-shell:has(.journal-route-viewport) {
+    position: relative;
+  }
+
+  .dashboard-shell:has(.journal-route-viewport) .dashboard-nav-glass {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--dashboard-nav-h, 64px);
+    z-index: 50;
+    pointer-events: none;
+  }
+
+  .dashboard-shell:has(.journal-route-viewport) .dashboard-nav-glass > * {
+    pointer-events: auto;
+  }
+
+  .dashboard-shell:has(.journal-route-viewport) .dashboard-scroll {
+    flex: 1;
+    min-height: 0;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: clip;
+    overflow-clip-margin: 160px 0 100px 0;
+    scrollbar-gutter: stable both-edges;
+  }
+
+  /* md+ — lock port at rest; flip bleed via clip-margin (visible toggles scrollbar → seam shift) */
+  .book-spread-scroll-port {
+    overflow: hidden;
+  }
+
+  /* md+ — pin inner to spread width so flex centering / seam never drift during flip */
+  .book-spread-scroll-inner {
+    width: calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px));
+    min-width: unset;
+  }
+
+  .journal-route-viewport {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    max-height: 100%;
+    overflow: visible;
+    touch-action: auto;
+    z-index: auto;
+    /* Fixed nav overlay (64px) + header chrome (40px) + bottom nav band (64px) */
+    padding: calc(var(--dashboard-nav-h, 64px) + var(--journal-chrome-top, 40px)) 16px
+      var(--journal-chrome-bottom, 64px);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .book-viewport-80.journal-route-viewport {
+    --journal-chrome-top: 40px;
+    --journal-chrome-bottom: 64px;
+    --page-h: clamp(
+      320px,
+      calc(
+        100vh - 64px - var(--journal-chrome-top) - var(--journal-chrome-bottom)
+      ),
+      920px
+    );
+  }
+
+  .journal-route-viewport .book-spread-shell {
+    position: relative;
+    flex-shrink: 0;
+    overflow: visible;
+  }
+
+  .journal-route-viewport .book-spread-scroll-port {
+    overflow: hidden;
+  }
+
+  .auth-route-viewport .book-spread-scroll-port {
+    overflow: hidden;
+  }
+
+  /* Flip bleed — visible on book chain; no overflow toggle on journal-route-viewport (prevents squeeze) */
+  .journal-route-viewport .book-spread-scroll-port:has(.spread-coil-flipping),
+  .journal-route-viewport .book-spread-scroll-inner:has(.spread-coil-flipping),
+  .auth-route-viewport .book-spread-scroll-port:has(.spread-coil-flipping),
+  .auth-route-viewport .book-spread-scroll-inner:has(.spread-coil-flipping),
+  .auth-route-viewport:has(.spread-coil-flipping),
+  .book-spread-scroll-port:has(.spread-coil-flipping),
+  .book-spread-scroll-inner:has(.spread-coil-flipping) {
+    overflow: visible;
+  }
+
+  /* Flip sheet paints above bottom nav pill (sibling after scroll-port in shell) */
+  .journal-route-viewport .book-spread-shell:has(.spread-coil-flipping) .book-spread-scroll-port {
+    position: relative;
+    z-index: 10;
+  }
+
+  .journal-route-viewport .book-spread-shell:has(.spread-coil-flipping) .journal-bottom-nav-outer {
+    z-index: 1;
+  }
+
+  /* md+ — fixed header in nav→book chrome band; spotlight bleeds through transparent nav */
+  .journal-route-viewport .book-spread-header-wrap {
+    position: fixed;
+    top: calc(
+      var(--dashboard-nav-h, 64px) + var(--journal-chrome-top, 40px) / 2
+    );
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    transform: translateY(-50%);
+    z-index: 45;
+    overflow: visible;
+    pointer-events: none;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+  }
+
+  .journal-route-viewport .book-spread-header-wrap .book-spread-header-row,
+  .journal-route-viewport .book-spread-header-wrap [aria-label] {
+    pointer-events: auto;
+  }
+
+  .journal-route-viewport .book-spread-header-spotlight {
+    height: 80px;
+    width: min(320px, 90vw);
+  }
+
+  .journal-route-viewport .book-spread-header-row {
+    width: auto;
+    max-width: min(
+      96vw,
+      calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 40px)
+    );
+    justify-content: center;
+  }
+
+  .journal-route-viewport .book-spread-header-title {
+    max-width: none;
+  }
+
+  .journal-route-viewport .book-spread-header-desc {
+    max-width: min(42vw, 280px);
+  }
+
+  /* Nav row — anchored to shell bottom, vertically centered in bottom chrome band (md+ only) */
+  .journal-route-viewport .journal-bottom-nav-outer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: var(--journal-chrome-bottom, 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0;
+    box-sizing: border-box;
+    z-index: 3;
+  }
+
+  /* Auth — fit spread in fixed viewport like landing (header floats above book) */
+  .auth-book-viewport.auth-route-viewport {
+    padding: 56px 16px 24px;
+    box-sizing: border-box;
+  }
+
+  .book-viewport-80.auth-route-viewport {
+    --auth-chrome-top: 56px;
+    --auth-chrome-bottom: 24px;
+    --page-h: clamp(
+      360px,
+      calc(100vh - var(--auth-chrome-top) - var(--auth-chrome-bottom)),
+      860px
+    );
+  }
+
+  .auth-route-viewport .auth-book-enter-shell {
+    height: auto;
+    width: auto;
+    max-height: 100%;
+    display: block;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: visible;
+  }
+
+  .auth-route-viewport .auth-spread-header-wrap {
+    position: fixed;
+    top: calc(var(--auth-chrome-top, 56px) / 2);
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    transform: translateY(-50%);
+    z-index: 45;
+    overflow: visible;
+    pointer-events: none;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+  }
+
+  .auth-route-viewport .auth-spread-header-wrap .book-spread-header-row {
+    pointer-events: auto;
+  }
+
+  .auth-route-viewport .auth-spread-header-row {
+    max-width: min(
+      96vw,
+      calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 40px)
+    );
+  }
+
+  .auth-route-viewport .auth-spread-header-phrase {
+    max-width: min(38vw, 280px);
+  }
+}
+
+/* Preserve-3d spread row — transform in CSS so mobile scroll-inner can reset tilt */
+.book-spread-3d-row {
+  transform: perspective(2400px);
+}
+
+.book-spread-3d-row--tilted {
+  transform: perspective(2000px) rotateX(3deg) rotateY(-2deg);
+}
+
+/* Auth open-book leather ambient — sibling of preserve-3d row inside scroll-inner */
+.auth-spread-spotlight {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 280px);
+  height: calc(var(--page-h, 540px) + 200px);
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(139, 69, 19, 0.42) 0%,
+    rgba(90, 40, 10, 0.24) 40%,
+    transparent 65%
+  );
+  filter: blur(50px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
 /* Landing cover container — enables container queries for scaled typography */
 .landing-cover-viewport {
   --cover-w: min(70vw, calc(70vh * 240 / 340));
@@ -803,6 +1460,56 @@ body {
   flex: 1;
   min-width: 0;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Wave 34 — full label md+; short label below 768px (SSR-safe dual spans) */
+.auth-responsive-label--short {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .auth-responsive-label--full {
+    display: none;
+  }
+
+  .auth-responsive-label--short {
+    display: inline;
+  }
+}
+
+/* md+ — icon beside label on paper footers, dialogs, confirms (mobile stays icon-only) */
+@media (min-width: 768px) {
+  .journal-md-icon-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+  }
+
+  .journal-md-icon-label svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+  }
+
+  /* Write footer cancel — match AI Assist / Save typography (paper-action had no font-size) */
+  .journal-write-footer__action-btn {
+    font-family: "Lora", serif;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+  }
+
+  .journal-write-footer__action-btn .journal-md-icon-label {
+    font-weight: 400;
+    letter-spacing: inherit;
+    gap: 4px;
+  }
 }
 
 .auth-demo-trigger__chevron {
@@ -881,31 +1588,204 @@ body {
   min-width: 0;
 }
 
-/* Journal write footer — stack actions on very narrow pages */
+/* Journal write footer — meta row + responsive icon actions on mobile */
 .journal-write-footer {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 8px;
   padding-top: 8px;
   margin-top: 8px;
   border-top: 1px solid rgba(120, 70, 20, 0.1);
   flex-shrink: 0;
+  min-width: 0;
+}
+
+/* Shared page footer meta — read + write footers (Wave 36 DRY alias) */
+.journal-page-footer__meta,
+.journal-read-footer__meta,
+.journal-write-footer__meta {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.journal-page-footer__emoji,
+.journal-read-footer__emoji,
+.journal-write-footer__emoji {
+  font-size: 15px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.journal-page-footer__words,
+.journal-read-footer__words,
+.journal-write-footer__words {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Lora", serif;
+  font-size: 10px;
+  color: var(--theme-ink-body, rgba(100, 55, 20, 0.55));
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .journal-write-footer__actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 6px;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
-@media (max-width: 400px) {
+/* Write footer actions — paper-action hover glow parity with read-mode Remove/Edit */
+.journal-write-footer__ai-btn,
+.journal-write-footer__save-btn,
+.journal-write-footer__action-btn {
+  transition:
+    color 0.2s,
+    text-shadow 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s,
+    opacity 0.2s;
+}
+
+.journal-write-footer__ai-btn {
+  font-family: "Lora", serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: rgba(55, 28, 100, 0.42);
+  color: rgba(245, 235, 255, 0.95);
+  border: 1px solid rgba(120, 80, 200, 0.35);
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.journal-write-footer__ai-btn:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 1);
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.95),
+    0 0 20px rgba(230, 210, 255, 0.75),
+    0 0 32px rgba(180, 140, 255, 0.45);
+  box-shadow: 0 0 16px rgba(140, 100, 220, 0.42);
+  border-color: rgba(200, 170, 255, 0.62);
+}
+
+.journal-write-footer__ai-btn:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.journal-write-footer__save-btn {
+  font-family: "Lora", serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: rgba(90, 40, 10, 0.82);
+  color: rgba(255, 215, 150, 0.92);
+  border: none;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.journal-write-footer__save-btn:hover:not(:disabled) {
+  color: rgba(255, 235, 180, 1);
+  text-shadow: 0 0 14px rgba(255, 185, 80, 0.55);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 16px rgba(255, 160, 60, 0.28);
+}
+
+.journal-write-footer__save-btn:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+@media (max-width: 767px) {
+  /* Wave 38 — footer wraps so nowrap actions never expand page min-width in edit mode */
+  .journal-write-footer {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
   .journal-write-footer__actions {
+    gap: 4px;
     width: 100%;
-    margin-left: 0;
     justify-content: flex-end;
+  }
+
+  .journal-write-footer__ai-btn,
+  .journal-write-footer__save-btn,
+  .journal-write-footer__action-btn {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 6px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .journal-write-footer__action-btn {
+    font-size: 0 !important;
+    letter-spacing: 0 !important;
+  }
+
+  /* Mood/weather pickers live in write footer on mobile — hide duplicate body rows */
+  .journal-write-pickers {
+    display: none;
+  }
+}
+
+/* Journal read footer — mood/weather/words + Page/Edit inline row */
+.journal-read-footer {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(120, 70, 20, 0.1);
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.journal-read-footer__actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.journal-read-footer__btn {
+  font-size: 9px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .journal-read-footer__btn {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0 !important;
+    letter-spacing: 0 !important;
   }
 }
 
@@ -1507,6 +2387,21 @@ body {
   z-index: 3;
 }
 
+@media (max-width: 767px) {
+  /* Wave 35 — viewport shell pad; icon + title + desc stay on one inline row */
+  .book-spread-header-wrap {
+    left: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+}
+
 .book-spread-header-spotlight {
   position: absolute;
   left: 50%;
@@ -1537,6 +2432,51 @@ body {
   max-width: 100%;
   min-width: 0;
   cursor: default;
+}
+
+.book-spread-header-title-row {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.book-spread-header-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .book-spread-header-row {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    gap: 0 6px;
+  }
+
+  .book-spread-header-title-row {
+    min-width: 0;
+    max-width: 38%;
+    flex-shrink: 1;
+  }
+
+  .book-spread-header-sep {
+    display: inline;
+    flex-shrink: 0;
+  }
+
+  .book-spread-header-title {
+    max-width: 100%;
+  }
+
+  .book-spread-header-desc {
+    max-width: 42%;
+    flex: 1 1 auto;
+  }
 }
 
 .book-spread-header-icon {
@@ -1800,11 +2740,49 @@ body {
   flex-shrink: 0;
 }
 
-.journal-bottom-nav {
+.journal-nav-page-controls {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.journal-bottom-nav-outer {
   position: absolute;
   bottom: -80px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.journal-bottom-nav-outer .journal-bottom-nav {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  pointer-events: auto;
+  max-width: 100%;
+}
+
+.journal-nav-touch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 767px) {
+  .journal-nav-touch-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
+  }
+}
+
+.journal-bottom-nav {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1830,6 +2808,62 @@ body {
 
 .leather-glass-nav-pill.journal-bottom-nav {
   overflow: visible;
+}
+
+@media (max-width: 767px) {
+  /* Wave 34/35 — single-row icon nav on phone + shell-pad outer wrap */
+  .journal-bottom-nav {
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 8px 10px;
+    width: 100%;
+    max-width: 100%;
+    justify-content: space-between;
+  }
+
+  .journal-nav-actions {
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .journal-nav-pill-text {
+    display: none;
+  }
+
+  .journal-nav-divider--actions,
+  .journal-nav-divider--between-actions {
+    display: none;
+  }
+
+  .journal-nav-action-btn {
+    border-radius: 8px;
+    min-width: 44px;
+    background: none;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+  }
+
+  .journal-nav-action-btn:hover:not(:disabled) {
+    color: rgba(255, 220, 150, 1);
+    text-shadow: 0 0 14px rgba(255, 185, 80, 0.55);
+    box-shadow: 0 0 16px rgba(255, 160, 60, 0.22);
+  }
+
+  .journal-nav-action-btn.journal-nav-pill-btn--destructive:hover:not(:disabled) {
+    color: rgba(255, 160, 120, 1);
+    text-shadow: 0 0 14px rgba(255, 120, 80, 0.45);
+  }
+
+  .journal-nav-page-count {
+    min-width: 56px;
+    font-size: 11px;
+  }
+
+  .journal-bottom-nav .journal-nav-touch-btn svg {
+    width: 22px;
+    height: 22px;
+  }
 }
 
 /* ─── Auth book glow — ambient leather spotlight around open spread ─────────
@@ -1939,12 +2973,132 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   --shelf-spine-h: clamp(220px, min(52vh, 38vw), 380px);
   --dashboard-dash-color: rgba(255, 160, 60, 0.15);
   --dashboard-dash-color-hover: rgba(255, 178, 75, 0.55);
+  box-sizing: border-box;
+  padding: 32px 16px;
+}
+
+@media (min-width: 768px) {
+  /* md+ shelf — one viewport below nav; no page scroll for typical shelf counts */
+  .dashboard-shelf-viewport {
+    flex: 1;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(12px, 2.5vh, 28px) clamp(16px, 3vw, 32px);
+    --shelf-spine-h: clamp(
+      200px,
+      calc((100vh - var(--dashboard-nav-h, 64px)) * 0.44),
+      360px
+    );
+  }
+
+  .dashboard-shelf-viewport .shelf-stagger {
+    min-height: 0;
+  }
+
+  .dashboard-shelf-viewport > div {
+    flex: 0 1 auto;
+    min-height: 0;
+    width: 100%;
+    max-width: 900px;
+    margin-inline: auto;
+  }
+
+  .dashboard-shelf-greeting {
+    margin-bottom: clamp(16px, 2.5vh, 36px);
+  }
+
+  .dashboard-shelf-grid {
+    min-height: 0;
+  }
+
+  .dashboard-shelf-stats {
+    margin-top: clamp(16px, 2.5vh, 40px);
+  }
+
+  /* md+ — single-row compact bottom nav aligned with shelf icon + page count */
+  .journal-bottom-nav {
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 5px 12px;
+    max-width: min(
+      96vw,
+      calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 80px)
+    );
+  }
+
+  .journal-nav-actions {
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .journal-nav-touch-btn {
+    min-width: 28px;
+    min-height: 28px;
+    padding: 3px;
+  }
+
+  .journal-nav-pill-btn {
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.6px;
+    padding: 4px 8px;
+    min-height: 28px;
+    line-height: 1.2;
+    border-radius: 14px;
+  }
+
+  .journal-nav-pill-text {
+    font-weight: 400;
+  }
+
+  .journal-bottom-nav svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .journal-nav-page-count {
+    font-family: "Lora", serif;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.6px;
+    min-width: auto;
+    padding: 0 2px;
+    line-height: 1.2;
+    text-shadow: none;
+    color: rgba(255, 210, 130, 0.88);
+  }
+
+  .journal-nav-page-controls {
+    gap: 2px;
+  }
+
+  .journal-nav-page-btn {
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  .journal-nav-divider {
+    height: 12px;
+  }
 }
 
 /* Nav logo + StoryBook — amber spotlight (filter on link wrapper, not preserve-3d child) */
 .dashboard-nav-brand {
   filter: drop-shadow(0 0 10px rgba(255, 160, 60, 0.35))
     drop-shadow(0 0 22px rgba(255, 140, 40, 0.18));
+}
+
+/* Wave 38/40 — transparent on all routes; no backdrop-filter (frost clips spotlight seam) */
+.dashboard-nav-glass {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* Profile trigger — outer leather spotlight ring beyond AvatarRing */

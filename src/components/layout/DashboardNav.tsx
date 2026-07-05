@@ -12,6 +12,7 @@
  *  • Sign-out delegates to `useSignOutWithBookClose` via `onSignOut` from DashboardClientShell.
  *  • Rendered **outside** `.dashboard-scroll` in `DashboardClientShell` — content scrollbar
  *    gutter must not change nav inner width (shelf ↔ journal profile shift fix).
+ *  • Wave 38/40 — `.dashboard-nav-glass` on all routes (transparent, no backdrop-filter).
  *
  * ── WALKTHROUGH ──
  *  OFFLINE — `{pendingCount} offline` badge from `OfflineSyncContext`; counts IndexedDB queue.
@@ -32,6 +33,8 @@ import { AvatarRing } from "@/components/ui/AvatarRing";
 import {
   DASHBOARD_BRAND_TEXT_STYLE,
   DASHBOARD_NAV_BRAND_SIZE,
+  DASHBOARD_NAV_GLASS_CLASS,
+  DASHBOARD_SHELL_PAD_CLASS,
 } from "@/lib/dashboard-styles";
 import { useOfflineSync } from "@/context/OfflineSyncContext";
 import { resolveLogoutDisplayName } from "@/lib/logout-book-close";
@@ -50,12 +53,12 @@ export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps)
 
   return (
     <nav
+      className={`${DASHBOARD_SHELL_PAD_CLASS} ${DASHBOARD_NAV_GLASS_CLASS}`}
       style={{
         height: "64px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 32px",
         background: "transparent",
         flexShrink: 0,
         zIndex: 50,

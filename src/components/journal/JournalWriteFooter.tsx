@@ -1,15 +1,23 @@
 "use client";
 
 /**
- * Write-mode footer — word count, AI assist, cancel, save.
- * Responsive flex-wrap row; high-contrast AI button for cream paper background.
+ * Write-mode footer — mood/weather meta, word count, AI assist, cancel, save.
+ * Wave 35: icon-only on mobile via dual-span labels; md+ icon + label.
+ * Hover glow on all action buttons matches read-mode paper actions (globals.css).
  */
 import { AlignLeft, Check, Sparkles, X } from "lucide-react";
-import { JOURNAL_INK_BODY } from "@/lib/journal-page-styles";
+import {
+  WRITE_AI_LABEL_FULL,
+  WRITE_CANCEL_LABEL_FULL,
+  WRITE_SAVE_LABEL_FULL,
+  WRITE_SAVING_LABEL_FULL,
+} from "@/lib/journal-responsive-labels";
 import { JOURNAL_INTERACTION_CLASS as C } from "@/lib/journal-interaction-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
 
 type JournalWriteFooterProps = {
+  mood: string;
+  weather: string;
   wordCount: number;
   isAiThinking: boolean;
   isSaving: boolean;
@@ -20,6 +28,8 @@ type JournalWriteFooterProps = {
 };
 
 export function JournalWriteFooter({
+  mood,
+  weather,
   wordCount,
   isAiThinking,
   isSaving,
@@ -28,87 +38,76 @@ export function JournalWriteFooter({
   onCancel,
   onSave,
 }: JournalWriteFooterProps) {
+  const saveFullLabel = isSaving ? WRITE_SAVING_LABEL_FULL : WRITE_SAVE_LABEL_FULL;
+  const aiDisabled = isAiThinking || !canAiAssist;
+
   return (
     <div className="journal-write-footer">
-      <span
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "6px",
-          fontFamily: "'Lora',serif",
-          fontSize: "10px",
-          color: JOURNAL_INK_BODY,
-          flexShrink: 0,
-        }}
-      >
-        <AlignLeft size={13} strokeWidth={2} aria-hidden />
-        {wordCount} words
-      </span>
+      <div className="journal-page-footer__meta journal-write-footer__meta">
+        {mood ? (
+          <span className="journal-page-footer__emoji journal-write-footer__emoji">
+            {mood}
+          </span>
+        ) : null}
+        {weather ? (
+          <span className="journal-page-footer__emoji journal-write-footer__emoji">
+            {weather}
+          </span>
+        ) : null}
+        <span className="journal-page-footer__words journal-write-footer__words">
+          <AlignLeft size={13} strokeWidth={2} aria-hidden />
+          {wordCount} words
+        </span>
+      </div>
 
       <div className="journal-write-footer__actions">
         <RippleButton
           type="button"
-          icon={Sparkles}
-          iconSize={13}
           onClick={onAiAssist}
-          disabled={isAiThinking || !canAiAssist}
-          className="leather-glass-action-btn"
-          style={{
-            fontFamily: "'Lora',serif",
-            fontSize: "9px",
-            letterSpacing: "1.5px",
-            textTransform: "uppercase",
-            background: "rgba(55,28,100,.42)",
-            color: "rgba(245,235,255,.95)",
-            border: "1px solid rgba(120,80,200,.35)",
-            padding: "5px 12px",
-            borderRadius: "4px",
-            cursor: "pointer",
-            flexShrink: 0,
-            opacity: isAiThinking || !canAiAssist ? 0.4 : 1,
-          }}
+          disabled={aiDisabled}
+          aria-label={WRITE_AI_LABEL_FULL}
+          className="journal-write-footer__ai-btn"
         >
-          AI Assist
+          <span className="journal-md-icon-label auth-responsive-label--full">
+            <Sparkles size={13} strokeWidth={2} aria-hidden />
+            {WRITE_AI_LABEL_FULL}
+          </span>
+          <span className="auth-responsive-label--short" aria-hidden>
+            <Sparkles size={18} strokeWidth={2} />
+          </span>
         </RippleButton>
+
         <RippleButton
           type="button"
-          icon={X}
-          iconSize={13}
           onClick={onCancel}
-          className={C.paperAction}
-          style={{
-            fontSize: "9.5px",
-            padding: "5px 12px",
-          }}
+          aria-label={WRITE_CANCEL_LABEL_FULL}
+          className={`${C.paperAction} journal-write-footer__action-btn`}
         >
-          Cancel
+          <span className="journal-md-icon-label auth-responsive-label--full">
+            <X size={13} strokeWidth={2} aria-hidden />
+            {WRITE_CANCEL_LABEL_FULL}
+          </span>
+          <span className="auth-responsive-label--short" aria-hidden>
+            <X size={18} strokeWidth={2} />
+          </span>
         </RippleButton>
+
         <RippleButton
           type="button"
-          icon={Check}
-          iconSize={13}
           onClick={onSave}
           disabled={isSaving}
+          aria-label={saveFullLabel}
           shine
           shineRadius={4}
-          className="leather-glass-action-btn"
-          style={{
-            fontFamily: "'Lora',serif",
-            fontSize: "9.5px",
-            letterSpacing: "1.5px",
-            textTransform: "uppercase",
-            background: "rgba(90,40,10,.82)",
-            color: "rgba(255,215,150,.92)",
-            border: "none",
-            padding: "5px 14px",
-            borderRadius: "4px",
-            cursor: "pointer",
-            boxShadow: "0 2px 8px rgba(0,0,0,.3)",
-            flexShrink: 0,
-            opacity: isSaving ? 0.7 : 1,
-          }}
+          className="journal-write-footer__save-btn"
         >
-          {isSaving ? "Saving…" : "Save"}
+          <span className="journal-md-icon-label auth-responsive-label--full">
+            <Check size={13} strokeWidth={2} aria-hidden />
+            {saveFullLabel}
+          </span>
+          <span className="auth-responsive-label--short" aria-hidden>
+            <Check size={18} strokeWidth={2} />
+          </span>
         </RippleButton>
       </div>
     </div>

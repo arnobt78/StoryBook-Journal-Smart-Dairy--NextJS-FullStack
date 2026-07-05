@@ -22,6 +22,8 @@ import { RippleButton } from "@/components/ui/ripple-button";
 type GoogleSignInButtonProps = {
   disabled?: boolean;
   label?: string;
+  /** Mobile short label — defaults to `label` when omitted (Wave 34) */
+  labelShort?: string;
   /** login → welcomeBack toast; register → registered toast after OAuth return */
   variant?: OAuthAuthVariant;
 };
@@ -29,6 +31,7 @@ type GoogleSignInButtonProps = {
 export function GoogleSignInButton({
   disabled = false,
   label = "Open with Gmail",
+  labelShort,
   variant = "login",
 }: GoogleSignInButtonProps) {
   const [loading, setLoading] = useState(false);
@@ -71,7 +74,12 @@ export function GoogleSignInButton({
       }}
     >
       {loading ? <AuthCtaSpinner size={18} /> : <GoogleIcon size={18} />}
-      <span style={{ letterSpacing: "1.5px" }}>{loading ? "Redirecting…" : label}</span>
+      <span className="auth-responsive-label--full" style={{ letterSpacing: "1.5px" }}>
+        {loading ? "Redirecting…" : label}
+      </span>
+      <span className="auth-responsive-label--short" style={{ letterSpacing: "1.5px" }}>
+        {loading ? "Redirecting…" : (labelShort ?? label)}
+      </span>
     </RippleButton>
   );
 }

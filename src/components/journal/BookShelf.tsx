@@ -223,7 +223,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
 
   return (
     <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-      <div style={{ marginBottom: "48px" }}>
+      <div className="dashboard-shelf-greeting">
         <TypewriterText
           text={greeting}
           className="dashboard-greeting-typewriter"
@@ -249,13 +249,12 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
 
       {/* shelf-stagger: responsive spine vars from .dashboard-shelf-viewport parent */}
       <div
-        className="shelf-stagger"
+        className="shelf-stagger dashboard-shelf-grid"
         style={{
           display: "flex",
           flexWrap: "wrap",
           gap: "32px",
           alignItems: "flex-end",
-          minHeight: "clamp(280px, 55vh, 520px)",
         }}
       >
         {books.map((book) => (
@@ -316,7 +315,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
       </div>
 
       {books.length > 0 && (
-        <div style={{ marginTop: "60px", display: "flex", gap: "40px" }}>
+        <div className="dashboard-shelf-stats" style={{ display: "flex", gap: "40px" }}>
           {[
             { label: "Journals", value: books.length },
             {
@@ -367,6 +366,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         priority
+        destructive
         title="Remove this journal?"
         description={
           deleteTarget ? (

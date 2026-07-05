@@ -142,8 +142,11 @@ export function RightPage({
 
   return (
     /* Outer shell ignores pointer hits — same 3-D hit-testing rationale as `LeftPage`. */
-    <div style={{
+    <div
+      className="journal-page-face"
+      style={{
       width: "var(--page-w, 360px)", height: "var(--page-h, 540px)",
+      minWidth: 0,
       position: "relative",
       background: JOURNAL_PAGE_RIGHT_BG,
       borderRadius: "0 4px 4px 0",
@@ -222,30 +225,33 @@ export function RightPage({
               />
               <div style={{ height: "1px", background: JOURNAL_DIVIDER_GRADIENT, marginBottom: "10px", flexShrink: 0 }} />
 
-              <MiniLabel>Mood</MiniLabel>
-              <div style={{ display: "flex", gap: "2px", flexWrap: "wrap", marginBottom: "6px" }}>
-                {MOODS.map(m => (
-                  <RippleButton key={m} type="button" onClick={() => onDraftChange("mood", m)} style={{
-                    fontSize: "13px", background: "none", border: "none", cursor: "pointer",
-                    padding: "2px", borderRadius: "4px",
-                    opacity: draft.mood === m ? 1 : 0.38,
-                    transform: draft.mood === m ? "scale(1.15)" : "scale(1)",
-                    transition: "all .15s",
-                  }}>{m}</RippleButton>
-                ))}
-              </div>
+              {/* md+ pickers; mobile uses footer meta — hidden via .journal-write-pickers in globals.css */}
+              <div className="journal-write-pickers">
+                <MiniLabel>Mood</MiniLabel>
+                <div style={{ display: "flex", gap: "2px", flexWrap: "wrap", marginBottom: "6px" }}>
+                  {MOODS.map(m => (
+                    <RippleButton key={m} type="button" onClick={() => onDraftChange("mood", m)} style={{
+                      fontSize: "13px", background: "none", border: "none", cursor: "pointer",
+                      padding: "2px", borderRadius: "4px",
+                      opacity: draft.mood === m ? 1 : 0.38,
+                      transform: draft.mood === m ? "scale(1.15)" : "scale(1)",
+                      transition: "all .15s",
+                    }}>{m}</RippleButton>
+                  ))}
+                </div>
 
-              <MiniLabel>Weather</MiniLabel>
-              <div style={{ display: "flex", gap: "2px", flexWrap: "wrap", marginBottom: "8px" }}>
-                {WEATHERS.map(w => (
-                  <RippleButton key={w} type="button" onClick={() => onDraftChange("weather", w)} style={{
-                    fontSize: "13px", background: "none", border: "none", cursor: "pointer",
-                    padding: "2px", borderRadius: "4px",
-                    opacity: draft.weather === w ? 1 : 0.38,
-                    transform: draft.weather === w ? "scale(1.15)" : "scale(1)",
-                    transition: "all .15s",
-                  }}>{w}</RippleButton>
-                ))}
+                <MiniLabel>Weather</MiniLabel>
+                <div style={{ display: "flex", gap: "2px", flexWrap: "wrap", marginBottom: "8px" }}>
+                  {WEATHERS.map(w => (
+                    <RippleButton key={w} type="button" onClick={() => onDraftChange("weather", w)} style={{
+                      fontSize: "13px", background: "none", border: "none", cursor: "pointer",
+                      padding: "2px", borderRadius: "4px",
+                      opacity: draft.weather === w ? 1 : 0.38,
+                      transform: draft.weather === w ? "scale(1.15)" : "scale(1)",
+                      transition: "all .15s",
+                    }}>{w}</RippleButton>
+                  ))}
+                </div>
               </div>
 
               <JournalEditor
@@ -289,6 +295,8 @@ export function RightPage({
               </div>
 
               <JournalWriteFooter
+                mood={draft.mood}
+                weather={draft.weather}
                 wordCount={wc}
                 isAiThinking={isAiThinking}
                 isSaving={isSaving}

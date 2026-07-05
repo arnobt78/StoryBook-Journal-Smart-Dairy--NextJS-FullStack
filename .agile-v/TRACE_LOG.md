@@ -53,3 +53,14 @@
 | 2026-07-05T09:36:00Z | ui-wave30 | build-agent-js | Demo picker selected avatar+name; 71 Vitest PASS | REQ-0029–0030 | DEC-0058 |
 | 2026-07-05T11:55:00Z | ui-wave31 | build-agent-js | Dark page theme ink parity; bookThemeCssVars; 77 Vitest PASS | REQ-0029–0030 | DEC-0059 |
 | 2026-07-05T12:10:00Z | ui-wave32 | build-agent-js | Theme-aware page flip overlay; 78 Vitest PASS | REQ-0029–0030 | DEC-0060 |
+| 2026-07-05T13:30:00Z | ui-wave33 | build-agent-js | Mobile horizontal scroll for open book spread; BookSpreadScrollPort; 82 Vitest PASS | REQ-0029–0030 | DEC-0061 |
+| 2026-07-05T13:45:00Z | ui-wave33b | build-agent-js | Auth left padding parity + scroll-inner width pin; 83 Vitest PASS | REQ-0029–0030 | DEC-0062 |
+| 2026-07-05T14:10:00Z | ui-wave34 | build-agent-js | Mobile auth labels + shell pad + icon nav; 85 Vitest PASS | REQ-0029–0030 | DEC-0063 |
+| 2026-07-05T14:26:00Z | ui-wave35 | build-agent-js | Mobile journal header inline + nav touch + footers + scroll lock; 87 Vitest PASS | REQ-0029–0030 | DEC-0064 |
+| 2026-07-05T14:36:00Z | ui-wave36 | build-agent-js | Journal viewport chrome + read footer icon parity; 88 Vitest PASS | REQ-0029–0030 | DEC-0065 |
+| 2026-07-05T14:47:00Z | ui-wave37 | build-agent-js | Glass nav + book X-scroll parity + header center; 88 Vitest PASS | REQ-0029–0030 | DEC-0066 |
+| 2026-07-05T15:25:00Z | ui-wave38 | build-agent-js | Transparent nav spotlight bleed + edit X-scroll lock; 88 Vitest PASS | REQ-0029–0030 | DEC-0067 |
+| 2026-07-05T16:00:00Z | ui-wave39 | build-agent-js | md+ flip unclip stable overflow chain + pinned inner width; runtime debug session 5275de | REQ-0029–0030 | DEC-0068 |
+| 2026-07-05T16:45:00Z | ui-wave40 | build-agent-js | Fixed nav overlay journal md+; dashboard-scroll 100vh clip | REQ-0029–0030 | DEC-0069 |
+| 2026-07-05T17:20:00Z | ui-wave40b | build-agent-js | Journal nav+chrome padding; shelf single-viewport md+; debug removed | REQ-0029–0030 | DEC-0070 |
+| 2026-07-05T17:30:00Z | verify | red-team-verifier | Full static audit 90 Vitest + lint/typecheck/build PASS; docs sync | REQ-0024 | DEC-0071 |

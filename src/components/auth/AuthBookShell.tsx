@@ -33,6 +33,8 @@ import { usePathname } from "next/navigation";
 import { Sparkles, Zap } from "lucide-react";
 import { PageFlipOverlay } from "@/components/journal/PageFlip";
 import { SpreadCoilBinding } from "@/components/journal/SpreadCoilBinding";
+import { BookSpreadScrollPort } from "@/components/book/BookSpreadScrollPort";
+import { BOOK_SPREAD_3D_ROW_CLASS } from "@/lib/book-spread-scroll";
 import {
   normalizeAuthPath,
   useAuthBookNavigation,
@@ -51,22 +53,15 @@ import {
   authFooterLinkStyle,
   authFooterPromptStyle,
 } from "@/lib/auth-form-styles";
-import { BOOK_BRAND_GOLD_TEXT_STYLE } from "@/lib/book-brand-styles";
+import { AuthSpreadHeader } from "@/components/auth/AuthSpreadHeader";
+import {
+  AUTH_LEFT_PAGE_CONTENT_PADDING,
+  JOURNAL_PAGE_LEFT_BG,
+  JOURNAL_PAGE_INSET_SHADOW_LEFT,
+  journalMarginLineLayerStyle,
+  journalRuledLinesLayerStyle,
+} from "@/lib/journal-page-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
-import { RotatingTypewriterText } from "@/components/animations/RotatingTypewriterText";
-
-/** Branding subtitle phrases — cycle beneath the "StoryBook" label above the open spread */
-const AUTH_BRAND_PHRASES = [
-  "Your story, your words",
-  "Begin a new chapter",
-  "Every memory preserved",
-  "Write. Reflect. Remember.",
-] as const;
-
-/** Shared Dancing Script branding — title + inline rotating subtitle use identical size */
-const AUTH_BRAND_TEXT_STYLE = BOOK_BRAND_GOLD_TEXT_STYLE;
-
-/** Radial amber orb behind left-page Lucide icon — sibling blur, not on preserve-3d parent */
 const AUTH_LEFT_ICON_SPOTLIGHT: CSSProperties = {
   position: "absolute",
   width: "52px",
@@ -130,95 +125,39 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
   const showRegisterLink = pathname === "/login";
 
   return (
-    /* Render the book directly — no wrapper animation div.
-       Any animated wrapper with animation-fill-mode:forwards retains a
-       transform permanently after completion, creating a compositing layer
-       that breaks pointer-event routing for preserve-3d descendants inside. */
     <div>
-      {/* No `filter` here: parent filter + child `preserve-3d` repaints every frame and
-        reads as edge “vibration” after the flip overlay unmounts; shadow lives on spread. */}
-      <div className="auth-book-enter-shell" style={{ position: "relative" }}>
-        {/* Book branding block — StoryBook + rotating phrase inline on one row (wraps on narrow viewports) */}
-        <div
-          key={brandStaggerKey}
-          style={{
-            position: "absolute",
-            top: "-48px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            alignItems: "baseline",
-            justifyContent: "center",
-            gap: "0 8px",
-            maxWidth:
-              "min(96vw, calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 40px))",
-            pointerEvents: "none",
-          }}
-        >
-          <span {...authStaggerRowProps(0, { style: AUTH_BRAND_TEXT_STYLE })}>
-            StoryBook
-          </span>
-          <span
-            {...authStaggerRowProps(1, {
-              style: { ...AUTH_BRAND_TEXT_STYLE, opacity: 0.5 },
-            })}
-            aria-hidden
-          >
-            ·
-          </span>
-          <RotatingTypewriterText
-            {...authStaggerRowProps(2, {
-              style: {
-                ...AUTH_BRAND_TEXT_STYLE,
-                whiteSpace: "nowrap",
-                minHeight: "1.2em",
-                minWidth: "clamp(140px, 22vw, 240px)",
-              },
-            })}
-            texts={[...AUTH_BRAND_PHRASES]}
-            noShine
-          />
-        </div>
+      {/* Header outside enter-shell — fixed chrome must not inherit shell centering / 3D context (Wave 40) */}
+      <AuthSpreadHeader key={brandStaggerKey} />
 
-        {/* Center spotlight — radial leather glow behind and AROUND the open diary layout.
+      <div className="auth-book-enter-shell" style={{ position: "relative" }}>
+        {/* Wave 33 — scroll port wraps spotlight + 3D spread; branding stays outside */}
+        <BookSpreadScrollPort>
+          {/* Center spotlight — radial leather glow behind and AROUND the open diary layout.
               Size exceeds book footprint by ~280px h / 200px v so the halo extends visibly
               beyond the book edges. zIndex:0 keeps it behind the spread (zIndex:1). */}
-        <div
-          aria-hidden
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width:
-              "calc(var(--page-w, 360px) * 2 + var(--spine-w, 22px) + 280px)",
-            height: "calc(var(--page-h, 540px) + 200px)",
-            background:
-              "radial-gradient(ellipse at 50% 50%, rgba(139,69,19,.42) 0%, rgba(90,40,10,.24) 40%, transparent 65%)",
-            filter: "blur(50px)",
-            borderRadius: "50%",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
+          <div
+            aria-hidden
+            className="auth-spread-spotlight"
+            style={{
+              pointerEvents: "none",
+              zIndex: 0,
+            }}
+          />
 
-        {/* Book spread: `pointer-events: none` on the 3-D row; order is spine | left | right
+          {/* Book spread: `pointer-events: none` on the 3-D row; order is spine | left | right
               so leather reads as the outer left binding, not a brown bar mid-spread.
               Perspective only — no rotateX/Y on this row. Inner page stacks use `auto`.
               auth-book-glow: adds ambient leather box-shadow around the outer layout. */}
         <div
           className={
             spreadFlipping
-              ? "auth-book-glow spread-coil-flipping"
-              : "auth-book-glow"
+              ? `auth-book-glow spread-coil-flipping ${BOOK_SPREAD_3D_ROW_CLASS}`
+              : `auth-book-glow ${BOOK_SPREAD_3D_ROW_CLASS}`
           }
           style={{
             display: "flex",
             alignItems: "stretch",
             transformStyle: "preserve-3d",
-            transform: "perspective(2400px)",
             position: "relative",
             zIndex: 1,
             pointerEvents: "none",
@@ -252,41 +191,16 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
               width: "var(--page-w, 360px)",
               height: "var(--page-h, 540px)",
               position: "relative",
-              background:
-                "linear-gradient(to right, #ede1cc 0%, #f4ecda 60%, #ede0c8 100%)",
+              background: JOURNAL_PAGE_LEFT_BG,
               borderRadius: "0",
-              boxShadow:
-                "inset -12px 0 20px rgba(120,70,20,.14), inset 3px 0 8px rgba(200,160,100,.08)",
+              boxShadow: JOURNAL_PAGE_INSET_SHADOW_LEFT,
               flexShrink: 0,
               overflow: "hidden",
               pointerEvents: "none",
             }}
           >
-            {/* Ruled lines */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                backgroundImage:
-                  "repeating-linear-gradient(transparent,transparent 27px,rgba(120,80,30,.1) 27px,rgba(120,80,30,.1) 28px)",
-                backgroundPosition: "0 52px",
-                pointerEvents: "none",
-                zIndex: 0,
-              }}
-            />
-            {/* Margin line */}
-            <div
-              style={{
-                position: "absolute",
-                left: "58px",
-                top: 0,
-                bottom: 0,
-                width: "1px",
-                background: "rgba(220,100,80,.18)",
-                pointerEvents: "none",
-                zIndex: 0,
-              }}
-            />
+            <div style={journalRuledLinesLayerStyle} />
+            <div style={journalMarginLineLayerStyle} />
             {/* Right curl shadow — blends into center coil */}
             <div
               className="spread-seam-curl-left"
@@ -306,7 +220,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
                 /* Below the right-hand form column’s stacking for portaled menus (see globals). */
                 zIndex: 2,
                 height: "100%",
-                padding: "28px 24px 32px 72px",
+                padding: AUTH_LEFT_PAGE_CONTENT_PADDING,
                 display: "flex",
                 flexDirection: "column",
                 boxSizing: "border-box",
@@ -554,6 +468,7 @@ export function AuthBookShell({ children }: { children: ReactNode }) {
           {/* ── PAGE FLIP: same overlay component as journal BookSpread ── */}
           {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
         </div>
+        </BookSpreadScrollPort>
       </div>
     </div>
   );

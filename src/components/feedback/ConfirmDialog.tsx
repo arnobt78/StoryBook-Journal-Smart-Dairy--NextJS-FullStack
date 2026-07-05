@@ -5,6 +5,7 @@
  * Built on Radix Dialog; parent handles API + query invalidation after onConfirm.
  */
 import type { ReactNode } from "react";
+import { Check, Trash2, X } from "lucide-react";
 import { RippleButton } from "@/components/ui/ripple-button";
 import {
   Dialog,
@@ -28,6 +29,8 @@ export type ConfirmDialogProps = {
   variant?: "paper" | "dark";
   /** Stack above open editor modal (Wave 22 delete confirm) */
   priority?: boolean;
+  /** When true, confirm button uses destructive trash icon (delete flows) */
+  destructive?: boolean;
 };
 
 export function ConfirmDialog({
@@ -41,6 +44,7 @@ export function ConfirmDialog({
   onCancel,
   variant = "paper",
   priority = false,
+  destructive = false,
 }: ConfirmDialogProps) {
   const isDark = variant === "dark";
 
@@ -70,7 +74,13 @@ export function ConfirmDialog({
             onClick={onCancel}
             className="journal-dialog-btn-cancel"
           >
-            {cancelLabel}
+            <span className="journal-md-icon-label auth-responsive-label--full">
+              <X size={13} strokeWidth={2} aria-hidden />
+              {cancelLabel}
+            </span>
+            <span className="auth-responsive-label--short" aria-hidden>
+              <X size={16} strokeWidth={2} />
+            </span>
           </RippleButton>
           <RippleButton
             type="button"
@@ -78,7 +88,21 @@ export function ConfirmDialog({
             onClick={onConfirm}
             className="journal-dialog-btn-primary"
           >
-            {loading ? "Removing…" : confirmLabel}
+            <span className="journal-md-icon-label auth-responsive-label--full">
+              {destructive ? (
+                <Trash2 size={13} strokeWidth={2} aria-hidden />
+              ) : (
+                <Check size={13} strokeWidth={2} aria-hidden />
+              )}
+              {loading ? "Removing…" : confirmLabel}
+            </span>
+            <span className="auth-responsive-label--short" aria-hidden>
+              {destructive ? (
+                <Trash2 size={16} strokeWidth={2} />
+              ) : (
+                <Check size={16} strokeWidth={2} />
+              )}
+            </span>
           </RippleButton>
         </DialogFooter>
       </DialogContent>

@@ -5,7 +5,7 @@
  * Parent handles POST/PATCH + notifyJournalCacheUpdated after onSubmit.
  */
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { COVER_COLORS } from "@/constants";
 import { COVER_ICONS } from "@/constants/cover-icons";
 import { BOOK_THEMES } from "@/constants/themes";
@@ -258,7 +258,13 @@ function BookEditorForm({
           onClick={onClose}
           className="journal-dialog-btn-cancel"
         >
-          Cancel
+          <span className="journal-md-icon-label auth-responsive-label--full">
+            <X size={13} strokeWidth={2} aria-hidden />
+            Cancel
+          </span>
+          <span className="auth-responsive-label--short" aria-hidden>
+            <X size={16} strokeWidth={2} />
+          </span>
         </RippleButton>
         <RippleButton
           type="button"
@@ -267,7 +273,13 @@ function BookEditorForm({
           shine
           className="journal-dialog-btn-primary"
         >
-          {submitLabel}
+          <span className="journal-md-icon-label auth-responsive-label--full">
+            <Check size={13} strokeWidth={2} aria-hidden />
+            {submitLabel}
+          </span>
+          <span className="auth-responsive-label--short" aria-hidden>
+            <Check size={16} strokeWidth={2} />
+          </span>
         </RippleButton>
       </DialogFooter>
     </DialogContent>

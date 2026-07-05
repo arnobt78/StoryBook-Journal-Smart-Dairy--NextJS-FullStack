@@ -27,12 +27,24 @@ describe("authStaggerRemountKey", () => {
 });
 
 describe("authBrandStaggerKey", () => {
-  it("holds stable key during flip", () => {
-    expect(authBrandStaggerKey(false, "/register")).toBe("auth-brand-hold");
-    expect(authBrandStaggerKey(false, "/login")).toBe("auth-brand-hold");
+  it("uses destination pathname when content is ready", () => {
+    expect(authBrandStaggerKey(true, "/register", "/login")).toBe("/register");
   });
 
-  it("uses pathname when content is ready", () => {
-    expect(authBrandStaggerKey(true, "/register")).toBe("/register");
+  it("keeps flip source during flip — same key as before click (no mid-flip remount)", () => {
+    expect(authBrandStaggerKey(false, "/register", "/login")).toBe("/login");
+    expect(authBrandStaggerKey(false, "/login", "/register")).toBe("/register");
+  });
+
+  it("falls back to pathname when no flip source", () => {
+    expect(authBrandStaggerKey(false, "/login", null)).toBe("/login");
+  });
+
+  it("remounts once on ready transition (sync with page stagger)", () => {
+    const hiddenKey = authBrandStaggerKey(false, "/register", "/login");
+    const readyKey = authBrandStaggerKey(true, "/register", "/login");
+    expect(hiddenKey).toBe("/login");
+    expect(readyKey).toBe("/register");
+    expect(hiddenKey).not.toBe(readyKey);
   });
 });

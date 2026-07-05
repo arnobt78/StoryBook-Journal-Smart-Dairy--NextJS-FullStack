@@ -63,6 +63,18 @@ export const JOURNAL_PAGE_LEFT_BG =
 export const JOURNAL_PAGE_RIGHT_BG =
   "var(--theme-page-right, linear-gradient(to left, #e8dcc9 0%, #f4ecda 60%, #ede0c8 100%))";
 
+/** Horizontal inset for page body copy — shared by journal + auth open-book columns */
+export const JOURNAL_PAGE_PAD_X = "22px";
+
+/** LeftPage scrollable content area — symmetric horizontal inset */
+export const JOURNAL_PAGE_CONTENT_PADDING = "0 22px 12px";
+
+/** RightPage body stack — matches auth right column closely */
+export const JOURNAL_PAGE_RIGHT_CONTENT_PADDING = "2px 24px 12px";
+
+/** Auth left marketing column — top/bottom preserved for footer pin; 22px sides like journal */
+export const AUTH_LEFT_PAGE_CONTENT_PADDING = "28px 22px 32px 22px";
+
 /** Ruled-line repeating gradient — shared by LeftPage, RightPage, PageFlipOverlay */
 export function journalPageRuledLinesBackground(): string {
   return `repeating-linear-gradient(transparent,transparent 27px,${JOURNAL_RULE_LINE} 27px,${JOURNAL_RULE_LINE} 28px)`;

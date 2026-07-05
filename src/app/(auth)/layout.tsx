@@ -1,4 +1,5 @@
 import { AuthBookShell } from "@/components/auth/AuthBookShell";
+import { AUTH_ROUTE_VIEWPORT_CLASS } from "@/lib/book-spread-scroll";
 
 /**
  * @file (auth)/layout.tsx
@@ -21,7 +22,7 @@ export default function AuthLayout({
 }) {
   return (
     <div
-      className="auth-book-viewport book-viewport-80"
+      className={`auth-book-viewport book-viewport-80 ${AUTH_ROUTE_VIEWPORT_CLASS}`}
       style={{
         position: "fixed",
         inset: 0,

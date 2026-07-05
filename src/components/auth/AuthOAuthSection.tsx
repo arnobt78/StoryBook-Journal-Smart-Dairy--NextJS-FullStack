@@ -7,6 +7,10 @@
 import { AuthOrSeparator } from "@/components/auth/AuthOrSeparator";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { authStaggerRowProps } from "@/lib/auth-stagger";
+import {
+  OAUTH_GMAIL_LABEL,
+  OAUTH_GMAIL_REGISTER_LABEL_FULL,
+} from "@/lib/auth-responsive-labels";
 
 type AuthOAuthSectionProps = {
   googleEnabled: boolean;
@@ -26,7 +30,9 @@ export function AuthOAuthSection({
   if (!googleEnabled) return null;
 
   const label =
-    variant === "register" ? "Continue with Gmail" : "Open with Gmail";
+    variant === "register" ? OAUTH_GMAIL_REGISTER_LABEL_FULL : OAUTH_GMAIL_LABEL;
+  const labelShort =
+    variant === "register" ? OAUTH_GMAIL_LABEL : undefined;
 
   return (
     <>
@@ -38,7 +44,12 @@ export function AuthOAuthSection({
         <AuthOrSeparator label="or" compact />
       </div>
       <div {...authStaggerRowProps(googleStaggerIndex)}>
-        <GoogleSignInButton disabled={disabled} label={label} variant={variant} />
+        <GoogleSignInButton
+          disabled={disabled}
+          label={label}
+          labelShort={labelShort}
+          variant={variant}
+        />
       </div>
     </>
   );

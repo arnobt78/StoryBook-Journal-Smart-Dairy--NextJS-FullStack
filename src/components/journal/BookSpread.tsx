@@ -45,6 +45,7 @@ import { appToast } from "@/lib/app-toast";
 import { ConfirmDialog } from "@/components/feedback/ConfirmDialog";
 import { BookEditorModal } from "@/components/journal/BookEditorModal";
 import { BookSpreadHeader } from "@/components/journal/BookSpreadHeader";
+import { BookSpreadScrollPort } from "@/components/book/BookSpreadScrollPort";
 import { JournalBottomNav } from "@/components/journal/JournalBottomNav";
 import { LeftPage } from "./LeftPage";
 import { RightPage } from "./RightPage";
@@ -60,6 +61,10 @@ import { useOfflineSync } from "@/context/OfflineSyncContext";
 import { createAiAssistSessionId } from "@/lib/ai-assist";
 import { applyOptimisticEntryPatch } from "@/lib/journal-cache-optimistic";
 import { syncEntryUrlParam } from "@/lib/journal-entry-url";
+import {
+  BOOK_SPREAD_3D_ROW_CLASS,
+  BOOK_SPREAD_3D_ROW_TILTED_CLASS,
+} from "@/lib/book-spread-scroll";
 import { formatEntryDate, normalizeTags } from "@/lib/utils";
 import { queryKeys } from "@/lib/query-keys";
 import {
@@ -723,6 +728,7 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
           open={confirmDeleteBook}
           variant="dark"
           priority
+          destructive
           title="Remove this journal?"
           description={<>Every page in &ldquo;{bookTitle}&rdquo; will be permanently deleted.</>}
           confirmLabel="Remove journal"
@@ -738,28 +744,36 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
 
   return (
     <>
-      {/* Book shadow on the 3-D row — avoids parent `filter` + preserve-3d shimmer (same rationale as `AuthBookShell`). */}
-      <div
-        style={{ position: "relative", ...bookThemeProps.style }}
-        data-book-theme={bookThemeProps["data-book-theme"]}
-      >
-        {/* Leather ambient spotlight — absolute-positioned BEFORE the 3D book so it paints
-            behind it (DOM order, same stacking context). Extends +280px h / +200px v beyond
-            the book footprint so the halo is visible around the outer edges of the spread.
-            filter:blur is on THIS sibling div, not on the preserve-3d ancestor — safe. */}
-        <div aria-hidden className="journal-spread-spotlight" />
+      <div className="journal-spread-stage">
+        <BookSpreadHeader
+          coverEmoji={book.coverEmoji}
+          title={book.title}
+          description={book.description}
+        />
 
-        {/* Book spread — `pointer-events: none` on the 3-D flex row avoids an oversized
-          axis-aligned hit box (full spread) stealing clicks; `LeftPage` / `RightPage`
-          re-enable `auto` only on their inner content stacks. */}
-        {/* ── 3D BOOK: preserve-3d spread — shadow on wrapper, not filter (avoids shimmer) ── */}
         <div
-          className={isFlipping ? "spread-coil-flipping" : undefined}
+          className="book-spread-shell"
+          style={{ position: "relative", ...bookThemeProps.style }}
+          data-book-theme={bookThemeProps["data-book-theme"]}
+        >
+        {/* Wave 33 — scroll port wraps spotlight + 3D spread; header/nav stay outside */}
+        <BookSpreadScrollPort>
+          {/* Leather ambient spotlight — absolute-positioned BEFORE the 3D book so it paints
+              behind it (DOM order, same stacking context). Extends +280px h / +200px v beyond
+              the book footprint so the halo is visible around the outer edges of the spread.
+              filter:blur is on THIS sibling div, not on the preserve-3d ancestor — safe. */}
+          <div aria-hidden className="journal-spread-spotlight" />
+
+          {/* Book spread — `pointer-events: none` on the 3-D flex row avoids an oversized
+            axis-aligned hit box (full spread) stealing clicks; `LeftPage` / `RightPage`
+            re-enable `auto` only on their inner content stacks. */}
+          {/* ── 3D BOOK: preserve-3d spread — shadow on wrapper, not filter (avoids shimmer) ── */}
+        <div
+          className={`${isFlipping ? "spread-coil-flipping " : ""}${BOOK_SPREAD_3D_ROW_CLASS} ${BOOK_SPREAD_3D_ROW_TILTED_CLASS}`}
           style={{
             display: "flex",
             alignItems: "stretch",
             transformStyle: "preserve-3d",
-            transform: "perspective(2000px) rotateX(3deg) rotateY(-2deg)",
             position: "relative",
             pointerEvents: "none",
             /* Add leather outer ambient ring on top of the drop-shadow */
@@ -818,6 +832,7 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
           {/* ── PAGE FLIP: overlay mounts only during animation ── */}
           {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
         </div>
+        </BookSpreadScrollPort>
 
         <JournalBottomNav
           currentIdx={currentIdx}
@@ -847,6 +862,7 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
           open={confirmDeleteEntry}
           variant="dark"
           priority
+          destructive
           title="Remove this page?"
           description={
             <>
@@ -862,6 +878,7 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
           open={confirmDeleteBook}
           variant="dark"
           priority
+          destructive
           title="Remove this journal?"
           description={
             <>
@@ -873,13 +890,7 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
           onConfirm={() => void handleDeleteBook()}
           onCancel={() => setConfirmDeleteBook(false)}
         />
-
-        {/* Golden branding above spread — icon, title, truncated description */}
-        <BookSpreadHeader
-          coverEmoji={book.coverEmoji}
-          title={book.title}
-          description={book.description}
-        />
+        </div>
       </div>
     </>
   );

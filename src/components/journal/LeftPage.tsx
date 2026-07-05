@@ -76,7 +76,9 @@ interface LeftPageProps {
 export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigate, isFlipping }: LeftPageProps) {
   return (
     /* Outer shell ignores pointer hits (see `BookSpread` comment): 3-D AABB can overlap sibling page. */
-    <div style={{
+    <div
+      className="journal-page-face"
+      style={{
       width: "var(--page-w, 360px)", height: "var(--page-h, 540px)",
       position: "relative",
       background: JOURNAL_PAGE_LEFT_BG,

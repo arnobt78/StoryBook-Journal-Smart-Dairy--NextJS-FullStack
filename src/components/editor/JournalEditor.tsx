@@ -67,8 +67,8 @@ export function JournalEditor({
   if (!editor) return null;
 
   return (
-    <div className="journal-editor flex min-h-0 flex-1 flex-col overflow-hidden">
-      <EditorContent editor={editor} className="flex-1 overflow-y-auto" />
+    <div className="journal-editor flex min-h-0 flex-1 flex-col overflow-hidden overflow-x-hidden">
+      <EditorContent editor={editor} className="flex-1 overflow-x-hidden overflow-y-auto" />
     </div>
   );
 }
