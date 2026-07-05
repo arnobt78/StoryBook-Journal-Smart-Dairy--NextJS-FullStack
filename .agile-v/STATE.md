@@ -8,7 +8,7 @@
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-ui-wave30-2026-07-05 |
-| **Last commit** | pending — Wave 29–30 uncommitted on `6c90855` |
+| **Last commit** | `709087e` (Wave 29–30: demo picker layout + selected state) |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -22,7 +22,7 @@
 ## Resume (2026-07-05)
 
 1. Read this file → `cycles/C4/README.md` → `PLAYBOOK.md` → latest `DEC-0058`.
-2. **Code baseline:** `6c90855` (Wave 27–28) + uncommitted Wave 29–30 (demo picker).
+2. **Code baseline:** `709087e` — Waves 1–30 on `main`.
 3. **Next backlog:** REQ-0021 e2e CI · stash-only shelf-handoff/`/insights` if requested.
 4. **Constraints:** `notifyJournalCacheUpdated` only; `force-dynamic`; SSR in `page.tsx`.
 5. Verify: `npm run lint && npm run typecheck && npm run test` (**71** Vitest) + `npm run build`.
@@ -44,8 +44,8 @@
 | 24–26 | Journal stagger, flip anti-flash, `?entry=` | `430e51f` |
 | 27 | Spread header Dancing Script desc align | `0544490` |
 | 28 | Nav scroll isolation | `0544490` |
-| **29** | **Demo picker 3-zone trigger + chevron rotate** | uncommitted |
-| **30** | **Demo picker selected avatar + name** | uncommitted |
+| **29** | **Demo picker 3-zone trigger + chevron rotate** | `709087e` |
+| **30** | **Demo picker selected avatar + name** | `709087e` |
 
 ## Infinity Loop
 
