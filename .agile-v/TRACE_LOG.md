@@ -51,3 +51,5 @@
 | 2026-07-05T09:15:00Z | ui-wave28 | build-agent-js | dashboard-shell nav scroll isolation + scrollbar-gutter stable; lint/typecheck/test PASS | REQ-0029–0030 | DEC-0056 |
 | 2026-07-05T09:28:00Z | ui-wave29 | build-agent-js | Login demo picker 3-zone trigger + chevron rotate; 68 Vitest PASS | REQ-0029–0030 | DEC-0057 |
 | 2026-07-05T09:36:00Z | ui-wave30 | build-agent-js | Demo picker selected avatar+name; 71 Vitest PASS | REQ-0029–0030 | DEC-0058 |
+| 2026-07-05T11:55:00Z | ui-wave31 | build-agent-js | Dark page theme ink parity; bookThemeCssVars; 77 Vitest PASS | REQ-0029–0030 | DEC-0059 |
+| 2026-07-05T12:10:00Z | ui-wave32 | build-agent-js | Theme-aware page flip overlay; 78 Vitest PASS | REQ-0029–0030 | DEC-0060 |

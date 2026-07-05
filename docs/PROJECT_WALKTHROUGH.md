@@ -150,7 +150,7 @@ Prisma models (`prisma/schema.prisma`):
 - **Auth CTA loading (Wave 19):** Credential submit keeps `loading` true (spinner + pending label) until the form unmounts on dashboard navigation — `setLoading(false)` only on API/sign-in errors. Google OAuth shows `AuthCtaSpinner` beside "Redirecting…".
 - **OAuth welcome toast (Wave 20):** `OAuthReturnSync` on dashboard mount reads `OAUTH_PENDING_KEY` + `OAUTH_VARIANT_KEY`; shows `welcomeBack` or `registered` then `notifyJournalCacheUpdated`.
 - **Logout animation (Wave 20):** `useSignOutWithBookClose` drives `LogoutBookCloseOverlay` (spread fold → hinge close → 360° orbit) for nav dropdown and ⌘K sign-out.
-- **Journal readability (Wave 21):** `journal-page-styles.ts` bumps spread ink to auth parity (`.45–.55`); wired in LeftPage, RightPage, footers, tags.
+- **Journal readability (Wave 21, 31):** `journal-page-styles.ts` + `bookThemeCssVars()` — spread ink/lines/buttons read `--theme-*` per `BOOK_THEMES` (Dark Academia + Midnight Journal light ink).
 - **Golden book header (Wave 21, 27):** `BookSpreadHeader` — icon + Dancing Script title + truncated description (same font, nowrap row); tooltip for full meta.
 - **Login demo picker (Wave 29–30):** `.auth-demo-trigger` 3-zone layout + chevron rotate; selected state shows Robohash + `TEST_ACCOUNT_DISPLAY_NAME` via `isDemoAccountSelected()`.
 - **Dashboard shell (Wave 28):** `.dashboard-shell` nav outside `.dashboard-scroll`; `scrollbar-gutter: stable`.
@@ -528,7 +528,32 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 29. Related docs
+## 30. C4 UI Wave 31 — Dark page theme ink parity (2026-07-05)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Tokens | `constants/themes.ts` | Full surface ink/lines/buttons per theme |
+| Bridge | `book-theme-vars.ts`, `useBookTheme.ts` | `--theme-*` on spread; `--ink-primary` for ProseMirror |
+| Pages | `LeftPage`, `RightPage`, tags, footers, `globals.css` | Ruled lines, actions, editor inherit theme vars |
+| Preview | `BookThemePreview.tsx` | Same `bookThemeCssVars` as live reader |
+| Tests | `book-theme-vars.test.ts` (6) | **77** Vitest total |
+
+**Out of scope:** cache/API — theme PATCH already invalidates via `notifyJournalCacheUpdated`.
+
+---
+
+## 31. C4 UI Wave 32 — Theme-aware page flip (2026-07-05)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Flip | `PageFlip.tsx`, `globals.css` | `--theme-page-left/right` on flip faces; shadow keyframes via vars |
+| Tokens | `constants/themes.ts`, `book-theme-vars.ts` | `flipSeamEdge`, `flipShadowRest/Mid` per theme |
+| DRY | `journal-page-styles.ts`, `LeftPage`, `RightPage` | Shared `journalRuledLinesLayerStyle` |
+| Tests | `book-theme-vars.test.ts` (7) | **78** Vitest total |
+
+---
+
+## 32. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -539,4 +564,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-05 — C4 Wave 27–30; lint/typecheck/71 Vitest/build PASS.*
+*Last reviewed: 2026-07-05 — C4 Wave 27–32; lint/typecheck/78 Vitest/build PASS.*

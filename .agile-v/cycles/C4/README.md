@@ -1,11 +1,11 @@
 # Cycle C4 — UI Polish + Entry Tags (active)
 
-**Status:** Stage 4 Verification — static PASS · Waves **1–30**
+**Status:** Stage 4 Verification — static PASS · Waves **1–32**
 
 | Field | Value |
 |-------|-------|
-| Commits | through `709087e` |
-| Unit tests | **71** Vitest PASS |
+| Commits | through `7df4759` + Wave 31–32 pending |
+| Unit tests | **78** Vitest PASS |
 
 ## Core deliverables (REQ)
 
@@ -29,6 +29,8 @@
 | **28** | Nav outside `.dashboard-scroll` — profile avatar shift fix | `DashboardClientShell.tsx`, `DashboardNav.tsx`, `globals.css` |
 | **29** | Demo picker 3-zone trigger + chevron rotate | `LoginForm.tsx`, `auth-form-styles.ts`, `globals.css` |
 | **30** | Demo picker selected avatar + `TEST_ACCOUNT_DISPLAY_NAME` | `demo-account.ts`, `constants/auth.ts`, `LoginForm.tsx` |
+| **31** | Dark page theme ink — `bookThemeCssVars`, extended `BOOK_THEMES` | `book-theme-vars.ts`, `journal-page-styles.ts`, `LeftPage`, `RightPage`, `globals.css` |
+| **32** | Theme-aware page flip — `PageFlipOverlay` uses theme vars | `PageFlip.tsx`, `globals.css`, `themes.ts` |
 
 ## Wave 23 detail (latest on main)
 
@@ -59,11 +61,11 @@
 
 ## Key decisions (index)
 
-DEC-0055–0058 Waves 27–30
+DEC-0055–0060 Waves 27–32
 
 ## Verification (2026-07-05)
 
-lint · typecheck · **71** Vitest · build — all PASS · e2e NOT in CI
+lint · typecheck · **78** Vitest · build — all PASS · e2e NOT in CI
 
 ## Next — suggested focus
 

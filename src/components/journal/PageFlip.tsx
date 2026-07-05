@@ -6,6 +6,9 @@
  * Renders as a direct sibling of LeftPage and RightPage inside the flex +
  * preserve-3d container so it inherits the correct perspective context.
  *
+ * Inherits all `--theme-*` CSS vars from the BookSpread wrapper (Wave 31/32) —
+ * no theme props; flip sheet paper/lines/seam match the active Page Theme.
+ *
  * Front face = right-page paper (the page being turned away).
  * Back face  = left-page paper (reverse side visible mid-turn).
  *
@@ -24,24 +27,25 @@
  *  5. On animation end, hook unmounts overlay and runs onComplete (swap entry / router.push).
  */
 import type { FlipDirection } from "@/types";
+import {
+  JOURNAL_FLIP_SEAM_EDGE,
+  JOURNAL_PAGE_INSET_SHADOW_RIGHT,
+  JOURNAL_PAGE_LEFT_BG,
+  JOURNAL_PAGE_RIGHT_BG,
+  journalMarginLineLayerStyle,
+  journalRuledLinesLayerStyle,
+} from "@/lib/journal-page-styles";
 
 interface PageFlipProps {
   direction: FlipDirection;
 }
 
-/** Ruled lines + red margin line applied to both faces of the flip sheet */
-function RuledLinesTexture() {
+/** Ruled lines + margin on flip faces — same layers as LeftPage */
+function FlipPageTexture() {
   return (
     <>
-      <div style={{
-        position: "absolute", inset: 0,
-        backgroundImage: "repeating-linear-gradient(transparent,transparent 27px,rgba(120,80,30,.08) 27px,rgba(120,80,30,.08) 28px)",
-        backgroundPosition: "0 52px", pointerEvents: "none",
-      }} />
-      <div style={{
-        position: "absolute", left: "58px", top: 0, bottom: 0, width: "1px",
-        background: "rgba(220,100,80,.12)", pointerEvents: "none",
-      }} />
+      <div style={journalRuledLinesLayerStyle} />
+      <div style={journalMarginLineLayerStyle} />
     </>
   );
 }
@@ -49,8 +53,8 @@ function RuledLinesTexture() {
 export function PageFlipOverlay({ direction }: PageFlipProps) {
   return (
     <>
+      {/* Rotation keyframes stay inline; shadow keyframes live in globals.css (theme vars) */}
       <style>{`
-        /* A — rotation only (even angular velocity) */
         @keyframes flipFwdRotate {
           from { transform: rotateY(0deg); }
           to   { transform: rotateY(-180deg); }
@@ -58,15 +62,6 @@ export function PageFlipOverlay({ direction }: PageFlipProps) {
         @keyframes flipBwdRotate {
           from { transform: rotateY(-180deg); }
           to   { transform: rotateY(0deg); }
-        }
-        /* B — shadow only (subtle seam lift; does not affect rotate timing) */
-        @keyframes flipFwdShadow {
-          0%, 100% { box-shadow: 2px 0 10px rgba(80,40,10,.10); }
-          50%      { box-shadow: -5px 0 16px rgba(40,20,5,.16); }
-        }
-        @keyframes flipBwdShadow {
-          0%, 100% { box-shadow: 2px 0 10px rgba(80,40,10,.10); }
-          50%      { box-shadow: -5px 0 16px rgba(40,20,5,.16); }
         }
         .flip-fwd {
           animation:
@@ -81,11 +76,11 @@ export function PageFlipOverlay({ direction }: PageFlipProps) {
         @media (prefers-reduced-motion: reduce) {
           .flip-fwd {
             animation: flipFwdRotate .65s linear forwards;
-            box-shadow: 2px 0 10px rgba(80,40,10,.10);
+            box-shadow: var(--theme-flip-shadow-rest, 2px 0 10px rgba(80,40,10,.10));
           }
           .flip-bwd {
             animation: flipBwdRotate .65s linear forwards;
-            box-shadow: 2px 0 10px rgba(80,40,10,.10);
+            box-shadow: var(--theme-flip-shadow-rest, 2px 0 10px rgba(80,40,10,.10));
           }
         }
       `}</style>
@@ -108,8 +103,7 @@ export function PageFlipOverlay({ direction }: PageFlipProps) {
             top: 0,
             bottom: 0,
             width: "14px",
-            background:
-              "linear-gradient(to right, rgba(90,45,10,.14) 0%, rgba(100,50,10,.06) 40%, transparent 100%)",
+            background: JOURNAL_FLIP_SEAM_EDGE,
             pointerEvents: "none",
             zIndex: 3,
             transform: "translateZ(1px)",
@@ -121,11 +115,11 @@ export function PageFlipOverlay({ direction }: PageFlipProps) {
           backfaceVisibility: "hidden",
           WebkitBackfaceVisibility: "hidden",
           borderRadius: "0 4px 4px 0",
-          background: "linear-gradient(to left, #e8dcc9 0%, #f4ecda 60%, #ede0c8 100%)",
-          boxShadow: "inset 10px 0 24px rgba(120,70,20,.1)",
+          background: JOURNAL_PAGE_RIGHT_BG,
+          boxShadow: JOURNAL_PAGE_INSET_SHADOW_RIGHT,
           overflow: "hidden",
         }}>
-          <RuledLinesTexture />
+          <FlipPageTexture />
         </div>
         {/* Back face — left-page paper */}
         <div style={{
@@ -134,10 +128,10 @@ export function PageFlipOverlay({ direction }: PageFlipProps) {
           WebkitBackfaceVisibility: "hidden",
           transform: "rotateY(180deg)",
           borderRadius: "4px 0 0 4px",
-          background: "linear-gradient(to right, #ede1cc 0%, #f4ecda 60%, #ede0c8 100%)",
+          background: JOURNAL_PAGE_LEFT_BG,
           overflow: "hidden",
         }}>
-          <RuledLinesTexture />
+          <FlipPageTexture />
         </div>
       </div>
     </>

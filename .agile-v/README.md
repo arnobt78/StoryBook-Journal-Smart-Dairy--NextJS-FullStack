@@ -21,10 +21,10 @@ Living **AQMS** for this repository.
 |--------|-------|
 | Requirements | **31** (26 implemented, 5 backlog/partial) |
 | Artifacts | ART-0001–**0098** |
-| UI waves | **1–30** done |
-| Vitest | **71 PASS** |
+| UI waves | **1–32** done |
+| Vitest | **78 PASS** |
 | Stage | 4 Verification |
-| Commit | `709087e` |
+| Commit | pending Wave 31–32 |
 | Gate 2 | CONDITIONAL (REQ-0021 CI e2e) |
 
 ## Cycles

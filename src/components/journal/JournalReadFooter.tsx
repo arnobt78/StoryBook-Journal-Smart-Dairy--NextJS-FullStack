@@ -6,7 +6,7 @@
  */
 import { AlignLeft, PencilLine, Trash2 } from "lucide-react";
 import type { JournalEntry } from "@/types";
-import { JOURNAL_INK_BODY } from "@/lib/journal-page-styles";
+import { JOURNAL_BORDER_SUBTLE, JOURNAL_INK_BODY } from "@/lib/journal-page-styles";
 import { JOURNAL_INTERACTION_CLASS as C } from "@/lib/journal-interaction-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
 
@@ -32,7 +32,7 @@ export function JournalReadFooter({
         gap: "8px",
         paddingTop: "10px",
         marginTop: "8px",
-        borderTop: "1px solid rgba(120,70,20,.1)",
+        borderTop: `1px solid ${JOURNAL_BORDER_SUBTLE}`,
         flexShrink: 0,
       }}
     >

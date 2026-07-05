@@ -3,7 +3,7 @@
 /**
  * Tag pills — shared between read and write modes on the right journal page.
  */
-import { JOURNAL_INK_TAG, JOURNAL_INK_TAG_BORDER } from "@/lib/journal-page-styles";
+import { JOURNAL_INK_TAG, JOURNAL_INK_TAG_BG, JOURNAL_INK_TAG_BORDER } from "@/lib/journal-page-styles";
 type JournalEntryTagsProps = {
   tags: string[];
   className?: string;
@@ -22,7 +22,7 @@ export function JournalEntryTags({ tags, className }: JournalEntryTagsProps) {
             fontFamily: "'Lora',serif",
             fontSize: "10px",
             color: JOURNAL_INK_TAG,
-            background: "rgba(120,70,20,.09)",
+            background: JOURNAL_INK_TAG_BG,
             padding: "2px 8px",
             borderRadius: "20px",
             border: `1px solid ${JOURNAL_INK_TAG_BORDER}`,

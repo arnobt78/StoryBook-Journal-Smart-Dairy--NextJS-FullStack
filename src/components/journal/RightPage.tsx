@@ -36,12 +36,20 @@ import type { JournalEntry, EntryDraft } from "@/types";
 import { MOODS, WEATHERS } from "@/constants";
 import { mergePendingTag } from "@/lib/journal-tags";
 import {
+  JOURNAL_DIVIDER_GRADIENT,
   JOURNAL_INK_BODY,
   JOURNAL_INK_HEADING,
   JOURNAL_INK_META,
+  JOURNAL_INK_ORNAMENT,
   JOURNAL_INK_PLACEHOLDER,
+  JOURNAL_PAGE_INSET_SHADOW_RIGHT,
+  JOURNAL_PAGE_RIGHT_BG,
+  JOURNAL_TAG_INPUT_BG,
+  JOURNAL_TAG_INPUT_BORDER,
+  JOURNAL_TAG_INPUT_COLOR,
   journalMiniLabelStyle,
   journalPageNumberStyle,
+  journalRuledLinesLayerStyle,
 } from "@/lib/journal-page-styles";
 import { journalStaggerRowProps } from "@/lib/journal-stagger";
 import { normalizeTags, wordCount } from "@/lib/utils";
@@ -137,18 +145,14 @@ export function RightPage({
     <div style={{
       width: "var(--page-w, 360px)", height: "var(--page-h, 540px)",
       position: "relative",
-      background: "var(--theme-page-right, linear-gradient(to left, #e8dcc9 0%, #f4ecda 60%, #ede0c8 100%))",
+      background: JOURNAL_PAGE_RIGHT_BG,
       borderRadius: "0 4px 4px 0",
-      boxShadow: "inset 10px 0 24px rgba(120,70,20,.1)",
+      boxShadow: JOURNAL_PAGE_INSET_SHADOW_RIGHT,
       flexShrink: 0, overflow: "hidden",
       pointerEvents: "none",
     }}>
       {/* Ruled lines */}
-      <div style={{
-        position: "absolute", inset: 0,
-        backgroundImage: "repeating-linear-gradient(transparent,transparent 27px,rgba(120,80,30,.1) 27px,rgba(120,80,30,.1) 28px)",
-        backgroundPosition: "0 52px", pointerEvents: "none", zIndex: 0,
-      }} />
+      <div style={journalRuledLinesLayerStyle} />
       {/* Left curl shadow toward coil seam */}
       <div
         className="spread-seam-curl-right"
@@ -216,7 +220,7 @@ export function RightPage({
                   width: "100%", lineHeight: 1.2, margin: "6px 0 8px",
                 }}
               />
-              <div style={{ height: "1px", background: "linear-gradient(to right,rgba(120,70,20,.25),transparent)", marginBottom: "10px", flexShrink: 0 }} />
+              <div style={{ height: "1px", background: JOURNAL_DIVIDER_GRADIENT, marginBottom: "10px", flexShrink: 0 }} />
 
               <MiniLabel>Mood</MiniLabel>
               <div style={{ display: "flex", gap: "2px", flexWrap: "wrap", marginBottom: "6px" }}>
@@ -277,9 +281,9 @@ export function RightPage({
                   placeholder="+ tag"
                   style={{
                     fontFamily: "'Lora',serif", fontSize: "10px",
-                    background: "rgba(120,70,20,.07)", border: "1px solid rgba(120,70,20,.18)",
+                    background: JOURNAL_TAG_INPUT_BG, border: `1px solid ${JOURNAL_TAG_INPUT_BORDER}`,
                     borderRadius: "20px", padding: "2px 9px", outline: "none",
-                    color: "rgba(45,20,5,.75)", width: "70px",
+                    color: JOURNAL_TAG_INPUT_COLOR, width: "70px",
                   }}
                 />
               </div>
@@ -316,7 +320,7 @@ export function RightPage({
               {/* Divider — shares the title's index so it fades in with it */}
               <div
                 {...journalStaggerRowProps(1, {
-                  style: { height: "1px", background: "linear-gradient(to right,rgba(120,70,20,.25),transparent)", marginBottom: "12px", flexShrink: 0 },
+                  style: { height: "1px", background: JOURNAL_DIVIDER_GRADIENT, marginBottom: "12px", flexShrink: 0 },
                 })}
               />
 
@@ -325,7 +329,7 @@ export function RightPage({
                 {...journalStaggerRowProps(2, {
                   style: {
                     fontFamily: "'Lora',serif", fontSize: "13px", lineHeight: 1.92,
-                    color: "rgba(35,14,3,.78)", flex: 1, minHeight: 0, overflowY: "auto",
+                    color: JOURNAL_INK_BODY, flex: 1, minHeight: 0, overflowY: "auto",
                     scrollbarWidth: "none",
                   },
                 })}
@@ -334,7 +338,7 @@ export function RightPage({
                   ? <div className="journal-prose" dangerouslySetInnerHTML={{ __html: entry.content }} />
                   : (
                     <div style={{ textAlign: "center", paddingTop: "28px" }}>
-                      <span style={{ fontSize: "28px", display: "block", opacity: 0.4, marginBottom: "10px" }}>✒</span>
+                      <span style={{ fontSize: "28px", display: "block", color: JOURNAL_INK_ORNAMENT, marginBottom: "10px" }}>✒</span>
                       <span style={{ fontFamily: "'Lora',serif", fontStyle: "italic", fontSize: "12px", color: JOURNAL_INK_PLACEHOLDER }}>
                         This page awaits your words…
                       </span>

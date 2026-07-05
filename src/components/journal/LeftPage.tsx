@@ -38,13 +38,21 @@
  */
 import type { JournalEntry } from "@/types";
 import {
+  JOURNAL_BORDER_SUBTLE,
+  JOURNAL_DOT_ACTIVE,
+  JOURNAL_DOT_INACTIVE,
   JOURNAL_INK_BODY,
   JOURNAL_INK_LIST_TITLE,
   JOURNAL_INK_META,
+  JOURNAL_INK_ORNAMENT,
   JOURNAL_INK_PLACEHOLDER,
   JOURNAL_INK_PREVIEW_BODY,
   JOURNAL_INK_PREVIEW_TITLE,
+  JOURNAL_PAGE_INSET_SHADOW_LEFT,
+  JOURNAL_PAGE_LEFT_BG,
+  journalMarginLineLayerStyle,
   journalPageNumberStyle,
+  journalRuledLinesLayerStyle,
   journalSectionLabelStyle,
 } from "@/lib/journal-page-styles";
 import { journalStaggerRowProps } from "@/lib/journal-stagger";
@@ -71,23 +79,15 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
     <div style={{
       width: "var(--page-w, 360px)", height: "var(--page-h, 540px)",
       position: "relative",
-      background: "var(--theme-page-left, linear-gradient(to right, #ede1cc 0%, #f4ecda 60%, #ede0c8 100%))",
+      background: JOURNAL_PAGE_LEFT_BG,
       borderRadius: "4px 0 0 4px",
-      boxShadow: "inset -10px 0 24px rgba(120,70,20,.12), inset 3px 0 8px rgba(200,160,100,.08)",
+      boxShadow: JOURNAL_PAGE_INSET_SHADOW_LEFT,
       flexShrink: 0, overflow: "hidden",
       pointerEvents: "none",
     }}>
-      {/* Ruled lines */}
-      <div style={{
-        position: "absolute", inset: 0,
-        backgroundImage: "repeating-linear-gradient(transparent,transparent 27px,rgba(120,80,30,.1) 27px,rgba(120,80,30,.1) 28px)",
-        backgroundPosition: "0 52px", pointerEvents: "none", zIndex: 0,
-      }} />
-      {/* Red margin line */}
-      <div style={{
-        position: "absolute", left: "58px", top: 0, bottom: 0, width: "1px",
-        background: "rgba(220,100,80,.18)", pointerEvents: "none", zIndex: 0,
-      }} />
+      {/* Ruled lines + margin */}
+      <div style={journalRuledLinesLayerStyle} />
+      <div style={journalMarginLineLayerStyle} />
       {/* Right curl shadow toward coil seam */}
       <div
         className="spread-seam-curl-left"
@@ -149,7 +149,7 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
                   style: {
                     display: "flex", alignItems: "center", gap: "6px",
                     marginTop: "10px", paddingTop: "8px",
-                    borderTop: "1px solid rgba(120,70,20,.12)",
+                    borderTop: `1px solid ${JOURNAL_BORDER_SUBTLE}`,
                   },
                 })}
               >
@@ -168,8 +168,8 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
                   style: { textAlign: "center", margin: "8px 0" },
                 })}
               >
-                {/* Dimming applied on nested span — keeps final .15 opacity separate from the entrance animation's opacity:1 end state */}
-                <span style={{ fontSize: "16px", opacity: 0.15 }}>✦ ✦ ✦</span>
+                {/* Nested span — ornament uses theme accent, not fixed opacity (Wave 31 dark-theme parity) */}
+                <span style={{ fontSize: "16px", color: JOURNAL_INK_ORNAMENT, letterSpacing: "0.35em" }}>✦ ✦ ✦</span>
               </div>
               <div
                 {...journalStaggerRowProps(2, {
@@ -202,7 +202,7 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
                       Math.min(ENTRY_LIST_STAGGER_START + i, ENTRY_LIST_STAGGER_CAP),
                       {
                         style: {
-                          padding: "7px 0", borderBottom: "1px solid rgba(120,70,20,.08)",
+                          padding: "7px 0", borderBottom: `1px solid ${JOURNAL_BORDER_SUBTLE}`,
                           cursor: "pointer",
                         },
                       },
@@ -228,7 +228,7 @@ export function LeftPage({ prevEntry, entries, currentIdx, pageNumber, onNavigat
                       </div>
                       <div style={{
                         width: "5px", height: "5px", borderRadius: "50%", flexShrink: 0,
-                        background: i === currentIdx ? "rgba(170,90,30,.75)" : "rgba(120,70,20,.2)",
+                        background: i === currentIdx ? JOURNAL_DOT_ACTIVE : JOURNAL_DOT_INACTIVE,
                       }} />
                     </div>
                   </div>
@@ -253,7 +253,7 @@ function SectionLabel({ children, index }: { children: React.ReactNode; index: n
       })}
     >
       {children}
-      <div style={{ flex: 1, height: "1px", background: "rgba(120,70,20,.15)" }} />
+      <div style={{ flex: 1, height: "1px", background: JOURNAL_BORDER_SUBTLE }} />
     </div>
   );
 }

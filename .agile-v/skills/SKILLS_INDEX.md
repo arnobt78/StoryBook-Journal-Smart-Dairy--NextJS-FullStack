@@ -35,7 +35,7 @@
 
 **C4 active REQs:** REQ-0029–0031 (UI polish, leather glass, entry tags, journal dialog)
 
-**Last wave:** 30 — demo picker selected avatar+name; Wave 29 trigger layout
+**Last wave:** 32 — theme-aware page flip overlay
 
 ## Traceability
 

@@ -260,7 +260,7 @@ body {
 .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
-  color: rgba(100, 55, 20, 0.28);
+  color: var(--theme-prose-placeholder, rgba(100, 55, 20, 0.28));
   font-style: italic;
   pointer-events: none;
   height: 0;
@@ -278,7 +278,7 @@ body {
   margin: 0.5em 0 0.25em;
 }
 .ProseMirror blockquote {
-  border-left: 2px solid rgba(120, 70, 20, 0.3);
+  border-left: 2px solid var(--theme-prose-blockquote-border, rgba(120, 70, 20, 0.3));
   padding-left: 1em;
   margin: 0.5em 0;
   font-style: italic;
@@ -299,13 +299,13 @@ body {
   font-style: italic;
 }
 .ProseMirror code {
-  background: rgba(120, 70, 20, 0.08);
+  background: var(--theme-prose-code-bg, rgba(120, 70, 20, 0.08));
   padding: 0.1em 0.35em;
   border-radius: 3px;
   font-size: 0.88em;
 }
 .ProseMirror pre {
-  background: rgba(35, 14, 3, 0.06);
+  background: var(--theme-prose-pre-bg, rgba(35, 14, 3, 0.06));
   border-radius: 4px;
   padding: 0.75em 1em;
   overflow-x: auto;
@@ -333,7 +333,7 @@ body {
   margin: 0.5em 0 0.25em;
 }
 .journal-prose blockquote {
-  border-left: 2px solid rgba(120, 70, 20, 0.3);
+  border-left: 2px solid var(--theme-prose-blockquote-border, rgba(120, 70, 20, 0.3));
   padding-left: 1em;
   font-style: italic;
 }
@@ -449,6 +449,28 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .journal-stagger-row {
     animation: none !important;
+  }
+}
+
+/* PageFlipOverlay — shadow-only keyframes; rotation stays in PageFlip.tsx inline.
+   Vars inherit from BookSpread theme wrapper (--theme-flip-shadow-*). */
+@keyframes flipFwdShadow {
+  0%,
+  100% {
+    box-shadow: var(--theme-flip-shadow-rest, 2px 0 10px rgba(80, 40, 10, 0.1));
+  }
+  50% {
+    box-shadow: var(--theme-flip-shadow-mid, -5px 0 16px rgba(40, 20, 5, 0.16));
+  }
+}
+
+@keyframes flipBwdShadow {
+  0%,
+  100% {
+    box-shadow: var(--theme-flip-shadow-rest, 2px 0 10px rgba(80, 40, 10, 0.1));
+  }
+  50% {
+    box-shadow: var(--theme-flip-shadow-mid, -5px 0 16px rgba(40, 20, 5, 0.16));
   }
 }
 
@@ -1579,16 +1601,16 @@ body {
   }
 }
 
-/* Journal ink utilities — optional class bridge for cream paper text */
+/* Journal ink utilities — optional class bridge; reads spread theme vars */
 .journal-ink-label {
-  color: rgba(100, 55, 20, 0.45);
+  color: var(--theme-ink-label, rgba(100, 55, 20, 0.45));
 }
 
 .journal-ink-meta {
-  color: rgba(100, 55, 20, 0.55);
+  color: var(--theme-ink-meta, rgba(100, 55, 20, 0.55));
 }
 
-/* ─── Wave 22 — cream paper action buttons (read/write footers) ─────────── */
+/* ─── Wave 22 — page action buttons (read/write footers); theme-aware via CSS vars ── */
 .journal-paper-action-btn {
   font-family: "Lora", serif;
   letter-spacing: 1.5px;
@@ -1597,8 +1619,8 @@ body {
   border-radius: 4px;
   cursor: pointer;
   flex-shrink: 0;
-  color: rgba(100, 55, 20, 0.55);
-  border: 1px solid rgba(120, 70, 20, 0.2);
+  color: var(--theme-paper-action-color, rgba(100, 55, 20, 0.55));
+  border: 1px solid var(--theme-paper-action-border, rgba(120, 70, 20, 0.2));
   transition:
     color 0.2s,
     text-shadow 0.2s,
@@ -1607,22 +1629,22 @@ body {
 }
 
 .journal-paper-action-btn--destructive {
-  color: rgba(140, 50, 30, 0.6);
-  border-color: rgba(140, 50, 30, 0.25);
+  color: var(--theme-paper-action-destructive-color, rgba(140, 50, 30, 0.6));
+  border-color: var(--theme-paper-action-destructive-border, rgba(140, 50, 30, 0.25));
 }
 
 .journal-paper-action-btn:hover:not(:disabled) {
-  color: rgba(35, 14, 3, 0.88);
+  color: var(--theme-paper-action-hover, rgba(35, 14, 3, 0.88));
   text-shadow: 0 0 12px rgba(255, 165, 60, 0.35);
   box-shadow: 0 0 14px rgba(255, 140, 50, 0.2);
-  border-color: rgba(120, 70, 20, 0.35);
+  border-color: var(--theme-paper-action-border, rgba(120, 70, 20, 0.35));
 }
 
 .journal-paper-action-btn--destructive:hover:not(:disabled) {
-  color: rgba(90, 25, 15, 0.92);
+  color: var(--theme-paper-action-destructive-hover, rgba(90, 25, 15, 0.92));
   text-shadow: 0 0 12px rgba(255, 120, 80, 0.35);
   box-shadow: 0 0 14px rgba(220, 80, 50, 0.22);
-  border-color: rgba(140, 50, 30, 0.4);
+  border-color: var(--theme-paper-action-destructive-border, rgba(140, 50, 30, 0.4));
 }
 
 /* ─── Wave 22 — journal bottom nav icon + pill buttons ───────────────────── */
@@ -2688,6 +2710,14 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   font-family: "Lora", serif;
   font-size: clamp(9px, 1.1vw, 12px);
   line-height: 1.45;
+}
+
+.journal-theme-preview-page--left {
+  color: var(--theme-ink);
+}
+
+.journal-theme-preview-page--right {
+  color: var(--theme-ink-muted);
 }
 
 @keyframes journalDialogOverlayIn {

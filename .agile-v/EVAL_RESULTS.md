@@ -22,7 +22,7 @@
 | Static Red Team | PASS | TC-0031–0043 |
 | Stage 3 synthesis | PASS | through `430e51f` (Waves 24 + 26) |
 | E2E regression executed | **FAIL** | REQ-0021 — e2e not in CI |
-| Vitest unit | PASS | **71** tests 2026-07-05 |
+| Vitest unit | PASS | **78** tests 2026-07-05 |
 | Lint + typecheck + build | PASS | 2026-07-04 Wave 26 — all three re-run and PASS |
 | C4 tag UX TC-0034–0035 | PASS | static + DB audit |
 | C4 dialog/nav UX | PASS | Waves 17–23 static |
