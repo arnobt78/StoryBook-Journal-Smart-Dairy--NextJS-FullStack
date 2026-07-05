@@ -99,9 +99,9 @@ npm run test:e2e:install && npm run dev && npm run test:e2e
 
 ## Current resume (2026-07-05)
 
-- **main:** `430e51f` + uncommitted Wave 27–28 (header brand + nav scroll isolation)
+- **main:** `6c90855` + Wave 29–30 pending commit
 - **Stage 4** IN_PROGRESS · **eval_gate_status:** CONDITIONAL
-- **Verify baseline:** 68 Vitest · lint · typecheck · build PASS
+- **Verify baseline:** 71 Vitest · lint · typecheck · build PASS
 - **Next work:** only with parent REQ-XXXX via Infinity Loop
 
 ## Evidence Summary template

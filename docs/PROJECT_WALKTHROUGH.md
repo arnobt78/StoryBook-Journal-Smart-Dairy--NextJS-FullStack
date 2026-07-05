@@ -152,7 +152,8 @@ Prisma models (`prisma/schema.prisma`):
 - **Logout animation (Wave 20):** `useSignOutWithBookClose` drives `LogoutBookCloseOverlay` (spread fold → hinge close → 360° orbit) for nav dropdown and ⌘K sign-out.
 - **Journal readability (Wave 21):** `journal-page-styles.ts` bumps spread ink to auth parity (`.45–.55`); wired in LeftPage, RightPage, footers, tags.
 - **Golden book header (Wave 21, 27):** `BookSpreadHeader` — icon + Dancing Script title + truncated description (same font, nowrap row); tooltip for full meta.
-- **Dashboard shell (Wave 28):** `DashboardClientShell` — `.dashboard-shell` (nav fixed height) + `.dashboard-scroll` (main only); prevents navbar profile shift when shelf scrollbar toggles.
+- **Login demo picker (Wave 29–30):** `.auth-demo-trigger` 3-zone layout + chevron rotate; selected state shows Robohash + `TEST_ACCOUNT_DISPLAY_NAME` via `isDemoAccountSelected()`.
+- **Dashboard shell (Wave 28):** `.dashboard-shell` nav outside `.dashboard-scroll`; `scrollbar-gutter: stable`.
 - **Shelf tooltips (Wave 21):** `BookShelf` spine hover shows title + description via `ui/tooltip.tsx`; `TooltipProvider` in `DashboardClientShell`.
 - **Journal nav polish (Wave 22):** `JournalBottomNav` — `FilePlus`, shelf spotlight, per-button hover + tooltips; `.journal-paper-action-btn` darker hover on read footer.
 - **Confirm stacking (Wave 22):** `ConfirmDialog` `priority` prop; close `BookEditorModal` before delete confirm; paper dialog footer band removed.
@@ -518,7 +519,16 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 28. Related docs
+## 28. C4 UI Waves 29–30 — Login demo picker (2026-07-05)
+
+| Wave | Files | Details |
+|------|-------|---------|
+| 29 | `LoginForm.tsx`, `auth-form-styles.ts`, `globals.css` | 3-zone trigger; chevron 180° rotate; `authDemoTriggerStyle` |
+| 30 | `demo-account.ts`, `constants/auth.ts`, `LoginForm.tsx`, `demo-account.test.ts` | Selected avatar + name; robohash prefetch; strict cred match |
+
+---
+
+## 29. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -529,4 +539,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-05 — C4 Wave 27–28; lint/typecheck/68 Vitest/build PASS.*
+*Last reviewed: 2026-07-05 — C4 Wave 27–30; lint/typecheck/71 Vitest/build PASS.*

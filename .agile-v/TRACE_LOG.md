@@ -49,3 +49,5 @@
 | 2026-07-05T08:58:00Z | activate | agile-v-core | Session activation; main=430e51f; 67 Vitest + lint + typecheck PASS; AQMS sync STATE/config/cursor rule | REQ-0024 | DEC-0054 |
 | 2026-07-05T09:04:00Z | ui-wave27 | build-agent-js | BookSpreadHeader gold desc inline + x-axis align; 68 Vitest PASS | REQ-0029–0030 | DEC-0055 |
 | 2026-07-05T09:15:00Z | ui-wave28 | build-agent-js | dashboard-shell nav scroll isolation + scrollbar-gutter stable; lint/typecheck/test PASS | REQ-0029–0030 | DEC-0056 |
+| 2026-07-05T09:28:00Z | ui-wave29 | build-agent-js | Login demo picker 3-zone trigger + chevron rotate; 68 Vitest PASS | REQ-0029–0030 | DEC-0057 |
+| 2026-07-05T09:36:00Z | ui-wave30 | build-agent-js | Demo picker selected avatar+name; 71 Vitest PASS | REQ-0029–0030 | DEC-0058 |

@@ -10,18 +10,20 @@
  *
  * Stagger indices 0–1 live in login/page.tsx; form rows use explicit authStaggerRowProps.
  */
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { BookOpen, ChevronDown } from "lucide-react";
+import { BookOpen, ChevronDown, Users } from "lucide-react";
 import { appToast } from "@/lib/app-toast";
 import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
+import { isDemoAccountSelected } from "@/lib/auth/demo-account";
 import { authStaggerRowProps } from "@/lib/auth-stagger";
+import { robohashUrl } from "@/lib/robohash";
 import {
   authControlClassName,
-  authControlStyle,
+  authDemoTriggerStyle,
   fieldLabelStyle,
   inputClassName,
   inputStyle,
@@ -32,7 +34,11 @@ import { AuthOAuthSection } from "@/components/auth/AuthOAuthSection";
 import { DemoAccountMenuRow } from "@/components/auth/DemoAccountMenuRow";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { AvatarRing } from "@/components/ui/AvatarRing";
-import { TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_PASSWORD } from "@/constants/auth";
+import {
+  TEST_ACCOUNT_DISPLAY_NAME,
+  TEST_ACCOUNT_EMAIL,
+  TEST_ACCOUNT_PASSWORD,
+} from "@/constants/auth";
 
 const TEST_EMAIL = TEST_ACCOUNT_EMAIL;
 const TEST_PASS = TEST_ACCOUNT_PASSWORD;
@@ -80,7 +86,15 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
 
   const stagger = demoLoginEnabled ? LOGIN_STAGGER_WITH_DEMO : LOGIN_STAGGER_NO_DEMO;
 
+  const demoSelected = isDemoAccountSelected(form.email, form.password);
   const hasCredentials = Boolean(form.email.trim() || form.password.trim());
+
+  /** Warm robohash cache so trigger avatar does not flash on first demo select */
+  useEffect(() => {
+    if (!demoLoginEnabled) return;
+    const img = new Image();
+    img.src = robohashUrl(TEST_EMAIL, 36);
+  }, [demoLoginEnabled]);
 
   const fillTestCredentials = () => {
     setForm({ email: TEST_EMAIL, password: TEST_PASS });
@@ -163,12 +177,35 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
             <RippleButton
               ref={demoTriggerRef}
               type="button"
-              className={`w-full ${authControlClassName}`}
+              aria-expanded={showTestMenu}
+              aria-haspopup="listbox"
+              aria-label={
+                demoSelected
+                  ? `${TEST_ACCOUNT_DISPLAY_NAME}, demo account selected`
+                  : "Select demo account"
+              }
+              className={`auth-demo-trigger w-full ${authControlClassName}`}
               onClick={() => setShowTestMenu((v) => !v)}
-              style={authControlStyle}
+              style={authDemoTriggerStyle}
             >
-              <span>Select Demo Account</span>
-              <ChevronDown size={14} aria-hidden className="shrink-0 opacity-60" />
+              {demoSelected ? (
+                <AvatarRing
+                  seed={TEST_EMAIL}
+                  size={18}
+                  unoptimized
+                  className="auth-demo-trigger__avatar"
+                />
+              ) : (
+                <Users size={16} aria-hidden className="auth-demo-trigger__icon" />
+              )}
+              <span className="auth-demo-trigger__label">
+                {demoSelected ? TEST_ACCOUNT_DISPLAY_NAME : "Select Demo Account"}
+              </span>
+              <ChevronDown
+                size={14}
+                aria-hidden
+                className={`auth-demo-trigger__chevron${showTestMenu ? " auth-demo-trigger__chevron--open" : ""}`}
+              />
             </RippleButton>
             {showTestMenu &&
               menuBox &&
@@ -191,7 +228,7 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
                   <DemoAccountMenuRow onClick={fillTestCredentials} withBorderBottom>
                     <AvatarRing seed={TEST_EMAIL} size={28} unoptimized />
                     <span className="demo-menu-row__inline" style={{ fontSize: "12px" }}>
-                      <strong>Test User</strong>
+                      <strong>{TEST_ACCOUNT_DISPLAY_NAME}</strong>
                       <span className="demo-menu-row__sep" aria-hidden>
                         ·
                       </span>

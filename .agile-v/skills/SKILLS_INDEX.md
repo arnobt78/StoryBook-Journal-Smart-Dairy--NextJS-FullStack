@@ -35,7 +35,7 @@
 
 **C4 active REQs:** REQ-0029–0031 (UI polish, leather glass, entry tags, journal dialog)
 
-**Last wave:** 28 — nav scroll isolation (`dashboard-shell` + `scrollbar-gutter: stable`); Wave 27 header brand parity committed pending
+**Last wave:** 30 — demo picker selected avatar+name; Wave 29 trigger layout
 
 ## Traceability
 

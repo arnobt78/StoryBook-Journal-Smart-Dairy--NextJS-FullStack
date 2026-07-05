@@ -13,6 +13,8 @@ export type OAuthAuthVariant = "login" | "register";
 /** Demo account — matches prisma/seed.ts and register route ensureTestUser */
 export const TEST_ACCOUNT_EMAIL = "test@user.com";
 export const TEST_ACCOUNT_PASSWORD = "12345678";
+/** Display name shown in demo picker trigger + menu row when demo creds are active */
+export const TEST_ACCOUNT_DISPLAY_NAME = "Test User";
 
 /** Post-OAuth landing route; dashboard queries refetch on mount via TanStack Query */
 export const OAUTH_CALLBACK_URL = "/dashboard";

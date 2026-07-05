@@ -26,7 +26,8 @@ export const inputStyle: CSSProperties = {
 /** Demo picker trigger — same visual height as credential inputs */
 export const authControlClassName = `auth-control ${LEATHER_GLASS_CLASS.input}`;
 
-export const authControlStyle: CSSProperties = {
+/** Demo picker trigger — leather-glass parity; 3-zone layout via `.auth-demo-trigger` in globals.css */
+export const authDemoTriggerStyle: CSSProperties = {
   width: "100%",
   fontFamily: "'Lora', serif",
   fontSize: "13px",
@@ -36,8 +37,6 @@ export const authControlStyle: CSSProperties = {
   cursor: "pointer",
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
-  gap: "8px",
   boxSizing: "border-box",
   minHeight: AUTH_CONTROL_HEIGHT,
   ...LEATHER_GLASS.input,

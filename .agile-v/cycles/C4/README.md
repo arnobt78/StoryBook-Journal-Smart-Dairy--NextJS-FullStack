@@ -1,14 +1,11 @@
 # Cycle C4 — UI Polish + Entry Tags (active)
 
-**Status:** Stage 4 Verification — static PASS · **Waves 24 + 26 committed (`430e51f`)**
+**Status:** Stage 4 Verification — static PASS · Waves **1–30**
 
 | Field | Value |
 |-------|-------|
-| CR | CR-0005 |
-| REQs | REQ-0029, REQ-0030, REQ-0031 |
-| Commits | `91bea2a` … `430e51f` |
-| ARTs | ART-0068–0098 |
-| Unit tests | **67** Vitest PASS |
+| Commits | through `6c90855` + Wave 29–30 pending |
+| Unit tests | **71** Vitest PASS |
 
 ## Core deliverables (REQ)
 
@@ -30,6 +27,8 @@
 | **26** | Flip anti-flash (`visibility` gate + remount key) + `?entry=` persistence on refresh | `LeftPage.tsx`, `RightPage.tsx`, `BookSpread.tsx`, `journal-entry-url.ts` |
 | **27** | Spread header Dancing Script desc + nowrap x-axis align | `book-brand-styles.ts`, `BookSpreadHeader.tsx` |
 | **28** | Nav outside `.dashboard-scroll` — profile avatar shift fix | `DashboardClientShell.tsx`, `DashboardNav.tsx`, `globals.css` |
+| **29** | Demo picker 3-zone trigger + chevron rotate | `LoginForm.tsx`, `auth-form-styles.ts`, `globals.css` |
+| **30** | Demo picker selected avatar + `TEST_ACCOUNT_DISPLAY_NAME` | `demo-account.ts`, `constants/auth.ts`, `LoginForm.tsx` |
 
 ## Wave 23 detail (latest on main)
 
@@ -60,11 +59,11 @@
 
 ## Key decisions (index)
 
-DEC-0055 Wave 27 header brand · **DEC-0056 Wave 28 nav scroll isolation**
+DEC-0055–0058 Waves 27–30
 
-## Verification (2026-07-05, Wave 27–28)
+## Verification (2026-07-05)
 
-lint · typecheck · **68** Vitest · build — all PASS · e2e NOT in CI
+lint · typecheck · **71** Vitest · build — all PASS · e2e NOT in CI
 
 ## Next — suggested focus
 
