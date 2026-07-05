@@ -8,7 +8,7 @@
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-ui-wave40b-2026-07-05 |
-| **Last commit** | `41cc166` (Waves 33–40b: mobile scroll + flip unclip + viewport fit) |
+| **Last commit** | `e92c28a` (Waves 33–40b: mobile scroll + flip unclip + viewport fit) |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
