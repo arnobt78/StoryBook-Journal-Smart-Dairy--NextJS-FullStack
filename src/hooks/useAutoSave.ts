@@ -1,6 +1,6 @@
-"use client";
-
 /**
+ * @file hooks/useAutoSave.ts
+ *
  * WALKTHROUGH — useAutoSave
  *
  * Lifecycle: mounts when BookSpread enters write mode (`enabled=true`).
@@ -17,6 +17,8 @@
  * Refs (`timer`, `isSaving`, `previousData`) survive re-renders without
  * re-subscribing; cleanup clears pending timeout on unmount or deps change.
  */
+"use client";
+
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";

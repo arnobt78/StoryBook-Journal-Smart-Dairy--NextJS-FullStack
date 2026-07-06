@@ -1,4 +1,11 @@
 /**
+ * @file types/index.ts
+ *
+ * WALKTHROUGH — Domain TypeScript interfaces (JournalBook, JournalEntry, User)
+ * ───────────────────────────────────────────────────────────────────────────
+ * Mirror Prisma models + client-only shapes. Imported by components, hooks, journal-api.
+ */
+/**
  * Shared TypeScript domain types — mirror Prisma models + client-only shapes.
  * Used by components, hooks, and journal-api fetch helpers for strict typing.
  */

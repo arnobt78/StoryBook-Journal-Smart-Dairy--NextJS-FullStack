@@ -1,4 +1,21 @@
 /**
+ * @file lib/auth.ts
+ *
+ * WALKTHROUGH — NextAuth v5 (Auth.js) central configuration
+ * ─────────────────────────────────────────────────────────
+ * Used by: `src/app/api/auth/[...nextauth]/route.ts`, every `auth()` call in
+ * Server Components + Route Handlers, and `SessionProvider` on the client.
+ *
+ * Flow:
+ *  1. Providers — Google OAuth (optional via env) + Credentials (email/password).
+ *  2. `authorize` — bcrypt compare against Prisma `User.passwordHash`; updates `lastLoginAt`.
+ *  3. `signIn` callback — Google users upserted via `provisionOAuthUser` so JWT carries Prisma cuid.
+ *  4. `jwt` / `session` callbacks — copy `user.id` + avatar into the client session.
+ *  5. Export `auth()`, `signIn`, `signOut`, `handlers` for App Router integration.
+ *
+ * Session strategy: JWT (no DB session table). `session.user.id` is the ownership key for all APIs.
+ */
+/**
  * NextAuth v5 configuration — session/JWT strategy for the whole app.
  *
  * Walkthrough:

@@ -1,3 +1,9 @@
+/**
+ * @file components/auth/GoogleSignInButton.tsx
+ *
+ * WALKTHROUGH — NextAuth Google signIn + OAUTH_PENDING_KEY before redirect
+ * ────────────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 /**

@@ -1,6 +1,6 @@
-"use client";
-
 /**
+ * @file hooks/useOfflineEntryDraft.ts
+ *
  * WALKTHROUGH — useOfflineEntryDraft
  *
  * IndexedDB draft persistence while editing (survives refresh/tab close).
@@ -13,6 +13,8 @@
  *
  * Key format: `${bookId}:${entryId}` via `draftKey()`.
  */
+"use client";
+
 import { useEffect, useRef } from "react";
 import { appToast } from "@/lib/app-toast";
 import {

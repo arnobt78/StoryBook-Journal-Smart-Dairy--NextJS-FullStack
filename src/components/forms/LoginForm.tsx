@@ -1,3 +1,12 @@
+/**
+ * @file components/forms/LoginForm.tsx
+ *
+ * WALKTHROUGH — Credential + demo + OAuth sign-in
+ * ─────────────────────────────────────────────
+ * Demo picker (test@user.com) when SHOW_DEMO_LOGIN enabled. signIn → router.push dashboard.
+ * Clears stale TanStack cache via notifyJournalCacheUpdated on success.
+ * Loading held until navigation completes (Wave 19 — no finally reset on success).
+ */
 "use client";
 
 /**

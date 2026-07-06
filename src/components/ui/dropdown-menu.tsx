@@ -1,3 +1,10 @@
+/**
+ * @file components/ui/dropdown-menu.tsx
+ *
+ * WALKTHROUGH — Radix dropdown (DashboardNav profile menu)
+ * ────────────────────────────────────────────────────────
+ * `modal={false}` on Content avoids scroll-lock layout shift on nav open.
+ */
 "use client";
 
 /**

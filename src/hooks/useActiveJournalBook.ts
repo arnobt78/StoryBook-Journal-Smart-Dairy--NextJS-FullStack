@@ -1,3 +1,11 @@
+/**
+ * @file hooks/useActiveJournalBook.ts
+ *
+ * WALKTHROUGH — Resolve open book from URL + TanStack cache
+ * ─────────────────────────────────────────────────────────
+ * Parses `/journal/[bookId]`; fetches bookDetail only when cache cold.
+ * Powers CommandPalette theme cycle and journal-scoped actions.
+ */
 "use client";
 
 /**

@@ -1,3 +1,11 @@
+/**
+ * @file components/layout/DashboardNav.tsx
+ *
+ * WALKTHROUGH — Authenticated top navigation bar
+ * ─────────────────────────────────────────────
+ * Brand, journal pill, profile dropdown (API status/docs links), offline badge.
+ * Glass transparent variant on `/journal/*` routes (Wave 37).
+ */
 "use client";
 
 /**

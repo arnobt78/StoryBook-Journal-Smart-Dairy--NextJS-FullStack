@@ -1,4 +1,13 @@
 /**
+ * @file api/auth/[...nextauth]/route.ts
+ * @route GET, POST `/api/auth/*`
+ *
+ * WALKTHROUGH — NextAuth.js App Router entry
+ * ─────────────────────────────────────────
+ * Re-exports `handlers` from `@/lib/auth` — OAuth callbacks, session endpoint,
+ * CSRF, credentials sign-in/out. All session/JWT logic lives in auth.ts callbacks.
+ */
+/**
  * NextAuth.js catch-all route — /api/auth/[...nextauth]
  *
  * HTTP: GET + POST (OAuth callbacks, session, CSRF, sign-in/out).

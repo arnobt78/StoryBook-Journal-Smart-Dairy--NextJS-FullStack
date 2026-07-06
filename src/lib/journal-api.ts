@@ -1,4 +1,6 @@
 /**
+ * @file lib/journal-api.ts
+ *
  * WALKTHROUGH — journal-api.ts
  *
  * Thin fetch wrappers for journal REST routes. Used by:

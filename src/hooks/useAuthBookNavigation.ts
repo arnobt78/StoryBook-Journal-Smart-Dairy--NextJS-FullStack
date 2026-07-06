@@ -1,3 +1,10 @@
+/**
+ * @file hooks/useAuthBookNavigation.ts
+ *
+ * WALKTHROUGH — Login ↔ register page-flip navigation
+ * ─────────────────────────────────────────────────
+ * Early router.push, hold cover until pathname matches, stagger remount keys.
+ */
 "use client";
 
 /**

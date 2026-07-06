@@ -1,3 +1,10 @@
+/**
+ * @file components/ui/safe-image.tsx
+ *
+ * WALKTHROUGH — next/image with Robohash fallback chain
+ * ─────────────────────────────────────────────────────
+ * Tries optimizer → fallbackSrc → native img. Used by AvatarRing, demo picker.
+ */
 "use client";
 
 /**

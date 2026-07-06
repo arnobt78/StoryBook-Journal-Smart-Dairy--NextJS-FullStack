@@ -1,3 +1,9 @@
+/**
+ * @file components/auth/AuthFormSubmitButton.tsx
+ *
+ * WALKTHROUGH — Primary auth CTA; loading spinner until navigation completes
+ * ──────────────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 import type { CSSProperties } from "react";

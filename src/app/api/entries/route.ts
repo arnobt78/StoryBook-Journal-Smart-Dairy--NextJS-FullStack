@@ -1,4 +1,14 @@
 /**
+ * @file api/entries/route.ts
+ * @route POST `/api/entries`
+ *
+ * WALKTHROUGH — Create new diary page
+ * ─────────────────────────────────
+ * POST only — entry list lives on GET /api/books/[bookId].
+ * Verifies `bookId` belongs to session user before insert.
+ * Used by: BookSpread "New entry", offline sync drain, bottom nav.
+ */
+/**
  * /api/entries — create journal entry.
  *
  * HTTP: POST only (list lives under GET /api/books/[bookId]).

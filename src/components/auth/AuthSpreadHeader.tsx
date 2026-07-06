@@ -1,3 +1,10 @@
+/**
+ * @file components/auth/AuthSpreadHeader.tsx
+ *
+ * WALKTHROUGH — StoryBook branding above auth open-book spread
+ * ───────────────────────────────────────────────────────────
+ * Rotating phrase via useRotatingTypewriter; fixed chrome outside enter shell.
+ */
 "use client";
 
 /**

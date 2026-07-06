@@ -1,3 +1,9 @@
+/**
+ * @file components/auth/DemoAccountMenuRow.tsx
+ *
+ * WALKTHROUGH — Equal-height demo picker dropdown rows (avatar + label)
+ * ────────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 /**

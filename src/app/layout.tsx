@@ -1,3 +1,15 @@
+/**
+ * @file app/layout.tsx
+ * @route Root layout — wraps every page in the app
+ *
+ * WALKTHROUGH — Application shell
+ * ─────────────────────────────
+ *  • `siteMetadata` — SEO/OpenGraph from `src/lib/site-metadata.ts`
+ *  • `globals.css` — fonts, leather-glass tokens, journal animations
+ *  • `<Providers>` — SessionProvider + TanStack Query + offline sync + toasts
+ *  • Font preloads — Dancing Script / IM Fell / Playfair for landing LCP
+ *  • Child route groups: `(auth)`, `(dashboard)`, `api/*` inherit this shell
+ */
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";

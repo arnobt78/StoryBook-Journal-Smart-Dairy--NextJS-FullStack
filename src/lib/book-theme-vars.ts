@@ -1,4 +1,13 @@
 /**
+ * @file lib/book-theme-vars.ts
+ *
+ * WALKTHROUGH — Per-book page theme → CSS custom properties
+ * ───────────────────────────────────────────────────────
+ * Maps `BOOK_THEMES` (constants/themes.ts) to `--theme-*` vars on spread wrapper.
+ * Used by `useBookTheme`, PageFlipOverlay, LeftPage/RightPage, BookThemePreview.
+ * SSR-safe pure function — no hooks.
+ */
+/**
  * Maps `BOOK_THEMES` tokens to CSS custom properties on the journal spread wrapper.
  * Shared by `useBookTheme` (live reader) and `BookThemePreview` (editor dialog).
  */

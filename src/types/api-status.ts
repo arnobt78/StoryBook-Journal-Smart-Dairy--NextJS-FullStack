@@ -1,4 +1,12 @@
 /**
+ * @file types/api-status.ts
+ *
+ * WALKTHROUGH — TypeScript contracts for GET /api/status
+ * ────────────────────────────────────────────────────
+ * Platform/personal aggregates only — no PII fields. Shared by api-status-server,
+ * ApiStatusClient, and api-status-client fetch wrapper.
+ */
+/**
  * API status payload — aggregate counts only; no PII (emails, names, IDs).
  * Consumed by GET /api/status and the /api-status dashboard page.
  */

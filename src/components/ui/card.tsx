@@ -1,3 +1,9 @@
+/**
+ * @file components/ui/card.tsx
+ *
+ * WALKTHROUGH — Leather-glass Card shell for API status/docs panels
+ * ───────────────────────────────────────────────────────────────
+ */
 import * as React from "react";
 import { cn } from "@/lib/utils";
 

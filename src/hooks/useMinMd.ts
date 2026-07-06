@@ -1,3 +1,10 @@
+/**
+ * @file hooks/useMinMd.ts
+ *
+ * WALKTHROUGH — SSR-safe md breakpoint (768px) via useSyncExternalStore
+ * ─────────────────────────────────────────────────────────────────────
+ * SSR returns false; hydrates to match media query without layout flash hooks.
+ */
 "use client";
 
 import { useSyncExternalStore } from "react";

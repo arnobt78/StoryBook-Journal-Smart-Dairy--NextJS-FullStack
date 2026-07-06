@@ -1,3 +1,10 @@
+/**
+ * @file components/ui/tooltip.tsx
+ *
+ * WALKTHROUGH — Radix tooltip for shelf spines, journal nav icons, spread header
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Provider lives in DashboardClientShell (`delayDuration` 200ms).
+ */
 "use client";
 
 /**

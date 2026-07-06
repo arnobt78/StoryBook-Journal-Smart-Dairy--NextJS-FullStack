@@ -1,3 +1,9 @@
+/**
+ * @file hooks/useBookTheme.ts
+ *
+ * WALKTHROUGH — Memoized CSS vars for active book theme on spread wrapper
+ * ───────────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 /**

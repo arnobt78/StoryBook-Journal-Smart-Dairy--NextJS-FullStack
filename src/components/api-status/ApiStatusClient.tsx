@@ -1,3 +1,12 @@
+/**
+ * @file components/api-status/ApiStatusClient.tsx
+ *
+ * WALKTHROUGH — Live API status dashboard (client island)
+ * ─────────────────────────────────────────────────────
+ * TanStack Query: `initialData` from SSR + 30s `refetchInterval`.
+ * Invalidated on journal CRUD via `notifyJournalCacheUpdated` (personal counts).
+ * Subcomponents: StatusDependencyCard, StatusStatGrid.
+ */
 "use client";
 
 import { useQuery } from "@tanstack/react-query";

@@ -1,3 +1,11 @@
+/**
+ * @file components/journal/BookEditorModal.tsx
+ *
+ * WALKTHROUGH — Create / edit journal dialog (Wave 17)
+ * ───────────────────────────────────────────────────
+ * Radix Dialog + leather-glass styling. Cover color, Lucide icon slug, theme preview.
+ * Parent (BookShelf/BookSpread) handles API + notifyJournalCacheUpdated on submit.
+ */
 "use client";
 
 /**

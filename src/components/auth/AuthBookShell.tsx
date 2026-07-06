@@ -1,3 +1,11 @@
+/**
+ * @file components/auth/AuthBookShell.tsx
+ *
+ * WALKTHROUGH — Login/register two-page open-book spread
+ * ─────────────────────────────────────────────────────
+ * Page flip between /login ↔ /register; landing handoff stagger; hold cover
+ * during RSC load. Uses usePageFlip + useAuthBookNavigation.
+ */
 "use client";
 
 /**

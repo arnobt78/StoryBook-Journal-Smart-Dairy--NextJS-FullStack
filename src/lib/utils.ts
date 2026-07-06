@@ -1,4 +1,12 @@
 /**
+ * @file lib/utils.ts
+ *
+ * WALKTHROUGH — Shared helpers (cn, wordCount, slugify, tag merge)
+ * ────────────────────────────────────────────────────────────────
+ * `cn()` — shadcn Tailwind merge. `wordCount` strips HTML for footer stats.
+ * `mergePendingTag` — flush "+ tag" input on blur/save (prevents empty DB tags).
+ */
+/**
  * General-purpose helpers — Tailwind class merge, journal text metrics, slug/tags.
  * Imported by API routes, autosave, and UI components.
  */

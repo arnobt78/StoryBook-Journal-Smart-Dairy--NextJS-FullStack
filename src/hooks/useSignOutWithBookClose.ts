@@ -1,3 +1,11 @@
+/**
+ * @file hooks/useSignOutWithBookClose.ts
+ *
+ * WALKTHROUGH — Logout with 3D book-close animation (Wave 20)
+ * ────────────────────────────────────────────────────────────
+ * Sequence: goodbye toast → LogoutBookCloseOverlay phases → queryClient.clear → signOut.
+ * Shared by DashboardNav and CommandPalette. Timings in `logout-book-close.ts`.
+ */
 "use client";
 
 /**

@@ -1,4 +1,10 @@
 /**
+ * @file components/auth/AuthOrSeparator.tsx
+ *
+ * WALKTHROUGH — "or" divider between credential submit and Google OAuth
+ * ─────────────────────────────────────────────────────────────────────
+ */
+/**
  * "or" divider with horizontal rules — matches StoryBook auth page typography.
  *
  * ── WALKTHROUGH ──

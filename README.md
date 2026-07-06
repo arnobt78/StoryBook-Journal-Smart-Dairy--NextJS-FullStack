@@ -1,4 +1,4 @@
-# StoryBook Journal - Next.js, TypeScript, PostgreSQL, Tailwind CSS FullStack Project (Online/Offline Drafting & Sync Capability with IndexedDB & AI Writing Assistance Smart Diary)
+# Story Book Journal - Next.js, TypeScript, PostgreSQL, Tailwind CSS (Animated Book UI) FullStack Project (Online/Offline Drafting & Sync Capability with IndexedDB & AI Assist Smart Diary)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
@@ -8,8 +8,10 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)](https://www.postgresql.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC)](https://tailwindcss.com/)
 [![NextAuth](https://img.shields.io/badge/NextAuth-v5-purple)](https://authjs.dev/)
+[![TanStack Query](https://img.shields.io/badge/TanStack_Query-5-FF4154)](https://tanstack.com/query)
+[![TipTap](https://img.shields.io/badge/TipTap-2.27-6841FF)](https://tiptap.dev/)
 
-A premium, immersive digital diary built with Next.js. It feels like opening a real leather notebook: 3D cover animations, CSS page-flip transitions, ruled paper, moods, weather, tags, autosave, offline drafts, and optional AI writing assistance — all backed by PostgreSQL and secure authentication.
+A premium, immersive digital diary that feels like opening a real leather notebook. It combines **3D book-cover animations**, **CSS page-flip transitions**, ruled paper, mood and weather pickers, tags, autosave, **IndexedDB offline drafts**, multi-tab **SSE realtime sync**, and optional **AI writing assistance** — all backed by **PostgreSQL**, **Prisma**, and **NextAuth** secure authentication. This repository is built for **learning**: you can study how a modern full-stack Next.js app splits Server Components (data) from Client Components (animation), how REST APIs validate with Zod, how TanStack Query keeps the UI fresh without full page reloads, and how offline-first patterns survive flaky networks.
 
 - **Live Demo:** [https://storybook-journal.vercel.app](https://storybook-journal.vercel.app)
 
@@ -29,48 +31,56 @@ A premium, immersive digital diary built with Next.js. It feels like opening a r
 10. [Getting Started](#getting-started)
 11. [Available Scripts](#available-scripts)
 12. [Learning Walkthrough](#learning-walkthrough)
-13. [Reusable Components & Patterns](#reusable-components--patterns)
-14. [Code Examples](#code-examples)
-15. [Keywords & SEO](#keywords--seo)
-16. [Related Documentation](#related-documentation)
-17. [License](#license)
+13. [In-Source Code Comments](#in-source-code-comments)
+14. [Reusable Components & Patterns](#reusable-components--patterns)
+15. [Code Examples](#code-examples)
+16. [Keywords & SEO](#keywords--seo)
+17. [Related Documentation](#related-documentation)
+18. [Conclusion](#conclusion)
+19. [License](#license)
 
 ---
 
 ## What Is This Project?
 
-StoryBook Journal is a **full-stack journaling SaaS-style web application** — not a simple notes CRUD demo. The product goal is emotional and tactile:
+StoryBook Journal is a **full-stack journaling web application** — not a minimal CRUD tutorial. The product goal is emotional and tactile:
 
-- Open a **leather book cover** with a 3D hinge animation
+- Open a **leather book cover** with a 3D hinge animation on the landing page
+- **Flip pages** between login and register inside an open-book auth spread
 - Browse **multiple journals** on a bookshelf dashboard
-- **Flip pages** between daily entries like a real diary
-- **Write** with rich content, mood/weather pickers, and tags
-- **Autosave** while typing; survive refreshes with **offline drafts**
-- **Sync** queued changes when the network returns
+- **Read and write** daily entries on a two-page spread (left = entry list, right = read/write)
+- **Autosave** while typing; survive refreshes with **offline IndexedDB drafts**
+- **Sync** queued creates/updates when the network returns
+- **Search** entries from a ⌘K command palette
+- **Cycle page themes** (warm paper, dark academia, midnight journal, and more)
 - Get **AI writing suggestions** through a secure server proxy (optional)
+- Inspect **API health** and **live API documentation** inside the authenticated dashboard
 
-This repository is designed for **learning**: Server Components for data, Client Components for animation, REST Route Handlers for APIs, Prisma for persistence, TanStack Query for client cache, and IndexedDB for offline resilience.
+This codebase is designed for **instruction and reuse**. Many files include `@file` and `WALKTHROUGH` block comments explaining architecture decisions. Start with `BookSpread.tsx`, `journal-cache-notify.ts`, and `docs/PROJECT_WALKTHROUGH.md`.
 
 ---
 
 ## Key Features
 
-| Feature                    | Description                                                                             |
-| -------------------------- | --------------------------------------------------------------------------------------- |
-| **3D book cover**          | Leather texture, gold shine sweep, hover tilt, animated cover open on landing           |
-| **Page-flip navigation**   | CSS `preserve-3d` flip overlay; route changes fire _after_ animation completes          |
-| **Book spread UI**         | Left page = previous entry + entry list; right page = read/write mode                   |
-| **Multiple journals**      | Create books with custom cover color + emoji on the shelf                               |
-| **Rich entry metadata**    | Mood, weather, location, tags, word count, reading time                                 |
-| **Autosave**               | Debounced PATCH while editing (2 s delay)                                               |
-| **Offline-first drafts**   | IndexedDB entry drafts + sync queue for PATCH/POST when offline                         |
-| **Optimistic UI**          | TanStack Query cache updates instantly; server sync reconciles later                    |
-| **Authentication**         | Email/password (bcrypt) + optional Google OAuth                                         |
-| **Demo login**             | Pre-filled test account dropdown on `/login` for quick exploration                      |
-| **AI writing assist**      | Anthropic Claude via `/api/ai/assist` (sync + SSE stream); key never exposed to browser |
-| **Security headers**       | `X-Frame-Options`, CSP-friendly patterns, dashboard `noindex`                           |
-| **SafeImage**              | Remote avatar loading with Robohash fallback                                            |
-| **Responsive book sizing** | CSS `clamp()` tokens (`--page-w`, `--page-h`) scale to viewport                         |
+| Feature                  | Description                                                                         |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| **3D book cover**        | Leather texture, gold shine, hover tilt, animated cover open on landing             |
+| **Page-flip navigation** | CSS `preserve-3d` flip overlay; auth and journal routes animate before content swap |
+| **Book spread UI**       | Left page = previous entry preview + TOC; right page = read or write mode           |
+| **Multiple journals**    | Create books with cover color, Lucide icon slug, and page theme                     |
+| **Rich entry metadata**  | Mood, weather, location, tags, word count, reading time                             |
+| **TipTap editor**        | Rich HTML content with placeholder, typography, character count                     |
+| **Autosave**             | Debounced PATCH while editing (2 s default via `useAutoSave`)                       |
+| **Offline-first**        | IndexedDB entry drafts + sync queue for PATCH/POST when offline                     |
+| **Optimistic UI**        | TanStack Query cache updates instantly; server reconciles on sync                   |
+| **Realtime SSE**         | `GET /api/journal/events` — multi-tab invalidation via Redis pub/sub                |
+| **Authentication**       | Email/password (bcrypt) + optional Google OAuth (NextAuth v5)                       |
+| **Demo login**           | Pre-filled test account dropdown on `/login` for quick exploration                  |
+| **AI writing assist**    | Groq → OpenRouter → Anthropic fallback; keys never exposed to browser               |
+| **API Status UI**        | `/api-status` — dependency health (DB, Redis, AI) + aggregate stats                 |
+| **API Docs UI**          | `/api-documentation` — OpenAPI-style catalog from `api-route-catalog.ts`            |
+| **Security**             | `proxy.ts` auth gate, security headers, dashboard `noindex`, Zod validation         |
+| **Responsive book**      | CSS `clamp()` tokens (`--page-w`, `--page-h`); mobile horizontal scroll             |
 
 ---
 
@@ -86,7 +96,7 @@ Each library plays a specific role. Understanding _why_ it is here helps you reu
 | **React**      | 19      | UI rendering, hooks, client/server component split          |
 | **TypeScript** | 5.7     | Strict typing across API, DB, and UI                        |
 
-**Next.js App Router** means pages under `src/app/` are routes. Files named `page.tsx` render URLs; `layout.tsx` wraps nested routes; `route.ts` files inside `api/` become REST endpoints.
+**Next.js App Router** means files under `src/app/` map to URLs. `page.tsx` renders routes; `layout.tsx` wraps nested routes; `route.ts` inside `api/` becomes REST endpoints.
 
 ### Data & backend
 
@@ -103,26 +113,37 @@ Each library plays a specific role. Understanding _why_ it is here helps you reu
 | --------------- | ------------------------------------------------------------- |
 | **NextAuth v5** | JWT sessions, Credentials + Google providers, `auth()` helper |
 
-Sessions use **HttpOnly cookies** (via NextAuth). The user id from Prisma is copied into the JWT so API routes can scope queries with `session.user.id`.
+Sessions use **HttpOnly cookies**. The Prisma user id is copied into the JWT so API routes scope every query with `session.user.id`.
 
 ### Client state & UX
 
-| Library             | Role                                                          |
-| ------------------- | ------------------------------------------------------------- |
-| **TanStack Query**  | Server-state cache, prefetch, invalidation after CRUD         |
-| **React Hook Form** | Login/register form state                                     |
-| **Sonner**          | Toast notifications (save success, offline queue, errors)     |
-| **Framer Motion**   | Available for motion (book uses mostly custom CSS animations) |
-| **TipTap**          | Rich text editor extensions (starter kit in dependencies)     |
-| **date-fns**        | Format entry dates (`MMMM d, yyyy`, weekday names)            |
-| **lucide-react**    | Icon set for nav and UI chrome                                |
+| Library             | Role                                                    |
+| ------------------- | ------------------------------------------------------- |
+| **TanStack Query**  | Server-state cache, prefetch, invalidation after CRUD   |
+| **React Hook Form** | Login/register form state                               |
+| **Sonner**          | Toast notifications (save, offline queue, errors)       |
+| **TipTap**          | Rich text editor (StarterKit, Placeholder, Typography)  |
+| **cmdk**            | ⌘K command palette keyboard navigation                  |
+| **Radix UI**        | Dialog, dropdown, tabs, tooltip — accessible primitives |
+| **date-fns**        | Format entry dates (`MMMM d, yyyy`, weekday names)      |
+| **lucide-react**    | Icon set for nav, shelf spines, and UI chrome           |
+| **Framer Motion**   | Available for motion (book UI uses mostly custom CSS)   |
+
+### Infrastructure (optional)
+
+| Library           | Role                                                |
+| ----------------- | --------------------------------------------------- |
+| **Upstash Redis** | AI rate limiting + journal pub/sub for SSE realtime |
+| **Vitest**        | Unit tests (96+ tests)                              |
+| **Playwright**    | E2E tests (optional; requires seed data)            |
 
 ### Styling
 
-| Library                        | Role                                                          |
-| ------------------------------ | ------------------------------------------------------------- |
-| **Tailwind CSS**               | Utility classes for forms, nav, modals                        |
-| **Custom CSS (`globals.css`)** | Book aesthetic: leather, paper, flip keyframes, design tokens |
+| Library               | Role                                                          |
+| --------------------- | ------------------------------------------------------------- |
+| **Tailwind CSS**      | Utility classes for forms, nav, modals                        |
+| **globals.css**       | Book aesthetic: leather, paper, flip keyframes, design tokens |
+| **Self-hosted fonts** | 15 WOFF2 files in `public/fonts/` — no Google Fonts CDN       |
 
 ---
 
@@ -133,10 +154,10 @@ Sessions use **HttpOnly cookies** (via NextAuth). The user id from Prisma is cop
 │   Browser   │────▶│  Next.js (App)   │────▶│   Prisma    │────▶│  PostgreSQL  │
 │  React UI   │◀────│  Server + API    │◀────│   Client    │◀────│              │
 └─────────────┘     └──────────────────┘     └─────────────┘     └──────────────┘
-       │                      │
-       │ IndexedDB            │ NextAuth JWT
-       ▼                      ▼
-  Offline drafts         Session cookies
+       │                      │                        │
+       │ IndexedDB            │ NextAuth JWT           │ Upstash Redis (optional)
+       ▼                      ▼                        ▼
+  Offline drafts         Session cookies          SSE + rate limits
   Sync queue
 ```
 
@@ -144,29 +165,51 @@ Sessions use **HttpOnly cookies** (via NextAuth). The user id from Prisma is cop
 
 1. User opens `/journal/[bookId]`.
 2. **`src/proxy.ts`** (Next.js 16 edge boundary) checks session; redirects to `/login` if missing.
-3. **`journal/[bookId]/page.tsx`** (Server Component) calls `auth()` + `prisma.journalBook.findFirst` with ownership check.
-4. Data is passed as `initialBook` to **`BookSpread`** (Client Component).
-5. User flips pages → `usePageFlip` animates → index changes locally.
-6. User edits → `useAutoSave` debounces → `PATCH /api/entries/[entryId]`.
-7. On success → `queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() })` refreshes shelf counts everywhere.
+3. **`journal/[bookId]/page.tsx`** (Server Component) calls `auth()` + Prisma with ownership check.
+4. Data passes as `initialBook` to **`BookSpread`** (Client Component).
+5. User flips pages → `usePageFlip` animates → focused entry index changes locally.
+6. URL updates via `history.replaceState` (`?entry=` persists focus on refresh — no App Router round-trip per flip).
+7. User edits → `useAutoSave` debounces → `PATCH /api/entries/[entryId]`.
+8. On success → **`notifyJournalCacheUpdated(queryClient)`** refreshes shelf + open book everywhere (no manual page refresh).
 
 ### Rendering strategy
 
-| Layer                  | Pattern                                                               |
-| ---------------------- | --------------------------------------------------------------------- |
-| **Server Components**  | Data fetch in `page.tsx` — no client bundle for Prisma                |
-| **Client Components**  | `"use client"` for flip, write mode, forms, offline hooks             |
-| **API Route Handlers** | `src/app/api/**/route.ts` — JSON REST, Zod validation, `auth()` guard |
+| Layer                  | Pattern                                                                     |
+| ---------------------- | --------------------------------------------------------------------------- |
+| **Server Components**  | Data fetch in `page.tsx` — Prisma never ships to the client bundle          |
+| **Client Components**  | `"use client"` for flip, write mode, forms, offline hooks                   |
+| **API Route Handlers** | `src/app/api/**/route.ts` — JSON REST, Zod validation, `auth()` guard       |
+| **force-dynamic**      | Auth, dashboard, journal pages, and SSE/search APIs skip stale static cache |
+
+### Cache invalidation (important)
+
+**Never** call raw `invalidateQueries({ queryKey: queryKeys.journalSubtree() })` outside `src/lib/journal-cache-notify.ts`. Always use:
+
+```typescript
+import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
+
+await notifyJournalCacheUpdated(queryClient);
+// or when UI needs fresh bookDetail ids immediately:
+await notifyJournalCacheUpdatedAndRefetch(queryClient, refetch);
+```
+
+This single entry point invalidates shelf, book detail, search, API status counts, and SSE-driven updates consistently.
 
 ### Offline subsystem
 
 When the browser is offline (or fetch fails):
 
 1. **`useOfflineEntryDraft`** saves draft text to IndexedDB.
-2. **`offline-journal-actions`** enqueues PATCH/POST to the sync queue with temp ids (`offline-entry-*`, `offline-book-*`).
+2. **`offline-journal-actions`** enqueues PATCH/POST with temp ids (`offline-entry-*`, `offline-book-*`).
 3. **`useOfflineSyncQueue`** drains the queue on `window.online`.
 4. **`useOfflineIdRemap`** swaps temp ids to server cuids so the reader stays on the correct page.
 5. **`DashboardNav`** shows an `{n} offline` badge via `OfflineSyncContext`.
+
+### Realtime (optional — requires Upstash Redis)
+
+1. Server writes call **`afterJournalMutation()`** → Redis publish.
+2. Client mounts **`JournalRealtimeBridge`** → `useJournalRealtime` opens `EventSource` to `/api/journal/events`.
+3. On event → `notifyJournalCacheUpdated` — other tabs/devices see fresh data.
 
 ---
 
@@ -176,33 +219,40 @@ When the browser is offline (or fetch fails):
 storybook-journal/
 ├── prisma/
 │   ├── schema.prisma          # User, JournalBook, JournalEntry models
-│   ├── seed.ts                # Optional seed script
+│   ├── seed.ts                # Optional demo data script
 │   └── migrations/            # SQL migration history
-├── public/                    # Static assets (SVG icons, book stack art)
+├── public/
+│   ├── fonts/                 # Self-hosted WOFF2 (Playfair, Lora, Dancing Script, …)
+│   └── dairy-1.svg            # App icon / brand mark
 ├── src/
 │   ├── app/                   # Next.js App Router
 │   │   ├── layout.tsx         # Root layout + SEO metadata
 │   │   ├── page.tsx           # Landing (3D cover) → redirect if logged in
 │   │   ├── providers.tsx      # SessionProvider, QueryClient, OfflineSync
-│   │   ├── robots.ts          # SEO robots rules
+│   │   ├── sitemap.ts         # Public routes for SEO
+│   │   ├── manifest.ts        # PWA manifest
+│   │   ├── robots.ts          # Crawler rules
 │   │   ├── (auth)/            # Login & register (book-spread auth UI)
-│   │   ├── (dashboard)/       # Protected shelf + journal reader
+│   │   ├── (dashboard)/       # Protected shelf, journal, API status/docs
 │   │   └── api/               # REST Route Handlers
 │   ├── components/
-│   │   ├── auth/              # AuthBookShell, Google OAuth, OAuthReturnSync
-│   │   ├── journal/           # BookSpread, BookShelf, PageFlip, BookCover
+│   │   ├── auth/              # AuthBookShell, OAuth, demo picker
+│   │   ├── journal/           # BookSpread, BookShelf, PageFlip, nav
+│   │   ├── api-status/        # Live API health dashboard
+│   │   ├── api-documentation/ # In-app API docs UI
+│   │   ├── editor/            # TipTap JournalEditor
 │   │   ├── forms/             # LoginForm, RegisterForm
-│   │   ├── layout/            # DashboardNav
+│   │   ├── layout/            # DashboardNav, CommandProvider
 │   │   ├── feedback/          # ConfirmDialog
-│   │   └── ui/                # safe-image, dropdown-menu (shadcn-style)
+│   │   └── ui/                # shadcn-style primitives (dialog, ripple-button, …)
 │   ├── context/
 │   │   └── OfflineSyncContext.tsx
-│   ├── hooks/                 # usePageFlip, useAutoSave, offline hooks
+│   ├── hooks/                 # usePageFlip, useAutoSave, offline, realtime
 │   ├── lib/                   # auth, db, validations, journal-api, offline, AI
-│   ├── constants/             # MOODS, WEATHERS, cover colors, offline events
+│   ├── constants/             # MOODS, WEATHERS, themes, cover icons
 │   ├── types/                 # Shared TS interfaces
-│   └── proxy.ts               # Auth redirect middleware (Next.js 16+)
-├── docs/                      # Extended guides (auth UI, walkthrough, guardrails)
+│   └── proxy.ts               # Auth redirect boundary (Next.js 16+)
+├── docs/                      # Extended guides (walkthrough, auth UI, guardrails)
 ├── .env.example               # Template for all environment variables
 ├── docker-compose.yml         # Optional local Postgres only (not the app)
 ├── next.config.ts             # Security headers, image remotePatterns
@@ -214,18 +264,21 @@ storybook-journal/
 
 ## Routes & Pages
 
-| Route               | Type     | Description                                                         |
-| ------------------- | -------- | ------------------------------------------------------------------- |
-| `/`                 | Server   | Landing cover animation; redirects to `/dashboard` if authenticated |
-| `/login`            | Server   | Login form inside book spread; optional Google OAuth                |
-| `/register`         | Server   | Registration; creates user + welcome book + entry                   |
-| `/dashboard`        | Server   | Bookshelf — lists all journals for the user                         |
-| `/journal/[bookId]` | Server   | Open book reader/writer (uses cuid `bookId`, not slug)              |
-| `/robots.txt`       | Metadata | Disallows `/api`, `/dashboard`, `/journal` for crawlers             |
+| Route                | Type     | Description                                                         |
+| -------------------- | -------- | ------------------------------------------------------------------- |
+| `/`                  | Server   | Landing cover animation; redirects to `/dashboard` if authenticated |
+| `/login`             | Server   | Login form inside book spread; optional Google OAuth                |
+| `/register`          | Server   | Registration; creates user + welcome book + entry                   |
+| `/dashboard`         | Server   | Bookshelf — lists all journals for the user                         |
+| `/journal/[bookId]`  | Server   | Open book reader/writer (`bookId` is cuid, not slug)                |
+| `/api-status`        | Server   | Live API dependency health + aggregate stats (auth required)        |
+| `/api-documentation` | Server   | In-app OpenAPI-style route catalog (auth required)                  |
+| `/robots.txt`        | Metadata | Disallows `/api`, `/dashboard`, `/journal` for crawlers             |
+| `/sitemap.xml`       | Metadata | Public indexable routes (`/`, `/login`, `/register`)                |
 
 **Route groups** `(auth)` and `(dashboard)` do not affect the URL — they organize layouts only.
 
-Auth and dashboard pages use `export const dynamic = "force-dynamic"` so session data is always fresh (no stale cached HTML for private routes).
+Auth and dashboard pages use `export const dynamic = "force-dynamic"` so session data is always fresh.
 
 ---
 
@@ -248,14 +301,18 @@ All JSON responses follow a common envelope:
 | GET       | `/api/books`              | ✅   | List user's journals with entry counts                        |
 | POST      | `/api/books`              | ✅   | Create journal + starter entry (transaction)                  |
 | GET       | `/api/books/[bookId]`     | ✅   | Book detail + entries (ownership scoped)                      |
-| PATCH     | `/api/books/[bookId]`     | ✅   | Update title, cover, description; slug sync on title change   |
+| PATCH     | `/api/books/[bookId]`     | ✅   | Update title, cover, theme; slug sync on title change         |
 | DELETE    | `/api/books/[bookId]`     | ✅   | Delete book and cascade entries                               |
 | POST      | `/api/entries`            | ✅   | Create entry in owned book                                    |
 | PATCH     | `/api/entries/[entryId]`  | ✅   | Autosave / manual save; recalculates wordCount, excerpt, slug |
 | DELETE    | `/api/entries/[entryId]`  | ✅   | Delete entry (ownership scoped)                               |
+| GET       | `/api/search`             | ✅   | Scoped entry search (`q`, optional `bookId`, `mood`)          |
+| GET       | `/api/journal/events`     | ✅   | SSE stream — journal mutations (Redis pub/sub)                |
 | POST      | `/api/ai/assist`          | ✅   | Sync AI continuation (rate limited)                           |
 | POST      | `/api/ai/assist/stream`   | ✅   | SSE streaming AI continuation                                 |
-| GET       | `/api/health`             | —    | Health check for monitoring                                   |
+| GET       | `/api/health`             | —    | Simple health check for monitoring                            |
+| GET       | `/api/status`             | ✅   | Dependency health + platform/personal aggregate stats         |
+| GET       | `/api/openapi`            | ✅   | Machine-readable route catalog JSON                           |
 
 **Authorization pattern** (every protected route):
 
@@ -270,6 +327,8 @@ if (!session?.user?.id) {
 // Prisma queries always include userId in where clause
 ```
 
+Browse the full catalog interactively at **`/api-documentation`** when logged in, or fetch `GET /api/openapi`.
+
 ---
 
 ## Database Schema
@@ -282,7 +341,7 @@ Stores account credentials and profile. `passwordHash` is null for OAuth-only us
 
 ### JournalBook
 
-A journal on the shelf. Unique constraint: `@@unique([userId, slug])`. Fields include `coverColor`, `coverEmoji`, `theme`, `visibility`.
+A journal on the shelf. Unique constraint: `@@unique([userId, slug])`. Fields include `coverColor`, `coverEmoji` (icon slug), `theme`, `visibility`.
 
 ### JournalEntry
 
@@ -290,22 +349,39 @@ A single diary page. `tags` is stored as a **JSON string** (e.g. `"[\"morning\",
 
 **Cascade deletes:** Deleting a user removes their books and entries.
 
+```prisma
+model JournalEntry {
+  id          String   @id @default(cuid())
+  bookId      String
+  title       String   @default("Untitled Entry")
+  content     String   @default("")
+  mood        String   @default("✨")
+  weather     String   @default("☀️")
+  tags        String   @default("[]")
+  wordCount   Int      @default(0)
+  entryDate   String
+  // … see prisma/schema.prisma for full model
+}
+```
+
 ---
 
 ## Environment Variables
 
-Copy the template and fill in values:
+There is **no `.env` file in the repository** (by design — secrets must not be committed). Copy the template:
 
 ```bash
 cp .env.example .env
 ```
 
-### Required (app will not run without these)
+### Minimum required to run locally
+
+You **cannot** authenticate or persist journals without a database and auth secret. These four variables are required:
 
 | Variable       | Description                                     | How to obtain                                                                                                                   |
 | -------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `DATABASE_URL` | PostgreSQL connection string for Prisma queries | [Neon](https://neon.tech), [Supabase](https://supabase.com), [Railway](https://railway.app), local Docker, or any Postgres host |
-| `DIRECT_URL`   | Direct Postgres URL for migrations/`db push`    | Same as `DATABASE_URL` unless you use a connection pooler (then use direct host for migrations)                                 |
+| `DIRECT_URL`   | Direct Postgres URL for migrations/`db push`    | Same as `DATABASE_URL` unless you use a pooler (then use direct host for migrations)                                            |
 | `AUTH_SECRET`  | NextAuth JWT signing secret                     | Run: `openssl rand -base64 32`                                                                                                  |
 | `NEXTAUTH_URL` | Public app URL                                  | `http://localhost:3000` locally; `https://your-domain.vercel.app` in production                                                 |
 
@@ -318,16 +394,19 @@ AUTH_SECRET="your-generated-secret-here"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
-> **Note:** There is no `.env` committed to the repo (by design). You must create one from `.env.example`. Without `DATABASE_URL` and `AUTH_SECRET`, the app cannot authenticate or persist data.
+With only these four variables, the app runs fully: email/password auth, shelf, journal CRUD, autosave, offline drafts, and search. Optional features simply stay disabled.
 
 ### Optional (features degrade gracefully when unset)
 
-| Variable                                    | Feature                        | Behavior when missing                                   |
-| ------------------------------------------- | ------------------------------ | ------------------------------------------------------- |
-| `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` | Google OAuth login             | Google button hidden; email/password still works        |
-| `GOOGLE_ID` + `GOOGLE_SECRET`               | Legacy aliases                 | Same as above — supported for backward compatibility    |
-| `ANTHROPIC_API_KEY`                         | AI writing assist              | Returns a poetic placeholder sentence; UI still works   |
-| `SHOW_DEMO_LOGIN`                           | Demo account dropdown on login | Defaults to **on**; set `"false"` to hide in production |
+| Variable                                              | Feature                           | Behavior when missing                                   |
+| ----------------------------------------------------- | --------------------------------- | ------------------------------------------------------- |
+| `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET`           | Google OAuth login                | Google button hidden; email/password still works        |
+| `GOOGLE_ID` + `GOOGLE_SECRET`                         | Legacy aliases                    | Same as above                                           |
+| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | SSE realtime + AI rate limit      | In-memory rate limit fallback; no cross-tab SSE         |
+| `GROQ_API_KEY`                                        | AI assist (primary)               | Falls through to OpenRouter, then Anthropic             |
+| `OPENROUTER_API_KEY`                                  | AI assist (fallback)              | Falls through to Anthropic                              |
+| `ANTHROPIC_API_KEY`                                   | AI assist (legacy)                | Returns poetic placeholder text; UI still works         |
+| `SHOW_DEMO_LOGIN`                                     | Demo account dropdown on `/login` | Defaults to **on**; set `"false"` to hide in production |
 
 ### Where to set variables
 
@@ -336,6 +415,8 @@ NEXTAUTH_URL="http://localhost:3000"
 | Local       | `.env` or `.env.local` in project root     |
 | Vercel      | Project → Settings → Environment Variables |
 | CI          | GitHub Actions secrets or your pipeline    |
+
+See **`.env.example`** for commented templates including Docker Postgres lines.
 
 ---
 
@@ -347,12 +428,12 @@ NEXTAUTH_URL="http://localhost:3000"
 - **npm** 10+
 - **PostgreSQL** 14+ (hosted or local)
 
-### Quick start (5 steps)
+### Quick start
 
 ```bash
 # 1. Clone and enter the project
-git clone https://github.com/your-username/storybook-journal.git
-cd storybook-journal
+git clone https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack.git
+cd StoryBook-Journal-Smart-Dairy--NextJS-FullStack
 
 # 2. Install dependencies
 npm install
@@ -371,6 +452,12 @@ npm run dev
 ```
 
 Open **<http://localhost:3000>**
+
+### Verify everything works
+
+```bash
+npm run verify   # lint + typecheck + 96 unit tests
+```
 
 ### Test credentials (demo login)
 
@@ -391,7 +478,7 @@ If you do not have a hosted database:
 docker compose up -d db
 ```
 
-Then uncomment the Docker lines in `.env.example`:
+Then use the Docker lines from `.env.example`:
 
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/storybook"
@@ -412,20 +499,23 @@ Run `npm run db:push` again. **Docker runs Postgres only** — the Next.js app r
 
 ## Available Scripts
 
-| Script           | Command               | Purpose                                       |
-| ---------------- | --------------------- | --------------------------------------------- |
-| Dev server       | `npm run dev`         | Hot reload at localhost:3000                  |
-| Production build | `npm run build`       | Compile for deployment                        |
-| Start production | `npm run start`       | Run built app                                 |
-| Lint             | `npm run lint`        | ESLint check                                  |
-| Lint fix         | `npm run lint:fix`    | Auto-fix lint issues                          |
-| Typecheck        | `npm run typecheck`   | `tsc --noEmit`                                |
-| Prisma generate  | `npm run db:generate` | Regenerate Prisma client after schema changes |
-| Push schema      | `npm run db:push`     | Sync schema to DB (dev-friendly)              |
-| Migrate          | `npm run db:migrate`  | Create/apply migrations                       |
-| Prisma Studio    | `npm run db:studio`   | Visual DB browser                             |
-| Seed             | `npm run db:seed`     | Run `prisma/seed.ts`                          |
-| Full setup       | `npm run setup`       | install + generate + db push                  |
+| Script           | Command               | Purpose                                |
+| ---------------- | --------------------- | -------------------------------------- |
+| Dev server       | `npm run dev`         | Hot reload at localhost:3000           |
+| Production build | `npm run build`       | Compile for deployment                 |
+| Start production | `npm run start`       | Run built app                          |
+| **Verify all**   | `npm run verify`      | lint + typecheck + vitest              |
+| Lint             | `npm run lint`        | ESLint check                           |
+| Lint fix         | `npm run lint:fix`    | Auto-fix lint issues                   |
+| Typecheck        | `npm run typecheck`   | `tsc --noEmit`                         |
+| Unit tests       | `npm run test`        | Vitest (96 tests)                      |
+| E2E tests        | `npm run test:e2e`    | Playwright (optional; needs seed)      |
+| Prisma generate  | `npm run db:generate` | Regenerate client after schema changes |
+| Push schema      | `npm run db:push`     | Sync schema to DB (dev-friendly)       |
+| Migrate          | `npm run db:migrate`  | Create/apply migrations                |
+| Prisma Studio    | `npm run db:studio`   | Visual DB browser                      |
+| Seed             | `npm run db:seed`     | Run `prisma/seed.ts`                   |
+| Full setup       | `npm run setup`       | install + generate + db push           |
 
 ---
 
@@ -435,38 +525,63 @@ Follow this path if you are new to the codebase.
 
 ### Step 1 — Landing & auth
 
-1. Start at `src/app/page.tsx` — session check + `LandingCover`.
-2. Read `src/components/journal/BookCover.tsx` — 3D hinge CSS animation.
-3. Explore `src/app/(auth)/login/page.tsx` and `AuthBookShell.tsx` — page flip between login/register.
+1. `src/app/page.tsx` — session check + landing cover.
+2. `src/components/journal/BookCover.tsx` — 3D hinge CSS animation.
+3. `src/app/(auth)/login/page.tsx` and `AuthBookShell.tsx` — page flip between login/register.
+4. `src/hooks/useAuthBookNavigation.ts` — early `router.push`, hold cover, stagger remount.
 
 ### Step 2 — Dashboard shelf
 
 1. `src/app/(dashboard)/dashboard/page.tsx` — Server Component fetches books.
 2. `src/components/journal/BookShelf.tsx` — client shelf, create book modal, prefetch on hover.
+3. `src/hooks/useJournalPrefetch.ts` — warms route + `bookDetail` query on spine hover.
 
 ### Step 3 — Journal reader (core)
 
-1. `src/app/(dashboard)/journal/[bookId]/page.tsx` — loads book + entries server-side.
-2. **`src/components/journal/BookSpread.tsx`** — the orchestrator: flip, autosave, offline, AI.
-3. `LeftPage.tsx` / `RightPage.tsx` — read vs write UI.
+1. `src/app/(dashboard)/journal/[bookId]/page.tsx` — loads book + entries server-side; resolves `?entry=`.
+2. **`src/components/journal/BookSpread.tsx`** — orchestrator: flip, autosave, offline, AI.
+3. `LeftPage.tsx` / `RightPage.tsx` — read vs write UI with stagger animations.
 4. `src/hooks/usePageFlip.ts` — animation timing and re-entrancy guard.
+5. `src/lib/journal-entry-url.ts` — `history.replaceState` for entry focus persistence.
 
 ### Step 4 — API & validation
 
-1. Pick any route in `src/app/api/entries/[entryId]/route.ts`.
-2. Compare with `src/lib/validations.ts` — same Zod shapes the API expects.
-3. See `src/lib/journal-slug.ts` — slug uniqueness when titles change.
+1. `src/app/api/entries/[entryId]/route.ts` — PATCH autosave handler.
+2. `src/lib/validations.ts` — Zod schemas shared with API.
+3. `src/lib/journal-mutation.ts` — `afterJournalMutation()` for Redis publish.
+4. `src/lib/api-route-catalog.ts` — static docs for `/api-documentation`.
 
 ### Step 5 — Client cache
 
-1. `src/lib/query-keys.ts` — central cache keys.
-2. After any save, search for `journalSubtree()` invalidation — one call refreshes shelf + open book.
+1. `src/lib/query-keys.ts` — central cache keys (`journalSubtree`, `apiStatus`, …).
+2. **`src/lib/journal-cache-notify.ts`** — the only place to invalidate journal queries.
+3. `src/components/auth/OAuthReturnSync.tsx` — post-OAuth invalidation pattern.
 
 ### Step 6 — Offline (advanced)
 
-1. `src/lib/offline/idb.ts` — IndexedDB wrapper.
+1. `src/lib/offline/` — IndexedDB drafts + sync queue.
 2. `src/hooks/useOfflineSyncQueue.ts` — FIFO drain on reconnect.
 3. `src/context/OfflineSyncContext.tsx` — global pending count for nav badge.
+
+### Step 7 — Realtime & ops
+
+1. `src/hooks/useJournalRealtime.ts` — SSE → `notifyJournalCacheUpdated`.
+2. `src/app/(dashboard)/api-status/page.tsx` — operational dashboard.
+3. `src/app/(dashboard)/api-documentation/page.tsx` — developer docs UI.
+
+---
+
+## In-Source Code Comments
+
+Many files under `src/` carry **`@file` + `WALKTHROUGH`** block comments at the top. These are educational only — they do not change runtime behavior.
+
+| Pattern                           | Meaning                                                |
+| --------------------------------- | ------------------------------------------------------ |
+| `@file path/relative/to/src`      | Which module you are reading                           |
+| `WALKTHROUGH — …`                 | High-level purpose and how it fits the app             |
+| `── Section ──` inside components | Feature-specific notes (offline, flip, stagger, cache) |
+
+**Recommended reading order:** `BookSpread.tsx` → `journal-cache-notify.ts` → `journal-api.ts` → `useOfflineSyncQueue.ts` → `AuthBookShell.tsx` → `api-route-catalog.ts`.
 
 ---
 
@@ -492,43 +607,57 @@ import { SafeImage } from "@/components/ui/safe-image";
 />;
 ```
 
+### `RippleButton` (`src/components/ui/ripple-button.tsx`)
+
+Water-splash click effect with optional shine radius. Used on auth CTAs, shelf spines, and journal nav.
+
+```tsx
+import { RippleButton } from "@/components/ui/ripple-button";
+
+<RippleButton shineRadius={120} className="leather-glass-btn">
+  Save
+</RippleButton>;
+```
+
 ### `usePageFlip` (`src/hooks/usePageFlip.ts`)
 
 Manages flip animation state; calls your callback only **after** the animation ends (prevents blank flashes during navigation).
-
-**Use when:** building book/carousel UIs where content must swap post-animation.
 
 ```tsx
 const { isFlipping, flipDir, triggerFlip } = usePageFlip();
 
 triggerFlip("fwd", () => {
-  router.push("/next-page"); // safe — runs after 650ms flip
+  router.push("/next-page"); // safe — runs after flip completes
 });
 ```
 
-### `queryKeys.journalSubtree()` (`src/lib/query-keys.ts`)
+### `notifyJournalCacheUpdated` (`src/lib/journal-cache-notify.ts`)
 
-Single invalidation root for related queries.
-
-**Use when:** multiple `useQuery` hooks share a domain and should refetch together after mutations.
+Single invalidation entry point for all journal-related TanStack Query data.
 
 ```tsx
-await queryClient.invalidateQueries({ queryKey: queryKeys.journalSubtree() });
+import { notifyJournalCacheUpdated } from "@/lib/journal-cache-notify";
+
+await notifyJournalCacheUpdated(queryClient);
 ```
 
 ### `ConfirmDialog` (`src/components/feedback/ConfirmDialog.tsx`)
 
 Accessible async confirmation modal with loading state.
 
-**Use when:** destructive actions (delete entry, delete book, sign out).
+**Use when:** destructive actions (delete entry, delete book).
 
 ### Offline sync pattern
 
-Copy `src/lib/offline/*` + `useOfflineSyncQueue` if you need queue-and-drain semantics for any REST API — not journal-specific at the storage layer.
+Copy `src/lib/offline/*` + `useOfflineSyncQueue` for queue-and-drain semantics on any REST API.
 
 ### Auth proxy pattern (`src/proxy.ts`)
 
-Next.js 16+ replacement for middleware — wrap NextAuth and redirect unauthenticated users before pages render.
+Next.js 16+ edge boundary — redirect unauthenticated users before protected pages render. API routes still call `auth()` independently.
+
+### `BOOK_THEMES` + `useBookTheme`
+
+Theme tokens in `src/constants/themes.ts` map to CSS variables via `bookThemeCssVars()`. Reuse for any multi-theme document UI.
 
 ---
 
@@ -551,7 +680,8 @@ const res = await fetch("/api/books", {
   body: JSON.stringify({
     title: "Travel Log",
     coverColor: "#1a3a5c",
-    coverEmoji: "✈️",
+    coverEmoji: "plane",
+    theme: "midnight-journal",
     description: "Road trips and memories",
   }),
 });
@@ -582,6 +712,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
@@ -596,16 +728,30 @@ export default async function DashboardPage() {
 }
 ```
 
+### Search entries (⌘K or API)
+
+```bash
+curl "http://localhost:3000/api/search?q=morning&limit=10" \
+  -H "Cookie: <your-session-cookie>"
+```
+
 ---
 
 ## Keywords & SEO
 
-Primary keywords (also defined in `src/lib/site-metadata.ts`):
+Primary keywords (defined in `src/lib/site-metadata.ts`):
 
-`StoryBook Journal`, `digital journal`, `online diary`, `journaling app`, `page flip animation`, `immersive writing`, `AI writing assistant`, `personal journal`, `daily journal`, `Next.js journal`, `React diary app`, `offline journal`, `Prisma PostgreSQL`, `NextAuth`, `TanStack Query`
+`StoryBook Journal`, `digital journal`, `online diary`, `journaling app`, `smart diary`, `page flip animation`, `immersive writing`, `AI writing assistant`, `personal journal`, `daily journal`, `offline journal`, `IndexedDB sync`, `Next.js journal`, `React diary app`, `Prisma PostgreSQL`, `NextAuth`, `TanStack Query`, `TipTap editor`, `Arnob Mahmud`
+
+**Author:** [Arnob Mahmud](https://www.arnobmahmud.com) · <contact@arnobmahmud.com>
+
+**Live demo:** [https://storybook-journal.vercel.app](https://storybook-journal.vercel.app)
 
 **SEO notes:**
 
+- Root metadata in `src/lib/site-metadata.ts` — title, description, OpenGraph, Twitter, icons (`/dairy-1.svg`), author.
+- `src/app/sitemap.ts` — `/`, `/login`, `/register`.
+- `src/app/manifest.ts` — web app manifest (`/manifest.webmanifest`).
 - Public landing `/` is indexable with full OpenGraph/Twitter metadata.
 - Dashboard and journal routes set `robots: { index: false }` — private user content stays out of search indexes.
 - `src/app/robots.ts` disallows `/api`, `/dashboard`, `/journal` for well-behaved crawlers.
@@ -622,6 +768,14 @@ Primary keywords (also defined in `src/lib/site-metadata.ts`):
 | `docs/SAFE_IMAGE_REUSABLE_COMPONENT.md`  | SafeImage implementation details                 |
 | `docs/DROPDOWN_TEST_CREDENTIALS_DOCS.md` | Demo account and NextAuth reference              |
 | `.env.example`                           | All environment variable templates with comments |
+
+---
+
+## Conclusion
+
+StoryBook Journal demonstrates how to build a **polished, production-style** full-stack app with Next.js 16: tactile UI animations, strict auth boundaries, optimistic offline sync, centralized cache invalidation, and optional AI and realtime layers. Whether you are learning App Router patterns, Prisma modeling, TanStack Query, or offline-first design, this repository provides working code with inline walkthrough comments you can read file-by-file.
+
+Clone it, set four environment variables, run `npm run dev`, and explore the live demo — then open `BookSpread.tsx` and follow the data from browser click to PostgreSQL row and back.
 
 ---
 

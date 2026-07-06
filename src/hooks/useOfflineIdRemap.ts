@@ -1,6 +1,6 @@
-"use client";
-
 /**
+ * @file hooks/useOfflineIdRemap.ts
+ *
  * WALKTHROUGH — useOfflineIdRemap
  *
  * Listens for browser CustomEvents dispatched after sync queue drain
@@ -10,6 +10,8 @@
  *
  * Effect subscribes on mount, unsubscribes on bookId/focus change/unmount.
  */
+"use client";
+
 /**
  * Remaps focused entry/book ids when offline temp rows sync to server cuids.
  */

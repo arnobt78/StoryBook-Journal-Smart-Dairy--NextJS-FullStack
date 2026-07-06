@@ -1,3 +1,9 @@
+/**
+ * @file hooks/useRotatingTypewriter.ts
+ *
+ * WALKTHROUGH — Auth header phrase rotation (type → hold → erase → next)
+ * ───────────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 /**

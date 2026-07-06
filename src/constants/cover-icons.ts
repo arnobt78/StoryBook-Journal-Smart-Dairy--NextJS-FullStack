@@ -1,4 +1,11 @@
 /**
+ * @file constants/cover-icons.ts
+ *
+ * WALKTHROUGH — Lucide icon slug catalog for journal cover marks
+ * ─────────────────────────────────────────────────────────────
+ * Stored in `JournalBook.coverEmoji`; `resolveCoverIconId()` maps legacy emojis.
+ */
+/**
  * Cover icon catalog — Lucide icons stored in JournalBook.coverEmoji as slug ids.
  * Legacy unicode emojis are mapped at runtime via resolveCoverIconId().
  */

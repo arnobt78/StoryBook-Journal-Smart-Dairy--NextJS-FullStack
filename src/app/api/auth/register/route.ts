@@ -1,4 +1,14 @@
 /**
+ * @file api/auth/register/route.ts
+ * @route POST `/api/auth/register`
+ *
+ * WALKTHROUGH — Public signup + seed data
+ * ─────────────────────────────────────
+ * Creates User (bcrypt password), default JournalBook, and welcome entry in one flow.
+ * Client: RegisterForm → then signIn with credentials.
+ * No session until user logs in via NextAuth after registration.
+ */
+/**
  * POST /api/auth/register — public account creation.
  *
  * HTTP: POST only.

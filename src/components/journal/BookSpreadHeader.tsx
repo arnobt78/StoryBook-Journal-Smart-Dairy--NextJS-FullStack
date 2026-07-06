@@ -1,3 +1,11 @@
+/**
+ * @file components/journal/BookSpreadHeader.tsx
+ *
+ * WALKTHROUGH — Golden branding row above open journal spread
+ * ───────────────────────────────────────────────────────────
+ * Icon + Dancing Script title + truncated description. Stagger indices 0–2
+ * mirror AuthBookShell. Mobile: fixed z45 band; tooltip shows full meta.
+ */
 "use client";
 
 /**

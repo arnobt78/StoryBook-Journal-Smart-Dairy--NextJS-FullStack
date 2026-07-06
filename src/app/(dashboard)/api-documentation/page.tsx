@@ -1,4 +1,13 @@
 /**
+ * @file app/(dashboard)/api-documentation/page.tsx
+ * @route `/api-documentation` — OpenAPI-style route catalog UI (REQ-0032)
+ *
+ * WALKTHROUGH — Static catalog SSR + client cache
+ * ─────────────────────────────────────────────
+ * `getApiRouteCatalog()` builds docs from Zod schemas (no runtime OpenAPI gen).
+ * Client caches 5min; catalog rarely changes between deploys.
+ */
+/**
  * @route `/api-documentation` — OpenAPI-style live route catalog UI.
  * SSR: getApiRouteCatalog() on server; client caches catalog for 5 minutes.
  */

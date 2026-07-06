@@ -1,3 +1,11 @@
+/**
+ * @file components/ui/dialog.tsx
+ *
+ * WALKTHROUGH — Radix Dialog primitives (shadcn pattern)
+ * ─────────────────────────────────────────────────────
+ * Portal + overlay for BookEditorModal, ConfirmDialog. Consumers add
+ * `.journal-paper-dialog` / leather-glass classes from globals.css.
+ */
 "use client";
 
 /**

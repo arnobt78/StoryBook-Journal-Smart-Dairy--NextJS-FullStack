@@ -1,3 +1,11 @@
+/**
+ * @file components/api-documentation/ApiDocumentationClient.tsx
+ *
+ * WALKTHROUGH — OpenAPI-style docs UI (Overview | Endpoints | Schemas)
+ * ───────────────────────────────────────────────────────────────────
+ * Static catalog from SSR `initialCatalog`; client caches 5min via useQuery.
+ * EndpointList: expandable Swagger rows; SchemaPanel: Zod field tables.
+ */
 "use client";
 
 import { useQuery } from "@tanstack/react-query";

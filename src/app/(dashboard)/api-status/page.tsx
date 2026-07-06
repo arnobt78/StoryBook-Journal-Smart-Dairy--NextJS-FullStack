@@ -1,4 +1,14 @@
 /**
+ * @file app/(dashboard)/api-status/page.tsx
+ * @route `/api-status` — API health & aggregate stats UI (REQ-0032)
+ *
+ * WALKTHROUGH — SSR + client refetch pattern
+ * ─────────────────────────────────────────
+ * Server: `getApiStatus(userId)` — no fetch loop to `/api/status`.
+ * Client: ApiStatusClient with useQuery + refetchInterval 30s.
+ * Auth: inherited from `(dashboard)/layout.tsx` redirect gate.
+ */
+/**
  * @route `/api-status` — live API dependency health and aggregate stats UI.
  * SSR: getApiStatus() on server; client refetches via TanStack Query.
  */

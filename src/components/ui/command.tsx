@@ -1,3 +1,10 @@
+/**
+ * @file components/ui/command.tsx
+ *
+ * WALKTHROUGH — cmdk primitives for ⌘K CommandPalette
+ * ───────────────────────────────────────────────────
+ * Keyboard list + filter; styled with leather-glass in CommandPalette.tsx.
+ */
 "use client";
 
 /**

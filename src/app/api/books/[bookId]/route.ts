@@ -1,4 +1,15 @@
 /**
+ * @file api/books/[bookId]/route.ts
+ * @route GET, PATCH, DELETE `/api/books/[bookId]`
+ *
+ * WALKTHROUGH — Single journal (open book payload)
+ * ───────────────────────────────────────────────
+ * GET    — Book metadata + all entries (tags parsed from JSON string).
+ * PATCH  — Update title/cover/theme; slug may sync when title changes.
+ * DELETE — Cascade deletes entries; `afterJournalMutation` notifies other tabs.
+ * Client — `fetchJournalBook` hydrates BookSpread; TanStack Query key `bookDetail(id)`.
+ */
+/**
  * /api/books/[bookId] — single book read, update, delete.
  *
  * HTTP: GET (book + entries), PATCH (metadata), DELETE (cascade via Prisma).

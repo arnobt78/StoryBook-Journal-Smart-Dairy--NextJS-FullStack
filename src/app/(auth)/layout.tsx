@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { AuthBookShell } from "@/components/auth/AuthBookShell";
 import { AUTH_ROUTE_VIEWPORT_CLASS } from "@/lib/book-spread-scroll";
 
@@ -11,10 +12,12 @@ import { AUTH_ROUTE_VIEWPORT_CLASS } from "@/lib/book-spread-scroll";
  * **Layout constraint:** `position: fixed; overflow: hidden` prevents a scroll container
  * from breaking pointer hit-testing on 3-D transformed pages (see CLAUDE.md).
  */
-/**
- * Auth layout — fixed full-viewport shell with the book **centered** in the viewport
- * (same balanced framing as before). `overflow: hidden` keeps 3-D hit-testing predictable.
- */
+
+/** Auth funnel pages are indexable; child routes set page-specific titles */
+export const metadata: Metadata = {
+  robots: { index: true, follow: true },
+};
+
 export default function AuthLayout({
   children,
 }: {

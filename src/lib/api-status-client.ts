@@ -1,4 +1,11 @@
 /**
+ * @file lib/api-status-client.ts
+ *
+ * WALKTHROUGH — Client fetch for GET /api/status
+ * ─────────────────────────────────────────────
+ * Used by ApiStatusClient useQuery (30s refetch). Throws on non-success envelope.
+ */
+/**
  * Client fetch wrapper for GET /api/status — used by ApiStatusClient useQuery.
  */
 import type { ApiStatusPayload, ApiStatusResponse } from "@/types/api-status";

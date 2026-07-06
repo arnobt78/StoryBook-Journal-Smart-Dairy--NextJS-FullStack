@@ -1,3 +1,11 @@
+/**
+ * @file lib/auth-stagger.ts
+ *
+ * WALKTHROUGH — Auth book row entrance animation indices
+ * ────────────────────────────────────────────────────
+ * Each auth form row gets `--auth-stagger-i` × 60ms. Landing handoff uses
+ * parallel delays via `data-auth-from-landing` in globals.css (Wave 18c).
+ */
 import type { CSSProperties } from "react";
 
 /** Delay step between auth row entrances — must match globals.css calc multiplier */

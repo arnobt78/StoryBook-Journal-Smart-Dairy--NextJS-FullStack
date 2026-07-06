@@ -1,6 +1,6 @@
-"use client";
-
 /**
+ * @file hooks/useJournalPrefetch.ts
+ *
  * WALKTHROUGH — useJournalPrefetch
  *
  * Shelf hover optimization: prefetches Next.js route chunk + TanStack
@@ -10,6 +10,8 @@
  * Lifecycle: stateless callback returned once; no effects — safe to call
  * from onMouseEnter without stale closures.
  */
+"use client";
+
 /**
  * Prefetch journal route + TanStack bookDetail on shelf hover for instant open.
  */

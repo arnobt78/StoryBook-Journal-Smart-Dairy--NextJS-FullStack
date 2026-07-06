@@ -1,3 +1,9 @@
+/**
+ * @file hooks/useDebouncedValue.ts
+ *
+ * WALKTHROUGH — Generic debounce hook (CommandPalette search: 300ms default)
+ * ────────────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 /**

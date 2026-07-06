@@ -1,3 +1,9 @@
+/**
+ * @file components/auth/AuthFormField.tsx
+ *
+ * WALKTHROUGH — Label + input row with auth-stagger index (login/register forms)
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import type { ReactNode } from "react";
 import { fieldLabelStyle } from "@/lib/auth-form-styles";
 import { authStaggerRowProps } from "@/lib/auth-stagger";

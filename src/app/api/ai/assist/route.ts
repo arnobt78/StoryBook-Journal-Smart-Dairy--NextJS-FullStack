@@ -1,4 +1,14 @@
 /**
+ * @file api/ai/assist/route.ts
+ * @route POST `/api/ai/assist`
+ *
+ * WALKTHROUGH — Sync AI writing assist (fallback when stream fails)
+ * ────────────────────────────────────────────────────────────────
+ * Provider chain in `ai-provider.ts`: Groq → OpenRouter → Anthropic → placeholder.
+ * Rate limit: 10/min per user via Redis (`consumeAiRateLimit`). API keys never sent to browser.
+ * Client: RightPage "AI Assist" button; `assistSessionId` dedupes stream+sync rate slot.
+ */
+/**
  * POST /api/ai/assist — sync JSON AI writing fallback.
  * Provider chain: Groq → OpenRouter → Anthropic (legacy) → placeholder.
  */

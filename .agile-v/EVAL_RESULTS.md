@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-wave42-2026-07-06 |
+| **Revision** | C4-docs-wave43-2026-07-06 |
 | **eval_gate_status** | **CONDITIONAL** |
-| **Last run** | 2026-07-06T11:15:00Z |
+| **Last run** | 2026-07-06T13:45:00Z |
 | **Waiver** | none |
 
 ## Eval checklist (C4)
@@ -17,14 +17,14 @@
 | TEST_SPEC drafted | PASS | TC-0001–0045 |
 | Gate 1 approved | PASS | GATE-0001 |
 | Gate 1 infra amendment | PASS | GATE-0003 |
-| CR-0005 C4 UI synthesis | PASS | Waves 1–**42** |
+| CR-0005 C4 UI synthesis | PASS | Waves 1–**42**; Wave **43** docs |
 | Logic Gatekeeper Stage 2 | PASS | phases/02-validation/SUMMARY.md |
 | Static Red Team | PASS | TC-0031–0045 |
 | Stage 3 synthesis | PASS | through Wave 42 (REQ-0032) |
 | E2E regression executed | **FAIL** | REQ-0021 — e2e not in CI |
 | Vitest unit | PASS | **96** tests 2026-07-06 |
-| Lint + typecheck | PASS | 2026-07-06 Wave 42 |
-| Build | PASS | 2026-07-06 Wave 42 |
+| Lint + typecheck | PASS | 2026-07-06 Wave 43 |
+| Build | PASS | 2026-07-06 Wave 43 |
 | C4 tag UX TC-0034–0035 | PASS | static + DB audit |
 | C4 dialog/nav UX | PASS | Waves 17–23 static |
 | C4 flip anti-flash + entry persistence TC-0042–0043 | PASS | Wave 26 static + unit |

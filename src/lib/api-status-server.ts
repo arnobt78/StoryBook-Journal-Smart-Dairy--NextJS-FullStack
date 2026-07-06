@@ -1,4 +1,13 @@
 /**
+ * @file lib/api-status-server.ts
+ *
+ * WALKTHROUGH — Server-side status aggregation
+ * ──────────────────────────────────────────
+ * Probes: PostgreSQL (`SELECT 1`), Redis ping, AI env flags (no secrets exposed).
+ * Counts: platform totals + per-user book/entry counts + recently-active (15m proxy).
+ * Shared by GET `/api/status` and SSR on `/api-status` page (no double network hop).
+ */
+/**
  * Server-side API status aggregation — DB ping, Redis ping, platform/personal counts.
  * Shared by GET /api/status and SSR on /api-status page (no double network hop).
  */

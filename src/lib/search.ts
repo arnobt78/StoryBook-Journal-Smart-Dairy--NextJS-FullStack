@@ -1,4 +1,12 @@
 /**
+ * @file lib/search.ts
+ *
+ * WALKTHROUGH — Command palette search types + Zod query schema
+ * ─────────────────────────────────────────────────────────────
+ * `searchQuerySchema` validates GET `/api/search` params.
+ * `SearchHit` shape returned to CommandPalette for keyboard navigation.
+ */
+/**
  * Journal search — Prisma scoped full-text-lite (title/content contains).
  */
 import { z } from "zod";

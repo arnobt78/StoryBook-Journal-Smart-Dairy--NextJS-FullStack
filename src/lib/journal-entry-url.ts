@@ -1,4 +1,12 @@
 /**
+ * @file lib/journal-entry-url.ts
+ *
+ * WALKTHROUGH — Persist focused entry in URL without App Router round-trip
+ * ────────────────────────────────────────────────────────────────────────
+ * `syncEntryUrlParam` uses `history.replaceState` (not router.replace).
+ * `resolveInitialFocusedEntryId` validates `?entry=` on SSR in journal page.
+ */
+/**
  * Journal entry URL sync — mirrors the currently focused entry into the `?entry=`
  * query string via `history.replaceState` (NOT `next/navigation`'s router) so a hard
  * refresh reopens the same entry instead of always defaulting to the newest one.

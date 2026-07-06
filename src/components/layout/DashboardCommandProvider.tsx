@@ -1,3 +1,11 @@
+/**
+ * @file components/layout/DashboardCommandProvider.tsx
+ *
+ * WALKTHROUGH — ⌘K palette + SSE bridge mount point
+ * ────────────────────────────────────────────────
+ * Wraps dashboard children with CommandPalette (global shortcut) and
+ * JournalRealtimeBridge (mounts useJournalRealtime once per session).
+ */
 "use client";
 
 /** Dashboard shell — command palette + realtime SSE bridge; shared sign-out from client shell. */

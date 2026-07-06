@@ -1,4 +1,11 @@
 /**
+ * @file lib/api-openapi-client.ts
+ *
+ * WALKTHROUGH — Client fetch for GET /api/openapi
+ * ───────────────────────────────────────────────
+ * Used by ApiDocumentationClient useQuery. Parses `{ success, data }` envelope.
+ */
+/**
  * Client fetch wrapper for GET /api/openapi.
  */
 import type { ApiRouteCatalog } from "@/lib/api-route-catalog";

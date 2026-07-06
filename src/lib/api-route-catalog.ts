@@ -1,4 +1,13 @@
 /**
+ * @file lib/api-route-catalog.ts
+ *
+ * WALKTHROUGH — Static OpenAPI-style route manifest
+ * ───────────────────────────────────────────────
+ * Single source of truth for `/api/openapi` and `/api-documentation` UI.
+ * Lists all Route Handlers with methods, auth, Zod schema field docs, response codes.
+ * Update this file when adding new API routes (see also README API table).
+ */
+/**
  * Static API route catalog — single source of truth for /api/openapi and /api-documentation UI.
  * Field definitions mirror Zod schemas in validations.ts, search.ts, ai-assist.ts.
  */

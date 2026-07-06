@@ -1,4 +1,10 @@
 /**
+ * @file components/auth/GoogleIcon.tsx
+ *
+ * WALKTHROUGH — Inline multicolor Google "G" SVG (no external asset fetch)
+ * ─────────────────────────────────────────────────────────────────────────
+ */
+/**
  * Official multicolor Google "G" mark for OAuth buttons (SVG, no external asset).
  *
  * ── WALKTHROUGH ──

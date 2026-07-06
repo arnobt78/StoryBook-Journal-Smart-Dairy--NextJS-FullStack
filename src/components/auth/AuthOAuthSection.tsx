@@ -1,3 +1,9 @@
+/**
+ * @file components/auth/AuthOAuthSection.tsx
+ *
+ * WALKTHROUGH — OR divider + Google OAuth block (stagger indices from parent)
+ * ───────────────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 /**

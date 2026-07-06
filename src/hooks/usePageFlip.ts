@@ -1,6 +1,6 @@
-"use client";
-
 /**
+ * @file hooks/usePageFlip.ts
+ *
  * WALKTHROUGH — usePageFlip
  *
  * Hook lifecycle:
@@ -17,6 +17,8 @@
  *
  * FLIP_MS must stay in sync with the CSS keyframe duration in PageFlipOverlay.
  */
+"use client";
+
 import { useState, useRef, useCallback } from "react";
 import type { FlipDirection } from "@/types";
 

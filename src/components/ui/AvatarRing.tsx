@@ -1,3 +1,9 @@
+/**
+ * @file components/ui/AvatarRing.tsx
+ *
+ * WALKTHROUGH — Leather-glass glow ring around profile/demo avatars
+ * ────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 /**

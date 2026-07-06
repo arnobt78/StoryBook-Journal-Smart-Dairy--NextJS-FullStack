@@ -1,3 +1,9 @@
+/**
+ * @file hooks/useTypewriter.ts
+ *
+ * WALKTHROUGH — Landing hint character reveal (respects reduced-motion)
+ * ───────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 /**

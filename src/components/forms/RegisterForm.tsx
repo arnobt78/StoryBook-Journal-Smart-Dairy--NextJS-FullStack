@@ -1,3 +1,12 @@
+/**
+ * @file components/forms/RegisterForm.tsx
+ *
+ * WALKTHROUGH — Account registration client form
+ * ────────────────────────────────────────────
+ * POST `/api/auth/register` then `signIn` with credentials.
+ * Optional Google OAuth via AuthOAuthSection. Invalidates journal cache before dashboard.
+ * Stagger: `authStaggerRowProps` indices continue from register/page.tsx shell rows.
+ */
 "use client";
 
 /**

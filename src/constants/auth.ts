@@ -1,4 +1,10 @@
 /**
+ * @file constants/auth.ts
+ *
+ * WALKTHROUGH — localStorage keys for OAuth return + navbar auth flicker guard
+ * ───────────────────────────────────────────────────────────────────────────
+ */
+/**
  * Auth-related constants shared by login UI and OAuth redirect handling.
  * localStorage keys mirror AUTH_UI_IMPLEMENTATION_GUIDE.md to prevent navbar flicker
  * when returning from Google OAuth.

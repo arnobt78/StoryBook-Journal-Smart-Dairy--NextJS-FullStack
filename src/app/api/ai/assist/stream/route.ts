@@ -1,4 +1,13 @@
 /**
+ * @file api/ai/assist/stream/route.ts
+ * @route POST `/api/ai/assist/stream` (SSE)
+ *
+ * WALKTHROUGH — Streaming AI writing assist
+ * ───────────────────────────────────────
+ * Returns `text/event-stream` tokens from provider chain. Same rate limit as sync route.
+ * Client appends tokens into TipTap editor; falls back to POST `/api/ai/assist` on error.
+ */
+/**
  * POST /api/ai/assist/stream — SSE token stream (Groq → OpenRouter → Anthropic).
  */
 import { NextRequest } from "next/server";

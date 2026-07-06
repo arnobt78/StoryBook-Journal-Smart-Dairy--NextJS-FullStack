@@ -1,4 +1,11 @@
 /**
+ * @file constants/themes.ts
+ *
+ * WALKTHROUGH — Book page theme tokens (paper, ink, flip shadows)
+ * ───────────────────────────────────────────────────────────────
+ * `BOOK_THEMES` → `bookThemeCssVars()` → `--theme-*` on spread. ⌘K cycles theme.
+ */
+/**
  * Book spread themes — single source of truth for page backgrounds and ink tokens.
  * Consumed by `bookThemeCssVars()` → CSS custom properties on the spread wrapper.
  */

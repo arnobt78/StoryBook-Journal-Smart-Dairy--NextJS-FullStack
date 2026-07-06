@@ -1,3 +1,12 @@
+/**
+ * @file components/journal/CommandPalette.tsx
+ *
+ * WALKTHROUGH — ⌘K global command palette
+ * ─────────────────────────────────────
+ * Features: debounced search (`/api/search`), journal navigation, theme cycle,
+ * sign-out hook passthrough. Query enabled only while open to avoid idle fetches.
+ * Theme cycle PATCHes active book via `updateJournalBook` + cache invalidation.
+ */
 "use client";
 
 /**

@@ -1,4 +1,14 @@
 /**
+ * @file lib/validations.ts
+ *
+ * WALKTHROUGH — Shared Zod schemas (single source of truth)
+ * ─────────────────────────────────────────────────────────
+ * API Route Handlers call `.safeParse()` on incoming JSON bodies.
+ * Client forms may reuse the same schemas via `@hookform/resolvers/zod`.
+ * Keeping validation here prevents drift between frontend payloads and server rules.
+ * OpenAPI docs in `api-route-catalog.ts` mirror these field definitions.
+ */
+/**
  * Zod schemas shared by API Route Handlers and (optionally) client forms.
  * Single validation source prevents drift between frontend payloads and server expectations.
  */

@@ -1,4 +1,15 @@
 /**
+ * @file api/journal/events/route.ts
+ * @route GET `/api/journal/events` (SSE)
+ *
+ * WALKTHROUGH — Cross-tab realtime sync
+ * ────────────────────────────────────
+ * Server-Sent Events stream per authenticated user.
+ * Upstash REST cannot SUBSCRIBE — polls Redis LPUSH buffer every 500ms.
+ * Client: `useJournalRealtime` → `notifyJournalCacheUpdated` on remote mutations.
+ * Query `?since=` dedupes events on reconnect. Heartbeat every 25s keeps connection alive.
+ */
+/**
  * GET /api/journal/events — SSE stream of journal mutations (Redis list poll).
  *
  * Upstash REST has no blocking SUBSCRIBE — we LPUSH on publish and poll the

@@ -1,3 +1,10 @@
+/**
+ * @file components/auth/OAuthReturnSync.tsx
+ *
+ * WALKTHROUGH — Post-OAuth journal cache invalidation + welcome toast
+ * ─────────────────────────────────────────────────────────────────
+ * Mounts in DashboardClientShell; calls notifyJournalCacheUpdated once.
+ */
 "use client";
 
 /**

@@ -1,4 +1,14 @@
 /**
+ * @file api/status/route.ts
+ * @route GET `/api/status`
+ *
+ * WALKTHROUGH — Enriched system status API
+ * ──────────────────────────────────────
+ * Auth required. Returns DB ping latency, Redis/AI configured flags,
+ * platform aggregates (user/book/entry counts), personal counts, recently-active proxy.
+ * Server logic: `getApiStatus()` shared with SSR on `/api-status` page.
+ */
+/**
  * GET /api/status — enriched dependency health + aggregate platform/personal stats.
  * Auth: session required. No PII — counts only.
  */

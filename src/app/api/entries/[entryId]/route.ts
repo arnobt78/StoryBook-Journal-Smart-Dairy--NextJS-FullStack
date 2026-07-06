@@ -1,4 +1,14 @@
 /**
+ * @file api/entries/[entryId]/route.ts
+ * @route PATCH, DELETE `/api/entries/[entryId]`
+ *
+ * WALKTHROUGH — Entry autosave + delete
+ * ────────────────────────────────────
+ * PATCH  — Partial update from `useAutoSave` (2s debounce) or manual Save.
+ *          Recomputes wordCount/readingTime when content changes; syncs slug on title.
+ * DELETE — Hard delete; BookSpread navigates to adjacent entry after success.
+ */
+/**
  * /api/entries/[entryId] — update or delete a single entry.
  *
  * HTTP: PATCH (partial update), DELETE (hard delete).

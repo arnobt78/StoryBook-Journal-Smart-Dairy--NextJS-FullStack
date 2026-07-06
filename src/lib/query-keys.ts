@@ -1,4 +1,15 @@
 /**
+ * @file lib/query-keys.ts
+ *
+ * WALKTHROUGH — TanStack Query cache key registry
+ * ─────────────────────────────────────────────
+ * Every `useQuery` and `invalidateQueries` MUST use these factories so cache hits
+ * and invalidations target the same entries across shelf, reader, API status, etc.
+ *
+ * Invalidation entry point: `notifyJournalCacheUpdated` in journal-cache-notify.ts
+ * (never call `invalidateQueries({ queryKey: journalSubtree() })` elsewhere).
+ */
+/**
  * Central TanStack Query keys for journal data.
  * Keeping keys in one module avoids typos and ensures invalidateQueries
  * targets the same cache entries that useQuery uses across pages.

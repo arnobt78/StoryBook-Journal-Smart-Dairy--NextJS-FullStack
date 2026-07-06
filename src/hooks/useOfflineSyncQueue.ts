@@ -1,6 +1,6 @@
-"use client";
-
 /**
+ * @file hooks/useOfflineSyncQueue.ts
+ *
  * WALKTHROUGH — useOfflineSyncQueue (sync queue drain)
  *
  * Mount lifecycle:
@@ -15,6 +15,8 @@
  *
  * Returns `{ pendingCount, drainQueue, refreshCount }` for context + badge.
  */
+"use client";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { appToast } from "@/lib/app-toast";

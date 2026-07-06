@@ -1,3 +1,12 @@
+/**
+ * @file components/journal/JournalBottomNav.tsx
+ *
+ * WALKTHROUGH — Reader bottom navigation pill
+ * ─────────────────────────────────────────
+ * Shelf shortcut (book-stack icon), prev/next entry, New/Edit/Remove actions.
+ * Mobile: icon-only + tooltips; md+: labeled pills. Touch targets 44×44px (Wave 35).
+ * Parent: BookSpread passes handlers; does not fetch data itself.
+ */
 "use client";
 
 /**

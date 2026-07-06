@@ -1,3 +1,14 @@
+/**
+ * @file components/layout/DashboardClientShell.tsx
+ * @route Wraps all `(dashboard)/*` pages after auth gate
+ *
+ * WALKTHROUGH — Authenticated app chrome
+ * ────────────────────────────────────
+ * Mounts: OAuthReturnSync (welcome toast), LogoutBookCloseOverlay, DashboardNav,
+ * DashboardCommandProvider (⌘K + realtime bridge), TooltipProvider.
+ * Layout: nav outside `.dashboard-scroll` so scrollbar doesn't shift avatar (Wave 28).
+ * Sign-out: shared `useSignOutWithBookClose` for nav + palette.
+ */
 "use client";
 
 /**

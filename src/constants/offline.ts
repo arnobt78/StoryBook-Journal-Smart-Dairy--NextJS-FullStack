@@ -1,4 +1,11 @@
 /**
+ * @file constants/offline.ts
+ *
+ * WALKTHROUGH — Offline temp id prefixes + CustomEvent names for id remap
+ * ──────────────────────────────────────────────────────────────────────
+ * BookSpread/BookShelf listen after sync queue drain replaces offline-* ids.
+ */
+/**
  * Browser events + id prefixes for offline sync remapping.
  * BookSpread / BookShelf listen to swap temp ids after queue drain.
  */

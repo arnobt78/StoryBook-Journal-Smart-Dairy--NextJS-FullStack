@@ -1,3 +1,12 @@
+/**
+ * @file components/editor/JournalEditor.tsx
+ *
+ * WALKTHROUGH — TipTap rich-text editor (write mode only)
+ * ───────────────────────────────────────────────────────
+ * Client-only (`"use client"`). Extensions: StarterKit, Placeholder, Typography,
+ * CharacterCount. Outputs HTML → `JournalEntry.content`; read mode uses `.journal-prose`.
+ * Controlled by RightPage/BookSpread via `content` + `onChange` props.
+ */
 "use client";
 
 /**

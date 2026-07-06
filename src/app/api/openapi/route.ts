@@ -1,4 +1,13 @@
 /**
+ * @file api/openapi/route.ts
+ * @route GET `/api/openapi`
+ *
+ * WALKTHROUGH — Machine-readable API catalog
+ * ─────────────────────────────────────────
+ * Auth required. Returns OpenAPI 3.1-shaped JSON from static `api-route-catalog.ts`.
+ * Powers `/api-documentation` UI (Endpoints + Schemas tabs).
+ */
+/**
  * GET /api/openapi — machine-readable route catalog (OpenAPI 3.1-shaped JSON).
  * Auth: session required. Static manifest from api-route-catalog.ts.
  */

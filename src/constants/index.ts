@@ -1,4 +1,10 @@
 /**
+ * @file constants/index.ts
+ *
+ * WALKTHROUGH — Product pickers (moods, weather, cover colors, autosave delay)
+ * ────────────────────────────────────────────────────────────────────────────
+ */
+/**
  * Product constants — mood/weather pickers, book cover palette, autosave timing.
  * Re-export auth keys from ./auth for a single import path in UI code.
  */

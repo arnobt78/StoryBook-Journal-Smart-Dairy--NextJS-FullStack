@@ -1,4 +1,16 @@
 /**
+ * @file api/books/route.ts
+ * @route GET, POST `/api/books`
+ *
+ * WALKTHROUGH — Journal shelf list + create
+ * ────────────────────────────────────────
+ * GET  — Returns user's books with `_count.entries` for shelf badges.
+ * POST — Transaction: create book + starter "New Entry" (BookSpread never empty).
+ *        Validates body with `createBookSchema`; calls `afterJournalMutation`.
+ * Auth — `session.user.id` scopes every Prisma query (never trust client bookId here).
+ * Client — `fetchJournalBooks` / `createJournalBook` in journal-api.ts; invalidate via notifyJournalCacheUpdated.
+ */
+/**
  * /api/books — journal shelf CRUD (list + create).
  *
  * HTTP: GET (list), POST (create book + starter entry).

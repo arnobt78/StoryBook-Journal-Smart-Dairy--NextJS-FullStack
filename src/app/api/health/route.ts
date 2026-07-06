@@ -1,4 +1,14 @@
 /**
+ * @file api/health/route.ts
+ * @route GET `/api/health`
+ *
+ * WALKTHROUGH — Public liveness probe (uptime monitors)
+ * ───────────────────────────────────────────────────
+ * Minimal JSON `{ ok, service, timestamp }` — no DB/Redis checks.
+ * For enriched deps + stats see GET `/api/status` (auth required).
+ * UI: `/api-status` dashboard page; external monitors hit this endpoint directly.
+ */
+/**
  * GET /api/health — liveness probe.
  *
  * HTTP: GET only; always 200 when App Router responds.

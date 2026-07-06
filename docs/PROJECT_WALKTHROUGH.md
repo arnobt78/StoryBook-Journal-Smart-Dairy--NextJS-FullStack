@@ -17,6 +17,22 @@ Deployment target is **Vercel** for the app; `docker-compose.yml` is an optional
 
 ---
 
+## 1b. In-source walkthrough comments
+
+Many files under `src/` carry **`@file` + `WALKTHROUGH`** block comments at the top (and occasionally on key functions). These are **educational only** — they explain architecture, data flow, and non-obvious design choices without changing runtime behavior.
+
+| Pattern | Meaning |
+|---------|---------|
+| `@file path/relative/to/src` | Which module you are reading |
+| `WALKTHROUGH — …` | High-level purpose and how it fits the app |
+| `── Section ──` inside components | Feature-specific notes (offline, flip, stagger, cache) |
+
+**Start here for learning:** `BookSpread.tsx`, `journal-cache-notify.ts`, `journal-api.ts`, `useOfflineSyncQueue.ts`, `AuthBookShell.tsx`, `api-route-catalog.ts`.
+
+**Cache rule (called out in comments):** only `notifyJournalCacheUpdated` / `AndRefetch` in `journal-cache-notify.ts` may invalidate the journal query subtree.
+
+---
+
 ## 2. Tech stack (authoritative)
 
 | Area | Choice |
@@ -39,6 +55,8 @@ Deployment target is **Vercel** for the app; `docker-compose.yml` is an optional
 | Offline | IndexedDB drafts + sync queue (`patchEntry`, `postEntry`, `patchBook`, `postBook`); `OfflineSyncContext`; optimistic cache + `notifyJournalCacheUpdated`; shelf hover prefetch |
 | Production guardrails | `next.config` + `vercel.json` security/cache headers; `robots.ts`; dashboard `noindex`; `force-dynamic` on dashboard/journal pages |
 | SEO | `src/lib/site-metadata.ts` — OG/Twitter/keywords; author Arnob Mahmud |
+| SEO routes | `src/app/sitemap.ts`, `manifest.ts` — public indexable routes |
+| In-source docs | `@file` + `WALKTHROUGH` block comments across `src/**` (Wave 43) |
 | Production | **Vercel** — https://storybook-journal.vercel.app |
 
 ---

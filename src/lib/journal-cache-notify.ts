@@ -1,4 +1,6 @@
 /**
+ * @file lib/journal-cache-notify.ts
+ *
  * WALKTHROUGH — journal-cache-notify.ts
  *
  * **Single invalidation entry point** after any journal mutation (online CRUD,

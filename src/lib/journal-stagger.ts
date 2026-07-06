@@ -1,3 +1,11 @@
+/**
+ * @file lib/journal-stagger.ts
+ *
+ * WALKTHROUGH — Journal UI row entrance animation indices
+ * ───────────────────────────────────────────────────────
+ * Mirrors `auth-stagger.ts`: each row gets `--journal-stagger-i` × 60ms delay.
+ * Used by BookSpreadHeader, LeftPage, RightPage. Replays on flip via `entryStaggerKey` remount.
+ */
 import type { CSSProperties } from "react";
 
 /**

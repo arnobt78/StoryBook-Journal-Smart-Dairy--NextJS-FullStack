@@ -1,3 +1,9 @@
+/**
+ * @file components/ui/tabs.tsx
+ *
+ * WALKTHROUGH — Radix Tabs primitives (ApiDocumentationClient Overview/Endpoints/Schemas)
+ * ─────────────────────────────────────────────────────────────────────────────────────
+ */
 "use client";
 
 import * as React from "react";

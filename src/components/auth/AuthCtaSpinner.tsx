@@ -1,3 +1,9 @@
+/**
+ * @file components/auth/AuthCtaSpinner.tsx
+ *
+ * WALKTHROUGH — Inline Loader2 spinner on auth CTAs during redirect
+ * ────────────────────────────────────────────────────────────────
+ */
 import { Loader2 } from "lucide-react";
 
 type AuthCtaSpinnerProps = {

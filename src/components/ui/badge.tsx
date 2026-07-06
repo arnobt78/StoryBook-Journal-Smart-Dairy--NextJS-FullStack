@@ -1,3 +1,10 @@
+/**
+ * @file components/ui/badge.tsx
+ *
+ * WALKTHROUGH — Status badges (dependency health, HTTP methods in API docs UI)
+ * ───────────────────────────────────────────────────────────────────────────
+ * Variants: default, success, warning, destructive — styled via globals.css.
+ */
 import * as React from "react";
 import { cn } from "@/lib/utils";
 

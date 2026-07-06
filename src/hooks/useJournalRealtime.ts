@@ -1,3 +1,12 @@
+/**
+ * @file hooks/useJournalRealtime.ts
+ *
+ * WALKTHROUGH — Client SSE subscription for cross-tab sync
+ * ──────────────────────────────────────────────────────
+ * Opens EventSource to `/api/journal/events?since=` when session is authenticated.
+ * On each event → `notifyJournalCacheUpdated` so shelf + reader refetch without refresh.
+ * Pauses when tab hidden; exponential backoff on disconnect. Debounced toast for remote edits.
+ */
 "use client";
 
 /**

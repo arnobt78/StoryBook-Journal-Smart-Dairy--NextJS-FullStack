@@ -1,4 +1,14 @@
 /**
+ * @file api/search/route.ts
+ * @route GET `/api/search`
+ *
+ * WALKTHROUGH — Command palette search backend
+ * ──────────────────────────────────────────
+ * Scoped full-text-lite: title/content `contains` on user's entries only.
+ * Query params validated by `searchQuerySchema` (q, bookId?, mood?, limit).
+ * Client: `CommandPalette.tsx` debounces 300ms; `force-dynamic` for fresh results.
+ */
+/**
  * GET /api/search — scoped entry search (title/content contains).
  */
 import { NextRequest, NextResponse } from "next/server";

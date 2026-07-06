@@ -1,3 +1,11 @@
+/**
+ * @file components/ui/ripple-button.tsx
+ *
+ * WALKTHROUGH — Click ripple + optional shine radius
+ * ────────────────────────────────────────────────
+ * Used across auth CTAs, shelf spines, journal nav. `shineRadius` only when set
+ * so `rounded-full` avatars are not forced to 4px radius.
+ */
 "use client";
 
 /**
