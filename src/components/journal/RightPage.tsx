@@ -5,8 +5,8 @@
  *
  * READ mode:  Renders HTML content via dangerouslySetInnerHTML (TipTap output).
  *             Row entrance wave replays after every flip (see ROW STAGGER below).
- * WRITE mode: Textarea-based editor with mood/weather pickers, tag input,
- *             word count, AI Assist button.
+ * WRITE mode: Delegated to `RightPageWritePanel` (mounts only while editing).
+ *             Voice dictation hooks live in the write panel — zero read-mode overhead.
  *
  * Sizing: driven by CSS custom properties --page-w / --page-h so the entire
  * book scales responsively from the root :root rule in globals.css.
@@ -30,11 +30,7 @@
  *  together on initial mount AND after every page turn (remount key), matching the
  *  auth login/register effect exactly.
  */
-import dynamic from "next/dynamic";
-import { useCallback, useState } from "react";
 import type { JournalEntry, EntryDraft } from "@/types";
-import { MOODS, WEATHERS } from "@/constants";
-import { mergePendingTag } from "@/lib/journal-tags";
 import {
   JOURNAL_DIVIDER_GRADIENT,
   JOURNAL_INK_BODY,
@@ -44,42 +40,14 @@ import {
   JOURNAL_INK_PLACEHOLDER,
   JOURNAL_PAGE_INSET_SHADOW_RIGHT,
   JOURNAL_PAGE_RIGHT_BG,
-  JOURNAL_TAG_INPUT_BG,
-  JOURNAL_TAG_INPUT_BORDER,
-  JOURNAL_TAG_INPUT_COLOR,
-  journalMiniLabelStyle,
   journalPageNumberStyle,
   journalRuledLinesLayerStyle,
 } from "@/lib/journal-page-styles";
 import { journalStaggerRowProps } from "@/lib/journal-stagger";
-import { normalizeTags, wordCount } from "@/lib/utils";
+import { normalizeTags } from "@/lib/utils";
 import { JournalEntryTags } from "@/components/journal/JournalEntryTags";
-import { JournalEntryTagsEditor } from "@/components/journal/JournalEntryTagsEditor";
-import { RippleButton } from "@/components/ui/ripple-button";
 import { JournalReadFooter } from "@/components/journal/JournalReadFooter";
-import { JournalWriteFooter } from "@/components/journal/JournalWriteFooter";
-
-const JournalEditor = dynamic(
-  () => import("@/components/editor/JournalEditor").then((m) => ({ default: m.JournalEditor })),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        style={{
-          flex: 1,
-          minHeight: 80,
-          fontFamily: "'Lora',serif",
-          fontStyle: "italic",
-          fontSize: "12px",
-          color: JOURNAL_INK_PLACEHOLDER,
-          paddingTop: 12,
-        }}
-      >
-        Loading editor…
-      </div>
-    ),
-  },
-);
+import { RightPageWritePanel } from "@/components/journal/RightPageWritePanel";
 
 interface RightPageProps {
   entry: JournalEntry;
@@ -107,38 +75,7 @@ export function RightPage({
   onStartWriting, onDraftChange, onSave, onCancel, onAiAssist, isAiThinking,
   onDeleteEntry, canDeleteEntry = true,
 }: RightPageProps) {
-  const [newTag, setNewTag] = useState("");
-
-  const wc = wordCount(draft.content);
   const entryTags = normalizeTags(entry.tags);
-  const draftTags = normalizeTags(draft.tags);
-
-  /** Commit "+ tag" field into draft — Enter, blur, or Save */
-  const commitPendingTag = useCallback((): string[] => {
-    const merged = mergePendingTag(draftTags, newTag);
-    if (merged.length !== draftTags.length || merged.some((t, i) => t !== draftTags[i])) {
-      onDraftChange("tags", merged);
-    }
-    setNewTag("");
-    return merged;
-  }, [draftTags, newTag, onDraftChange]);
-
-  const handleTagKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && newTag.trim()) {
-      e.preventDefault();
-      commitPendingTag();
-    }
-    if (e.key === "Backspace" && !newTag && draftTags.length) {
-      onDraftChange("tags", draftTags.slice(0, -1));
-    }
-  };
-
-  const handleSave = () => {
-    const tags = mergePendingTag(draftTags, newTag);
-    if (newTag.trim()) setNewTag("");
-    if (tags.length !== draftTags.length) onDraftChange("tags", tags);
-    onSave({ tags });
-  };
 
   return (
     /* Outer shell ignores pointer hits — same 3-D hit-testing rationale as `LeftPage`. */
@@ -202,110 +139,15 @@ export function RightPage({
           </div>
 
           {isWriting ? (
-            /* ── WRITE MODE — flex column so editor scrolls; tags/footer stay pinned ── */
-            <div
-              style={{
-                flex: 1,
-                minHeight: 0,
-                display: "flex",
-                flexDirection: "column",
-                overflow: "hidden",
-              }}
-            >
-              <input
-                value={draft.title}
-                onChange={e => onDraftChange("title", e.target.value)}
-                placeholder="Title your entry…"
-                style={{
-                  fontFamily: "'Playfair Display',serif", fontStyle: "italic",
-                  fontSize: "21px", color: JOURNAL_INK_HEADING,
-                  background: "transparent", border: "none", outline: "none",
-                  width: "100%", lineHeight: 1.2, margin: "6px 0 8px",
-                }}
-              />
-              <div style={{ height: "1px", background: JOURNAL_DIVIDER_GRADIENT, marginBottom: "10px", flexShrink: 0 }} />
-
-              {/* md+ pickers; mobile uses footer meta — hidden via .journal-write-pickers in globals.css */}
-              <div className="journal-write-pickers">
-                <MiniLabel>Mood</MiniLabel>
-                <div style={{ display: "flex", gap: "2px", flexWrap: "wrap", marginBottom: "6px" }}>
-                  {MOODS.map(m => (
-                    <RippleButton key={m} type="button" onClick={() => onDraftChange("mood", m)} style={{
-                      fontSize: "13px", background: "none", border: "none", cursor: "pointer",
-                      padding: "2px", borderRadius: "4px",
-                      opacity: draft.mood === m ? 1 : 0.38,
-                      transform: draft.mood === m ? "scale(1.15)" : "scale(1)",
-                      transition: "all .15s",
-                    }}>{m}</RippleButton>
-                  ))}
-                </div>
-
-                <MiniLabel>Weather</MiniLabel>
-                <div style={{ display: "flex", gap: "2px", flexWrap: "wrap", marginBottom: "8px" }}>
-                  {WEATHERS.map(w => (
-                    <RippleButton key={w} type="button" onClick={() => onDraftChange("weather", w)} style={{
-                      fontSize: "13px", background: "none", border: "none", cursor: "pointer",
-                      padding: "2px", borderRadius: "4px",
-                      opacity: draft.weather === w ? 1 : 0.38,
-                      transform: draft.weather === w ? "scale(1.15)" : "scale(1)",
-                      transition: "all .15s",
-                    }}>{w}</RippleButton>
-                  ))}
-                </div>
-              </div>
-
-              <JournalEditor
-                content={draft.content}
-                onChange={(html) => onDraftChange("content", html)}
-                placeholder="Write what's on your mind today…"
-                autoFocus
-              />
-
-              {isAiThinking && (
-                <div style={{ fontFamily: "'Lora',serif", fontStyle: "italic", fontSize: "11px", color: JOURNAL_INK_BODY, marginTop: "4px" }}>
-                  Writing…
-                </div>
-              )}
-
-              <MiniLabel>Tags</MiniLabel>
-              {/* Editable pills — × removes; "+ tag" adds; Backspace on empty input pops last */}
-              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "4px", marginBottom: "8px", flexShrink: 0 }}>
-                <JournalEntryTagsEditor
-                  tags={draftTags}
-                  onRemove={(tag) =>
-                    onDraftChange(
-                      "tags",
-                      draftTags.filter((t) => t !== tag),
-                    )
-                  }
-                />
-                <input
-                  value={newTag}
-                  onChange={e => setNewTag(e.target.value)}
-                  onKeyDown={handleTagKey}
-                  onBlur={commitPendingTag}
-                  placeholder="+ tag"
-                  style={{
-                    fontFamily: "'Lora',serif", fontSize: "10px",
-                    background: JOURNAL_TAG_INPUT_BG, border: `1px solid ${JOURNAL_TAG_INPUT_BORDER}`,
-                    borderRadius: "20px", padding: "2px 9px", outline: "none",
-                    color: JOURNAL_TAG_INPUT_COLOR, width: "70px",
-                  }}
-                />
-              </div>
-
-              <JournalWriteFooter
-                mood={draft.mood}
-                weather={draft.weather}
-                wordCount={wc}
-                isAiThinking={isAiThinking}
-                isSaving={isSaving}
-                canAiAssist={Boolean(draft.content.trim())}
-                onAiAssist={onAiAssist}
-                onCancel={onCancel}
-                onSave={handleSave}
-              />
-            </div>
+            <RightPageWritePanel
+              draft={draft}
+              isSaving={isSaving}
+              isAiThinking={isAiThinking}
+              onDraftChange={onDraftChange}
+              onSave={onSave}
+              onCancel={onCancel}
+              onAiAssist={onAiAssist}
+            />
           ) : (
             /* ── READ MODE — journal-stagger-row entrance replays on every mount AND every
                flip via BookSpread's Fragment `key={entryStaggerKey}` ── */
@@ -383,14 +225,6 @@ export function RightPage({
           )}
         </div>
       </div>
-    </div>
-  );
-}
-
-function MiniLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <div style={journalMiniLabelStyle}>
-      {children}
     </div>
   );
 }

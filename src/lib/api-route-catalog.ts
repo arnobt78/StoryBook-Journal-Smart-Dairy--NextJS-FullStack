@@ -393,6 +393,31 @@ const ENDPOINTS: ApiEndpointDoc[] = [
       { status: 429, description: "Rate limited" },
     ],
   },
+  {
+    id: "voice-transcribe",
+    method: "POST",
+    path: "/api/voice/transcribe",
+    summary: "Phase 3 voice transcription proxy",
+    tag: "AI",
+    auth: "session+rateLimit",
+    requestBody: {
+      schemaName: "voiceTranscribeSchema",
+      fields: [
+        { name: "audio", type: "Blob (multipart)", required: true },
+        { name: "provider", type: "server-deepgram | server-assemblyai", required: false },
+      ],
+    },
+    responses: [
+      { status: 200, description: "Transcript text", envelope: "{ text }" },
+      { status: 400, description: "Missing audio or bad request" },
+      { status: 401, description: "Unauthorized" },
+      { status: 429, description: "Rate limited (10/min, shared with AI assist)" },
+      { status: 503, description: "Provider unavailable — client falls back to Phase 1/2" },
+    ],
+    notes:
+      "Requires DEEPGRAM_API_KEY or ASSEMBLYAI_API_KEY env var. " +
+      "Phase 1 (Web Speech) and Phase 2 (browser Whisper) need no server key.",
+  },
 ];
 
 const TAGS: ApiRouteCatalog["tags"] = [

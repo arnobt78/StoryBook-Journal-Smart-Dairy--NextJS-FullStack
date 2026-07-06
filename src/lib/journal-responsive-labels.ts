@@ -28,3 +28,9 @@ export const NAV_NEW_JOURNAL_LABEL = "New journal";
 
 /** Bottom nav — mobile tooltip for new journal pill */
 export const NAV_NEW_JOURNAL_TOOLTIP = "New journal";
+
+/** Voice dictation — full label on md+ (mobile uses mic icon via dual-span CSS) */
+export const VOICE_DICTATE_LABEL_FULL = "Dictate";
+
+/** Voice dictation stop — full label on md+ */
+export const VOICE_STOP_LABEL_FULL = "Stop";

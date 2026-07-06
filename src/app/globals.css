@@ -1618,6 +1618,15 @@ body {
   min-width: 0;
 }
 
+/* Journal write footer stack — full-width voice banner + action row */
+.journal-write-footer-stack {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
 /* Journal write footer — meta row + responsive icon actions on mobile */
 .journal-write-footer {
   display: flex;
@@ -1625,6 +1634,7 @@ body {
   align-items: center;
   gap: 8px;
   padding-top: 8px;
+  padding-bottom: 2px;
   margin-top: 8px;
   border-top: 1px solid rgba(120, 70, 20, 0.1);
   flex-shrink: 0;
@@ -1672,12 +1682,14 @@ body {
   gap: 6px;
   margin-left: auto;
   flex-shrink: 0;
+  overflow: visible;
 }
 
 /* Write footer actions — paper-action hover glow parity with read-mode Remove/Edit */
 .journal-write-footer__ai-btn,
 .journal-write-footer__save-btn,
-.journal-write-footer__action-btn {
+.journal-write-footer__action-btn,
+.journal-write-footer__voice-chevron {
   transition:
     color 0.2s,
     text-shadow 0.2s,
@@ -1758,7 +1770,9 @@ body {
 
   .journal-write-footer__ai-btn,
   .journal-write-footer__save-btn,
-  .journal-write-footer__action-btn {
+  .journal-write-footer__action-btn,
+  .journal-write-footer__voice-chevron,
+  .journal-write-footer__voice-mic {
     min-width: 36px;
     min-height: 36px;
     padding: 6px !important;
@@ -1767,7 +1781,12 @@ body {
     justify-content: center;
   }
 
-  .journal-write-footer__action-btn {
+  .voice-mic-label {
+    display: none;
+  }
+
+  .journal-write-footer__action-btn,
+  .journal-write-footer__voice-chevron {
     font-size: 0 !important;
     letter-spacing: 0 !important;
   }
@@ -4303,5 +4322,215 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   .api-status-grid--stats {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* ─── Wave 44 — Voice Dictation ──────────────────────────────────────────── */
+
+/* Inset pulse — stays inside button bounds (page-face overflow:hidden safe) */
+@keyframes voicePulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 1px rgba(200, 60, 60, 0.35);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 3px rgba(200, 60, 60, 0.55),
+      0 0 12px rgba(200, 50, 50, 0.25);
+  }
+}
+
+/* Recording state — inset red pulse on footer mic action */
+.voice-mic-btn--recording {
+  color: rgba(200, 60, 60, 0.95);
+  background: rgba(200, 60, 60, 0.1);
+  border-color: rgba(200, 60, 60, 0.5);
+  animation: voicePulse 1.2s ease-in-out infinite;
+}
+
+.voice-mic-btn--recording:hover {
+  color: rgba(220, 80, 80, 1);
+  border-color: rgba(220, 80, 80, 0.65);
+  background: rgba(200, 60, 60, 0.14);
+}
+
+/* Busy (requesting-permission / transcribing) — subtle wait state */
+.voice-mic-btn--busy {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Full-width interim/error banner — spans right page content above footer */
+.voice-interim-banner {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(40, 18, 5, 0.88);
+  color: rgba(255, 215, 150, 0.95);
+  font-family: "Lora", serif;
+  font-style: italic;
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  border: 1px solid rgba(180, 130, 60, 0.28);
+  animation: authRowIn 0.18s ease both;
+}
+
+.voice-interim-banner--error {
+  background: rgba(80, 20, 15, 0.9);
+  color: rgba(255, 170, 150, 0.95);
+  border-color: rgba(180, 60, 50, 0.35);
+}
+
+.voice-interim-banner__row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.voice-interim-banner--processing .auth-cta-spinner {
+  color: rgba(255, 200, 120, 0.95);
+  flex-shrink: 0;
+}
+
+.voice-interim-banner__icon {
+  flex-shrink: 0;
+  color: rgba(255, 200, 120, 0.95);
+}
+
+.voice-interim-banner__icon--listen {
+  animation: voiceInterimIconPulse 1.6s ease-in-out infinite;
+}
+
+.voice-interim-banner__label--pulse {
+  display: inline-flex;
+  align-items: baseline;
+  animation: voiceInterimLabelPulse 2s ease-in-out infinite;
+}
+
+.voice-interim-banner__dots {
+  display: inline-flex;
+  margin-left: 1px;
+}
+
+.voice-interim-banner__dots span {
+  animation: voiceEllipsisWave 1.1s ease-in-out infinite;
+}
+
+.voice-interim-banner__dots span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.voice-interim-banner__dots span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes voiceInterimIconPulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 4px rgba(255, 180, 80, 0.45));
+  }
+}
+
+@keyframes voiceInterimLabelPulse {
+  0%,
+  100% {
+    opacity: 0.82;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes voiceEllipsisWave {
+  0%,
+  70%,
+  100% {
+    opacity: 0.2;
+    transform: translateY(0);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(-1.5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-interim-banner__icon--listen,
+  .voice-interim-banner__label--pulse,
+  .voice-interim-banner__dots span {
+    animation: none !important;
+  }
+}
+
+/* Phase 2 model download progress bar */
+.voice-progress-bar-wrap {
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(120, 70, 20, 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.voice-progress-bar {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(200, 140, 50, 0.7),
+    rgba(255, 190, 80, 0.9)
+  );
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  min-width: 4px;
+}
+
+/* Mic + chevron cluster — shared hover glow; split layout when picker present */
+.voice-dictation-cluster {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  border-radius: 4px;
+  transition: box-shadow 0.2s;
+}
+
+.voice-dictation-cluster--split .journal-write-footer__voice-mic {
+  border-radius: 4px 0 0 4px;
+  border-right: none;
+}
+
+.journal-write-footer__voice-chevron {
+  min-width: 28px;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  border-radius: 0 4px 4px 0;
+}
+
+.voice-dictation-cluster:hover {
+  box-shadow: 0 0 10px rgba(255, 140, 50, 0.18);
+}
+
+/* Wrapper — progress bar positioning context */
+.voice-dictation-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: visible;
 }
 

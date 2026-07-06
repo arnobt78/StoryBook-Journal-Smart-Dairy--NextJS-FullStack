@@ -57,6 +57,7 @@ Many files under `src/` carry **`@file` + `WALKTHROUGH`** block comments at the 
 | SEO | `src/lib/site-metadata.ts` — OG/Twitter/keywords; author Arnob Mahmud |
 | SEO routes | `src/app/sitemap.ts`, `manifest.ts` — public indexable routes |
 | In-source docs | `@file` + `WALKTHROUGH` block comments across `src/**` (Wave 43) |
+| Voice dictation | 3-phase STT — Web Speech → browser Whisper (WASM worker) → cloud `/api/voice/transcribe`; write-mode only; no query invalidation |
 | Production | **Vercel** — https://storybook-journal.vercel.app |
 
 ---
@@ -80,6 +81,7 @@ src/app/
     entries/, entries/[entryId]/
     search/                   # Scoped entry search (GET)
     journal/events/           # SSE realtime stream (force-dynamic)
+    voice/transcribe/         # Phase 3 cloud STT proxy (auth + rate limit)
 
 src/lib/
   db.ts                       # PrismaClient singleton (dev HMR guard)
@@ -104,7 +106,17 @@ src/lib/
   site-metadata.ts            # Central SEO metadata for root layout
   ai-assist.ts, ai-rate-limit.ts
   validations.ts              # Zod schemas shared by API routes
+  voice-input.ts              # STT provider detection, constants, mime helpers
+  voice-recorder-drain.ts     # Serialized async queue (Whisper + Phase 3 drain)
+  voice-speech-detection.ts   # AnalyserNode RMS VAD (skip silent chunks)
+  voice-transcript-merge.ts   # Overlap dedupe for Private mode
+  voice-session-trim.ts       # 45s rolling PCM window
+  whisper-browser.ts          # PCM decode (main); ASR via worker or inline fallback
+  whisper-worker-client.ts    # RPC to whisper.worker.ts
   utils.ts                    # slugify, tags JSON, word counts, dates
+
+src/workers/
+  whisper.worker.ts           # ONNX Whisper inference (off main thread)
 
 src/context/
   OfflineSyncContext.tsx      # pendingCount badge + sync processor
@@ -119,6 +131,9 @@ src/hooks/
   useJournalPrefetch.ts       # shelf hover → prefetch route + bookDetail query
   useJournalRealtime.ts       # EventSource → notifyJournalCacheUpdated (multi-tab)
   useBookTheme.ts             # CSS vars from JournalBook.theme
+  useVoiceInput.ts            # Top-level voice state machine (3 providers)
+  useWebSpeech.ts             # Phase 1 SpeechRecognition
+  useBrowserWhisper.ts        # Phase 2 MediaRecorder + worker ASR
 
 src/components/ui/
   safe-image.tsx              # next/image + fallbackSrc (Robohash) + native img fallback
@@ -638,7 +653,21 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 38. Related docs
+## 39. Voice dictation — Wave 47 (2026-07-06)
+
+| Area | Details |
+|------|---------|
+| Mount | `RightPageWritePanel` only — unmount on cancel/save releases mic |
+| Phase 1 | `useWebSpeech` → live interim in banner → `insertTextAtCursor` |
+| Phase 2 | `useBrowserWhisper` — VAD, 5s chunks, drain queue; PCM decode main thread; ONNX in `whisper.worker.ts` |
+| Phase 3 | `useVoiceInput` chunked POST → `/api/voice/transcribe`; drain queue + Processing banner on Stop |
+| Banner | Listening while mic on; Processing on drain; animated ellipsis (write footer) |
+| Cache | **None** — voice inserts via TipTap → existing autosave/offline path |
+| Tests | `voice-*`, `whisper-worker-client` — **120** Vitest total |
+
+---
+
+## 40. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { createBookSchema } from "@/lib/validations";
+import { createBookSchema, voiceTranscribeSchema } from "@/lib/validations";
 import { mergePendingTag } from "@/lib/journal-tags";
 import { normalizeTags } from "@/lib/utils";
 
@@ -39,6 +39,19 @@ describe("createBookSchema", () => {
       title: "X",
       coverEmoji: "invalid-icon",
     });
+    expect(r.success).toBe(false);
+  });
+});
+
+describe("voiceTranscribeSchema", () => {
+  it("defaults provider to server-deepgram", () => {
+    const r = voiceTranscribeSchema.safeParse({});
+    expect(r.success).toBe(true);
+    if (r.success) expect(r.data.provider).toBe("server-deepgram");
+  });
+
+  it("rejects invalid provider", () => {
+    const r = voiceTranscribeSchema.safeParse({ provider: "web-speech" });
     expect(r.success).toBe(false);
   });
 });

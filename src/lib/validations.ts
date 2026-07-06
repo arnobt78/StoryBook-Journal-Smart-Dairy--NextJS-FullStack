@@ -69,9 +69,19 @@ export const updateEntrySchema = z.object({
   isArchived: z.boolean().optional(),
 });
 
+/** POST /api/voice/transcribe — multipart metadata fields (audio blob validated in handler) */
+export const voiceTranscribeSchema = z.object({
+  provider: z
+    .enum(["server-deepgram", "server-assemblyai"])
+    .optional()
+    .default("server-deepgram"),
+  audioFormat: z.string().max(30).optional(),
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type CreateBookInput = z.infer<typeof createBookSchema>;
 export type UpdateBookInput = z.infer<typeof updateBookSchema>;
 export type CreateEntryInput = z.infer<typeof createEntrySchema>;
 export type UpdateEntryInput = z.infer<typeof updateEntrySchema>;
+export type VoiceTranscribeInput = z.infer<typeof voiceTranscribeSchema>;

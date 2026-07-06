@@ -1,11 +1,11 @@
 # Cycle C4 — UI Polish + Entry Tags (active)
 
-**Status:** Stage 4 Verification — static PASS · Waves **1–43**
+**Status:** Stage 4 Verification — static PASS · Waves **1–47**
 
 | Field | Value |
 |-------|-------|
-| Commits | through Wave 43 (this commit) |
-| Unit tests | **96** Vitest PASS |
+| Commits | through Wave 47 (this commit) |
+| Unit tests | **120** Vitest PASS |
 
 ## Core deliverables (REQ)
 
@@ -41,6 +41,7 @@
 | **41** | Auth logo → `/`; demo-picker fixed slots; nav brand spotlight + profile hover; bottom nav "New journal" | `AuthSpreadHeader`, `LoginForm`, `DashboardNav`, `JournalBottomNav`, `globals.css` |
 | **42** | API status + documentation UI — `/api-status`, `/api-documentation`, GET `/api/status`, `/api/openapi` | `api-status-server.ts`, `api-route-catalog.ts`, `ApiStatusClient`, `ApiDocumentationClient`, `card/badge/tabs` |
 | **43** | SEO metadata + sitemap + manifest; `@file` walkthrough comments; README rewrite; `npm run verify` | `site-metadata.ts`, `sitemap.ts`, `manifest.ts`, `README.md`, ~90 `src/**` comment headers |
+| **47** | Voice hardening — Phase 3 drain, WASM worker, dead-type cleanup, banner UX | `useVoiceInput.ts`, `whisper.worker.ts`, `whisper-worker-client.ts`, `voice-*` libs |
 
 ## Wave 23 detail (latest on main)
 

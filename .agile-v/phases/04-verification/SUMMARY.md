@@ -16,6 +16,7 @@
 - **Build:** PASS (2026-06-29)
 - **Wave 23:** defer delete confirm; nav wrap; shelf spotlight unclip
 - **E2E/live:** NOT RUN — REQ-0021 blocks Gate 2
+- **Wave 47:** voice hardening — 120 Vitest PASS (2026-07-06)
 - **eval_gate_status:** CONDITIONAL
 
 ## Evidence

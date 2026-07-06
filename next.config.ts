@@ -14,6 +14,22 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Node-only ONNX/sharp — external on server; stubbed on client (Phase 2 Whisper)
+  serverExternalPackages: ["sharp", "onnxruntime-node"],
+  turbopack: {
+    resolveAlias: {
+      sharp: { browser: "./src/lib/empty-module.ts" },
+      "onnxruntime-node": { browser: "./src/lib/empty-module.ts" },
+    },
+  },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      sharp$: false,
+      "onnxruntime-node$": false,
+    };
+    return config;
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "lh3.googleusercontent.com", pathname: "/**" },

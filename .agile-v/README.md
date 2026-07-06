@@ -1,6 +1,6 @@
 # Agile V — StoryBook Journal
 
-<!-- Cycle: C4 | Revision: C4-docs-wave43-2026-07-06 | Standard: Agile V 1.4 -->
+<!-- Cycle: C4 | Revision: C4-voice-wave47-2026-07-06 | Standard: Agile V 1.4 -->
 
 Living **AQMS** for this repository.
 
@@ -11,7 +11,7 @@ Living **AQMS** for this repository.
 1. **`STATE.md`** — cycle **C4**, stage, gates, **resume tomorrow** block
 2. **`PLAYBOOK.md`** — Infinity Loop + session protocol
 3. **`REQUIREMENTS.md`** — REQ-0001–**0031**
-4. **`cycles/C4/README.md`** — wave index through **43**
+4. **`cycles/C4/README.md`** — wave index through **47**
 5. **`skills/SKILLS_INDEX.md`** — 24 agent manifests
 6. Human Gate → **`CHECKPOINTS.md`** + **`APPROVALS.md`**
 
@@ -21,8 +21,8 @@ Living **AQMS** for this repository.
 |--------|-------|
 | Requirements | **32** (27 implemented, 5 backlog/partial) |
 | Artifacts | ART-0001–**0107** |
-| UI waves | **1–42** done |
-| Vitest | **96 PASS** |
+| UI waves | **1–47** done |
+| Vitest | **120 PASS** |
 | Stage | 4 Verification |
 | Commit | `98a2dea` |
 | Gate 2 | CONDITIONAL (REQ-0021 CI e2e) |

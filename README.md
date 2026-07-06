@@ -1,4 +1,4 @@
-# Story Book Journal - Next.js, TypeScript, PostgreSQL, Tailwind CSS (Animated Book UI) FullStack Project (Online/Offline Drafting & Sync Capability with IndexedDB & AI Assist Smart Diary)
+# Smart Story Book Journal - Next.js, TypeScript, PostgreSQL, Tailwind CSS (Animated Book UI) FullStack Project (Online-Offline Drafting, Sync Capability, Voice Dictation, AI Assist Daily Diary)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
@@ -56,31 +56,30 @@ StoryBook Journal is a **full-stack journaling web application** — not a minim
 - Get **AI writing suggestions** through a secure server proxy (optional)
 - Inspect **API health** and **live API documentation** inside the authenticated dashboard
 
-This codebase is designed for **instruction and reuse**. Many files include `@file` and `WALKTHROUGH` block comments explaining architecture decisions. Start with `BookSpread.tsx`, `journal-cache-notify.ts`, and `docs/PROJECT_WALKTHROUGH.md`.
-
 ---
 
 ## Key Features
 
-| Feature                  | Description                                                                         |
-| ------------------------ | ----------------------------------------------------------------------------------- |
-| **3D book cover**        | Leather texture, gold shine, hover tilt, animated cover open on landing             |
-| **Page-flip navigation** | CSS `preserve-3d` flip overlay; auth and journal routes animate before content swap |
-| **Book spread UI**       | Left page = previous entry preview + TOC; right page = read or write mode           |
-| **Multiple journals**    | Create books with cover color, Lucide icon slug, and page theme                     |
-| **Rich entry metadata**  | Mood, weather, location, tags, word count, reading time                             |
-| **TipTap editor**        | Rich HTML content with placeholder, typography, character count                     |
-| **Autosave**             | Debounced PATCH while editing (2 s default via `useAutoSave`)                       |
-| **Offline-first**        | IndexedDB entry drafts + sync queue for PATCH/POST when offline                     |
-| **Optimistic UI**        | TanStack Query cache updates instantly; server reconciles on sync                   |
-| **Realtime SSE**         | `GET /api/journal/events` — multi-tab invalidation via Redis pub/sub                |
-| **Authentication**       | Email/password (bcrypt) + optional Google OAuth (NextAuth v5)                       |
-| **Demo login**           | Pre-filled test account dropdown on `/login` for quick exploration                  |
-| **AI writing assist**    | Groq → OpenRouter → Anthropic fallback; keys never exposed to browser               |
-| **API Status UI**        | `/api-status` — dependency health (DB, Redis, AI) + aggregate stats                 |
-| **API Docs UI**          | `/api-documentation` — OpenAPI-style catalog from `api-route-catalog.ts`            |
-| **Security**             | `proxy.ts` auth gate, security headers, dashboard `noindex`, Zod validation         |
-| **Responsive book**      | CSS `clamp()` tokens (`--page-w`, `--page-h`); mobile horizontal scroll             |
+| Feature                  | Description                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------ |
+| **3D book cover**        | Leather texture, gold shine, hover tilt, animated cover open on landing              |
+| **Page-flip navigation** | CSS `preserve-3d` flip overlay; auth and journal routes animate before content swap  |
+| **Book spread UI**       | Left page = previous entry preview + TOC; right page = read or write mode            |
+| **Multiple journals**    | Create books with cover color, Lucide icon slug, and page theme                      |
+| **Rich entry metadata**  | Mood, weather, location, tags, word count, reading time                              |
+| **TipTap editor**        | Rich HTML content with placeholder, typography, character count                      |
+| **Autosave**             | Debounced PATCH while editing (2 s default via `useAutoSave`)                        |
+| **Offline-first**        | IndexedDB entry drafts + sync queue for PATCH/POST when offline                      |
+| **Optimistic UI**        | TanStack Query cache updates instantly; server reconciles on sync                    |
+| **Realtime SSE**         | `GET /api/journal/events` — multi-tab invalidation via Redis pub/sub                 |
+| **Authentication**       | Email/password (bcrypt) + optional Google OAuth (NextAuth v5)                        |
+| **Demo login**           | Pre-filled test account dropdown on `/login` for quick exploration                   |
+| **AI writing assist**    | Groq → OpenRouter → Anthropic fallback; keys never exposed to browser                |
+| **Voice dictation**      | Mic button in write mode — Web Speech (free) → browser Whisper (private) → cloud STT |
+| **API Status UI**        | `/api-status` — dependency health (DB, Redis, AI) + aggregate stats                  |
+| **API Docs UI**          | `/api-documentation` — OpenAPI-style catalog from `api-route-catalog.ts`             |
+| **Security**             | `proxy.ts` auth gate, security headers, dashboard `noindex`, Zod validation          |
+| **Responsive book**      | CSS `clamp()` tokens (`--page-w`, `--page-h`); mobile horizontal scroll              |
 
 ---
 
@@ -310,6 +309,7 @@ All JSON responses follow a common envelope:
 | GET       | `/api/journal/events`     | ✅   | SSE stream — journal mutations (Redis pub/sub)                |
 | POST      | `/api/ai/assist`          | ✅   | Sync AI continuation (rate limited)                           |
 | POST      | `/api/ai/assist/stream`   | ✅   | SSE streaming AI continuation                                 |
+| POST      | `/api/voice/transcribe`   | ✅   | Phase 3 voice STT proxy (Deepgram / AssemblyAI; rate limited) |
 | GET       | `/api/health`             | —    | Simple health check for monitoring                            |
 | GET       | `/api/status`             | ✅   | Dependency health + platform/personal aggregate stats         |
 | GET       | `/api/openapi`            | ✅   | Machine-readable route catalog JSON                           |
@@ -398,15 +398,29 @@ With only these four variables, the app runs fully: email/password auth, shelf, 
 
 ### Optional (features degrade gracefully when unset)
 
-| Variable                                              | Feature                           | Behavior when missing                                   |
-| ----------------------------------------------------- | --------------------------------- | ------------------------------------------------------- |
-| `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET`           | Google OAuth login                | Google button hidden; email/password still works        |
-| `GOOGLE_ID` + `GOOGLE_SECRET`                         | Legacy aliases                    | Same as above                                           |
-| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | SSE realtime + AI rate limit      | In-memory rate limit fallback; no cross-tab SSE         |
-| `GROQ_API_KEY`                                        | AI assist (primary)               | Falls through to OpenRouter, then Anthropic             |
-| `OPENROUTER_API_KEY`                                  | AI assist (fallback)              | Falls through to Anthropic                              |
-| `ANTHROPIC_API_KEY`                                   | AI assist (legacy)                | Returns poetic placeholder text; UI still works         |
-| `SHOW_DEMO_LOGIN`                                     | Demo account dropdown on `/login` | Defaults to **on**; set `"false"` to hide in production |
+| Variable                                              | Feature                                  | Behavior when missing                                                                        |
+| ----------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET`           | Google OAuth login                       | Google button hidden; email/password still works                                             |
+| `GOOGLE_ID` + `GOOGLE_SECRET`                         | Legacy aliases                           | Same as above                                                                                |
+| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | SSE realtime + AI rate limit             | In-memory rate limit fallback; no cross-tab SSE                                              |
+| `GROQ_API_KEY`                                        | AI assist (primary)                      | Falls through to OpenRouter, then Anthropic                                                  |
+| `OPENROUTER_API_KEY`                                  | AI assist (fallback)                     | Falls through to Anthropic                                                                   |
+| `ANTHROPIC_API_KEY`                                   | AI assist (legacy)                       | Returns poetic placeholder text; UI still works                                              |
+| `SHOW_DEMO_LOGIN`                                     | Demo account dropdown on `/login`        | Defaults to **on**; set `"false"` to hide in production                                      |
+| `DEEPGRAM_API_KEY`                                    | Voice dictation Phase 3 (Deepgram)       | Phase 1/2 still work; set `NEXT_PUBLIC_VOICE_PROVIDER=server-deepgram` to expose in picker   |
+| `ASSEMBLYAI_API_KEY`                                  | Voice dictation Phase 3 (AssemblyAI)     | Phase 1/2 still work; set `NEXT_PUBLIC_VOICE_PROVIDER=server-assemblyai` to expose in picker |
+| `NEXT_PUBLIC_VOICE_PROVIDER`                          | Default cloud STT provider in mic picker | `server-deepgram` or `server-assemblyai`; server keys stay server-side                       |
+
+**Voice dictation works without any keys.** Phase 1 uses the browser Web Speech API (Chrome/Edge). Phase 2 runs Whisper on-device via `@huggingface/transformers` — PCM decode on main thread, ONNX ASR in a dedicated Web Worker (`whisper.worker.ts`), ~140 MB model download on first use. Phase 3 is optional cloud STT:
+
+| Provider       | Free tier                                                         | Sign up                                                                        |
+| -------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **Deepgram**   | $200 one-time credit, no credit card; expires 1 year after signup | [console.deepgram.com/signup](https://console.deepgram.com/signup)             |
+| **AssemblyAI** | $50 one-time credit, no credit card; credits do not expire        | [assemblyai.com/dashboard/signup](https://www.assemblyai.com/dashboard/signup) |
+
+After creating an API key, add it to `.env` and set the matching `NEXT_PUBLIC_VOICE_PROVIDER` so the mic button provider picker includes the cloud option.
+
+**Vercel / production:** If you only use Phase 1 (Web Speech) and Phase 2 (browser Whisper), omit `DEEPGRAM_API_KEY`, `ASSEMBLYAI_API_KEY`, and `NEXT_PUBLIC_VOICE_PROVIDER` entirely — no empty placeholders needed.
 
 ### Where to set variables
 
@@ -508,7 +522,7 @@ Run `npm run db:push` again. **Docker runs Postgres only** — the Next.js app r
 | Lint             | `npm run lint`        | ESLint check                           |
 | Lint fix         | `npm run lint:fix`    | Auto-fix lint issues                   |
 | Typecheck        | `npm run typecheck`   | `tsc --noEmit`                         |
-| Unit tests       | `npm run test`        | Vitest (96 tests)                      |
+| Unit tests       | `npm run test`        | Vitest (120 tests)                     |
 | E2E tests        | `npm run test:e2e`    | Playwright (optional; needs seed)      |
 | Prisma generate  | `npm run db:generate` | Regenerate client after schema changes |
 | Push schema      | `npm run db:push`     | Sync schema to DB (dev-friendly)       |

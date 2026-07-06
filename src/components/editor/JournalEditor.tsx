@@ -6,6 +6,12 @@
  * Client-only (`"use client"`). Extensions: StarterKit, Placeholder, Typography,
  * CharacterCount. Outputs HTML → `JournalEntry.content`; read mode uses `.journal-prose`.
  * Controlled by RightPage/BookSpread via `content` + `onChange` props.
+ *
+ * Wave 44 — forwardRef + JournalEditorHandle:
+ *   Exposes `insertTextAtCursor(text)` via useImperativeHandle so voice dictation
+ *   (VoiceDictationButton / useVoiceInput) can inject transcribed text at the current
+ *   TipTap caret position. This is the only change introduced for voice dictation in
+ *   this file — no existing behaviour is altered.
  */
 "use client";
 
@@ -18,7 +24,13 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Typography from "@tiptap/extension-typography";
 import CharacterCount from "@tiptap/extension-character-count";
-import { useEffect } from "react";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
+
+/** Public imperative handle exposed to parent via ref (e.g. RightPage for voice dictation) */
+export interface JournalEditorHandle {
+  /** Insert text at the current TipTap cursor position */
+  insertTextAtCursor: (text: string) => void;
+}
 
 type JournalEditorProps = {
   content: string;
@@ -28,13 +40,17 @@ type JournalEditorProps = {
   autoFocus?: boolean;
 };
 
-export function JournalEditor({
+export const JournalEditor = forwardRef<JournalEditorHandle, JournalEditorProps>(
+  function JournalEditor(
+  {
   content,
   onChange,
   placeholder = "Write what's on your mind today…",
   editable = true,
   autoFocus = false,
-}: JournalEditorProps) {
+}: JournalEditorProps,
+  ref,
+) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -73,6 +89,19 @@ export function JournalEditor({
     if (editor) editor.setEditable(editable);
   }, [editable, editor]);
 
+  // Expose insertTextAtCursor so voice dictation can inject transcript text
+  useImperativeHandle(
+    ref,
+    () => ({
+      insertTextAtCursor: (text: string) => {
+        if (!editor) return;
+        // Voice dictation — keep cursor visible in the editor scroll port
+        editor.chain().focus().insertContent(`${text} `).scrollIntoView().run();
+      },
+    }),
+    [editor],
+  );
+
   if (!editor) return null;
 
   return (
@@ -80,4 +109,4 @@ export function JournalEditor({
       <EditorContent editor={editor} className="flex-1 overflow-x-hidden overflow-y-auto" />
     </div>
   );
-}
+});

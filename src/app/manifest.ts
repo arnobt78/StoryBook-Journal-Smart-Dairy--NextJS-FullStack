@@ -7,7 +7,6 @@ import {
   SITE_DESCRIPTION,
   SITE_ICON,
   SITE_NAME,
-  SITE_DEMO_URL,
 } from "@/lib/site-metadata";
 
 export default function manifest(): MetadataRoute.Manifest {
@@ -17,7 +16,7 @@ export default function manifest(): MetadataRoute.Manifest {
     description: SITE_DESCRIPTION,
     start_url: "/",
     scope: "/",
-    id: SITE_DEMO_URL,
+    id: "/",
     display: "standalone",
     orientation: "portrait",
     background_color: "#1a0c05",
