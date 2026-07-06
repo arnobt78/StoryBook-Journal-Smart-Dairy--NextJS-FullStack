@@ -8,7 +8,7 @@
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-docs-wave43-2026-07-06 |
-| **Last commit** | Wave 43: SEO + walkthrough comments + README (pending) |
+| **Last commit** | `1fa389f` (Wave 43: SEO + walkthrough comments + README) |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
