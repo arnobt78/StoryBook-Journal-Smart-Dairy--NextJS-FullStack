@@ -155,7 +155,8 @@ Prisma models (`prisma/schema.prisma`):
 - **Login demo picker (Wave 29–30):** `.auth-demo-trigger` 3-zone layout + chevron rotate; selected state shows Robohash + `TEST_ACCOUNT_DISPLAY_NAME` via `isDemoAccountSelected()`.
 - **Dashboard shell (Wave 28):** `.dashboard-shell` nav outside `.dashboard-scroll`; `scrollbar-gutter: stable`.
 - **Shelf tooltips (Wave 21):** `BookShelf` spine hover shows title + description via `ui/tooltip.tsx`; `TooltipProvider` in `DashboardClientShell`.
-- **Journal nav polish (Wave 22):** `JournalBottomNav` — `FilePlus`, shelf spotlight, per-button hover + tooltips; `.journal-paper-action-btn` darker hover on read footer.
+- **Journal nav polish (Wave 22):** `JournalBottomNav` — shelf spotlight, per-button hover + tooltips; `.journal-paper-action-btn` darker hover on read footer.
+- **Wave 41 (2026-07-06):** Auth `StoryBook` → `/`; demo-picker fixed avatar slots; dashboard nav brand spotlight + profile hover glow; bottom nav **New journal** (`BookPlus`, still `onNewEntry`); create modal title **Create Journal**.
 - **Confirm stacking (Wave 22):** `ConfirmDialog` `priority` prop; close `BookEditorModal` before delete confirm; paper dialog footer band removed.
 - **Nav defer confirm (Wave 23):** `pendingDeleteBookConfirm` / `pendingDeleteTarget` — confirm opens after editor unmounts (fixes Radix z-index race).
 - **Nav layout (Wave 23):** `.journal-bottom-nav` flex-wrap + `max-width`; `.journal-nav-actions` groups New/Edit/Remove; tooltips on shelf + arrows only.
@@ -625,4 +626,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-05 — C4 Wave 40b; lint/typecheck/90 Vitest/build PASS.*
+*Last reviewed: 2026-07-06 — C4 Wave 41; lint/typecheck/90 Vitest/build PASS.*

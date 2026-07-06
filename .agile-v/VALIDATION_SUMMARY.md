@@ -3,19 +3,19 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-wave32-2026-07-05 |
-| **Status** | Stage 4 static complete; Waves 1–28; Gate 2 pending e2e |
+| **Revision** | C4-ui-wave40b-2026-07-05 |
+| **Status** | Stage 4 static complete; Waves 1–40b; Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
-| **Last Updated** | 2026-07-05T09:20:00Z |
-| **Verifier** | build-agent-js (Wave 27–28) |
+| **Last Updated** | 2026-07-06T10:06:00Z |
+| **Verifier** | agile-v-core (session activation re-verify) |
 
 ## Evidence Summary
 
 ```
 Scope: C4 REQ-0029–0031 + regression REQ-0002, REQ-0003, REQ-0007 | Traceability: 31 REQs, ART-0098
-Findings: PASS static/unit/build through Wave 26 | FAIL 0 | NOT RUN e2e in CI
-Log: 2026-07-04 | build-agent-js | Wave 26 | 67 Vitest PASS
+Findings: PASS static/unit through Wave 40b | FAIL 0 | NOT RUN e2e in CI
+Log: 2026-07-06 | agile-v-core | session activation | 90 Vitest PASS
 ```
 
 ## EvalGate (Gate 2)
@@ -43,14 +43,14 @@ Gate 2 NOT READY — REQ-0021 full e2e in CI; REQ-0009 prod demo gate
 | TC-0042 | REQ-0029–0030 | code audit | **PASS** Wave 26: LeftPage/RightPage `visibility` anti-flash gate mirrors AuthBookShell; `entryStaggerKey` remount replays stagger on both pages post-flip |
 | TC-0043 | REQ-0002, REQ-0003 | unit + code audit | **PASS** Wave 26: `journal-entry-url.ts` (9 Vitest); `?entry=` SSR resolution + `history.replaceState` mirror persists focused entry across hard refresh |
 
-## Tooling (2026-07-04, Wave 26)
+## Tooling (2026-07-06, session activation)
 
 | Check | Result |
 |-------|--------|
 | `npm run lint` | PASS |
 | `npm run typecheck` | PASS |
-| `npm run test` | PASS (78 Vitest, 2026-07-05 Wave 31–32) |
-| `npm run build` | PASS (2026-07-04, Turbopack — re-run this pass, all routes compile) |
+| `npm run test` | PASS (**90** Vitest) |
+| `npm run build` | PASS (2026-07-05 Wave 40b — re-run before Gate 2) |
 
 ## Prior cycles (archived summary)
 

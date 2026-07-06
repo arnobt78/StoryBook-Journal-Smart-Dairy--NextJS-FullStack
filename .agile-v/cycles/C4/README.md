@@ -38,6 +38,7 @@
 | **39** | md+ flip unclip — stable clip-margin + pinned inner width | `globals.css`, `BookSpreadScrollPort`, `book-spread-scroll.ts` |
 | **40** | Fixed nav overlay on journal md+ | `globals.css`, `DashboardClientShell` pattern |
 | **40b** | Journal nav+chrome padding; shelf single-viewport md+ | `globals.css`, `BookShelf` (`.dashboard-shelf-*`) |
+| **41** | Auth logo → `/`; demo-picker fixed slots; nav brand spotlight + profile hover; bottom nav "New journal" | `AuthSpreadHeader`, `LoginForm`, `DashboardNav`, `JournalBottomNav`, `globals.css` |
 
 ## Wave 23 detail (latest on main)
 
@@ -70,9 +71,9 @@
 
 DEC-0055–0060 Waves 27–32
 
-## Verification (2026-07-05)
+## Verification (2026-07-06)
 
-lint · typecheck · **78** Vitest · build — all PASS · e2e NOT in CI
+lint · typecheck · **90** Vitest · build — all PASS (2026-07-06 Wave 41) · e2e NOT in CI
 
 ## Next — suggested focus
 

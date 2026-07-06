@@ -192,16 +192,18 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
               onClick={() => setShowTestMenu((v) => !v)}
               style={authDemoTriggerStyle}
             >
-              {demoSelected ? (
-                <AvatarRing
-                  seed={TEST_EMAIL}
-                  size={18}
-                  unoptimized
-                  className="auth-demo-trigger__avatar"
-                />
-              ) : (
-                <Users size={16} aria-hidden className="auth-demo-trigger__icon" />
-              )}
+              <span className="auth-demo-trigger__lead">
+                {demoSelected ? (
+                  <AvatarRing
+                    seed={TEST_EMAIL}
+                    size={18}
+                    unoptimized
+                    className="auth-demo-trigger__avatar"
+                  />
+                ) : (
+                  <Users size={16} aria-hidden className="auth-demo-trigger__icon" />
+                )}
+              </span>
               {demoSelected ? (
                 <span className="auth-demo-trigger__label">{TEST_ACCOUNT_DISPLAY_NAME}</span>
               ) : (
@@ -239,7 +241,9 @@ export function LoginForm({ googleEnabled = false, demoLoginEnabled = false }: L
                   }}
                 >
                   <DemoAccountMenuRow onClick={fillTestCredentials} withBorderBottom>
-                    <AvatarRing seed={TEST_EMAIL} size={28} unoptimized />
+                    <span className="demo-menu-row__avatar-slot">
+                      <AvatarRing seed={TEST_EMAIL} size={28} unoptimized />
+                    </span>
                     <span className="demo-menu-row__inline" style={{ fontSize: "12px" }}>
                       <strong>{TEST_ACCOUNT_DISPLAY_NAME}</strong>
                       <span className="demo-menu-row__sep" aria-hidden>

@@ -22,3 +22,9 @@ export const WRITE_SAVE_LABEL_FULL = "Save";
 
 /** Write-mode save while persisting — full label on md+ */
 export const WRITE_SAVING_LABEL_FULL = "Saving…";
+
+/** Bottom nav — new page action (label matches Edit/Remove journal trio) */
+export const NAV_NEW_JOURNAL_LABEL = "New journal";
+
+/** Bottom nav — mobile tooltip for new journal pill */
+export const NAV_NEW_JOURNAL_TOOLTIP = "New journal";

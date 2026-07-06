@@ -97,12 +97,13 @@ npm run test:e2e:install && npm run dev && npm run test:e2e
 - **REQ-0019** — Pino/Sentry observability
 - **REQ-0022** — axe accessibility audit
 
-## Current resume (2026-07-05)
+## Current resume (2026-07-06)
 
-- **main:** `72313b4` (Waves 1–32)
+- **main:** `e92c28a` (Waves 1–40b) · HEAD docs: `0dff632`
 - **Stage 4** IN_PROGRESS · **eval_gate_status:** CONDITIONAL
-- **Verify baseline:** 78 Vitest · lint · typecheck · build PASS
-- **Next work:** only with parent REQ-XXXX via Infinity Loop
+- **Verify baseline:** **90** Vitest · lint · typecheck PASS (confirmed 2026-07-06)
+- **No pending CHECKPOINTS** — proceed on user instruction with parent REQ-XXXX
+- **Next work:** REQ-0021 e2e CI · manual QA matrix · any new feature via Infinity Loop
 
 ## Evidence Summary template
 

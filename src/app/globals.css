@@ -1420,6 +1420,21 @@ body {
   flex: 1;
 }
 
+/* Fixed avatar column — robohash paint must not shift name/email text */
+.demo-menu-row__avatar-slot {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-menu-row__avatar-slot .leather-avatar-ring {
+  box-sizing: border-box;
+}
+
 .demo-menu-row__sep {
   opacity: 0.45;
   font-size: 11px;
@@ -1454,6 +1469,21 @@ body {
   flex-shrink: 0;
   width: 18px;
   opacity: 0.6;
+}
+
+/* Fixed lead column — Users icon vs AvatarRing must not shift centered label */
+.auth-demo-trigger__lead {
+  width: 18px;
+  min-width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-demo-trigger__lead .leather-avatar-ring {
+  box-sizing: border-box;
 }
 
 .auth-demo-trigger__label {
@@ -2450,6 +2480,18 @@ body {
   white-space: nowrap;
 }
 
+/* Auth header — StoryBook link hover (login + register) */
+.auth-spread-header-wrap .book-spread-header-title:hover {
+  filter: brightness(1.08);
+  transition: filter 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-spread-header-wrap .book-spread-header-title:hover {
+    transition: none;
+  }
+}
+
 @media (max-width: 767px) {
   .book-spread-header-row {
     flex-direction: row;
@@ -3090,8 +3132,30 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
 
 /* Nav logo + StoryBook — amber spotlight (filter on link wrapper, not preserve-3d child) */
 .dashboard-nav-brand {
+  position: relative;
   filter: drop-shadow(0 0 10px rgba(255, 160, 60, 0.35))
     drop-shadow(0 0 22px rgba(255, 140, 40, 0.18));
+}
+
+.dashboard-nav-brand-spotlight {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 160px;
+  height: 52px;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse at 50% 55%,
+    rgba(255, 160, 60, 0.32) 0%,
+    transparent 68%
+  );
+}
+
+.dashboard-nav-brand > *:not(.dashboard-nav-brand-spotlight) {
+  position: relative;
+  z-index: 1;
 }
 
 /* Wave 38/40 — transparent on all routes; no backdrop-filter (frost clips spotlight seam) */
@@ -3107,6 +3171,13 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   box-shadow:
     0 0 18px rgba(255, 160, 60, 0.32),
     0 0 36px rgba(139, 69, 19, 0.22);
+  transition: box-shadow 0.2s;
+}
+
+.dashboard-nav-avatar-glow:hover:not(:disabled) {
+  box-shadow:
+    0 0 22px rgba(255, 160, 60, 0.45),
+    0 0 40px rgba(255, 140, 40, 0.28);
 }
 
 /* Per-spine color halo — same splash range as .dashboard-new-journal-spotlight */

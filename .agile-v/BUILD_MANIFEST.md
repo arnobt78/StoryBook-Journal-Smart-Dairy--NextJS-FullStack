@@ -102,6 +102,7 @@
 | ART-0096 | C4 | lib | `journal-interaction-styles.ts` + `.journal-nav-*` CSS | REQ-0029–0030 | implemented |
 | ART-0097 | C4 | component | Wave 23 defer confirm in `BookSpread` + `BookShelf` | REQ-0029–0030 | implemented |
 | ART-0098 | C4 | styles | `globals.css` nav wrap + shelf-slot glow (Wave 23) | REQ-0029–0030 | implemented |
+| ART-0099 | C4 | ui-wave | Wave 41 — AuthSpreadHeader link, demo slots, nav glow, nav labels | REQ-0029–0030 | implemented |
 
 ## Planned artifacts (backlog)
 

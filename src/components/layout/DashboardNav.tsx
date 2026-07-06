@@ -74,6 +74,7 @@ export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps)
           gap: "10px",
         }}
       >
+        <span aria-hidden className="dashboard-nav-brand-spotlight" />
         <Image
           src="/dairy-1.svg"
           alt=""

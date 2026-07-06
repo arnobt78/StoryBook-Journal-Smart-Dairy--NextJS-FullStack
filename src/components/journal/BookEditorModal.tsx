@@ -72,7 +72,7 @@ function BookEditorForm({
   );
 
   const dialogTitle =
-    mode === "create" ? "Start a new journal" : `Edit ${form.title || "journal"}`;
+    mode === "create" ? "Create Journal" : `Edit ${form.title || "journal"}`;
   const dialogSubtitle =
     mode === "create"
       ? "Name it, pick a cover, and choose how your pages will feel."

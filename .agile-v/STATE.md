@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-ui-wave40b-2026-07-05 |
-| **Last commit** | `e92c28a` (Waves 33–40b: mobile scroll + flip unclip + viewport fit) |
+| **Revision** | C4-ui-wave41-2026-07-06 |
+| **Last commit** | pending (Wave 41) |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,16 +16,17 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-07-05T17:30:00Z |
-| **Updated By** | build-agent-js (Wave 40b layout + flip unclip audit) |
+| **Last Updated** | 2026-07-06T10:24:00Z |
+| **Updated By** | build-agent-js (Wave 41 auth nav + demo picker + bottom nav labels) |
 
 ## Resume (2026-07-06)
 
-1. Read this file → `cycles/C4/README.md` → latest `DEC-0071`.
-2. **Code baseline:** Waves 33–40b committed (md+ flip unclip, fixed nav overlay, journal/shelf viewport fit).
-3. **Next backlog:** REQ-0021 e2e CI; extended manual QA (14" laptop, mobile 390px, flip stress).
-4. **Constraints:** `notifyJournalCacheUpdated` only; `force-dynamic`; SSR in `page.tsx`.
-5. Verify: `npm run lint && npm run typecheck && npm run test` (**90** Vitest) + `npm run build`.
+1. Read this file → `PLAYBOOK.md` → `cycles/C4/README.md` → latest `DEC-0072`.
+2. **Code baseline:** `e92c28a` — Waves 33–40b (mobile X-scroll, md+ flip unclip, fixed nav overlay, journal/shelf viewport fit).
+3. **Verify (confirmed this session):** lint · typecheck · **90** Vitest PASS.
+4. **Next backlog:** REQ-0021 e2e CI; extended manual QA (14" laptop, mobile 390px, flip stress).
+5. **Constraints:** `notifyJournalCacheUpdated` only; `force-dynamic`; SSR in `page.tsx`.
+6. **Skills load order:** 01 core → 02 pipeline → 13 build-agent-js → 18 → 19 → 20.
 
 ## Stage checklist
 
@@ -48,6 +49,7 @@
 | **39** | **md+ flip unclip — stable overflow clip-margin + pinned inner width** | this commit |
 | **40** | **Fixed nav overlay on journal md+; dashboard-scroll 100vh clip** | this commit |
 | **40b** | **Journal nav+chrome padding; shelf single-viewport md+** | this commit |
+| **41** | **Auth logo link, demo-picker shift fix, nav glow, New journal label** | this session |
 
 ## Infinity Loop
 

@@ -8,9 +8,9 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import {
+  BookPlus,
   ChevronLeft,
   ChevronRight,
-  FilePlus,
   Pencil,
   Trash2,
 } from "lucide-react";
@@ -23,6 +23,10 @@ import {
 import { useMinMd } from "@/hooks/useMinMd";
 import { DASHBOARD_SHELL_PAD_CLASS } from "@/lib/dashboard-styles";
 import { JOURNAL_INTERACTION_CLASS as C } from "@/lib/journal-interaction-styles";
+import {
+  NAV_NEW_JOURNAL_LABEL,
+  NAV_NEW_JOURNAL_TOOLTIP,
+} from "@/lib/journal-responsive-labels";
 
 export type JournalBottomNavProps = {
   currentIdx: number;
@@ -113,17 +117,17 @@ export function JournalBottomNav({
         <div className="journal-nav-divider journal-nav-divider--actions" aria-hidden />
 
         <div className="journal-nav-actions">
-          <NavTooltip label="New entry" enabled={!isMd}>
+          <NavTooltip label={NAV_NEW_JOURNAL_TOOLTIP} enabled={!isMd}>
             <RippleButton
               type="button"
-              icon={FilePlus}
+              icon={BookPlus}
               iconSize={16}
               onClick={onNewEntry}
               disabled={navBusy}
-              aria-label="New entry"
+              aria-label={NAV_NEW_JOURNAL_LABEL}
               className={`${C.navPill} journal-nav-pill-btn--new journal-nav-action-btn journal-nav-touch-btn`}
             >
-              <span className="journal-nav-pill-text">New Entry</span>
+              <span className="journal-nav-pill-text">{NAV_NEW_JOURNAL_LABEL}</span>
             </RippleButton>
           </NavTooltip>
 

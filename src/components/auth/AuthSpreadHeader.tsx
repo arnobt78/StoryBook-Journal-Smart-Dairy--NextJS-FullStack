@@ -7,6 +7,7 @@
  * Positioning driven by `.auth-route-viewport` rules in globals.css.
  */
 import Image from "next/image";
+import Link from "next/link";
 import { RotatingTypewriterText } from "@/components/animations/RotatingTypewriterText";
 import {
   BOOK_BRAND_DESC_INLINE_STYLE,
@@ -43,14 +44,20 @@ export function AuthSpreadHeader() {
               priority
             />
           </span>
-          <span
+          <Link
+            href="/"
             {...authStaggerRowProps(1, {
               className: "book-spread-header-title",
-              style: BOOK_BRAND_GOLD_TEXT_STYLE,
+              style: {
+                ...BOOK_BRAND_GOLD_TEXT_STYLE,
+                textDecoration: "none",
+                cursor: "pointer",
+              },
             })}
+            aria-label="StoryBook — return to home"
           >
             StoryBook
-          </span>
+          </Link>
         </div>
         <span
           {...authStaggerRowProps(1, {

@@ -64,3 +64,5 @@
 | 2026-07-05T16:45:00Z | ui-wave40 | build-agent-js | Fixed nav overlay journal md+; dashboard-scroll 100vh clip | REQ-0029–0030 | DEC-0069 |
 | 2026-07-05T17:20:00Z | ui-wave40b | build-agent-js | Journal nav+chrome padding; shelf single-viewport md+; debug removed | REQ-0029–0030 | DEC-0070 |
 | 2026-07-05T17:30:00Z | verify | red-team-verifier | Full static audit 90 Vitest + lint/typecheck/build PASS; docs sync | REQ-0024 | DEC-0071 |
+| 2026-07-06T10:06:00Z | session-activate | agile-v-core | AQMS resume C4 Stage 4; re-verify 90 Vitest + lint + typecheck PASS; STATE/PLAYBOOK/EVAL sync | REQ-0024 | DEC-0072 |
+| 2026-07-06T10:24:00Z | ui-wave41 | build-agent-js | Auth nav link, demo-picker shift fix, dashboard glow, bottom nav labels; 90 Vitest PASS | REQ-0029–0030 | DEC-0073 |
