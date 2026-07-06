@@ -8,6 +8,8 @@
  */
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Lightweight JSON health probe for the profile menu “API Status” link.
  * Safe to call unauthenticated; returns 200 when the App Router responds.

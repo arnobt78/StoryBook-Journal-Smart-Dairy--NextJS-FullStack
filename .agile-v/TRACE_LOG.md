@@ -66,3 +66,4 @@
 | 2026-07-05T17:30:00Z | verify | red-team-verifier | Full static audit 90 Vitest + lint/typecheck/build PASS; docs sync | REQ-0024 | DEC-0071 |
 | 2026-07-06T10:06:00Z | session-activate | agile-v-core | AQMS resume C4 Stage 4; re-verify 90 Vitest + lint + typecheck PASS; STATE/PLAYBOOK/EVAL sync | REQ-0024 | DEC-0072 |
 | 2026-07-06T10:24:00Z | ui-wave41 | build-agent-js | Auth nav link, demo-picker shift fix, dashboard glow, bottom nav labels; 90 Vitest PASS | REQ-0029–0030 | DEC-0073 |
+| 2026-07-06T11:15:00Z | ui-wave42 | build-agent-js | API status + docs UI; 96 Vitest PASS | REQ-0032 | DEC-0075 |

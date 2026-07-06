@@ -24,6 +24,10 @@ describe("notifyJournalCacheUpdated", () => {
       queryKey: ["journal"],
       refetchType: "active",
     });
+    expect(invalidateQueries).toHaveBeenCalledWith({
+      queryKey: ["api", "status"],
+      refetchType: "active",
+    });
   });
 
   it("marks stale only when offline", async () => {
@@ -35,6 +39,10 @@ describe("notifyJournalCacheUpdated", () => {
     await notifyJournalCacheUpdated(qc);
     expect(invalidateQueries).toHaveBeenCalledWith({
       queryKey: ["journal"],
+      refetchType: "none",
+    });
+    expect(invalidateQueries).toHaveBeenCalledWith({
+      queryKey: ["api", "status"],
       refetchType: "none",
     });
   });

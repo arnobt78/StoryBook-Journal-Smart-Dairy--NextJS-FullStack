@@ -3,19 +3,19 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-wave40b-2026-07-05 |
-| **Status** | Stage 4 static complete; Waves 1–40b; Gate 2 pending e2e |
+| **Revision** | C4-ui-wave42-2026-07-06 |
+| **Status** | Stage 4 static complete; Waves 1–42; Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
-| **Last Updated** | 2026-07-06T10:06:00Z |
-| **Verifier** | agile-v-core (session activation re-verify) |
+| **Last Updated** | 2026-07-06T10:46:00Z |
+| **Verifier** | agile-v-core (session activation 2026-07-06) |
 
 ## Evidence Summary
 
 ```
-Scope: C4 REQ-0029–0031 + regression REQ-0002, REQ-0003, REQ-0007 | Traceability: 31 REQs, ART-0098
-Findings: PASS static/unit through Wave 40b | FAIL 0 | NOT RUN e2e in CI
-Log: 2026-07-06 | agile-v-core | session activation | 90 Vitest PASS
+Scope: C4 REQ-0029–0032 + regression REQ-0002, REQ-0003, REQ-0007 | Traceability: 32 REQs, ART-0107
+Findings: PASS static/unit through Wave 42 | FAIL 0 | NOT RUN e2e in CI
+Log: 2026-07-06 | build-agent-js | Wave 42 | 96 Vitest PASS
 ```
 
 ## EvalGate (Gate 2)

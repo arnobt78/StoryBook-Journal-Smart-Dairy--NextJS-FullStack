@@ -308,3 +308,12 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 - **Artifacts:** ART-0075 JournalEntryTags, ART-0076 JournalEntryTagsEditor, ART-0077 journal-tags.ts, RightPage/BookSpread/useAutoSave updates
 - **Commits:** `5b515b9`, `8354849`, `8f88e90`
 - **Linked REQ:** REQ-0003 (entry CRUD field)
+
+### REQ-0032 — API status and documentation UI
+
+- **Status:** implemented · `approved [C4]`
+- **Requirement:** Authenticated dashboard pages SHALL replace raw JSON nav links with glassmorphic UI for live API status (`/api-status`) and OpenAPI-style route documentation (`/api-documentation`). Platform aggregates (user/journal/entry counts, recently active proxy) visible to all logged-in users — no PII. Dependencies: PostgreSQL, Redis, AI env flags only.
+- **Constraint:** Keep `/api/health` and `/api/books` JSON routes unchanged; new `GET /api/status` and `GET /api/openapi` auth-gated; `force-dynamic` on pages and new routes; invalidate `apiStatus` query on journal CRUD via `notifyJournalCacheUpdated`.
+- **Verification Criteria:** TC-0044 — catalog completeness; TC-0045 — status payload shape; manual nav links to UI pages.
+- **Artifacts:** ART-0100–0107 (see BUILD_MANIFEST)
+- **Linked REQ:** REQ-0006 (health), REQ-0019 (observability surface)

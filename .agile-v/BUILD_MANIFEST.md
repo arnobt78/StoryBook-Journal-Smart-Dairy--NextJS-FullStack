@@ -103,6 +103,14 @@
 | ART-0097 | C4 | component | Wave 23 defer confirm in `BookSpread` + `BookShelf` | REQ-0029–0030 | implemented |
 | ART-0098 | C4 | styles | `globals.css` nav wrap + shelf-slot glow (Wave 23) | REQ-0029–0030 | implemented |
 | ART-0099 | C4 | ui-wave | Wave 41 — AuthSpreadHeader link, demo slots, nav glow, nav labels | REQ-0029–0030 | implemented |
+| ART-0100 | C4 | api | `src/app/api/status/route.ts` | REQ-0032 | implemented |
+| ART-0101 | C4 | api | `src/app/api/openapi/route.ts` | REQ-0032 | implemented |
+| ART-0102 | C4 | lib | `api-status-server.ts`, `api-route-catalog.ts`, `api-status-client.ts` | REQ-0032 | implemented |
+| ART-0103 | C4 | page | `src/app/(dashboard)/api-status/page.tsx` + ApiStatusClient | REQ-0032 | implemented |
+| ART-0104 | C4 | page | `src/app/(dashboard)/api-documentation/page.tsx` + ApiDocumentationClient | REQ-0032 | implemented |
+| ART-0105 | C4 | ui | `card.tsx`, `badge.tsx`, `tabs.tsx` + `.api-status-*` CSS | REQ-0032 | implemented |
+| ART-0106 | C4 | lib | `query-keys` apiStatus/apiOpenApi + journal-cache-notify extension | REQ-0032 | implemented |
+| ART-0107 | C4 | component | DashboardNav links → `/api-status`, `/api-documentation` | REQ-0032 | implemented |
 
 ## Planned artifacts (backlog)
 

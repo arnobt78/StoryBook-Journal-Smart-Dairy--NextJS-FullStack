@@ -15,10 +15,18 @@ import { queryKeys } from "@/lib/query-keys";
 /** Invalidate journal subtree — awaitable for flows that need refetch-after. */
 export function notifyJournalCacheUpdated(queryClient: QueryClient): Promise<void> {
   const offline = typeof navigator !== "undefined" && !navigator.onLine;
-  return queryClient.invalidateQueries({
-    queryKey: queryKeys.journalSubtree(),
-    refetchType: offline ? "none" : "active",
-  });
+  const refetchType = offline ? "none" : "active";
+  return Promise.all([
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.journalSubtree(),
+      refetchType,
+    }),
+    /* API status page personal/platform counts refresh after journal CRUD */
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.apiStatus(),
+      refetchType,
+    }),
+  ]).then(() => undefined);
 }
 
 /**

@@ -15,4 +15,9 @@ export const queryKeys = {
   booksList: () => ["journal", "books"] as const,
   /** GET /api/books/[bookId] — single book with entries (tags parsed) */
   bookDetail: (bookId: string) => ["journal", "book", bookId] as const,
+
+  /** GET /api/status — dependency health + aggregate stats */
+  apiStatus: () => ["api", "status"] as const,
+  /** GET /api/openapi — route catalog for documentation UI */
+  apiOpenApi: () => ["api", "openapi"] as const,
 };

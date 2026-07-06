@@ -35,7 +35,7 @@
 
 **C4 active REQs:** REQ-0029–0031 (UI polish, leather glass, entry tags, journal dialog)
 
-**Last wave:** 40b — md+ flip unclip, fixed nav overlay, journal/shelf viewport fit
+**Last wave:** 42 — `/api-status`, `/api-documentation`, GET `/api/status`, GET `/api/openapi`
 
 ## Traceability
 

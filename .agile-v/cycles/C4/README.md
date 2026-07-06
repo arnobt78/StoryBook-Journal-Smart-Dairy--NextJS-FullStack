@@ -1,10 +1,10 @@
 # Cycle C4 — UI Polish + Entry Tags (active)
 
-**Status:** Stage 4 Verification — static PASS · Waves **1–40b**
+**Status:** Stage 4 Verification — static PASS · Waves **1–42**
 
 | Field | Value |
 |-------|-------|
-| Commits | through `72313b4` + Waves 33–40b (this session) |
+| Commits | through Wave 42 (this commit) |
 | Unit tests | **90** Vitest PASS |
 
 ## Core deliverables (REQ)
@@ -39,6 +39,7 @@
 | **40** | Fixed nav overlay on journal md+ | `globals.css`, `DashboardClientShell` pattern |
 | **40b** | Journal nav+chrome padding; shelf single-viewport md+ | `globals.css`, `BookShelf` (`.dashboard-shelf-*`) |
 | **41** | Auth logo → `/`; demo-picker fixed slots; nav brand spotlight + profile hover; bottom nav "New journal" | `AuthSpreadHeader`, `LoginForm`, `DashboardNav`, `JournalBottomNav`, `globals.css` |
+| **42** | API status + documentation UI — `/api-status`, `/api-documentation`, GET `/api/status`, `/api/openapi` | `api-status-server.ts`, `api-route-catalog.ts`, `ApiStatusClient`, `ApiDocumentationClient`, `card/badge/tabs` |
 
 ## Wave 23 detail (latest on main)
 
@@ -73,7 +74,7 @@ DEC-0055–0060 Waves 27–32
 
 ## Verification (2026-07-06)
 
-lint · typecheck · **90** Vitest · build — all PASS (2026-07-06 Wave 41) · e2e NOT in CI
+lint · typecheck · **96** Vitest · build — all PASS (2026-07-06 Wave 42) · e2e NOT in CI
 
 ## Next — suggested focus
 

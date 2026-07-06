@@ -15,6 +15,8 @@ export const LEATHER_GLASS_CLASS = {
   input: "leather-glass-input",
   avatarRing: "leather-avatar-ring",
   navPill: "leather-glass-nav-pill",
+  /** API status / documentation dark glass cards */
+  apiCard: "api-status-card",
 } as const;
 
 export const LEATHER_GLASS: Record<

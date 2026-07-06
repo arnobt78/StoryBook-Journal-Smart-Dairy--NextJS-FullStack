@@ -213,7 +213,11 @@ API routes consistently call `await auth()` and check `session?.user?.id` before
 | POST | `/api/ai/assist/stream` | SSE AI assist stream |
 | GET | `/api/search` | Entry search (title/content, scoped) |
 | GET | `/api/journal/events` | SSE journal mutation stream |
-| GET | `/api/health` | Health check |
+| GET | `/api/health` | Public liveness probe |
+| GET | `/api/status` | Auth — DB/Redis/AI deps + platform/personal aggregate counts |
+| GET | `/api/openapi` | Auth — OpenAPI-shaped route catalog JSON |
+| GET | `/api-documentation` | Auth UI — Swagger-style docs (Overview / Endpoints / Schemas) |
+| GET | `/api-status` | Auth UI — live status dashboard |
 
 ---
 
@@ -230,6 +234,7 @@ API routes consistently call `await auth()` and check `session?.user?.id` before
 | Other-tab mutation | SSE → `useJournalRealtime` → `notifyJournalCacheUpdated` |
 | Server write | `afterJournalMutation` → Redis publish (fire-and-forget) |
 | All client CRUD | **Only** `notifyJournalCacheUpdated` in `journal-cache-notify.ts` |
+| API status page | Same helper invalidates `queryKeys.apiStatus()` — personal counts refresh on CRUD |
 
 SSR: dashboard/journal pages fetch server-side; client `useQuery` uses SSR `initialData` with `staleTime: 60_000`.
 

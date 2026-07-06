@@ -99,9 +99,9 @@ npm run test:e2e:install && npm run dev && npm run test:e2e
 
 ## Current resume (2026-07-06)
 
-- **main:** `e92c28a` (Waves 1–40b) · HEAD docs: `0dff632`
+- **main:** Wave 42 (API status + docs) · **96** Vitest · lint · typecheck PASS
 - **Stage 4** IN_PROGRESS · **eval_gate_status:** CONDITIONAL
-- **Verify baseline:** **90** Vitest · lint · typecheck PASS (confirmed 2026-07-06)
+- **Verify baseline:** **90** Vitest · lint · typecheck PASS (confirmed 2026-07-06 session activation)
 - **No pending CHECKPOINTS** — proceed on user instruction with parent REQ-XXXX
 - **Next work:** REQ-0021 e2e CI · manual QA matrix · any new feature via Infinity Loop
 

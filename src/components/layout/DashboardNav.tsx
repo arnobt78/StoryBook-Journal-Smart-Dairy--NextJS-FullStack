@@ -144,10 +144,7 @@ export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps)
 
             <DropdownMenuItem asChild>
               <Link
-                href="/api/health"
-                target="_blank"
-                rel="noopener noreferrer"
-                prefetch={false}
+                href="/api-status"
                 className="flex cursor-pointer items-center gap-2 font-lora"
               >
                 <Activity
@@ -160,10 +157,7 @@ export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps)
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link
-                href="/api/books"
-                target="_blank"
-                rel="noopener noreferrer"
-                prefetch={false}
+                href="/api-documentation"
                 className="flex cursor-pointer items-center gap-2 font-lora"
               >
                 <FileText

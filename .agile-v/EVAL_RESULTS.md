@@ -3,28 +3,28 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-ui-wave40b-2026-07-05 |
+| **Revision** | C4-ui-wave42-2026-07-06 |
 | **eval_gate_status** | **CONDITIONAL** |
-| **Last run** | 2026-07-06T10:06:00Z |
+| **Last run** | 2026-07-06T11:15:00Z |
 | **Waiver** | none |
 
 ## Eval checklist (C4)
 
 | Eval | Result | Notes |
 |------|--------|-------|
-| REQ traceability complete | PASS | REQ-0001–0031 + ATM |
-| BUILD_MANIFEST linked | PASS | ART-0001–0098 |
-| TEST_SPEC drafted | PASS | TC-0001–0043 |
+| REQ traceability complete | PASS | REQ-0001–0032 + ATM |
+| BUILD_MANIFEST linked | PASS | ART-0001–0107 |
+| TEST_SPEC drafted | PASS | TC-0001–0045 |
 | Gate 1 approved | PASS | GATE-0001 |
 | Gate 1 infra amendment | PASS | GATE-0003 |
-| CR-0005 C4 UI synthesis | PASS | Waves 1–**40b** |
+| CR-0005 C4 UI synthesis | PASS | Waves 1–**42** |
 | Logic Gatekeeper Stage 2 | PASS | phases/02-validation/SUMMARY.md |
-| Static Red Team | PASS | TC-0031–0043 |
-| Stage 3 synthesis | PASS | through `e92c28a` (Waves 24–40b) |
+| Static Red Team | PASS | TC-0031–0045 |
+| Stage 3 synthesis | PASS | through Wave 42 (REQ-0032) |
 | E2E regression executed | **FAIL** | REQ-0021 — e2e not in CI |
-| Vitest unit | PASS | **90** tests 2026-07-06 |
-| Lint + typecheck | PASS | 2026-07-06 session activation |
-| Build | PASS | 2026-07-05 Wave 40b — re-run before Gate 2 |
+| Vitest unit | PASS | **96** tests 2026-07-06 |
+| Lint + typecheck | PASS | 2026-07-06 Wave 42 |
+| Build | PASS | 2026-07-06 Wave 42 |
 | C4 tag UX TC-0034–0035 | PASS | static + DB audit |
 | C4 dialog/nav UX | PASS | Waves 17–23 static |
 | C4 flip anti-flash + entry persistence TC-0042–0043 | PASS | Wave 26 static + unit |

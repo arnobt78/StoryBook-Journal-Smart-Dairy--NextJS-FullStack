@@ -3984,3 +3984,324 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
     transform: translate(-50%, -48%) scale(0.97);
   }
 }
+
+/* ── API status / documentation pages (C4 Wave 42) ── */
+
+.api-status-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.api-status-card {
+  background: linear-gradient(145deg, rgba(28, 14, 6, 0.92), rgba(18, 8, 4, 0.88));
+  border: 1px solid rgba(255, 160, 60, 0.18);
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 1px rgba(255, 140, 40, 0.06),
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    0 0 48px rgba(255, 140, 40, 0.08);
+  overflow: hidden;
+}
+
+.api-status-card__header {
+  padding: 20px 22px 8px;
+}
+
+.api-status-card__title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgba(255, 210, 140, 0.95);
+  margin: 0;
+}
+
+.api-status-card__description {
+  font-family: Lora, serif;
+  font-size: 0.8125rem;
+  color: rgba(255, 205, 130, 0.55);
+  margin: 6px 0 0;
+  line-height: 1.45;
+}
+
+.api-status-card__content {
+  padding: 12px 22px 22px;
+}
+
+.api-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Lora, serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.api-status-badge--default {
+  background: rgba(255, 160, 60, 0.15);
+  color: rgba(255, 205, 130, 0.9);
+  border: 1px solid rgba(255, 160, 60, 0.25);
+}
+
+.api-status-badge--success {
+  background: rgba(72, 187, 120, 0.15);
+  color: rgba(160, 240, 190, 0.95);
+  border: 1px solid rgba(72, 187, 120, 0.35);
+  box-shadow: 0 0 12px rgba(72, 187, 120, 0.15);
+}
+
+.api-status-badge--warning {
+  background: rgba(255, 193, 70, 0.12);
+  color: rgba(255, 220, 140, 0.95);
+  border: 1px solid rgba(255, 193, 70, 0.3);
+}
+
+.api-status-badge--destructive {
+  background: rgba(239, 68, 68, 0.12);
+  color: rgba(255, 180, 180, 0.95);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.api-status-badge--outline {
+  background: transparent;
+  color: rgba(255, 205, 130, 0.7);
+  border: 1px solid rgba(255, 160, 60, 0.22);
+}
+
+.api-status-badge--get {
+  background: rgba(72, 187, 120, 0.18);
+  color: rgba(180, 255, 210, 0.95);
+  border: 1px solid rgba(72, 187, 120, 0.35);
+}
+
+.api-status-badge--post {
+  background: rgba(96, 165, 250, 0.18);
+  color: rgba(190, 225, 255, 0.95);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+}
+
+.api-status-badge--patch {
+  background: rgba(251, 191, 36, 0.15);
+  color: rgba(255, 230, 160, 0.95);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+
+.api-status-badge--delete {
+  background: rgba(248, 113, 113, 0.15);
+  color: rgba(255, 200, 200, 0.95);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+}
+
+.api-status-stat-glow {
+  position: relative;
+  padding: 16px 20px;
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(28, 14, 6, 0.75), rgba(18, 8, 4, 0.65));
+  border: 1px solid rgba(255, 160, 60, 0.14);
+  box-shadow: 0 0 32px rgba(255, 140, 40, 0.06);
+}
+
+.api-status-stat-glow__value {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 700;
+  color: rgba(255, 210, 140, 0.95);
+  line-height: 1.1;
+}
+
+.api-status-stat-glow__label {
+  font-family: Lora, serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 178, 75, 0.55);
+  margin-top: 6px;
+}
+
+.api-status-stat-glow__subtitle {
+  font-family: Lora, serif;
+  font-size: 11px;
+  color: rgba(255, 205, 130, 0.45);
+  margin-top: 4px;
+}
+
+.api-status-dep-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 160, 60, 0.08);
+}
+
+.api-status-dep-row:last-child {
+  border-bottom: none;
+}
+
+.api-status-dep-row__icon {
+  flex-shrink: 0;
+  color: rgba(255, 180, 80, 0.75);
+}
+
+.api-status-dep-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.api-status-dep-row__title {
+  font-family: Lora, serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 210, 140, 0.9);
+}
+
+.api-status-dep-row__meta {
+  font-family: Lora, serif;
+  font-size: 0.75rem;
+  color: rgba(255, 205, 130, 0.5);
+  margin-top: 2px;
+}
+
+.api-status-tabs__list {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 8px;
+  background: rgba(18, 8, 4, 0.6);
+  border: 1px solid rgba(255, 160, 60, 0.14);
+  margin-bottom: 20px;
+}
+
+.api-status-tabs__trigger {
+  font-family: Lora, serif;
+  font-size: 0.8125rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: rgba(255, 205, 130, 0.6);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+}
+
+.api-status-tabs__trigger:hover {
+  color: rgba(255, 210, 140, 0.85);
+}
+
+.api-status-tabs__trigger[data-state="active"] {
+  color: rgba(255, 220, 150, 0.98);
+  background: linear-gradient(135deg, rgba(90, 40, 10, 0.88), rgba(70, 32, 8, 0.82));
+  box-shadow: 0 0 20px rgba(255, 140, 40, 0.2);
+}
+
+.api-status-tabs__content {
+  outline: none;
+}
+
+.api-status-endpoint {
+  border: 1px solid rgba(255, 160, 60, 0.12);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  background: rgba(18, 8, 4, 0.5);
+}
+
+.api-status-endpoint__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.api-status-endpoint__header:hover {
+  background: rgba(255, 160, 60, 0.04);
+}
+
+.api-status-endpoint__path {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8125rem;
+  color: rgba(255, 210, 140, 0.9);
+  flex: 1;
+  min-width: 0;
+  word-break: break-all;
+}
+
+.api-status-endpoint__body {
+  padding: 0 16px 16px;
+  border-top: 1px solid rgba(255, 160, 60, 0.08);
+}
+
+.api-status-endpoint__summary {
+  font-family: Lora, serif;
+  font-size: 0.8125rem;
+  color: rgba(255, 205, 130, 0.65);
+  padding-top: 12px;
+  line-height: 1.5;
+}
+
+.api-status-schema-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Lora, serif;
+  font-size: 0.75rem;
+  margin-top: 10px;
+}
+
+.api-status-schema-table th,
+.api-status-schema-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 160, 60, 0.08);
+  color: rgba(255, 205, 130, 0.75);
+}
+
+.api-status-schema-table th {
+  color: rgba(255, 178, 75, 0.65);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.6875rem;
+}
+
+.api-status-page-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.api-status-page-header__title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(32px, 5vw, 42px);
+  font-weight: 700;
+  color: rgba(255, 210, 140, 0.95);
+  margin: 0;
+}
+
+.api-status-page-header__subtitle {
+  font-family: Lora, serif;
+  font-size: 0.875rem;
+  color: rgba(255, 205, 130, 0.55);
+  margin-top: 8px;
+}
+
+.api-status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .api-status-grid--stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
