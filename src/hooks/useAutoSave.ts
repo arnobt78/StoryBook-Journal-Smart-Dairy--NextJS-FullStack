@@ -30,6 +30,8 @@ import {
   isBrowserOffline,
   isOfflineOrNetworkError,
 } from "@/lib/offline/offline-journal-actions";
+import { updateJournalEntry } from "@/lib/journal-api";
+import { handleSessionExpired, isUnauthorizedError } from "@/lib/journal-fetch";
 import type { UpdateEntryInput } from "@/lib/validations";
 
 interface UseAutoSaveOptions {
@@ -107,13 +109,7 @@ export function useAutoSave({
       }
 
       try {
-        const res = await fetch(`/api/entries/${entryId}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: serialized,
-        });
-
-        if (!res.ok) throw new Error("Save failed");
+        await updateJournalEntry(entryId, payload);
 
         applyOptimisticEntryPatch(queryClient, bookId, entryId, payload);
         void notifyJournalCacheUpdated(queryClient);
@@ -121,6 +117,10 @@ export function useAutoSave({
 
         appToast.journal.autosaved();
       } catch (err) {
+        if (isUnauthorizedError(err)) {
+          handleSessionExpired();
+          return;
+        }
         if (isOfflineOrNetworkError(err)) {
           try {
             await enqueuePatchEntryOffline({

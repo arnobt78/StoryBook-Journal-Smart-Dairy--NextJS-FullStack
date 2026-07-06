@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-voice-wave47-2026-07-06 |
-| **Last commit** | `1fa389f` (Wave 43: SEO + walkthrough comments + README) |
+| **Revision** | C4-wave48-2026-07-06 |
+| **Last commit** | Wave 48: entry save 401 + voice/editor UX |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -17,13 +17,13 @@
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
 | **Last Updated** | 2026-07-06T15:00:00Z |
-| **Updated By** | build-agent-js (Wave 47 voice hardening) |
+| **Updated By** | build-agent-js (Wave 48 entry auth + voice UX) |
 
 ## Resume (2026-07-06)
 
 1. Read this file → `PLAYBOOK.md` → `cycles/C4/README.md` → latest `DEC-0075`.
-2. **Code baseline:** Wave 47 — voice hardening (Phase 3 drain, WASM worker, cleanup).
-3. **Verify:** lint · typecheck · **120** Vitest · build PASS · `npm run verify`.
+2. **Code baseline:** Wave 48 — entry PATCH auth wrapper + `journal-fetch` 401 UX; voice Quick/Private stop + editor scroll.
+3. **Verify:** lint · typecheck · **123** Vitest · build PASS · `npm run verify`.
 4. **Next backlog:** REQ-0021 e2e CI; manual QA new API pages.
 5. **Constraints:** `notifyJournalCacheUpdated` only; `force-dynamic`; SSR in `page.tsx`.
 6. **Skills load order:** 01 core → 02 pipeline → 13 build-agent-js → 18 → 19 → 20.
@@ -35,7 +35,7 @@
 | 1 Requirements | **COMPLETE** | REQ-0001–**0032**; CR-0001–0005 |
 | 2 Validation | **COMPLETE** | `phases/02-validation/SUMMARY.md` |
 | 3 Synthesis | **COMPLETE** | ART-0001–**0107**; through Wave 42 |
-| 4 Verification | **IN_PROGRESS** | **120** Vitest PASS; lint/typecheck/build PASS |
+| 4 Verification | **IN_PROGRESS** | **123** Vitest PASS; lint/typecheck/build PASS |
 | 5 Acceptance | NOT_STARTED | — |
 
 ## C4 UI waves (recent)
@@ -52,7 +52,8 @@
 | **41** | **Auth logo link, demo-picker shift fix, nav glow, New journal label** | `98a2dea` |
 | **42** | **API status + documentation UI** | `0cb5c04` |
 | **43** | **SEO metadata, @file walkthrough comments, README, verify script** | this commit |
-| **47** | **Voice hardening — Phase 3 drain, WASM worker offload, dead-type cleanup** | this commit |
+| **47** | **Voice hardening — Phase 3 drain, WASM worker offload, dead-type cleanup** | prior |
+| **48** | **Entry save 401 fix + voice/editor UX (journal-fetch, Web Speech stop, editor scroll)** | this commit |
 
 ## Infinity Loop
 

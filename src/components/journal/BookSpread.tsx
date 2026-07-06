@@ -71,7 +71,8 @@ import {
   notifyJournalCacheUpdated,
   notifyJournalCacheUpdatedAndRefetch,
 } from "@/lib/journal-cache-notify";
-import { fetchJournalBook, deleteJournalBook, deleteJournalEntry, updateJournalBook } from "@/lib/journal-api";
+import { fetchJournalBook, deleteJournalBook, deleteJournalEntry, updateJournalBook, updateJournalEntry } from "@/lib/journal-api";
+import { handleSessionExpired, isUnauthorizedError } from "@/lib/journal-fetch";
 import {
   enqueuePatchBookOffline,
   enqueuePatchEntryOffline,
@@ -300,19 +301,17 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
     }
 
     try {
-      const res = await fetch(`/api/entries/${current.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error();
-      /* Optimistic patch before read mode — tags/mood visible instantly without waiting for refetch */
+      await updateJournalEntry(current.id, payload);
       applyOptimisticEntryPatch(queryClient, bookId, current.id, payload);
       setIsWriting(false);
       await clearLocalDraft();
       await notifyJournalCacheUpdated(queryClient);
       appToast.journal.entrySaved();
     } catch (err) {
+      if (isUnauthorizedError(err)) {
+        handleSessionExpired();
+        return;
+      }
       if (isOfflineOrNetworkError(err)) {
         try {
           await enqueuePatchEntryOffline({

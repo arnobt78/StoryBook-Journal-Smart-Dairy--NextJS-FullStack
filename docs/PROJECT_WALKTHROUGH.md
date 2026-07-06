@@ -667,7 +667,23 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 40. Related docs
+## 40. Entry auth + voice/editor UX — Wave 48 (2026-07-06)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Entry PATCH auth | `api/entries/[entryId]/route.ts`, `lib/auth.ts` | NextAuth v5 `auth()` wrapper on PATCH/DELETE; JWT `maxAge` 30d |
+| Client 401 UX | `journal-fetch.ts`, `journal-api.ts`, `useAutoSave.ts`, `BookSpread.tsx` | `updateJournalEntry` + `handleSessionExpired`; no offline queue on 401 |
+| Session keepalive | `providers.tsx` | `SessionProvider` `refetchInterval` 5m + `refetchOnWindowFocus` |
+| Editor sync | `JournalEditor.tsx` | `skipNextSyncRef` — fixes delete-on-first-try + voice insert races |
+| Draft restore | `useOfflineEntryDraft.ts` | Skip IDB restore if user edited before async restore completes |
+| Quick voice stop | `useWebSpeech.ts`, `VoiceDictationButton.tsx` | `stop()` not `abort()`; session guard; suppress click double-fire; ignore `aborted` error |
+| Private mic | `useBrowserWhisper.ts`, `useVoiceInput.ts` | Release mic tracks immediately on stop; Phase 3 drain parity |
+| Editor scroll | `journal-editor-scroll.ts` | Smooth scroll on AI stream + voice `insertTextAtCursor` |
+| Tests | `journal-fetch.test.ts` (3) | **123** Vitest total |
+
+---
+
+## 41. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -678,4 +694,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-06 — C4 Wave 41; lint/typecheck/90 Vitest/build PASS.*
+*Last reviewed: 2026-07-06 — C4 Wave 48; lint/typecheck/123 Vitest/build PASS.*

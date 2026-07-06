@@ -78,6 +78,15 @@ export const appToast = {
     googleError() {
       showError("Could not open Google sign-in", "Please try again.");
     },
+    sessionExpired() {
+      show({
+        title: "Session expired",
+        description: "Please sign in again to save your changes.",
+        icon: AlertCircle,
+        variant: "error",
+        duration: 6000,
+      });
+    },
   },
 
   journal: {

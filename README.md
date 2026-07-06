@@ -470,7 +470,7 @@ Open **<http://localhost:3000>**
 ### Verify everything works
 
 ```bash
-npm run verify   # lint + typecheck + 96 unit tests
+npm run verify   # lint + typecheck + 123 unit tests
 ```
 
 ### Test credentials (demo login)
@@ -522,7 +522,7 @@ Run `npm run db:push` again. **Docker runs Postgres only** — the Next.js app r
 | Lint             | `npm run lint`        | ESLint check                           |
 | Lint fix         | `npm run lint:fix`    | Auto-fix lint issues                   |
 | Typecheck        | `npm run typecheck`   | `tsc --noEmit`                         |
-| Unit tests       | `npm run test`        | Vitest (120 tests)                     |
+| Unit tests       | `npm run test`        | Vitest (123 tests)                     |
 | E2E tests        | `npm run test:e2e`    | Playwright (optional; needs seed)      |
 | Prisma generate  | `npm run db:generate` | Regenerate client after schema changes |
 | Push schema      | `npm run db:push`     | Sync schema to DB (dev-friendly)       |

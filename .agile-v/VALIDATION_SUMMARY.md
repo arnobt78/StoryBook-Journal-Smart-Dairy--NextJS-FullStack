@@ -3,8 +3,8 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-voice-wave47-2026-07-06 |
-| **Status** | Stage 4 static complete; Waves 1–47; Gate 2 pending e2e |
+| **Revision** | C4-wave48-2026-07-06 |
+| **Status** | Stage 4 static complete; Waves 1–48; Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
 | **Last Updated** | 2026-07-06T15:00:00Z |
@@ -14,8 +14,8 @@
 
 ```
 Scope: C4 REQ-0029–0032 + regression REQ-0002, REQ-0003, REQ-0007 | Traceability: 32 REQs, ART-0107
-Findings: PASS static/unit through Wave 47 | FAIL 0 | NOT RUN e2e in CI
-Log: 2026-07-06 | build-agent-js | Wave 47 voice hardening | 120 Vitest + build PASS
+Findings: PASS static/unit through Wave 48 | FAIL 0 | NOT RUN e2e in CI
+Log: 2026-07-06 | build-agent-js | Wave 48 entry auth + voice UX | 123 Vitest + build PASS
 ```
 
 ## EvalGate (Gate 2)

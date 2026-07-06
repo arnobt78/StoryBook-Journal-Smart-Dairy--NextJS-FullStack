@@ -69,3 +69,4 @@
 | 2026-07-06T11:15:00Z | ui-wave42 | build-agent-js | API status + docs UI; 96 Vitest PASS | REQ-0032 | DEC-0075 |
 | 2026-07-06T13:45:00Z | docs-wave43 | build-agent-js | SEO metadata, @file comments, README rewrite; verify+build PASS | REQ-0020, REQ-0022–0023 | DEC-0076 |
 | 2026-07-06T15:00:00Z | voice-wave47 | build-agent-js | Phase 3 drain, WASM worker, voice cleanup; 120 Vitest PASS | REQ-0020 | DEC-0077 |
+| 2026-07-06T17:58:00Z | wave48 | build-agent-js | Entry PATCH auth wrapper + journal-fetch 401; voice/editor UX; 123 Vitest PASS | REQ-0002, REQ-0020 | DEC-0078, DEC-0079 |

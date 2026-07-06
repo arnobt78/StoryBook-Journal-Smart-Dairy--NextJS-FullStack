@@ -10,6 +10,7 @@
  * Interim/error text renders in JournalWriteFooter full-width banner.
  */
 import { ChevronDown, Mic, MicOff } from "lucide-react";
+import { useRef } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +33,8 @@ interface VoiceDictationButtonProps {
 
 export function VoiceDictationButton({ voice }: VoiceDictationButtonProps) {
   const { modelProgress, provider, setProvider, isSupported, toggle, isMicActive } = voice;
+  /** Suppress click that follows pointerdown stop — otherwise mic restarts immediately */
+  const suppressClickRef = useRef(false);
 
   if (!isSupported) return null;
 
@@ -74,15 +77,21 @@ export function VoiceDictationButton({ voice }: VoiceDictationButtonProps) {
       <div className={`voice-dictation-cluster${hasPicker ? " voice-dictation-cluster--split" : ""}`}>
         <RippleButton
           type="button"
-          onPointerDown={
-            isRecording
-              ? (e) => {
-                  e.preventDefault();
-                  toggle();
-                }
-              : undefined
-          }
-          onClick={isRecording ? undefined : toggle}
+          onPointerDown={(e) => {
+            if (isRecording) {
+              e.preventDefault();
+              suppressClickRef.current = true;
+              toggle();
+            }
+          }}
+          onClick={(e) => {
+            if (suppressClickRef.current) {
+              suppressClickRef.current = false;
+              e.preventDefault();
+              return;
+            }
+            toggle();
+          }}
           aria-label={isRecording ? stopLabel : dictateLabel}
           aria-pressed={isRecording}
           className={micBtnClass}

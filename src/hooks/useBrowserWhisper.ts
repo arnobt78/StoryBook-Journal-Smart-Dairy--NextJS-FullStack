@@ -223,6 +223,11 @@ export function useBrowserWhisper({
         finish();
       };
 
+      // Release mic immediately on user stop — queued blobs still drain in memory
+      if (flush && !fatalError && stream) {
+        stream.getTracks().forEach((t) => t.stop());
+      }
+
       if (recorder && recorder.state !== "inactive") {
         recorder.onstop = () => {
           void drainAndFinish();

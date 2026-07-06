@@ -14,6 +14,7 @@
 import type { JournalBook, JournalEntry } from "@/types";
 import type { BookFormValues } from "@/types/book-form";
 import type { CreateEntryInput, UpdateEntryInput } from "@/lib/validations";
+import { journalFetch } from "@/lib/journal-fetch";
 
 type BooksApi = { success: boolean; data?: (JournalBook & { _count?: { entries: number } })[]; message?: string };
 type BookApi = { success: boolean; data?: JournalBook & { entries: JournalEntry[] }; message?: string };
@@ -82,13 +83,12 @@ export async function updateJournalEntry(
   entryId: string,
   data: UpdateEntryInput,
 ): Promise<void> {
-  const res = await fetch(`/api/entries/${entryId}`, {
+  const res = await journalFetch(`/api/entries/${entryId}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   const json = (await res.json()) as MutationApi;
-  if (!res.ok || !json.success) {
+  if (!json.success) {
     throw new Error(json.message ?? `Failed to update entry (${res.status})`);
   }
 }

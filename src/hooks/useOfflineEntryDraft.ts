@@ -49,6 +49,23 @@ export function useOfflineEntryDraft({
 }: UseOfflineEntryDraftOptions) {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const restoredRef = useRef<string | null>(null);
+  const userEditedRef = useRef(false);
+  const enableSnapshotRef = useRef<string>("");
+
+  /* Snapshot draft at write-mode open — skip IDB restore if user edits before async restore completes */
+  useEffect(() => {
+    if (enabled && bookId && entryId) {
+      enableSnapshotRef.current = JSON.stringify(draft);
+      userEditedRef.current = false;
+    }
+  }, [enabled, bookId, entryId]); // eslint-disable-line react-hooks/exhaustive-deps -- snapshot once per open
+
+  useEffect(() => {
+    if (!enabled || !bookId || !entryId) return;
+    if (JSON.stringify(draft) !== enableSnapshotRef.current) {
+      userEditedRef.current = true;
+    }
+  }, [draft, enabled, bookId, entryId]);
 
   /* Debounced write while editing */
   useEffect(() => {
@@ -83,6 +100,10 @@ export function useOfflineEntryDraft({
           ? new Date(entryUpdatedAt).getTime()
           : 0;
         if (stored.updatedAt > serverTime) {
+          if (userEditedRef.current) {
+            restoredRef.current = key;
+            return;
+          }
           onRestore(stored.draft);
           appToast.journal.draftRestored();
         }

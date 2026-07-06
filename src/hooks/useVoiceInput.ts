@@ -204,6 +204,10 @@ export function useVoiceInput({ onTranscript }: UseVoiceInputOptions): UseVoiceI
     setPhase3Draining(true);
     setInterim(VOICE_PROCESSING_INTERIM);
 
+    // Release mic immediately — in-flight chunk blobs still drain via queue
+    const stream = streamRef.current;
+    stream?.getTracks().forEach((t) => t.stop());
+
     if (recorder && recorder.state !== "inactive") {
       recorder.onstop = () => {
         void drainAndCleanup();
