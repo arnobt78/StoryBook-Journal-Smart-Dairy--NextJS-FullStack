@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
-| **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
+| **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Diary--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-wave54-2026-07-07 |
 | **Last commit** | Wave 54: API status value-only skeleton (pending) |

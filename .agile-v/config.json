@@ -3,7 +3,7 @@
   "project": {
     "name": "storybook-journal",
     "display_name": "StoryBook Journal",
-    "repository": "https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack",
+    "repository": "https://github.com/arnobt78/StoryBook-Journal-Smart-Diary--NextJS-FullStack",
     "cycle": "C4",
   "revision": "C4-ui-wave42-2026-07-06",
   "last_commit": "0cb5c04",

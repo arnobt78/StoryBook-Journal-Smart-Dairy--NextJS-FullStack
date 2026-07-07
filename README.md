@@ -455,8 +455,8 @@ See **`.env.example`** for commented templates including Docker Postgres lines.
 
 ```bash
 # 1. Clone and enter the project
-git clone https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack.git
-cd StoryBook-Journal-Smart-Dairy--NextJS-FullStack
+git clone https://github.com/arnobt78/StoryBook-Journal-Smart-Diary--NextJS-FullStack.git
+cd StoryBook-Journal-Smart-Diary--NextJS-FullStack
 
 # 2. Install dependencies
 npm install
