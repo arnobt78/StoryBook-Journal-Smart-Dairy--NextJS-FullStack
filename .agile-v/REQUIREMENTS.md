@@ -57,7 +57,7 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 - **Status:** implemented · `approved [C1]`
 - **Requirement:** Authenticated shell SHALL provide brand nav, profile dropdown (email, name, API links, sign-out), book-close logout animation.
 - **Constraint:** Dropdown portal (`modal={false}`); Lucide icons; no layout shift.
-- **Verification Criteria:** TC-0008 — menu open, sign-out, `/dairy-1.svg` logo.
+- **Verification Criteria:** TC-0008 — menu open, sign-out, `/diary-1.svg` logo.
 - **Done Criteria:** DashboardNav + dropdown-menu primitive.
 - **Artifacts:** ART-0015 DashboardNav, ART-0016 dropdown-menu, ART-0017 `/api/health`
 
@@ -137,7 +137,7 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 - **Requirement:** Drafts SHALL persist locally (IndexedDB); mutations SHALL enqueue when offline and drain on reconnect with temp-id remap.
 - **Constraint:** Optimistic TanStack cache; `notifyJournalCacheUpdated`; FIFO queue types: patchEntry, postEntry, patchBook, postBook.
 - **Verification Criteria:** TC-0017 — offline save → online sync → server id remap.
-- **Done Criteria:** offline/* stores, OfflineSyncContext, useOffline* hooks, nav badge.
+- **Done Criteria:** offline/_ stores, OfflineSyncContext, useOffline_ hooks, nav badge.
 - **Artifacts:** ART-0039–0045
 
 ### REQ-0016 — Full-text search
@@ -248,33 +248,33 @@ Traceability source of truth. Status: `approved [C1]` = accepted at Gate 1. `imp
 
 ## Traceability index (REQ → primary ART)
 
-| REQ | Primary artifacts |
-|-----|-------------------|
-| REQ-0001 | ART-0001–0004, ART-0024 |
-| REQ-0002 | ART-0005–0006 |
-| REQ-0003 | ART-0007–0010, ART-0027 |
+| REQ      | Primary artifacts                 |
+| -------- | --------------------------------- |
+| REQ-0001 | ART-0001–0004, ART-0024           |
+| REQ-0002 | ART-0005–0006                     |
+| REQ-0003 | ART-0007–0010, ART-0027           |
 | REQ-0004 | ART-0007, ART-0011–0012, ART-0026 |
-| REQ-0005 | ART-0013–0014 |
-| REQ-0006 | ART-0015–0017 |
-| REQ-0007 | ART-0018–0019 |
-| REQ-0008 | ART-0006–0007 |
-| REQ-0009 | ART-0002, ART-0020 |
-| REQ-0010 | ART-0021, ART-0037–0038 |
-| REQ-0015 | ART-0039–0045 |
-| REQ-0023 | ART-0025, ART-0046–0047 |
-| REQ-0028 | ART-0048, ART-0033, ART-0042 |
-| REQ-0011 | ART-0022 |
-| REQ-0012 | ART-0023–0024, ART-0032 |
-| REQ-0019 | ART-0017 |
-| REQ-0020 | ART-0033–0034 |
-| REQ-0023 | ART-0025 |
-| REQ-0024 | `.agile-v/` |
-| REQ-0025 | ART-0029–0030, ART-0020 |
-| REQ-0026 | ART-0031, ART-0035 |
-| REQ-0027 | ART-0036 |
-| REQ-0029 | ART-0072–0074 |
-| REQ-0030 | ART-0068–0071, ART-0078 |
-| REQ-0031 | ART-0075–0077, ART-0009 |
+| REQ-0005 | ART-0013–0014                     |
+| REQ-0006 | ART-0015–0017                     |
+| REQ-0007 | ART-0018–0019                     |
+| REQ-0008 | ART-0006–0007                     |
+| REQ-0009 | ART-0002, ART-0020                |
+| REQ-0010 | ART-0021, ART-0037–0038           |
+| REQ-0015 | ART-0039–0045                     |
+| REQ-0023 | ART-0025, ART-0046–0047           |
+| REQ-0028 | ART-0048, ART-0033, ART-0042      |
+| REQ-0011 | ART-0022                          |
+| REQ-0012 | ART-0023–0024, ART-0032           |
+| REQ-0019 | ART-0017                          |
+| REQ-0020 | ART-0033–0034                     |
+| REQ-0023 | ART-0025                          |
+| REQ-0024 | `.agile-v/`                       |
+| REQ-0025 | ART-0029–0030, ART-0020           |
+| REQ-0026 | ART-0031, ART-0035                |
+| REQ-0027 | ART-0036                          |
+| REQ-0029 | ART-0072–0074                     |
+| REQ-0030 | ART-0068–0071, ART-0078           |
+| REQ-0031 | ART-0075–0077, ART-0009           |
 
 ---
 

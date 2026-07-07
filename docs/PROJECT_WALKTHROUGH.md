@@ -683,15 +683,32 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 41. Related docs
+## 41. Groq model migration + brand polish — Wave 49 (2026-07-07)
 
-- `README.md` — setup, env vars, API, learning walkthrough, stack badges.
-- `CLAUDE.md` — compact agent instructions (gitignored locally).
-- `docs/AUTH_UI_IMPLEMENTATION_GUIDE.md` — OAuth flicker, avatar, session patterns.
-- `docs/DROPDOWN_TEST_CREDENTIALS_DOCS.md` — demo account + NextAuth reference.
-- `docker-compose.yml` — optional local Postgres only (not used for Vercel deploy).
-- `.agile-v/` — Agile V traceability **C4** (REQ-0001–0031, ART-0078, `.cursor/rules/agile-v.mdc` alwaysApply).
+| Area | Files | Details |
+|------|-------|---------|
+| Provider chain | `lib/ai-provider.ts` | `GROQ_MODELS` (gpt-oss-20b, qwen3.6-27b, gpt-oss-120b) + `OPENROUTER_MODELS` (`:free`); Fisher-Yates `shuffle` per request; retry on 408/429/5xx |
+| Rate limit | `lib/ai-provider.ts`, `api/ai/assist(/stream)/route.ts` | `parseRetryAfter` (clamped 5–120s); `rateLimited` when all Groq+OR 429; routes forward `retryAfterSec ?? 45` |
+| Toasts | `BookSpread.tsx`, `app-toast.tsx` | Dynamic `retryAfterSec`; provider-neutral backup toast; sync-path parity via `meta.usedFallback` |
+| Fonts | `app/layout.tsx`, `globals.css` | Preload lora-400/playfair-600/dancing-400 (+3) — no fallback flash; `@font-face` unchanged |
+| LCP | `JournalBottomNav.tsx` | `priority` on shelf `/book-stack-1.svg` |
+| Brand icons | `AuthSpreadHeader.tsx`, `DashboardNav.tsx`, `site-metadata.ts` | Auth diary 24px; nav `lineHeight:1` + `gap:8px`; tab `favicon.ico` (diary SVG for Apple/OG/PWA) |
+| Cleanup | `public/` | Removed unused `book-stack-2/3`, `dairy-1/2`, `diary-3` SVGs |
+| Docs | `docs/LLM_MODEL_SELECTION.md` | App-specific chain + generic strategy |
+| Tests | `ai-provider.test.ts` (8) | **131** Vitest total |
 
 ---
 
-*Last reviewed: 2026-07-06 — C4 Wave 48; lint/typecheck/123 Vitest/build PASS.*
+## 42. Related docs
+
+- `README.md` — setup, env vars, API, learning walkthrough, stack badges.
+- `CLAUDE.md` — compact agent instructions (gitignored locally).
+- `docs/LLM_MODEL_SELECTION.md` — AI provider chain + model fallback strategy.
+- `docs/AUTH_UI_IMPLEMENTATION_GUIDE.md` — OAuth flicker, avatar, session patterns.
+- `docs/DROPDOWN_TEST_CREDENTIALS_DOCS.md` — demo account + NextAuth reference.
+- `docker-compose.yml` — optional local Postgres only (not used for Vercel deploy).
+- `.agile-v/` — Agile V traceability **C4** (REQ-0001–0032, `.cursor/rules/agile-v.mdc` alwaysApply).
+
+---
+
+*Last reviewed: 2026-07-07 — C4 Wave 49; lint/typecheck/131 Vitest/build PASS.*

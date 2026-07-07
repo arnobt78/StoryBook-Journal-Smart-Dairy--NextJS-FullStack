@@ -290,7 +290,7 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "10px",
+              gap: "8px",
             }}
           >
             <div aria-hidden className="dashboard-new-journal-spotlight" />
@@ -315,7 +315,10 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
       </div>
 
       {books.length > 0 && (
-        <div className="dashboard-shelf-stats" style={{ display: "flex", gap: "40px" }}>
+        <div
+          className="dashboard-shelf-stats"
+          style={{ display: "flex", gap: "40px" }}
+        >
           {[
             { label: "Journals", value: books.length },
             {
@@ -372,7 +375,8 @@ export function BookShelf({ books: initialBooks, userName }: BookShelfProps) {
           deleteTarget ? (
             <>
               &ldquo;{deleteTarget.title}&rdquo; and all{" "}
-              {deleteTarget._count?.entries ?? 0} pages will be permanently deleted.
+              {deleteTarget._count?.entries ?? 0} pages will be permanently
+              deleted.
             </>
           ) : null
         }
@@ -434,7 +438,8 @@ function BookSpine({
           opacity: hovered ? 1 : 0,
           transition: "opacity .2s, box-shadow .2s",
           textShadow: "0 0 8px rgba(255,185,80,.65)",
-          boxShadow: "0 0 10px rgba(255,160,60,.28), inset 0 0 4px rgba(255,185,80,.12)",
+          boxShadow:
+            "0 0 10px rgba(255,160,60,.28), inset 0 0 4px rgba(255,185,80,.12)",
         }}
       >
         ✎
@@ -540,7 +545,9 @@ function BookSpine({
         <TooltipContent>
           <div className="journal-tooltip-title">{book.title}</div>
           {book.description?.trim() ? (
-            <div className="journal-tooltip-desc">{book.description.trim()}</div>
+            <div className="journal-tooltip-desc">
+              {book.description.trim()}
+            </div>
           ) : null}
         </TooltipContent>
       </Tooltip>

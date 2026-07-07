@@ -111,6 +111,7 @@
 | ART-0105 | C4 | ui | `card.tsx`, `badge.tsx`, `tabs.tsx` + `.api-status-*` CSS | REQ-0032 | implemented |
 | ART-0106 | C4 | lib | `query-keys` apiStatus/apiOpenApi + journal-cache-notify extension | REQ-0032 | implemented |
 | ART-0107 | C4 | component | DashboardNav links → `/api-status`, `/api-documentation` | REQ-0032 | implemented |
+| ART-0108 | C4 | lib | `ai-provider.ts` multi-model shuffle fallback + `ai-provider.test.ts` | REQ-0010 | implemented |
 
 ## Planned artifacts (backlog)
 

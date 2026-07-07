@@ -12,7 +12,8 @@ import type { Metadata } from "next";
 
 /** Production demo URL — falls back when NEXTAUTH_URL is unset (local dev) */
 export const SITE_URL =
-  process.env.NEXTAUTH_URL?.replace(/\/$/, "") ?? "https://storybook-journal.vercel.app";
+  process.env.NEXTAUTH_URL?.replace(/\/$/, "") ??
+  "https://storybook-journal.vercel.app";
 
 export const SITE_DEMO_URL = "https://storybook-journal.vercel.app";
 
@@ -58,8 +59,11 @@ export const SITE_KEYWORDS = [
   "Arnob Mahmud",
 ] as const;
 
-/** Brand mark from /public — journal bookmark SVG */
-export const SITE_ICON = "/dairy-1.svg";
+/** Brand mark from /public — journal bookmark SVG (in-app, Apple touch, OG, PWA) */
+export const SITE_ICON = "/diary-1.svg";
+
+/** Browser tab favicon — classic .ico; listed first so tabs prefer it over SVG */
+export const SITE_FAVICON = "/favicon.ico";
 
 /** Optional secondary image for richer social previews */
 export const SITE_OG_IMAGE = "/book-stack-1.svg";
@@ -88,9 +92,9 @@ export const siteMetadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: [{ url: SITE_ICON, type: "image/svg+xml" }],
+    icon: [{ url: SITE_FAVICON, sizes: "any" }],
     apple: [{ url: SITE_ICON, type: "image/svg+xml" }],
-    shortcut: [SITE_ICON],
+    shortcut: [SITE_FAVICON],
   },
   openGraph: {
     type: "website",

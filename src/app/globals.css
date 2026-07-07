@@ -278,7 +278,8 @@ body {
   margin: 0.5em 0 0.25em;
 }
 .ProseMirror blockquote {
-  border-left: 2px solid var(--theme-prose-blockquote-border, rgba(120, 70, 20, 0.3));
+  border-left: 2px solid
+    var(--theme-prose-blockquote-border, rgba(120, 70, 20, 0.3));
   padding-left: 1em;
   margin: 0.5em 0;
   font-style: italic;
@@ -346,7 +347,8 @@ body {
   margin: 0.5em 0 0.25em;
 }
 .journal-prose blockquote {
-  border-left: 2px solid var(--theme-prose-blockquote-border, rgba(120, 70, 20, 0.3));
+  border-left: 2px solid
+    var(--theme-prose-blockquote-border, rgba(120, 70, 20, 0.3));
   padding-left: 1em;
   font-style: italic;
 }
@@ -1042,8 +1044,10 @@ body {
     touch-action: auto;
     z-index: auto;
     /* Fixed nav overlay (64px) + header chrome (40px) + bottom nav band (64px) */
-    padding: calc(var(--dashboard-nav-h, 64px) + var(--journal-chrome-top, 40px)) 16px
-      var(--journal-chrome-bottom, 64px);
+    padding: calc(
+        var(--dashboard-nav-h, 64px) + var(--journal-chrome-top, 40px)
+      )
+      16px var(--journal-chrome-bottom, 64px);
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -1088,12 +1092,16 @@ body {
   }
 
   /* Flip sheet paints above bottom nav pill (sibling after scroll-port in shell) */
-  .journal-route-viewport .book-spread-shell:has(.spread-coil-flipping) .book-spread-scroll-port {
+  .journal-route-viewport
+    .book-spread-shell:has(.spread-coil-flipping)
+    .book-spread-scroll-port {
     position: relative;
     z-index: 10;
   }
 
-  .journal-route-viewport .book-spread-shell:has(.spread-coil-flipping) .journal-bottom-nav-outer {
+  .journal-route-viewport
+    .book-spread-shell:has(.spread-coil-flipping)
+    .journal-bottom-nav-outer {
     z-index: 1;
   }
 
@@ -1402,7 +1410,7 @@ body {
   width: 100%;
   min-height: var(--auth-control-h, 42px);
   padding: 10px 14px;
-  gap: 10px;
+  gap: 8px;
   box-sizing: border-box;
   text-align: left;
   font-family: "Lora", serif;
@@ -1898,7 +1906,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(ellipse at 50% 30%, #2e160a 0%, #1a0c05 55%, #0e0603 100%);
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    #2e160a 0%,
+    #1a0c05 55%,
+    #0e0603 100%
+  );
   animation: overlayFadeIn 0.45s ease-out forwards;
 }
 
@@ -1975,7 +1988,13 @@ body {
   top: 0;
   bottom: 0;
   width: calc(var(--cover-w) * 26 / 240);
-  background: linear-gradient(90deg, #1e0c03 0%, #4a2008 40%, #6b3410 60%, #4a2008 100%);
+  background: linear-gradient(
+    90deg,
+    #1e0c03 0%,
+    #4a2008 40%,
+    #6b3410 60%,
+    #4a2008 100%
+  );
   border-radius: 3px 0 0 3px;
   z-index: 4;
   pointer-events: none;
@@ -2057,7 +2076,13 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 3px 14px 14px 3px;
-  background: linear-gradient(155deg, #5d2e0c 0%, #8b4513 25%, #70380f 55%, #3d1a06 100%);
+  background: linear-gradient(
+    155deg,
+    #5d2e0c 0%,
+    #8b4513 25%,
+    #70380f 55%,
+    #3d1a06 100%
+  );
   box-shadow:
     -8px 0 24px rgba(0, 0, 0, 0.55),
     10px 12px 50px rgba(0, 0, 0, 0.75);
@@ -2083,8 +2108,8 @@ body {
   transform-style: preserve-3d;
   transform: rotateY(-165deg);
   z-index: 5;
-  animation: logoutCoverHingeClose var(--logout-hinge-ms, 720ms) cubic-bezier(0.23, 1, 0.32, 1)
-    var(--logout-hinge-delay, 550ms) forwards;
+  animation: logoutCoverHingeClose var(--logout-hinge-ms, 720ms)
+    cubic-bezier(0.23, 1, 0.32, 1) var(--logout-hinge-delay, 550ms) forwards;
 }
 
 .logout-cover-front {
@@ -2093,8 +2118,16 @@ body {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   border-radius: 0 12px 12px 0;
-  background: linear-gradient(155deg, #5d2e0c 0%, #8b4513 25%, #70380f 55%, #3d1a06 100%);
-  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.55), 10px 12px 50px rgba(0, 0, 0, 0.75);
+  background: linear-gradient(
+    155deg,
+    #5d2e0c 0%,
+    #8b4513 25%,
+    #70380f 55%,
+    #3d1a06 100%
+  );
+  box-shadow:
+    -8px 0 24px rgba(0, 0, 0, 0.55),
+    10px 12px 50px rgba(0, 0, 0, 0.75);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -2120,7 +2153,13 @@ body {
   opacity: 0;
   pointer-events: none;
   border-radius: 0 12px 12px 0;
-  background: linear-gradient(155deg, #5d2e0c 0%, #8b4513 25%, #70380f 55%, #3d1a06 100%);
+  background: linear-gradient(
+    155deg,
+    #5d2e0c 0%,
+    #8b4513 25%,
+    #70380f 55%,
+    #3d1a06 100%
+  );
   animation: logoutShowLeatherShell 0.35s ease forwards;
   animation-delay: var(--logout-orbit-delay, 1270ms);
 }
@@ -2197,7 +2236,12 @@ body {
   width: 50%;
   height: 1px;
   margin-top: 14px;
-  background: linear-gradient(90deg, transparent, rgba(180, 110, 40, 0.28), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(180, 110, 40, 0.28),
+    transparent
+  );
 }
 
 .logout-cover-title-stack {
@@ -2247,7 +2291,12 @@ body {
   width: 55%;
   height: 1px;
   margin-top: 10px;
-  background: linear-gradient(90deg, transparent, rgba(255, 175, 70, 0.35), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 175, 70, 0.35),
+    transparent
+  );
 }
 
 /* Landing hint parity — marginTop 40px + amber spotlight behind typewriter */
@@ -2631,7 +2680,10 @@ body {
 
 .journal-paper-action-btn--destructive {
   color: var(--theme-paper-action-destructive-color, rgba(140, 50, 30, 0.6));
-  border-color: var(--theme-paper-action-destructive-border, rgba(140, 50, 30, 0.25));
+  border-color: var(
+    --theme-paper-action-destructive-border,
+    rgba(140, 50, 30, 0.25)
+  );
 }
 
 .journal-paper-action-btn:hover:not(:disabled) {
@@ -2645,7 +2697,10 @@ body {
   color: var(--theme-paper-action-destructive-hover, rgba(90, 25, 15, 0.92));
   text-shadow: 0 0 12px rgba(255, 120, 80, 0.35);
   box-shadow: 0 0 14px rgba(220, 80, 50, 0.22);
-  border-color: var(--theme-paper-action-destructive-border, rgba(140, 50, 30, 0.4));
+  border-color: var(
+    --theme-paper-action-destructive-border,
+    rgba(140, 50, 30, 0.4)
+  );
 }
 
 /* ─── Wave 22 — journal bottom nav icon + pill buttons ───────────────────── */
@@ -2722,7 +2777,9 @@ body {
   height: 24px;
   object-fit: contain;
   opacity: 0.88;
-  transition: opacity 0.2s, filter 0.2s;
+  transition:
+    opacity 0.2s,
+    filter 0.2s;
 }
 
 .journal-nav-shelf-slot:hover .journal-nav-shelf-icon {
@@ -2911,7 +2968,9 @@ body {
     box-shadow: 0 0 16px rgba(255, 160, 60, 0.22);
   }
 
-  .journal-nav-action-btn.journal-nav-pill-btn--destructive:hover:not(:disabled) {
+  .journal-nav-action-btn.journal-nav-pill-btn--destructive:hover:not(
+      :disabled
+    ) {
     color: rgba(255, 160, 120, 1);
     text-shadow: 0 0 14px rgba(255, 120, 80, 0.45);
   }
@@ -3226,7 +3285,7 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .dashboard-shelf-item:hover .dashboard-spine-spotlight {
@@ -3364,7 +3423,7 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .dashboard-spine-click {
@@ -3372,7 +3431,7 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   position: relative;
   transition: filter 0.3s ease;
 }
@@ -3584,7 +3643,7 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
 .journal-dialog-footer {
   flex-shrink: 0;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: flex-end;
   margin-top: 0;
   padding-top: 16px;
@@ -3593,7 +3652,8 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
 }
 
 /* Paper editor — footer blends with dialog body (no visible band) */
-.journal-paper-dialog:not(.journal-paper-dialog--compact) .journal-dialog-footer {
+.journal-paper-dialog:not(.journal-paper-dialog--compact)
+  .journal-dialog-footer {
   border-top: none;
   background: transparent;
   padding-top: 12px;
@@ -4013,7 +4073,11 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
 }
 
 .api-status-card {
-  background: linear-gradient(145deg, rgba(28, 14, 6, 0.92), rgba(18, 8, 4, 0.88));
+  background: linear-gradient(
+    145deg,
+    rgba(28, 14, 6, 0.92),
+    rgba(18, 8, 4, 0.88)
+  );
   border: 1px solid rgba(255, 160, 60, 0.18);
   border-radius: 8px;
   box-shadow:
@@ -4120,7 +4184,11 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   position: relative;
   padding: 16px 20px;
   border-radius: 8px;
-  background: linear-gradient(145deg, rgba(28, 14, 6, 0.75), rgba(18, 8, 4, 0.65));
+  background: linear-gradient(
+    145deg,
+    rgba(28, 14, 6, 0.75),
+    rgba(18, 8, 4, 0.65)
+  );
   border: 1px solid rgba(255, 160, 60, 0.14);
   box-shadow: 0 0 32px rgba(255, 140, 40, 0.06);
 }
@@ -4216,7 +4284,11 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
 
 .api-status-tabs__trigger[data-state="active"] {
   color: rgba(255, 220, 150, 0.98);
-  background: linear-gradient(135deg, rgba(90, 40, 10, 0.88), rgba(70, 32, 8, 0.82));
+  background: linear-gradient(
+    135deg,
+    rgba(90, 40, 10, 0.88),
+    rgba(70, 32, 8, 0.82)
+  );
   box-shadow: 0 0 20px rgba(255, 140, 40, 0.2);
 }
 
@@ -4236,7 +4308,7 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   padding: 14px 16px;
   cursor: pointer;
   user-select: none;
@@ -4533,4 +4605,3 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   flex-shrink: 0;
   overflow: visible;
 }
-

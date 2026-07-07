@@ -47,7 +47,8 @@
 | TC-0041 | C4 | REQ-0005, REQ-0029 | Landing handoff + auth book enter CSS | unit+audit | **PASS** | 2026-06-29 |
 | TC-0044 | C4 | REQ-0032 | api-route-catalog completeness (no dup paths) | unit | **PASS** | 2026-07-06 |
 | TC-0045 | C4 | REQ-0032 | getApiStatus payload shape | unit | **PASS** | 2026-07-06 |
+| TC-0046 | C4 | REQ-0010 | ai-provider shuffle fallback chain (Groq→OpenRouter→placeholder; rateLimited) | unit | **PASS** | 2026-07-07 |
 
 ## Regression baseline (Gate 2)
 
-TC-0001–0014 + TC-0021–0045 — **28 PASS static/unit, 1 FLAG, 15 NOT RUN e2e**
+TC-0001–0014 + TC-0021–0046 — **29 PASS static/unit, 1 FLAG, 15 NOT RUN e2e**

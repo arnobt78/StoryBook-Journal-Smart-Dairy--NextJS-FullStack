@@ -70,3 +70,7 @@
 | 2026-07-06T13:45:00Z | docs-wave43 | build-agent-js | SEO metadata, @file comments, README rewrite; verify+build PASS | REQ-0020, REQ-0022–0023 | DEC-0076 |
 | 2026-07-06T15:00:00Z | voice-wave47 | build-agent-js | Phase 3 drain, WASM worker, voice cleanup; 120 Vitest PASS | REQ-0020 | DEC-0077 |
 | 2026-07-06T17:58:00Z | wave48 | build-agent-js | Entry PATCH auth wrapper + journal-fetch 401; voice/editor UX; 123 Vitest PASS | REQ-0002, REQ-0020 | DEC-0078, DEC-0079 |
+| 2026-07-06T18:05:00Z | session-handoff | build-agent-js | EOD handoff: NEXT_SESSION.md, STATE/PLAYBOOK/C4/cursor rule sync; Groq agenda 2026-07-07 | REQ-0020 | NEXT_SESSION.md |
+| 2026-07-07T10:15:00Z | wave49 | build-agent-js | Groq model migration — ai-provider shuffle chains, dynamic toasts, LLM_MODEL_SELECTION.md; 129 Vitest PASS | REQ-0010 | DEC-0080, CR-0006 |
+| 2026-07-07T12:30:00Z | wave49b | build-agent-js | Retry-After polish, sync backup toast, LCP priority, font preloads; 132 Vitest PASS | REQ-0010, REQ-0011, REQ-0029 | DEC-0081 |
+| 2026-07-07T12:55:00Z | brand-icons | build-agent-js | Auth diary 24px, nav lineHeight, favicon.ico tab icon; verify PASS | REQ-0029, REQ-0022 | DEC-0082 |

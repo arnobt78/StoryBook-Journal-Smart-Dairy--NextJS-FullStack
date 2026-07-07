@@ -1,11 +1,11 @@
 # Cycle C4 — UI Polish + Entry Tags (active)
 
-**Status:** Stage 4 Verification — static PASS · Waves **1–47**
+**Status:** Stage 4 Verification — static PASS · Waves **1–48**
 
 | Field | Value |
 |-------|-------|
-| Commits | through Wave 47 (this commit) |
-| Unit tests | **120** Vitest PASS |
+| Commits | `ec8ec35` (Wave 48) · `a7509b2` (Wave 47) |
+| Unit tests | **123** Vitest PASS |
 
 ## Core deliverables (REQ)
 
@@ -42,8 +42,16 @@
 | **42** | API status + documentation UI — `/api-status`, `/api-documentation`, GET `/api/status`, `/api/openapi` | `api-status-server.ts`, `api-route-catalog.ts`, `ApiStatusClient`, `ApiDocumentationClient`, `card/badge/tabs` |
 | **43** | SEO metadata + sitemap + manifest; `@file` walkthrough comments; README rewrite; `npm run verify` | `site-metadata.ts`, `sitemap.ts`, `manifest.ts`, `README.md`, ~90 `src/**` comment headers |
 | **47** | Voice hardening — Phase 3 drain, WASM worker, dead-type cleanup, banner UX | `useVoiceInput.ts`, `whisper.worker.ts`, `whisper-worker-client.ts`, `voice-*` libs |
+| **48** | Entry save 401 — `auth()` wrapper, `journal-fetch`, session keepalive; voice Quick stop + editor scroll | `entries/[entryId]/route.ts`, `journal-fetch.ts`, `useWebSpeech.ts`, `JournalEditor.tsx`, `journal-editor-scroll.ts` |
 
-## Wave 23 detail (latest on main)
+## Session 2026-07-06 (EOD)
+
+- **Wave 47** (`a7509b2`): voice Phase 3 drain, WASM worker offload, 120 Vitest
+- **Wave 48** (`ec8ec35`): PATCH 401 fix + voice/editor UX bugs; 123 Vitest; pushed `main`
+- **Tomorrow:** Groq deprecation email → discuss `docs/LLM_MODEL_SELECTION.md`; migrate `ai-provider.ts` (`GROQ_MODEL` still `llama-3.3-70b-versatile`)
+- **Handoff:** `.agile-v/NEXT_SESSION.md`
+
+## Wave 23 detail (historical)
 
 - **Problem:** Remove confirm lost when editor open (Radix z-index race); nav clipped; shelf glow square.
 - **Fix:** `pendingDeleteBookConfirm` / `pendingDeleteTarget` + effect after editor close; `.journal-nav-actions` wrap; `.journal-nav-shelf-slot` spotlight sibling.
@@ -74,15 +82,16 @@
 
 DEC-0055–0060 Waves 27–32
 
-## Verification (2026-07-06)
+## Verification (2026-07-06 EOD)
 
-lint · typecheck · **96** Vitest · build — all PASS (2026-07-06 Wave 42) · e2e NOT in CI
+lint · typecheck · **123** Vitest · build — all PASS (Wave 48 `ec8ec35`) · e2e NOT in CI
 
 ## Next — suggested focus
 
-1. New feature/extension only with parent REQ-XXXX (e2e CI, shelf-handoff/`/insights` recovery from stash).
-2. Do **not** chase localhost-only refresh flash unless `npm run build && npm start` reproduces it.
-3. Optional: recover stashed WIP via `git stash list` if re-implementing shelf handoff or insights (separate from Wave 24–25 journal work, which is new code on disk now).
+1. **Groq / LLM** — review `docs/LLM_MODEL_SELECTION.md`; implement model fallback in `ai-provider.ts` (shutdown **2026-08-16**)
+2. New feature/extension only with parent REQ-XXXX (e2e CI, shelf-handoff/`/insights` recovery from stash)
+3. Do **not** chase localhost-only refresh flash unless `npm run build && npm start` reproduces it
+4. Optional: recover stashed WIP via `git stash list` if re-implementing shelf handoff or insights
 
 ## Out of scope for UI waves
 

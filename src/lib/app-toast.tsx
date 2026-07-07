@@ -168,7 +168,7 @@ export const appToast = {
       showError("AI assist unavailable", "Please try again later.");
     },
     fallbackOpenRouter() {
-      showInfo("Using backup AI provider", "Groq busy — OpenRouter is helping out.", 3000);
+      showInfo("Using backup AI provider", "Primary provider busy — backup is helping out.", 3000);
     },
     thinking() {
       showInfo("Writing…", "AI is continuing your entry.", 2000);

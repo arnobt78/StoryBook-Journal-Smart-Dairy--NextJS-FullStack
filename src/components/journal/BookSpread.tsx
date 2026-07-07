@@ -71,7 +71,13 @@ import {
   notifyJournalCacheUpdated,
   notifyJournalCacheUpdatedAndRefetch,
 } from "@/lib/journal-cache-notify";
-import { fetchJournalBook, deleteJournalBook, deleteJournalEntry, updateJournalBook, updateJournalEntry } from "@/lib/journal-api";
+import {
+  fetchJournalBook,
+  deleteJournalBook,
+  deleteJournalEntry,
+  updateJournalBook,
+  updateJournalEntry,
+} from "@/lib/journal-api";
 import { handleSessionExpired, isUnauthorizedError } from "@/lib/journal-fetch";
 import {
   enqueuePatchBookOffline,
@@ -90,7 +96,10 @@ export interface BookSpreadProps {
   initialFocusedEntryId?: string | null;
 }
 
-export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSpreadProps) {
+export function BookSpread({
+  initialBook,
+  initialFocusedEntryId = null,
+}: BookSpreadProps) {
   const bookId = initialBook.id;
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -131,7 +140,8 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
   const [isAiThinking, setIsAiThinking] = useState(false);
   const [confirmDeleteEntry, setConfirmDeleteEntry] = useState(false);
   const [confirmDeleteBook, setConfirmDeleteBook] = useState(false);
-  const [pendingDeleteBookConfirm, setPendingDeleteBookConfirm] = useState(false);
+  const [pendingDeleteBookConfirm, setPendingDeleteBookConfirm] =
+    useState(false);
   const [showEditBook, setShowEditBook] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSavingBook, setIsSavingBook] = useState(false);
@@ -277,7 +287,11 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
       ...(effective.location ? { location: effective.location } : {}),
     };
     if (override) {
-      setDraft((d) => ({ ...d, ...override, tags: normalizeTags(effective.tags) }));
+      setDraft((d) => ({
+        ...d,
+        ...override,
+        tags: normalizeTags(effective.tags),
+      }));
     }
 
     if (isBrowserOffline()) {
@@ -463,8 +477,8 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
       });
 
       if (streamRes.status === 429) {
-        const errJson = (await streamRes.json()) as { error?: string };
-        appToast.ai.rateLimited(60);
+        const errJson = (await streamRes.json()) as { retryAfterSec?: number };
+        appToast.ai.rateLimited(errJson.retryAfterSec ?? 45);
         return;
       }
 
@@ -489,7 +503,13 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
               error?: string;
               done?: string;
               usedFallback?: boolean;
+              rateLimited?: boolean;
+              retryAfterSec?: number;
             };
+            if (json.rateLimited) {
+              appToast.ai.rateLimited(json.retryAfterSec ?? 45);
+              return;
+            }
             if (json.usedFallback) appToast.ai.fallbackOpenRouter();
             if (json.error) throw new Error(json.error);
             if (json.text) {
@@ -513,7 +533,17 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
         headers: { "Content-Type": "application/json" },
         body,
       });
-      const json = (await res.json()) as { text?: string; error?: string };
+      if (res.status === 429) {
+        const errJson = (await res.json()) as { retryAfterSec?: number };
+        appToast.ai.rateLimited(errJson.retryAfterSec ?? 45);
+        return;
+      }
+      const json = (await res.json()) as {
+        text?: string;
+        error?: string;
+        meta?: { usedFallback?: boolean };
+      };
+      if (json.meta?.usedFallback) appToast.ai.fallbackOpenRouter();
       if (json.error) throw new Error(json.error);
       if (json.text) {
         setDraft((d) => ({
@@ -729,7 +759,12 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
           priority
           destructive
           title="Remove this journal?"
-          description={<>Every page in &ldquo;{bookTitle}&rdquo; will be permanently deleted.</>}
+          description={
+            <>
+              Every page in &ldquo;{bookTitle}&rdquo; will be permanently
+              deleted.
+            </>
+          }
           confirmLabel="Remove journal"
           loading={isDeleting}
           onConfirm={() => void handleDeleteBook()}
@@ -755,140 +790,142 @@ export function BookSpread({ initialBook, initialFocusedEntryId = null }: BookSp
           style={{ position: "relative", ...bookThemeProps.style }}
           data-book-theme={bookThemeProps["data-book-theme"]}
         >
-        {/* Wave 33 — scroll port wraps spotlight + 3D spread; header/nav stay outside */}
-        <BookSpreadScrollPort>
-          {/* Leather ambient spotlight — absolute-positioned BEFORE the 3D book so it paints
+          {/* Wave 33 — scroll port wraps spotlight + 3D spread; header/nav stay outside */}
+          <BookSpreadScrollPort>
+            {/* Leather ambient spotlight — absolute-positioned BEFORE the 3D book so it paints
               behind it (DOM order, same stacking context). Extends +280px h / +200px v beyond
               the book footprint so the halo is visible around the outer edges of the spread.
               filter:blur is on THIS sibling div, not on the preserve-3d ancestor — safe. */}
-          <div aria-hidden className="journal-spread-spotlight" />
+            <div aria-hidden className="journal-spread-spotlight" />
 
-          {/* Book spread — `pointer-events: none` on the 3-D flex row avoids an oversized
+            {/* Book spread — `pointer-events: none` on the 3-D flex row avoids an oversized
             axis-aligned hit box (full spread) stealing clicks; `LeftPage` / `RightPage`
             re-enable `auto` only on their inner content stacks. */}
-          {/* ── 3D BOOK: preserve-3d spread — shadow on wrapper, not filter (avoids shimmer) ── */}
-        <div
-          className={`${isFlipping ? "spread-coil-flipping " : ""}${BOOK_SPREAD_3D_ROW_CLASS} ${BOOK_SPREAD_3D_ROW_TILTED_CLASS}`}
-          style={{
-            display: "flex",
-            alignItems: "stretch",
-            transformStyle: "preserve-3d",
-            position: "relative",
-            pointerEvents: "none",
-            /* Add leather outer ambient ring on top of the drop-shadow */
-            boxShadow:
-              "0 48px 96px rgba(0,0,0,.72), 0 16px 40px rgba(0,0,0,.38), 0 0 90px rgba(139,69,19,.22), 0 0 200px rgba(90,40,10,.12)",
-          }}
-        >
-          {/* Spine */}
-          <div
-            style={{
-              width: "var(--spine-w, 22px)",
-              flexShrink: 0,
-              zIndex: 10,
-              background: `linear-gradient(180deg,
+            {/* ── 3D BOOK: preserve-3d spread — shadow on wrapper, not filter (avoids shimmer) ── */}
+            <div
+              className={`${isFlipping ? "spread-coil-flipping " : ""}${BOOK_SPREAD_3D_ROW_CLASS} ${BOOK_SPREAD_3D_ROW_TILTED_CLASS}`}
+              style={{
+                display: "flex",
+                alignItems: "stretch",
+                transformStyle: "preserve-3d",
+                position: "relative",
+                pointerEvents: "none",
+                /* Add leather outer ambient ring on top of the drop-shadow */
+                boxShadow:
+                  "0 48px 96px rgba(0,0,0,.72), 0 16px 40px rgba(0,0,0,.38), 0 0 90px rgba(139,69,19,.22), 0 0 200px rgba(90,40,10,.12)",
+              }}
+            >
+              {/* Spine */}
+              <div
+                style={{
+                  width: "var(--spine-w, 22px)",
+                  flexShrink: 0,
+                  zIndex: 10,
+                  background: `linear-gradient(180deg,
             color-mix(in srgb,${bookColor} 30%,#000) 0%,
             ${bookColor} 50%,
             color-mix(in srgb,${bookColor} 30%,#000) 100%)`,
-              boxShadow: "inset -2px 0 5px rgba(0,0,0,.4)",
-            }}
-          />
+                  boxShadow: "inset -2px 0 5px rgba(0,0,0,.4)",
+                }}
+              />
 
-          {/* Single keyed Fragment remounts both pages together for stagger replay.
+              {/* Single keyed Fragment remounts both pages together for stagger replay.
               Do NOT put the same numeric key on LeftPage + RightPage as siblings — React
               warns "two children with the same key" and reconciliation breaks (triple-page glitch). */}
-          <Fragment key={entryStaggerKey}>
-            <LeftPage
-              currentEntry={current}
-              prevEntry={prev}
-              entries={entries}
-              currentIdx={currentIdx}
-              pageNumber={currentIdx * 2 + 1}
-              onNavigate={navigate}
-              isFlipping={isFlipping}
-            />
+              <Fragment key={entryStaggerKey}>
+                <LeftPage
+                  currentEntry={current}
+                  prevEntry={prev}
+                  entries={entries}
+                  currentIdx={currentIdx}
+                  pageNumber={currentIdx * 2 + 1}
+                  onNavigate={navigate}
+                  isFlipping={isFlipping}
+                />
 
-            <RightPage
-              entry={current}
-              pageNumber={currentIdx * 2 + 2}
-              isWriting={isWriting}
-              draft={draft}
-              isSaving={isSaving}
-              isFlipping={isFlipping}
-              onStartWriting={startWriting}
-              onDraftChange={handleDraftChange}
-              onSave={saveEntry}
-              onCancel={() => setIsWriting(false)}
-              onAiAssist={aiAssist}
-              isAiThinking={isAiThinking}
-              onDeleteEntry={() => setConfirmDeleteEntry(true)}
-              canDeleteEntry={!isFlipping && !isWriting && !isDeleting}
-            />
-          </Fragment>
+                <RightPage
+                  entry={current}
+                  pageNumber={currentIdx * 2 + 2}
+                  isWriting={isWriting}
+                  draft={draft}
+                  isSaving={isSaving}
+                  isFlipping={isFlipping}
+                  onStartWriting={startWriting}
+                  onDraftChange={handleDraftChange}
+                  onSave={saveEntry}
+                  onCancel={() => setIsWriting(false)}
+                  onAiAssist={aiAssist}
+                  isAiThinking={isAiThinking}
+                  onDeleteEntry={() => setConfirmDeleteEntry(true)}
+                  canDeleteEntry={!isFlipping && !isWriting && !isDeleting}
+                />
+              </Fragment>
 
-          <SpreadCoilBinding />
+              <SpreadCoilBinding />
 
-          {/* ── PAGE FLIP: overlay mounts only during animation ── */}
-          {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
-        </div>
-        </BookSpreadScrollPort>
+              {/* ── PAGE FLIP: overlay mounts only during animation ── */}
+              {isFlipping && flipDir && <PageFlipOverlay direction={flipDir} />}
+            </div>
+          </BookSpreadScrollPort>
 
-        <JournalBottomNav
-          currentIdx={currentIdx}
-          entryCount={entries.length}
-          isFlipping={isFlipping}
-          isWriting={isWriting}
-          isSavingBook={isSavingBook}
-          isDeleting={isDeleting}
-          onBackToShelf={() => router.push("/dashboard")}
-          onPrev={goPrev}
-          onNext={goNext}
-          onNewEntry={newEntry}
-          onEditJournal={() => setShowEditBook(true)}
-          onRemoveJournal={openDeleteBookConfirm}
-        />
+          <JournalBottomNav
+            currentIdx={currentIdx}
+            entryCount={entries.length}
+            isFlipping={isFlipping}
+            isWriting={isWriting}
+            isSavingBook={isSavingBook}
+            isDeleting={isDeleting}
+            onBackToShelf={() => router.push("/dashboard")}
+            onPrev={goPrev}
+            onNext={goNext}
+            onNewEntry={newEntry}
+            onEditJournal={() => setShowEditBook(true)}
+            onRemoveJournal={openDeleteBookConfirm}
+          />
 
-        <BookEditorModal
-          key={`edit-${bookId}-${showEditBook}`}
-          open={showEditBook}
-          mode="edit"
-          initialValues={bookToFormValues(book)}
-          loading={isSavingBook}
-          onClose={closeEditBook}
-          onSubmit={(values) => void handleUpdateBook(values)}
-        />
-        <ConfirmDialog
-          open={confirmDeleteEntry}
-          variant="dark"
-          priority
-          destructive
-          title="Remove this page?"
-          description={
-            <>
-              &ldquo;{current.title}&rdquo; will be permanently deleted from this journal.
-            </>
-          }
-          confirmLabel="Remove page"
-          loading={isDeleting}
-          onConfirm={() => void handleDeleteEntry()}
-          onCancel={() => setConfirmDeleteEntry(false)}
-        />
-        <ConfirmDialog
-          open={confirmDeleteBook}
-          variant="dark"
-          priority
-          destructive
-          title="Remove this journal?"
-          description={
-            <>
-              Every page in &ldquo;{bookTitle}&rdquo; will be permanently deleted.
-            </>
-          }
-          confirmLabel="Remove journal"
-          loading={isDeleting}
-          onConfirm={() => void handleDeleteBook()}
-          onCancel={() => setConfirmDeleteBook(false)}
-        />
+          <BookEditorModal
+            key={`edit-${bookId}-${showEditBook}`}
+            open={showEditBook}
+            mode="edit"
+            initialValues={bookToFormValues(book)}
+            loading={isSavingBook}
+            onClose={closeEditBook}
+            onSubmit={(values) => void handleUpdateBook(values)}
+          />
+          <ConfirmDialog
+            open={confirmDeleteEntry}
+            variant="dark"
+            priority
+            destructive
+            title="Remove this page?"
+            description={
+              <>
+                &ldquo;{current.title}&rdquo; will be permanently deleted from
+                this journal.
+              </>
+            }
+            confirmLabel="Remove page"
+            loading={isDeleting}
+            onConfirm={() => void handleDeleteEntry()}
+            onCancel={() => setConfirmDeleteEntry(false)}
+          />
+          <ConfirmDialog
+            open={confirmDeleteBook}
+            variant="dark"
+            priority
+            destructive
+            title="Remove this journal?"
+            description={
+              <>
+                Every page in &ldquo;{bookTitle}&rdquo; will be permanently
+                deleted.
+              </>
+            }
+            confirmLabel="Remove journal"
+            loading={isDeleting}
+            onConfirm={() => void handleDeleteBook()}
+            onCancel={() => setConfirmDeleteBook(false)}
+          />
         </div>
       </div>
     </>

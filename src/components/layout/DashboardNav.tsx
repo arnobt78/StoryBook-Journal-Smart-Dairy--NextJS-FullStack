@@ -12,7 +12,7 @@
  * DashboardNav — top bar for authenticated pages.
  *
  * Features:
- *  • Brand mark uses `public/dairy-1.svg` (vector, crisp at any DPR).
+ *  • Brand mark uses `public/diary-1.svg` (vector, crisp at any DPR).
  *  • Profile uses a Radix-based shadcn dropdown (`modal={false}`) so the menu opens in
  *    a portal without scroll-lock or width reflow — avoids navbar “jump” / layout shift.
  *  • Profile menu rows pair Lucide glyphs (`Activity`, `FileText`, `LogOut`) with labels
@@ -53,7 +53,11 @@ interface DashboardNavProps {
   onSignOut: () => void | Promise<void>;
 }
 
-export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps) {
+export function DashboardNav({
+  user,
+  signingOut,
+  onSignOut,
+}: DashboardNavProps) {
   const { pendingCount } = useOfflineSync();
   const avatarSeed = user.email ?? user.name ?? "guest";
   const displayEmail = user.email ?? "—";
@@ -79,12 +83,12 @@ export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps)
           textDecoration: "none",
           display: "flex",
           alignItems: "center",
-          gap: "10px",
+          gap: "8px",
         }}
       >
         <span aria-hidden className="dashboard-nav-brand-spotlight" />
         <Image
-          src="/dairy-1.svg"
+          src="/diary-1.svg"
           alt=""
           width={24}
           height={24}
@@ -98,6 +102,7 @@ export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps)
             ...DASHBOARD_BRAND_TEXT_STYLE,
             fontSize: DASHBOARD_NAV_BRAND_SIZE,
             color: "rgba(255,205,130,.92)",
+            lineHeight: 1,
           }}
         >
           StoryBook
@@ -140,7 +145,11 @@ export function DashboardNav({ user, signingOut, onSignOut }: DashboardNavProps)
             </RippleButton>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="end" sideOffset={8} className="min-w-[15rem]">
+          <DropdownMenuContent
+            align="end"
+            sideOffset={8}
+            className="min-w-[15rem]"
+          >
             <div className="px-3 pt-2 font-lora text-sm font-medium text-[rgba(255,205,130,0.88)]">
               {displayName}
             </div>

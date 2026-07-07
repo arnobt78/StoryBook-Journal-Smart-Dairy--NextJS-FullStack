@@ -1,6 +1,6 @@
 # Agile V — StoryBook Journal
 
-<!-- Cycle: C4 | Revision: C4-voice-wave47-2026-07-06 | Standard: Agile V 1.4 -->
+<!-- Cycle: C4 | Revision: C4-wave48-2026-07-06 | Standard: Agile V 1.4 -->
 
 Living **AQMS** for this repository.
 
@@ -8,24 +8,26 @@ Living **AQMS** for this repository.
 
 ## Quick start
 
-1. **`STATE.md`** — cycle **C4**, stage, gates, **resume tomorrow** block
-2. **`PLAYBOOK.md`** — Infinity Loop + session protocol
-3. **`REQUIREMENTS.md`** — REQ-0001–**0031**
-4. **`cycles/C4/README.md`** — wave index through **47**
+1. **`STATE.md`** — cycle **C4**, stage, gates
+2. **`NEXT_SESSION.md`** — resume after 2026-07-06 (Groq / LLM doc)
+3. **`PLAYBOOK.md`** — Infinity Loop + session protocol
+4. **`REQUIREMENTS.md`** — REQ-0001–**0032**
+5. **`cycles/C4/README.md`** — wave index through **48**
 5. **`skills/SKILLS_INDEX.md`** — 24 agent manifests
 6. Human Gate → **`CHECKPOINTS.md`** + **`APPROVALS.md`**
 
-## C4 snapshot (2026-07-06 session activation)
+## C4 snapshot (2026-07-06 end of day)
 
 | Metric | Value |
 |--------|-------|
 | Requirements | **32** (27 implemented, 5 backlog/partial) |
 | Artifacts | ART-0001–**0107** |
-| UI waves | **1–47** done |
-| Vitest | **120 PASS** |
+| Waves | **1–48** done (UI 1–43, voice 47, auth/save 48) |
+| Vitest | **123 PASS** |
 | Stage | 4 Verification |
-| Commit | `98a2dea` |
+| Commit | `ec8ec35` |
 | Gate 2 | CONDITIONAL (REQ-0021 CI e2e) |
+| Next | Groq model migration — `docs/LLM_MODEL_SELECTION.md` |
 
 ## Cycles
 

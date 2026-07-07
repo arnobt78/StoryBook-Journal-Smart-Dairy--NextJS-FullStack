@@ -8,7 +8,7 @@
  * Client appends tokens into TipTap editor; falls back to POST `/api/ai/assist` on error.
  */
 /**
- * POST /api/ai/assist/stream — SSE token stream (Groq → OpenRouter → Anthropic).
+ * POST /api/ai/assist/stream — SSE token stream (Groq shuffle → OpenRouter :free → Anthropic).
  */
 import { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
@@ -40,7 +40,10 @@ export async function POST(req: NextRequest) {
   const rate = await consumeAiRateLimit(session.user.id, parsed.data.assistSessionId);
   if (!rate.ok) {
     return new Response(
-      JSON.stringify({ error: `Rate limit exceeded — try again in ${rate.retryAfterSec}s` }),
+      JSON.stringify({
+        error: `Rate limit exceeded — try again in ${rate.retryAfterSec}s`,
+        retryAfterSec: rate.retryAfterSec,
+      }),
       { status: 429 },
     );
   }
@@ -50,12 +53,20 @@ export async function POST(req: NextRequest) {
 
   const stream = new ReadableStream({
     async start(controller) {
-      const send = (data: Record<string, string | boolean>) => {
+      const send = (data: Record<string, string | boolean | number>) => {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
       };
 
       try {
         for await (const chunk of streamAssistCompletion(prompt)) {
+          if (chunk.rateLimited) {
+            send({
+              rateLimited: true,
+              retryAfterSec: chunk.retryAfterSec ?? 45,
+              error: chunk.error ?? "AI assist rate limited",
+            });
+            break;
+          }
           if (chunk.error) {
             send({ error: chunk.error });
             break;

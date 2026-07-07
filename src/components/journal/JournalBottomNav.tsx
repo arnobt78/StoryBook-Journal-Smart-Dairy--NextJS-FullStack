@@ -81,11 +81,13 @@ export function JournalBottomNav({
               onClick={onBackToShelf}
               className={`${C.navIcon} journal-nav-icon-btn--shelf journal-nav-touch-btn`}
             >
+              {/* priority — above-fold shelf icon; silences Next LCP warning on journal route */}
               <Image
-                src="/book-stack-2.svg"
+                src="/book-stack-1.svg"
                 alt=""
                 width={24}
                 height={24}
+                priority
                 unoptimized
                 className="journal-nav-shelf-icon pointer-events-none"
               />
@@ -123,7 +125,10 @@ export function JournalBottomNav({
           </NavTooltip>
         </div>
 
-        <div className="journal-nav-divider journal-nav-divider--actions" aria-hidden />
+        <div
+          className="journal-nav-divider journal-nav-divider--actions"
+          aria-hidden
+        />
 
         <div className="journal-nav-actions">
           <NavTooltip label={NAV_NEW_JOURNAL_TOOLTIP} enabled={!isMd}>
@@ -136,11 +141,16 @@ export function JournalBottomNav({
               aria-label={NAV_NEW_JOURNAL_LABEL}
               className={`${C.navPill} journal-nav-pill-btn--new journal-nav-action-btn journal-nav-touch-btn`}
             >
-              <span className="journal-nav-pill-text">{NAV_NEW_JOURNAL_LABEL}</span>
+              <span className="journal-nav-pill-text">
+                {NAV_NEW_JOURNAL_LABEL}
+              </span>
             </RippleButton>
           </NavTooltip>
 
-          <div className="journal-nav-divider journal-nav-divider--between-actions" aria-hidden />
+          <div
+            className="journal-nav-divider journal-nav-divider--between-actions"
+            aria-hidden
+          />
 
           <NavTooltip label="Edit journal" enabled={!isMd}>
             <RippleButton

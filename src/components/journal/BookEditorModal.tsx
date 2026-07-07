@@ -28,10 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { BookSpineMark } from "@/components/journal/BookSpineMark";
 import { BookThemePreview } from "@/components/journal/BookThemePreview";
-import {
-  DEFAULT_BOOK_FORM,
-  type BookFormValues,
-} from "@/types/book-form";
+import { DEFAULT_BOOK_FORM, type BookFormValues } from "@/types/book-form";
 
 export type BookEditorModalProps = {
   open: boolean;
@@ -123,7 +120,9 @@ function BookEditorForm({
               className="journal-editor-input"
               placeholder="My Journal"
               value={form.title}
-              onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, title: e.target.value }))
+              }
               onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             />
 
@@ -145,34 +144,34 @@ function BookEditorForm({
               <div
                 style={{
                   display: "flex",
-                  gap: "10px",
+                  gap: "8px",
                   flexWrap: "wrap",
                 }}
               >
-              {COVER_COLORS.map((c) => {
-                const selected = form.coverColor === c.value;
-                return (
-                  <RippleButton
-                    key={c.value}
-                    type="button"
-                    aria-label={c.label}
-                    aria-pressed={selected}
-                    onClick={() =>
-                      setForm((f) => ({ ...f, coverColor: c.value }))
-                    }
-                    className={`journal-color-swatch${
-                      selected ? " journal-color-swatch--selected" : ""
-                    }`}
-                    style={{ background: c.value }}
-                  >
-                    {selected ? (
-                      <span className="journal-color-swatch-check">
-                        <Check size={16} strokeWidth={3} />
-                      </span>
-                    ) : null}
-                  </RippleButton>
-                );
-              })}
+                {COVER_COLORS.map((c) => {
+                  const selected = form.coverColor === c.value;
+                  return (
+                    <RippleButton
+                      key={c.value}
+                      type="button"
+                      aria-label={c.label}
+                      aria-pressed={selected}
+                      onClick={() =>
+                        setForm((f) => ({ ...f, coverColor: c.value }))
+                      }
+                      className={`journal-color-swatch${
+                        selected ? " journal-color-swatch--selected" : ""
+                      }`}
+                      style={{ background: c.value }}
+                    >
+                      {selected ? (
+                        <span className="journal-color-swatch-check">
+                          <Check size={16} strokeWidth={3} />
+                        </span>
+                      ) : null}
+                    </RippleButton>
+                  );
+                })}
               </div>
             </div>
 
@@ -186,29 +185,34 @@ function BookEditorForm({
                   marginBottom: "8px",
                 }}
               >
-              {BOOK_THEMES.map((theme) => {
-                const selected = form.theme === theme.id;
-                return (
-                  <RippleButton
-                    key={theme.id}
-                    type="button"
-                    aria-pressed={selected}
-                    onClick={() => setForm((f) => ({ ...f, theme: theme.id }))}
-                    className={`journal-theme-chip${
-                      selected
-                        ? " journal-theme-chip--selected"
-                        : " journal-theme-chip--idle"
-                    }`}
-                  >
-                    {theme.label}
-                  </RippleButton>
-                );
-              })}
+                {BOOK_THEMES.map((theme) => {
+                  const selected = form.theme === theme.id;
+                  return (
+                    <RippleButton
+                      key={theme.id}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() =>
+                        setForm((f) => ({ ...f, theme: theme.id }))
+                      }
+                      className={`journal-theme-chip${
+                        selected
+                          ? " journal-theme-chip--selected"
+                          : " journal-theme-chip--idle"
+                      }`}
+                    >
+                      {theme.label}
+                    </RippleButton>
+                  );
+                })}
               </div>
               <BookThemePreview themeId={form.theme} />
             </div>
 
-            <span className="journal-editor-label" style={{ marginTop: "8px", display: "block" }}>
+            <span
+              className="journal-editor-label"
+              style={{ marginTop: "8px", display: "block" }}
+            >
               Cover Icon
             </span>
             <div className="journal-picker-pad">
@@ -219,23 +223,23 @@ function BookEditorForm({
                   flexWrap: "wrap",
                 }}
               >
-              {COVER_ICONS.map(({ id, label, Icon }) => {
-                const selected = form.coverEmoji === id;
-                return (
-                  <RippleButton
-                    key={id}
-                    type="button"
-                    aria-label={label}
-                    aria-pressed={selected}
-                    onClick={() => setForm((f) => ({ ...f, coverEmoji: id }))}
-                    className={`journal-cover-icon-btn${
-                      selected ? " journal-cover-icon-btn--selected" : ""
-                    }`}
-                  >
-                    <Icon size={20} strokeWidth={1.75} />
-                  </RippleButton>
-                );
-              })}
+                {COVER_ICONS.map(({ id, label, Icon }) => {
+                  const selected = form.coverEmoji === id;
+                  return (
+                    <RippleButton
+                      key={id}
+                      type="button"
+                      aria-label={label}
+                      aria-pressed={selected}
+                      onClick={() => setForm((f) => ({ ...f, coverEmoji: id }))}
+                      className={`journal-cover-icon-btn${
+                        selected ? " journal-cover-icon-btn--selected" : ""
+                      }`}
+                    >
+                      <Icon size={20} strokeWidth={1.75} />
+                    </RippleButton>
+                  );
+                })}
               </div>
             </div>
           </div>

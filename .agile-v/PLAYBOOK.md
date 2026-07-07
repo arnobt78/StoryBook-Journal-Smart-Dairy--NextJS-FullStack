@@ -5,10 +5,11 @@
 ## Session start (mandatory)
 
 1. Read **`STATE.md`** — cycle, stage, gates, `eval_gate_status`, `resume_token`
-2. Honor **`POLICY.yaml`** — traceability, gates, append-only logs
-3. Load skills: **`01 core`** → **`02 pipeline`** → domain from **`skills/SKILLS_INDEX.md`**
-4. If **`CHECKPOINTS.md`** has `PENDING` → halt until **`APPROVALS.md`** matches `resume_token`
-5. Load only current **`phases/XX-*/`** files (not full archive)
+2. If resuming after **2026-07-06**, read **`NEXT_SESSION.md`** (Groq / LLM agenda)
+3. Honor **`POLICY.yaml`** — traceability, gates, append-only logs
+4. Load skills: **`01 core`** → **`02 pipeline`** → domain from **`skills/SKILLS_INDEX.md`**
+5. If **`CHECKPOINTS.md`** has `PENDING` → halt until **`APPROVALS.md`** matches `resume_token`
+6. Load only current **`phases/XX-*/`** files (not full archive)
 
 ## Infinity Loop (per task)
 
@@ -97,13 +98,13 @@ npm run test:e2e:install && npm run dev && npm run test:e2e
 - **REQ-0019** — Pino/Sentry observability
 - **REQ-0022** — axe accessibility audit
 
-## Current resume (2026-07-06)
+## Current resume (2026-07-06 EOD)
 
-- **main:** Wave 42 (API status + docs) · **96** Vitest · lint · typecheck PASS
+- **main:** `ec8ec35` Wave 48 (entry save 401 + voice/editor UX) · **123** Vitest · lint · typecheck · build PASS
 - **Stage 4** IN_PROGRESS · **eval_gate_status:** CONDITIONAL
-- **Verify baseline:** **90** Vitest · lint · typecheck PASS (confirmed 2026-07-06 session activation)
 - **No pending CHECKPOINTS** — proceed on user instruction with parent REQ-XXXX
-- **Next work:** REQ-0021 e2e CI · manual QA matrix · any new feature via Infinity Loop
+- **Next session:** Discuss **`docs/LLM_MODEL_SELECTION.md`** — Groq deprecates `llama-3.3-70b-versatile` (2026-08-16); update `src/lib/ai-provider.ts`
+- **Backlog:** REQ-0021 e2e CI · optional auth wrapper on books POST · DRY `journal-api` via `journalFetch`
 
 ## Evidence Summary template
 

@@ -42,6 +42,7 @@ Gate 2 NOT READY — REQ-0021 full e2e in CI; REQ-0009 prod demo gate
 | TC-0041 | REQ-0029–0030 | unit + code audit | **PASS** Wave 24: journal-stagger.ts (3 Vitest); header/left/right row wiring |
 | TC-0042 | REQ-0029–0030 | code audit | **PASS** Wave 26: LeftPage/RightPage `visibility` anti-flash gate mirrors AuthBookShell; `entryStaggerKey` remount replays stagger on both pages post-flip |
 | TC-0043 | REQ-0002, REQ-0003 | unit + code audit | **PASS** Wave 26: `journal-entry-url.ts` (9 Vitest); `?entry=` SSR resolution + `history.replaceState` mirror persists focused entry across hard refresh |
+| TC-0046 | REQ-0010 | unit | **PASS** Wave 49: `ai-provider.test.ts` (8 Vitest); Groq shuffle → OpenRouter :free → rateLimited + Retry-After |
 
 ## Tooling (2026-07-06, session activation)
 
@@ -49,7 +50,7 @@ Gate 2 NOT READY — REQ-0021 full e2e in CI; REQ-0009 prod demo gate
 |-------|--------|
 | `npm run lint` | PASS |
 | `npm run typecheck` | PASS |
-| `npm run test` | PASS (**90** Vitest) |
+| `npm run test` | PASS (**131** Vitest) |
 | `npm run build` | PASS (2026-07-05 Wave 40b — re-run before Gate 2) |
 
 ## Prior cycles (archived summary)

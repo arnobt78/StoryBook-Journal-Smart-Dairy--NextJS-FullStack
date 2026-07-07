@@ -7,7 +7,7 @@
  *  • `siteMetadata` — SEO/OpenGraph from `src/lib/site-metadata.ts`
  *  • `globals.css` — fonts, leather-glass tokens, journal animations
  *  • `<Providers>` — SessionProvider + TanStack Query + offline sync + toasts
- *  • Font preloads — Dancing Script / IM Fell / Playfair for landing LCP
+ *  • Font preloads — landing display + auth demo dropdown + journal spread body weights
  *  • Child route groups: `(auth)`, `(dashboard)`, `api/*` inherit this shell
  */
 import type { Metadata } from "next";
@@ -29,10 +29,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
-        {/* Critical font preloads — landing cover titles render before globals.css is parsed */}
+        {/* Critical font preloads — ready before first paint on landing, auth, dashboard, journal */}
         <link
           rel="preload"
           href="/fonts/dancing-700.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/dancing-400.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
@@ -47,6 +54,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="preload"
           href="/fonts/playfair-400i.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/playfair-600.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/lora-400.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"

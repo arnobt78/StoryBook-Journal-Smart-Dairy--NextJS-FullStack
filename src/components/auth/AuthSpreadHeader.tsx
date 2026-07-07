@@ -38,16 +38,19 @@ export function AuthSpreadHeader() {
       <div className="book-spread-header-row">
         <div className="book-spread-header-title-row">
           <span
-            {...authStaggerRowProps(0, { className: "book-spread-header-icon" })}
+            {...authStaggerRowProps(0, {
+              className: "book-spread-header-icon",
+            })}
           >
+            {/* 24px — optical height parity with Dancing Script 20px bold italic title */}
             <Image
-              src="/dairy-1.svg"
+              src="/diary-1.svg"
               alt=""
-              width={20}
-              height={20}
+              width={24}
+              height={24}
               unoptimized
               className="shrink-0 object-contain"
-              style={{ width: 20, height: 20, display: "block" }}
+              style={{ width: 24, height: 24, display: "block" }}
               priority
             />
           </span>

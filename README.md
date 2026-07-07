@@ -222,7 +222,7 @@ storybook-journal/
 │   └── migrations/            # SQL migration history
 ├── public/
 │   ├── fonts/                 # Self-hosted WOFF2 (Playfair, Lora, Dancing Script, …)
-│   └── dairy-1.svg            # App icon / brand mark
+│   └── diary-1.svg            # App icon / brand mark
 ├── src/
 │   ├── app/                   # Next.js App Router
 │   │   ├── layout.tsx         # Root layout + SEO metadata
@@ -763,7 +763,7 @@ Primary keywords (defined in `src/lib/site-metadata.ts`):
 
 **SEO notes:**
 
-- Root metadata in `src/lib/site-metadata.ts` — title, description, OpenGraph, Twitter, icons (`/dairy-1.svg`), author.
+- Root metadata in `src/lib/site-metadata.ts` — title, description, OpenGraph, Twitter, icons (`/diary-1.svg`), author.
 - `src/app/sitemap.ts` — `/`, `/login`, `/register`.
 - `src/app/manifest.ts` — web app manifest (`/manifest.webmanifest`).
 - Public landing `/` is indexable with full OpenGraph/Twitter metadata.

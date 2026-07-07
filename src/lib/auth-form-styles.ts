@@ -77,7 +77,7 @@ export const outlineCtaStyle: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
-  gap: "10px",
+  gap: "8px",
   boxSizing: "border-box",
   minHeight: AUTH_CONTROL_HEIGHT,
   ...LEATHER_GLASS.buttonOutline,

@@ -1,22 +1,118 @@
 /**
- * AI assist provider chain: Groq (free tier) → OpenRouter fallback.
- * OpenAI-compatible chat completions API; Anthropic env kept as legacy optional path.
+ * AI assist provider chain — REQ-0010 / CR-0006 (Wave 49).
+ *
+ * Groq (shuffled production models) → OpenRouter (:free shuffle) → Anthropic legacy → placeholder.
+ * Model IDs are hardcoded — only GROQ_API_KEY / OPENROUTER_API_KEY env vars required on Vercel.
+ * verified 2026-07-07 against Groq + OpenRouter model catalogs.
  */
 import { DEV_PLACEHOLDER } from "@/lib/ai-assist";
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
-const GROQ_MODEL = "llama-3.3-70b-versatile";
-const OPENROUTER_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
+/** Groq production models — shuffled per request to spread free-tier rate budgets. */
+export const GROQ_MODELS = [
+  "openai/gpt-oss-20b",
+  "qwen/qwen3.6-27b",
+  "openai/gpt-oss-120b",
+] as const;
+
+/** OpenRouter free-tier variants — append :free for zero-cost inference. */
+export const OPENROUTER_MODELS = [
+  "meta-llama/llama-3.3-70b-instruct:free",
+  "deepseek/deepseek-chat-v3-0324:free",
+  "openai/gpt-oss-20b:free",
+] as const;
+
+const RETRYABLE_STATUS = new Set([408, 429, 500, 502, 503, 504]);
+
+const OPENROUTER_HEADERS = {
+  "HTTP-Referer": process.env.NEXTAUTH_URL ?? "https://storybook-journal.vercel.app",
+  "X-Title": "StoryBook Journal",
+} as const;
+
+export type AiProviderName = "groq" | "openrouter" | "placeholder" | "anthropic";
 
 export type AiProviderResult = {
   text: string;
-  provider: "groq" | "openrouter" | "placeholder" | "anthropic";
+  provider: AiProviderName;
   usedFallback: boolean;
+  /** Winning model id from the provider catalog. */
+  model?: string;
+  /** True when every attempted Groq + OpenRouter model returned HTTP 429. */
+  rateLimited?: boolean;
+  /** Max Retry-After (seconds) from provider 429 responses, when available. */
+  retryAfterSec?: number;
+};
+
+export type AiStreamChunk = {
+  text?: string;
+  usedFallback?: boolean;
+  rateLimited?: boolean;
+  /** Max Retry-After (seconds) from provider 429 responses, when available. */
+  retryAfterSec?: number;
+  done?: boolean;
+  error?: string;
 };
 
 type ChatMessage = { role: "user" | "assistant" | "system"; content: string };
+
+type ProviderAttemptResult =
+  | { ok: true; text: string; model: string }
+  | { ok: false; allRateLimited: boolean; retryAfterSec?: number };
+
+type ProviderStreamAttemptResult =
+  | { res: Response; model: string }
+  | { allRateLimited: boolean; retryAfterSec?: number };
+
+const RETRY_AFTER_MIN_SEC = 5;
+const RETRY_AFTER_MAX_SEC = 120;
+
+/** Parse Retry-After header (seconds or HTTP-date); clamp to sane range for toasts. */
+export function parseRetryAfter(headerValue: string | null): number | undefined {
+  if (!headerValue) return undefined;
+
+  const trimmed = headerValue.trim();
+  const asSeconds = Number(trimmed);
+  if (Number.isFinite(asSeconds) && asSeconds >= 0) {
+    return Math.min(RETRY_AFTER_MAX_SEC, Math.max(RETRY_AFTER_MIN_SEC, Math.ceil(asSeconds)));
+  }
+
+  const asDate = Date.parse(trimmed);
+  if (!Number.isNaN(asDate)) {
+    const deltaSec = Math.ceil((asDate - Date.now()) / 1000);
+    if (deltaSec > 0) {
+      return Math.min(RETRY_AFTER_MAX_SEC, Math.max(RETRY_AFTER_MIN_SEC, deltaSec));
+    }
+  }
+
+  return undefined;
+}
+
+function maxRetryAfter(current: number | undefined, next: number | undefined): number | undefined {
+  if (next === undefined) return current;
+  if (current === undefined) return next;
+  return Math.max(current, next);
+}
+
+function retryAfterFromResponse(res: Response): number | undefined {
+  if (res.status !== 429) return undefined;
+  return parseRetryAfter(res.headers.get("retry-after"));
+}
+
+/** Fisher-Yates shuffle — spreads load across models on free-tier keys. */
+export function shuffle<T>(arr: readonly T[]): T[] {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j]!, out[i]!];
+  }
+  return out;
+}
+
+function isRetryable(status: number): boolean {
+  return RETRYABLE_STATUS.has(status);
+}
 
 async function chatCompletion(
   url: string,
@@ -41,12 +137,96 @@ async function chatCompletion(
   });
 }
 
+async function streamChatCompletion(
+  url: string,
+  apiKey: string,
+  model: string,
+  messages: ChatMessage[],
+  extraHeaders?: Record<string, string>,
+): Promise<Response> {
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+      ...extraHeaders,
+    },
+    body: JSON.stringify({
+      model,
+      messages,
+      max_tokens: 300,
+      stream: true,
+    }),
+  });
+}
+
 async function parseChatJson(res: Response): Promise<string> {
   if (!res.ok) throw new Error(`AI HTTP ${res.status}`);
   const data = (await res.json()) as {
     choices?: { message?: { content?: string } }[];
   };
   return data.choices?.[0]?.message?.content?.trim() ?? "";
+}
+
+/** Try each shuffled model on one provider; advance on retryable status / empty / network error. */
+async function tryProviderModelsSync(
+  url: string,
+  apiKey: string,
+  models: readonly string[],
+  messages: ChatMessage[],
+  extraHeaders?: Record<string, string>,
+): Promise<ProviderAttemptResult> {
+  let allRateLimited = true;
+  let sawAttempt = false;
+  let retryAfterSec: number | undefined;
+
+  for (const model of shuffle(models)) {
+    sawAttempt = true;
+    try {
+      const res = await chatCompletion(url, apiKey, model, messages, extraHeaders);
+      if (!res.ok) {
+        retryAfterSec = maxRetryAfter(retryAfterSec, retryAfterFromResponse(res));
+        if (res.status !== 429) allRateLimited = false;
+        if (isRetryable(res.status)) continue;
+        continue;
+      }
+      const text = await parseChatJson(res);
+      if (text) return { ok: true, text, model };
+      allRateLimited = false;
+    } catch {
+      allRateLimited = false;
+    }
+  }
+
+  return { ok: false, allRateLimited: sawAttempt && allRateLimited, retryAfterSec };
+}
+
+/** Stream path — returns first model that yields a readable body. */
+async function tryProviderModelsStream(
+  url: string,
+  apiKey: string,
+  models: readonly string[],
+  messages: ChatMessage[],
+  extraHeaders?: Record<string, string>,
+): Promise<ProviderStreamAttemptResult> {
+  let allRateLimited = true;
+  let sawAttempt = false;
+  let retryAfterSec: number | undefined;
+
+  for (const model of shuffle(models)) {
+    sawAttempt = true;
+    try {
+      const res = await streamChatCompletion(url, apiKey, model, messages, extraHeaders);
+      if (res.ok && res.body) return { res, model };
+      retryAfterSec = maxRetryAfter(retryAfterSec, retryAfterFromResponse(res));
+      if (res.status !== 429) allRateLimited = false;
+      if (isRetryable(res.status)) continue;
+    } catch {
+      allRateLimited = false;
+    }
+  }
+
+  return { allRateLimited: sawAttempt && allRateLimited, retryAfterSec };
 }
 
 /** Legacy Anthropic path when only ANTHROPIC_API_KEY is set. */
@@ -76,54 +256,80 @@ async function anthropicSync(prompt: string): Promise<string> {
 export async function syncAssistCompletion(prompt: string): Promise<AiProviderResult> {
   const groqKey = process.env.GROQ_API_KEY;
   const openRouterKey = process.env.OPENROUTER_API_KEY;
+  const messages: ChatMessage[] = [{ role: "user", content: prompt }];
 
   if (!groqKey && !openRouterKey && !process.env.ANTHROPIC_API_KEY) {
     return { text: DEV_PLACEHOLDER, provider: "placeholder", usedFallback: false };
   }
 
+  let groqAllRateLimited = false;
+  let groqRetryAfterSec: number | undefined;
+
   if (groqKey) {
-    try {
-      const res = await chatCompletion(GROQ_URL, groqKey, GROQ_MODEL, [
-        { role: "user", content: prompt },
-      ]);
-      const text = await parseChatJson(res);
-      if (text) return { text, provider: "groq", usedFallback: false };
-    } catch {
-      /* fall through to OpenRouter */
+    const groq = await tryProviderModelsSync(GROQ_URL, groqKey, GROQ_MODELS, messages);
+    if (groq.ok) {
+      return { text: groq.text, provider: "groq", usedFallback: false, model: groq.model };
     }
+    groqAllRateLimited = groq.allRateLimited;
+    groqRetryAfterSec = groq.retryAfterSec;
   }
 
+  let openRouterAllRateLimited = false;
+  let openRouterRetryAfterSec: number | undefined;
+
   if (openRouterKey) {
-    const res = await chatCompletion(
+    const or = await tryProviderModelsSync(
       OPENROUTER_URL,
       openRouterKey,
-      OPENROUTER_MODEL,
-      [{ role: "user", content: prompt }],
-      {
-        "HTTP-Referer": process.env.NEXTAUTH_URL ?? "https://storybook-journal.vercel.app",
-        "X-Title": "StoryBook Journal",
-      },
+      OPENROUTER_MODELS,
+      messages,
+      OPENROUTER_HEADERS,
     );
-    const text = await parseChatJson(res);
-    if (text) {
-      return { text, provider: "openrouter", usedFallback: Boolean(groqKey) };
+    if (or.ok) {
+      return {
+        text: or.text,
+        provider: "openrouter",
+        usedFallback: Boolean(groqKey),
+        model: or.model,
+      };
     }
+    openRouterAllRateLimited = or.allRateLimited;
+    openRouterRetryAfterSec = or.retryAfterSec;
   }
 
   if (process.env.ANTHROPIC_API_KEY) {
-    const text = await anthropicSync(prompt);
-    if (text) return { text, provider: "anthropic", usedFallback: true };
+    try {
+      const text = await anthropicSync(prompt);
+      if (text) {
+        return {
+          text,
+          provider: "anthropic",
+          usedFallback: true,
+          model: "claude-sonnet-4-20250514",
+        };
+      }
+    } catch {
+      /* fall through */
+    }
   }
 
-  return { text: DEV_PLACEHOLDER, provider: "placeholder", usedFallback: true };
+  const rateLimited =
+    Boolean(groqKey || openRouterKey) && groqAllRateLimited && openRouterAllRateLimited;
+
+  return {
+    text: DEV_PLACEHOLDER,
+    provider: "placeholder",
+    usedFallback: true,
+    rateLimited,
+    retryAfterSec: maxRetryAfter(groqRetryAfterSec, openRouterRetryAfterSec),
+  };
 }
 
 /** Stream tokens via Groq/OpenRouter OpenAI SSE format; yields text chunks. */
-export async function* streamAssistCompletion(
-  prompt: string,
-): AsyncGenerator<{ text?: string; usedFallback?: boolean; done?: boolean; error?: string }> {
+export async function* streamAssistCompletion(prompt: string): AsyncGenerator<AiStreamChunk> {
   const groqKey = process.env.GROQ_API_KEY;
   const openRouterKey = process.env.OPENROUTER_API_KEY;
+  const messages: ChatMessage[] = [{ role: "user", content: prompt }];
 
   if (!groqKey && !openRouterKey && !process.env.ANTHROPIC_API_KEY) {
     yield { text: DEV_PLACEHOLDER };
@@ -131,50 +337,52 @@ export async function* streamAssistCompletion(
     return;
   }
 
-  let res: Response | null = null;
   let usedFallback = false;
+  let groqAllRateLimited = false;
+  let openRouterAllRateLimited = false;
+  let providerRetryAfterSec: number | undefined;
+  let res: Response | null = null;
 
   if (groqKey) {
-    try {
-      res = await fetch(GROQ_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${groqKey}`,
-        },
-        body: JSON.stringify({
-          model: GROQ_MODEL,
-          messages: [{ role: "user", content: prompt }],
-          max_tokens: 300,
-          stream: true,
-        }),
-      });
-      if (!res.ok || !res.body) res = null;
-    } catch {
-      res = null;
+    const groq = await tryProviderModelsStream(GROQ_URL, groqKey, GROQ_MODELS, messages);
+    if ("res" in groq) {
+      res = groq.res;
+    } else {
+      groqAllRateLimited = groq.allRateLimited;
+      providerRetryAfterSec = maxRetryAfter(providerRetryAfterSec, groq.retryAfterSec);
     }
   }
 
   if (!res && openRouterKey) {
     usedFallback = Boolean(groqKey);
-    res = await fetch(OPENROUTER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${openRouterKey}`,
-        "HTTP-Referer": process.env.NEXTAUTH_URL ?? "https://storybook-journal.vercel.app",
-        "X-Title": "StoryBook Journal",
-      },
-      body: JSON.stringify({
-        model: OPENROUTER_MODEL,
-        messages: [{ role: "user", content: prompt }],
-        max_tokens: 300,
-        stream: true,
-      }),
-    });
+    const or = await tryProviderModelsStream(
+      OPENROUTER_URL,
+      openRouterKey,
+      OPENROUTER_MODELS,
+      messages,
+      OPENROUTER_HEADERS,
+    );
+    if ("res" in or) {
+      res = or.res;
+    } else {
+      openRouterAllRateLimited = or.allRateLimited;
+      providerRetryAfterSec = maxRetryAfter(providerRetryAfterSec, or.retryAfterSec);
+    }
   }
 
   if (!res?.ok || !res.body) {
+    const rateLimited =
+      Boolean(groqKey || openRouterKey) && groqAllRateLimited && openRouterAllRateLimited;
+
+    if (rateLimited) {
+      yield {
+        rateLimited: true,
+        retryAfterSec: providerRetryAfterSec,
+        error: "AI assist rate limited",
+      };
+      return;
+    }
+
     if (process.env.ANTHROPIC_API_KEY) {
       try {
         const text = await anthropicSync(prompt);
@@ -186,6 +394,7 @@ export async function* streamAssistCompletion(
         return;
       }
     }
+
     yield { error: "AI assist failed" };
     return;
   }
