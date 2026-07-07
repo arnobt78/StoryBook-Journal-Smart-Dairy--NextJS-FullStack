@@ -10,8 +10,16 @@
 | **50** | AI reasoning hidden (`reasoning_format: hidden`) + write-footer button box-model parity |
 | **51** | Book-clip parity (`overflow:clip` 220px) + direction-aware flip seam + AI writing status anim + edit no-flash (preload/stagger) |
 | **51c** | Footer button height parity (read=write) + voice banner glow un-clip + phone bottom nav slimmer + write-panel hover-glow parity (`overflowX:clip`/`overflowY:visible`) |
+| **52** | API status instant shell — page.tsx auth+header SSR only; `ApiStatusClient` client-fetch + inline skeleton (no blocking `getApiStatus`) |
 
 **Verify:** `npm run verify` · **132** Vitest · build PASS
+
+## Wave 52 summary
+
+- `/api-status` — removed blocking `await getApiStatus()` from page.tsx (0.5–2s RSC hang); static shell+header SSR instantly; `ApiStatusClient` fetches `/api/status` with inline `.skeleton` (no `initialData`).
+- Invalidation unchanged — `queryKeys.apiStatus()` via `notifyJournalCacheUpdated`.
+- `/api-documentation` unchanged (sync catalog, already instant).
+- DEC-0087
 
 ## Wave 51 summary
 

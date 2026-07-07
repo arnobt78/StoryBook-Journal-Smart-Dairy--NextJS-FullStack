@@ -15,7 +15,16 @@ A premium, immersive digital diary that feels like opening a real leather notebo
 
 - **Live Demo:** [https://storybook-journal.vercel.app](https://storybook-journal.vercel.app)
 
----
+![Image 1](https://github.com/user-attachments/assets/38bbf068-b81e-4594-b89a-4e934a814f5a)
+![Image 2](https://github.com/user-attachments/assets/266ac8b6-7bcf-4185-923f-17dc885b62ab)
+![Image 3](https://github.com/user-attachments/assets/11b93830-8a66-4f61-8560-2aeed5213f48)
+![Image 4](https://github.com/user-attachments/assets/f444580d-8671-4da5-90d4-a69ca16c8990)
+![Image 5](https://github.com/user-attachments/assets/02fdf0a6-7ab8-4736-a021-147b00a3b5d5)
+![Image 6](https://github.com/user-attachments/assets/0d7d006e-6aaa-405f-9c46-e9b8956e73f0)
+![Image 7](https://github.com/user-attachments/assets/e192f459-c1d0-4ca2-a112-9d5833691509)
+![Image 8](https://github.com/user-attachments/assets/315edaef-7746-414f-a877-b1830e866947)
+![Image 9](https://github.com/user-attachments/assets/138e244c-e65a-4712-bac2-fa98a8c8f9b9)
+![Image 10](https://github.com/user-attachments/assets/6c1daa04-7cbd-43f3-8a69-3ddaa0eccaae)
 
 ## Table of Contents
 

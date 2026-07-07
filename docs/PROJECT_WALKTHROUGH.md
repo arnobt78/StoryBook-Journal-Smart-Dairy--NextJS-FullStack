@@ -724,7 +724,18 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 44. Related docs
+## 44. API status instant shell — Wave 52 (2026-07-07)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Instant shell | `api-status/page.tsx` | Auth gate + static background/header only; removed blocking `getApiStatus()` SSR await (DB+Redis+6 counts caused 0.5–2s navigation hang) |
+| Client skeleton | `ApiStatusClient.tsx` | No `initialData`; `useQuery` fetches `/api/status`; inline `.skeleton` pulse mirrors Service card + stat grids until data resolves |
+| Invalidation | `journal-cache-notify.ts` | Unchanged — `queryKeys.apiStatus()` invalidated on journal CRUD |
+| Tests | — | **132** Vitest + lint + typecheck + build PASS |
+
+---
+
+## 45. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -736,4 +747,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-07 — C4 Wave 51; lint/typecheck/132 Vitest/build PASS.*
+*Last reviewed: 2026-07-07 — C4 Wave 52; lint/typecheck/132 Vitest/build PASS.*
