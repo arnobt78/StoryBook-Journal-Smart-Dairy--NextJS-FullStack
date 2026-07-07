@@ -15,7 +15,7 @@
 ```
 Scope: C4 REQ-0029–0032 + regression REQ-0002, REQ-0003, REQ-0007, REQ-0010, REQ-0020 | Traceability: 32 REQs, ART-0109
 Findings: PASS static/unit through Wave 51 | FAIL 0 | NOT RUN e2e in CI
-Log: 2026-07-07 | build-agent-js | Wave 51 book-clip parity (runtime-log verified) + flip seam + AI writing status | 132 Vitest + build PASS
+Log: 2026-07-07 | build-agent-js | Wave 51 book-clip parity + flip seam + AI writing status; 51c footer/nav/banner polish + write-panel hover-glow parity (runtime-log verified) | 132 Vitest + build PASS
 ```
 
 ## EvalGate (Gate 2)

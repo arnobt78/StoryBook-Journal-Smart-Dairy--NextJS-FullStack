@@ -1551,14 +1551,15 @@ body {
     flex-shrink: 0;
   }
 
-  /* Write footer cancel — match AI Assist / Save typography (paper-action had no font-size) */
+  /* Write footer cancel/dictate — match AI Assist / Save typography + read-mode
+     `4px 10px` padding so all write buttons share the compact read-row height */
   .journal-write-footer__action-btn {
     font-family: "Lora", serif;
     font-size: 9px;
     font-weight: 400;
     letter-spacing: 1px;
     text-transform: uppercase;
-    padding: 5px 12px;
+    padding: 4px 10px;
   }
 
   .journal-write-footer__action-btn .journal-md-icon-label {
@@ -1659,8 +1660,9 @@ body {
   flex-wrap: nowrap;
   align-items: center;
   gap: 8px;
-  padding-top: 8px;
-  padding-bottom: 2px;
+  /* Same vertical rhythm as `.journal-read-footer` (padding-top:10px) so the
+     write row height matches the read row exactly. */
+  padding-top: 10px;
   margin-top: 8px;
   border-top: 1px solid rgba(120, 70, 20, 0.1);
   flex-shrink: 0;
@@ -1717,7 +1719,9 @@ body {
 .journal-write-footer__action-btn,
 .journal-write-footer__voice-chevron {
   box-sizing: border-box;
-  min-height: 30px;
+  /* Height parity with read-mode Remove/Edit (`.journal-read-footer__btn`):
+     content-driven height via `4px 10px` padding — no taller `min-height` so the
+     write row matches the compact read row on desktop. Mobile keeps 36×36 below. */
   line-height: 1;
   transition:
     color 0.2s,
@@ -1735,7 +1739,7 @@ body {
   background: rgba(55, 28, 100, 0.42);
   color: rgba(245, 235, 255, 0.95);
   border: 1px solid rgba(120, 80, 200, 0.35);
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: 4px;
   cursor: pointer;
   flex-shrink: 0;
@@ -1764,7 +1768,7 @@ body {
   background: rgba(90, 40, 10, 0.82);
   color: rgba(255, 215, 150, 0.92);
   border: 1px solid transparent;
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: 4px;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -2915,10 +2919,12 @@ body {
 }
 
 @media (max-width: 767px) {
+  /* Trimmed touch targets on phone — keeps a comfortable tap area while
+     reducing the bottom nav pill height (was 44px/10px → felt too tall). */
   .journal-nav-touch-btn {
-    min-width: 44px;
-    min-height: 44px;
-    padding: 10px;
+    min-width: 40px;
+    min-height: 38px;
+    padding: 7px;
   }
 }
 
@@ -2951,11 +2957,12 @@ body {
 }
 
 @media (max-width: 767px) {
-  /* Wave 34/35 — single-row icon nav on phone + shell-pad outer wrap */
+  /* Wave 34/35 — single-row icon nav on phone + shell-pad outer wrap.
+     Wave 51: slimmer vertical padding so the pill sits lower/tighter. */
   .journal-bottom-nav {
     flex-wrap: nowrap;
     gap: 6px;
-    padding: 8px 10px;
+    padding: 5px 10px;
     width: 100%;
     max-width: 100%;
     justify-content: space-between;
@@ -3003,8 +3010,8 @@ body {
   }
 
   .journal-bottom-nav .journal-nav-touch-btn svg {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -4453,9 +4460,15 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   cursor: wait;
 }
 
-/* Full-width interim/error banner — spans right page content above footer */
+/* Interim/error/writing banner — sits above the footer row.
+   Inset horizontally (`margin: 0 14px 6px`) instead of `width: 100%` so its
+   ambient `box-shadow` glow spreads naturally inside the write panel's
+   `overflow: hidden` bounds rather than being clipped to a hard line at the
+   left/right page edges (phone + desktop). Stretches to fill the remaining
+   width via the flex-column parent's default `align-items: stretch`. */
 .voice-interim-banner {
-  width: 100%;
+  width: auto;
+  margin: 0 14px 6px;
   box-sizing: border-box;
   background: rgba(40, 18, 5, 0.88);
   color: rgba(255, 215, 150, 0.95);
@@ -4465,7 +4478,6 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   line-height: 1.4;
   padding: 6px 10px;
   border-radius: 6px;
-  margin-bottom: 6px;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;

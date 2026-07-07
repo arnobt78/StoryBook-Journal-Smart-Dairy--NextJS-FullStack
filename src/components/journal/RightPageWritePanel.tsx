@@ -126,7 +126,13 @@ export function RightPageWritePanel({
         minHeight: 0,
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden",
+        /* Clip only horizontally (keeps the Wave-38 editor min-width guard) but
+           stay visible vertically so the footer's hover box-shadow glow flows
+           into RightPage's shared 12px bottom padding — matching read mode
+           instead of being cut flat. `clip` + `visible` is a valid axis pair
+           (no forced scrollbar). */
+        overflowX: "clip",
+        overflowY: "visible",
       }}
     >
       {/* ── WRITE-MODE ROW STAGGER — mirrors RightPage read-mode indices so the

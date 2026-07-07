@@ -76,3 +76,4 @@
 | 2026-07-07T12:55:00Z | brand-icons | build-agent-js | Auth diary 24px, nav lineHeight, favicon.ico tab icon; verify PASS | REQ-0029, REQ-0022 | DEC-0082 |
 | 2026-07-07T13:30:00Z | wave50 | build-agent-js | Groq reasoning_format hidden; stripReasoning; write-footer button box-model parity; 132 Vitest PASS | REQ-0010, REQ-0029 | DEC-0083 |
 | 2026-07-07T14:45:00Z | wave51 | build-agent-js | AI writing status anim + empty-stream sync fallback; edit preload+stagger (no flash); direction-aware coil seam; book-clip parity (overflow:clip 220px, runtime-log verified); 132 Vitest + build PASS | REQ-0020, REQ-0029, REQ-0003 | DEC-0084, DEC-0085, CR-0008 |
+| 2026-07-07T15:55:00Z | wave51c | build-agent-js | Footer button height parity (read=write); voice banner glow un-clip; phone bottom nav slimmer; write-panel hover-glow parity (overflowX:clip/overflowY:visible, runtime-log verified); 132 Vitest + build PASS | REQ-0029, REQ-0003 | DEC-0086 |

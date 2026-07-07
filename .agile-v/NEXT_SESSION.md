@@ -9,6 +9,7 @@
 | **49** | Groq model migration — `ai-provider.ts` shuffle chains, dynamic toasts, `docs/LLM_MODEL_SELECTION.md` |
 | **50** | AI reasoning hidden (`reasoning_format: hidden`) + write-footer button box-model parity |
 | **51** | Book-clip parity (`overflow:clip` 220px) + direction-aware flip seam + AI writing status anim + edit no-flash (preload/stagger) |
+| **51c** | Footer button height parity (read=write) + voice banner glow un-clip + phone bottom nav slimmer + write-panel hover-glow parity (`overflowX:clip`/`overflowY:visible`) |
 
 **Verify:** `npm run verify` · **132** Vitest · build PASS
 
@@ -40,5 +41,6 @@
 - Groq migration — done Wave 49
 - AI reasoning leak — fixed Wave 50
 - Book right-corner clip / flip width pop — fixed Wave 51 (don't reintroduce blanket `overflow:visible` at rest — use `clip`+margin)
+- Footer button height / voice banner + hover glow clip — fixed Wave 51c (write-panel root `overflowX:clip`+`overflowY:visible`; don't set root `overflow:hidden`)
 - Voice stop / Quick transcript — fixed Wave 48
 - Entry save 401 pilot — entries route only; working in dev

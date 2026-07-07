@@ -718,6 +718,8 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 | Flip seam | `globals.css`, `BookSpread.tsx` | Direction-aware `.spread-coil-flipping--fwd .spread-coil-binding` pins the forward-turn coil shadow to its idle value (seamless reveal); backward turn keeps depth bump |
 | AI writing status | `JournalWriteFooter.tsx`, `journal-responsive-labels.ts` | `VoiceAnimatedStatus` (Sparkles + `WRITE_WRITING_LABEL`) while `isAiThinking` — voice-parity; empty stream → sync `assist` fallback in `BookSpread` |
 | Edit no-flash | `JournalEditor.tsx`, `RightPage.tsx`, `RightPageWritePanel.tsx` | `immediatelyRender:true`; preload `JournalEditor` chunk in read mode; write-panel rows use `journalStaggerRowProps`; edit bumps `entryStaggerKey` |
+| Footer/nav/banner polish | `globals.css` | Write buttons match read `.journal-read-footer__btn` height (drop `min-height:30px`, `padding:4px 10px`, write row `padding-top:10px`); `.voice-interim-banner` `width:auto`+`margin:0 14px 6px` (glow not clipped); phone bottom nav slimmer (`.journal-nav-touch-btn` 44→38px, pill pad 8→5px, svg 22→20px) |
+| Hover-glow parity | `RightPageWritePanel.tsx` | Root `overflowX:clip`+`overflowY:visible` — footer hover glow flows into RightPage's shared 12px band like read mode (runtime-log verified: root bottom 835 vs footer 844 vs parent 848) |
 | Tests | — | **132** Vitest + lint + typecheck + build PASS |
 
 ---

@@ -8,7 +8,7 @@
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
 | **Revision** | C4-wave51-2026-07-07 |
-| **Last commit** | Wave 51: AI writing status + edit stagger/preload + flip seam + book-clip parity (pending) |
+| **Last commit** | Wave 51c: footer/nav/banner polish + write-panel hover-glow parity (pending) |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -50,6 +50,7 @@
 | **49** | **Groq model migration — multi-model shuffle fallback** | prior |
 | **50** | **AI reasoning hidden + write-footer button parity** | this session |
 | **51** | **AI writing status anim · edit stagger/preload (no flash) · flip seam direction-aware · book-clip parity (auth==journal)** | this session |
+| **51c** | **Footer button height parity (read=write) · voice banner glow un-clip · phone bottom nav slimmer · write-panel hover-glow parity** | this session |
 
 ## Infinity Loop
 
