@@ -22,7 +22,6 @@ type StatusStatGridProps = {
   stats: StatItem[];
   /** When true, stat values render skeleton chips; labels/icons unchanged */
   loading?: boolean;
-  staggerStartIndex?: number;
 };
 
 /** Grid of glowing stat cards — platform or personal aggregates */
