@@ -6,7 +6,7 @@
  * ──────────────────────────────────────
  * Auth required. Returns DB ping latency, Redis/AI configured flags,
  * platform aggregates (user/book/entry counts), personal counts, recently-active proxy.
- * Server logic: `getApiStatus()` shared with SSR on `/api-status` page.
+ * `getApiStatus()` backs the client `useQuery` fetch from the `/api-status` dashboard.
  */
 /**
  * GET /api/status — enriched dependency health + aggregate platform/personal stats.

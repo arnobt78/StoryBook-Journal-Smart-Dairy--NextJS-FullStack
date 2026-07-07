@@ -31,7 +31,11 @@ export default async function ApiStatusPage() {
       }}
     >
       <div className="api-status-page">
-        <header {...journalStaggerRowProps(0, { className: "api-status-page-header" })}>
+        <header
+          {...journalStaggerRowProps(0, {
+            className: "api-status-page-header",
+          })}
+        >
           <Activity
             className="mx-auto mb-2 size-8 text-[rgba(255,180,80,0.7)]"
             strokeWidth={1.5}
@@ -39,7 +43,8 @@ export default async function ApiStatusPage() {
           />
           <h1 className="api-status-page-header__title">API Status</h1>
           <p className="api-status-page-header__subtitle">
-            Live dependency health and platform aggregates — no personal data exposed
+            Live dependency health and platform aggregates — no personal data
+            exposed
           </p>
         </header>
 

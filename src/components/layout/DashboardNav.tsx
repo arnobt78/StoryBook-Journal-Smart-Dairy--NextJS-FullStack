@@ -45,6 +45,7 @@ import {
   DASHBOARD_SHELL_PAD_CLASS,
 } from "@/lib/dashboard-styles";
 import { useOfflineSync } from "@/context/OfflineSyncContext";
+import { useApiPagesPrefetch } from "@/hooks/useApiPagesPrefetch";
 import { resolveLogoutDisplayName } from "@/lib/logout-book-close";
 
 interface DashboardNavProps {
@@ -59,6 +60,7 @@ export function DashboardNav({
   onSignOut,
 }: DashboardNavProps) {
   const { pendingCount } = useOfflineSync();
+  const { prefetchApiPages } = useApiPagesPrefetch();
   const avatarSeed = user.email ?? user.name ?? "guest";
   const displayEmail = user.email ?? "—";
   const displayName = resolveLogoutDisplayName(user);
@@ -127,7 +129,12 @@ export function DashboardNav({
             {pendingCount} offline
           </span>
         )}
-        <DropdownMenu modal={false}>
+        <DropdownMenu
+          modal={false}
+          onOpenChange={(open) => {
+            if (open) prefetchApiPages();
+          }}
+        >
           <DropdownMenuTrigger asChild>
             <RippleButton
               type="button"

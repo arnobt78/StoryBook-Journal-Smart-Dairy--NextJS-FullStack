@@ -37,10 +37,14 @@ export function StatusStatGrid({
                   strokeWidth={1.75}
                   aria-hidden
                 />
-                <div className="api-status-stat-glow__value">{stat.value.toLocaleString()}</div>
+                <div className="api-status-stat-glow__value">
+                  {stat.value.toLocaleString()}
+                </div>
                 <div className="api-status-stat-glow__label">{stat.label}</div>
                 {stat.subtitle ? (
-                  <div className="api-status-stat-glow__subtitle">{stat.subtitle}</div>
+                  <div className="api-status-stat-glow__subtitle">
+                    {stat.subtitle}
+                  </div>
                 ) : null}
               </div>
             );

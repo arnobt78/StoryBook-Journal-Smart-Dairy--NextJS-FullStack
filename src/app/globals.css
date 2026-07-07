@@ -4413,6 +4413,29 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   margin-top: 8px;
 }
 
+.api-status-retry-btn {
+  font-family: Lora, serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: rgba(90, 40, 10, 0.82);
+  color: rgba(255, 215, 150, 0.92);
+  border: none;
+  padding: 10px 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+.api-status-retry-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.api-status-retry-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
 .api-status-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));

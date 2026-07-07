@@ -11,8 +11,16 @@
 | **51** | Book-clip parity (`overflow:clip` 220px) + direction-aware flip seam + AI writing status anim + edit no-flash (preload/stagger) |
 | **51c** | Footer button height parity (read=write) + voice banner glow un-clip + phone bottom nav slimmer + write-panel hover-glow parity (`overflowX:clip`/`overflowY:visible`) |
 | **52** | API status instant shell — page.tsx auth+header SSR only; `ApiStatusClient` client-fetch + inline skeleton (no blocking `getApiStatus`) |
+| **53** | API status polish — error+retry card, `useApiPagesPrefetch` on profile dropdown, doc comment fix |
 
 **Verify:** `npm run verify` · **132** Vitest · build PASS
+
+## Wave 53 summary
+
+- Stale doc comments in `api-status-server.ts` + `api/status/route.ts` aligned with Wave 52.
+- `ApiStatusClient` — `isError` → `ApiStatusErrorCard` + Try again (`refetch`); `.api-status-retry-btn` in globals.css.
+- `useApiPagesPrefetch` — profile menu `onOpenChange` warms `/api-status` + `/api-documentation` routes + TanStack cache.
+- DEC-0088
 
 ## Wave 52 summary
 

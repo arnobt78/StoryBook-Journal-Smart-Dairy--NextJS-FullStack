@@ -735,7 +735,18 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 45. Related docs
+## 45. API status polish — Wave 53 (2026-07-07)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Doc comments | `api-status-server.ts`, `api/status/route.ts` | Stale "SSR on page" comments updated — `getApiStatus` backs GET `/api/status` only |
+| Error + retry | `ApiStatusClient.tsx`, `globals.css` | `isError` → `ApiStatusErrorCard` + Try again (`refetch`); `.api-status-retry-btn` leather styling |
+| Nav prefetch | `useApiPagesPrefetch.ts`, `DashboardNav.tsx` | Profile menu open prefetches both API routes + TanStack `apiStatus`/`apiOpenApi` cache |
+| Tests | — | **132** Vitest + lint + typecheck + build PASS |
+
+---
+
+## 46. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -747,4 +758,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-07 — C4 Wave 52; lint/typecheck/132 Vitest/build PASS.*
+*Last reviewed: 2026-07-07 — C4 Wave 53; lint/typecheck/132 Vitest/build PASS.*

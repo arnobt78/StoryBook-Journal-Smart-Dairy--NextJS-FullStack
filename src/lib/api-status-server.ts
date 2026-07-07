@@ -5,11 +5,11 @@
  * ──────────────────────────────────────────
  * Probes: PostgreSQL (`SELECT 1`), Redis ping, AI env flags (no secrets exposed).
  * Counts: platform totals + per-user book/entry counts + recently-active (15m proxy).
- * Shared by GET `/api/status` and SSR on `/api-status` page (no double network hop).
+ * Consumed by GET `/api/status` only — `/api-status` page is instant shell + client fetch.
  */
 /**
  * Server-side API status aggregation — DB ping, Redis ping, platform/personal counts.
- * Shared by GET /api/status and SSR on /api-status page (no double network hop).
+ * Backs GET /api/status; dashboard page fetches via TanStack Query (Wave 52).
  */
 import { prisma } from "@/lib/db";
 import { getRedis } from "@/lib/redis";
