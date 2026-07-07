@@ -4436,6 +4436,31 @@ html[data-auth-from-landing="1"] .auth-book-enter-shell .auth-stagger-row {
   cursor: default;
 }
 
+/* Value-only skeleton chips — sized to match real badge/value/description slots */
+.api-status-value-skeleton {
+  display: inline-block;
+  height: clamp(28px, 4vw, 36px);
+  width: 46px;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.api-status-badge-skeleton {
+  display: inline-block;
+  flex-shrink: 0;
+  height: 22px;
+  width: 90px;
+  border-radius: 4px;
+}
+
+.api-status-line-skeleton {
+  display: inline-block;
+  height: 0.85rem;
+  width: min(240px, 60vw);
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
 .api-status-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));

@@ -79,3 +79,4 @@
 | 2026-07-07T15:55:00Z | wave51c | build-agent-js | Footer button height parity (read=write); voice banner glow un-clip; phone bottom nav slimmer; write-panel hover-glow parity (overflowX:clip/overflowY:visible, runtime-log verified); 132 Vitest + build PASS | REQ-0029, REQ-0003 | DEC-0086 |
 | 2026-07-07T16:25:00Z | wave52 | build-agent-js | API status instant shell — page.tsx auth+header only; ApiStatusClient client-fetch + inline skeleton (no initialData); 132 Vitest + build PASS | REQ-0032 | DEC-0087 |
 | 2026-07-07T16:40:00Z | wave53 | build-agent-js | API status polish — error+retry card, useApiPagesPrefetch on profile dropdown, doc comments; 132 Vitest + build PASS | REQ-0032 | DEC-0088 |
+| 2026-07-07T16:45:00Z | wave54 | build-agent-js | API status value-only skeleton — unified tree, static chrome + value chips; 132 Vitest + build PASS | REQ-0032 | DEC-0089 |

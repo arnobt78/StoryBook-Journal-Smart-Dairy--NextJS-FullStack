@@ -746,7 +746,18 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 46. Related docs
+## 46. API status value-only skeleton — Wave 54 (2026-07-07)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Unified tree | `ApiStatusClient.tsx` | Deleted `ApiStatusDataSkeleton`; single tree with `loading = !status` — static chrome always visible |
+| Value chips | `globals.css`, `StatusStatGrid.tsx`, `StatusDependencyCard.tsx` | Only badges, 6 stat numbers, last-checked line pulse; icons/labels/titles/descriptions render as real text |
+| Layout parity | Same cards/divs/line-heights | No layout shift when values resolve |
+| Tests | — | **132** Vitest + lint + typecheck + build PASS |
+
+---
+
+## 47. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -758,4 +769,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-07 — C4 Wave 53; lint/typecheck/132 Vitest/build PASS.*
+*Last reviewed: 2026-07-07 — C4 Wave 54; lint/typecheck/132 Vitest/build PASS.*

@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * @file components/api-status/StatusDependencyCard.tsx
+ *
+ * WALKTHROUGH — Single dependency row (DB, Redis, AI)
+ * ───────────────────────────────────────────────────
+ * Icon, title, and meta always render as static chrome. Only the trailing
+ * status badge pulses as a skeleton chip when `loading` is true.
+ */
 import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -9,6 +17,8 @@ type StatusDependencyCardProps = {
   meta: string;
   ok: boolean;
   configured?: boolean;
+  /** When true, badge slot shows skeleton chip instead of Connected/Unreachable */
+  loading?: boolean;
 };
 
 /** Single dependency row — database, Redis, or AI provider */
@@ -18,6 +28,7 @@ export function StatusDependencyCard({
   meta,
   ok,
   configured,
+  loading = false,
 }: StatusDependencyCardProps) {
   const badgeVariant =
     configured === false ? "warning" : ok ? "success" : "destructive";
@@ -31,7 +42,11 @@ export function StatusDependencyCard({
         <div className="api-status-dep-row__title">{title}</div>
         <div className="api-status-dep-row__meta">{meta}</div>
       </div>
-      <Badge variant={badgeVariant}>{badgeLabel}</Badge>
+      {loading ? (
+        <span className="skeleton api-status-badge-skeleton" aria-hidden />
+      ) : (
+        <Badge variant={badgeVariant}>{badgeLabel}</Badge>
+      )}
     </div>
   );
 }

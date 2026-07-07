@@ -1,8 +1,17 @@
+/**
+ * @file components/api-status/StatusStatGrid.tsx
+ *
+ * WALKTHROUGH — Stat grid for platform/personal aggregates
+ * ───────────────────────────────────────────────────────
+ * Static chrome (title, description, icons, labels, subtitles) always renders.
+ * Only the numeric value pulses as a skeleton chip when `loading` is true.
+ */
 import type { LucideIcon } from "lucide-react";
 
 export type StatItem = {
   label: string;
-  value: number;
+  /** null while loading — value cell shows skeleton chip */
+  value: number | null;
   subtitle?: string;
   icon: LucideIcon;
 };
@@ -11,6 +20,8 @@ type StatusStatGridProps = {
   title: string;
   description: string;
   stats: StatItem[];
+  /** When true, stat values render skeleton chips; labels/icons unchanged */
+  loading?: boolean;
   staggerStartIndex?: number;
 };
 
@@ -19,6 +30,7 @@ export function StatusStatGrid({
   title,
   description,
   stats,
+  loading = false,
 }: StatusStatGridProps) {
   return (
     <div className="api-status-card">
@@ -38,7 +50,11 @@ export function StatusStatGrid({
                   aria-hidden
                 />
                 <div className="api-status-stat-glow__value">
-                  {stat.value.toLocaleString()}
+                  {loading || stat.value == null ? (
+                    <span className="skeleton api-status-value-skeleton" aria-hidden />
+                  ) : (
+                    stat.value.toLocaleString()
+                  )}
                 </div>
                 <div className="api-status-stat-glow__label">{stat.label}</div>
                 {stat.subtitle ? (

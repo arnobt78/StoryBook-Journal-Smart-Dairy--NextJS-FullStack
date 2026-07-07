@@ -12,8 +12,16 @@
 | **51c** | Footer button height parity (read=write) + voice banner glow un-clip + phone bottom nav slimmer + write-panel hover-glow parity (`overflowX:clip`/`overflowY:visible`) |
 | **52** | API status instant shell — page.tsx auth+header SSR only; `ApiStatusClient` client-fetch + inline skeleton (no blocking `getApiStatus`) |
 | **53** | API status polish — error+retry card, `useApiPagesPrefetch` on profile dropdown, doc comment fix |
+| **54** | API status value-only skeleton — unified tree; static chrome + badge/number chips only |
 
 **Verify:** `npm run verify` · **132** Vitest · build PASS
+
+## Wave 54 summary
+
+- Deleted `ApiStatusDataSkeleton`; single unified tree with `loading = !status`.
+- Static chrome (icons, titles, labels, descriptions) always visible; only badges, stat numbers, last-checked line pulse.
+- `StatusStatGrid` + `StatusDependencyCard` accept `loading`; `.api-status-value/badge/line-skeleton` chips.
+- DEC-0089
 
 ## Wave 53 summary
 

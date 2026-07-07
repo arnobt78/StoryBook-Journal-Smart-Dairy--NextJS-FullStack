@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-wave53-2026-07-07 |
-| **Last commit** | Wave 53: API status polish — error+retry, nav prefetch (pending) |
+| **Revision** | C4-wave54-2026-07-07 |
+| **Last commit** | Wave 54: API status value-only skeleton (pending) |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -22,7 +22,7 @@
 ## Resume
 
 1. Read **`STATE.md`** → `PLAYBOOK.md` → `cycles/C4/README.md` → **`DEC-0083`**.
-2. **Code baseline:** Wave 53 — API status error+retry UI; `useApiPagesPrefetch` on profile dropdown; doc comments aligned with Wave 52 client-fetch.
+2. **Code baseline:** Wave 54 — API status value-only skeleton (unified tree; static chrome + value chips).
 3. **Verify:** lint · typecheck · **132** Vitest · build PASS · `npm run verify`.
 4. **Backlog:** REQ-0021 e2e CI; optional `auth()` on books POST; DRY `journal-api` via `journalFetch`.
 5. **Constraints:** `notifyJournalCacheUpdated` only; `force-dynamic`; SSR in `page.tsx`.
@@ -53,6 +53,7 @@
 | **51c** | **Footer button height parity (read=write) · voice banner glow un-clip · phone bottom nav slimmer · write-panel hover-glow parity** | this session |
 | **52** | **API status instant shell — auth+header SSR only; client skeleton fetch (no blocking getApiStatus)** | this session |
 | **53** | **API status polish — error+retry card, profile-menu prefetch (`useApiPagesPrefetch`), doc comment fix** | this session |
+| **54** | **API status value-only skeleton — unified tree; static chrome + badge/number chips only** | this session |
 
 ## Infinity Loop
 
