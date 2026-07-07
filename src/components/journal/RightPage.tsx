@@ -30,6 +30,7 @@
  *  together on initial mount AND after every page turn (remount key), matching the
  *  auth login/register effect exactly.
  */
+import { useEffect } from "react";
 import type { JournalEntry, EntryDraft } from "@/types";
 import {
   JOURNAL_DIVIDER_GRADIENT,
@@ -76,6 +77,14 @@ export function RightPage({
   onDeleteEntry, canDeleteEntry = true,
 }: RightPageProps) {
   const entryTags = normalizeTags(entry.tags);
+
+  /* Warm the lazy TipTap editor chunk while reading so the FIRST "Edit" click
+     mounts instantly (no dynamic-import "Loading editor…" flash — the chunk is
+     only fetched on first write otherwise). Idempotent: import() is cached. */
+  useEffect(() => {
+    if (isWriting) return;
+    void import("@/components/editor/JournalEditor");
+  }, [isWriting]);
 
   return (
     /* Outer shell ignores pointer hits — same 3-D hit-testing rationale as `LeftPage`. */

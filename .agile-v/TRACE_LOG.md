@@ -74,3 +74,5 @@
 | 2026-07-07T10:15:00Z | wave49 | build-agent-js | Groq model migration — ai-provider shuffle chains, dynamic toasts, LLM_MODEL_SELECTION.md; 129 Vitest PASS | REQ-0010 | DEC-0080, CR-0006 |
 | 2026-07-07T12:30:00Z | wave49b | build-agent-js | Retry-After polish, sync backup toast, LCP priority, font preloads; 132 Vitest PASS | REQ-0010, REQ-0011, REQ-0029 | DEC-0081 |
 | 2026-07-07T12:55:00Z | brand-icons | build-agent-js | Auth diary 24px, nav lineHeight, favicon.ico tab icon; verify PASS | REQ-0029, REQ-0022 | DEC-0082 |
+| 2026-07-07T13:30:00Z | wave50 | build-agent-js | Groq reasoning_format hidden; stripReasoning; write-footer button box-model parity; 132 Vitest PASS | REQ-0010, REQ-0029 | DEC-0083 |
+| 2026-07-07T14:45:00Z | wave51 | build-agent-js | AI writing status anim + empty-stream sync fallback; edit preload+stagger (no flash); direction-aware coil seam; book-clip parity (overflow:clip 220px, runtime-log verified); 132 Vitest + build PASS | REQ-0020, REQ-0029, REQ-0003 | DEC-0084, DEC-0085, CR-0008 |

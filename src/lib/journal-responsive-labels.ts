@@ -23,6 +23,9 @@ export const WRITE_SAVE_LABEL_FULL = "Save";
 /** Write-mode save while persisting — full label on md+ */
 export const WRITE_SAVING_LABEL_FULL = "Saving…";
 
+/** Write-mode AI assist in-progress — animated status banner label */
+export const WRITE_WRITING_LABEL = "Writing…";
+
 /** Bottom nav — new page action (label matches Edit/Remove journal trio) */
 export const NAV_NEW_JOURNAL_LABEL = "New journal";
 

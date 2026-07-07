@@ -12,6 +12,7 @@ import {
   WRITE_CANCEL_LABEL_FULL,
   WRITE_SAVE_LABEL_FULL,
   WRITE_SAVING_LABEL_FULL,
+  WRITE_WRITING_LABEL,
 } from "@/lib/journal-responsive-labels";
 import { JOURNAL_INTERACTION_CLASS as C } from "@/lib/journal-interaction-styles";
 import { RippleButton } from "@/components/ui/ripple-button";
@@ -95,9 +96,29 @@ export function JournalWriteFooter({
   const showVoiceListening = Boolean(
     voiceInterim && !showVoiceError && !showVoiceProcessing,
   );
+  // AI "Writing…" reuses the animated voice banner pattern (pulse + ellipsis
+  // wave) for a consistent status UI; suppressed while voice banners are active.
+  const showAiWriting = Boolean(
+    isAiThinking && !showVoiceError && !showVoiceProcessing && !showVoiceListening,
+  );
 
   return (
     <div className="journal-write-footer-stack">
+      {showAiWriting ? (
+        <div className="voice-interim-banner" aria-live="polite">
+          <VoiceAnimatedStatus
+            label={WRITE_WRITING_LABEL}
+            icon={
+              <Sparkles
+                size={12}
+                strokeWidth={2}
+                className="voice-interim-banner__icon voice-interim-banner__icon--listen"
+                aria-hidden
+              />
+            }
+          />
+        </div>
+      ) : null}
       {showVoiceError ? (
         <div className="voice-interim-banner voice-interim-banner--error" aria-live="assertive">
           {voiceError}

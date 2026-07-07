@@ -264,6 +264,9 @@ export function BookSpread({
       tags: [...current.tags],
       location: current.location ?? "",
     });
+    /* Bump the remount key so LeftPage + RightPage replay their stagger wave in
+       lockstep as write mode mounts — same cascade as a page-turn, no flash. */
+    setEntryStaggerKey((k) => k + 1);
     setIsWriting(true);
   };
 
@@ -487,6 +490,9 @@ export function BookSpread({
         const decoder = new TextDecoder();
         let buffer = "";
         let prefixAdded = false;
+        // Guard: if a streamed model returns no text (e.g. empty completion),
+        // fall through to the sync route so the user never sees a no-op click.
+        let receivedAnyText = false;
 
         while (true) {
           const { done, value } = await reader.read();
@@ -513,6 +519,7 @@ export function BookSpread({
             if (json.usedFallback) appToast.ai.fallbackOpenRouter();
             if (json.error) throw new Error(json.error);
             if (json.text) {
+              receivedAnyText = true;
               setDraft((d) => {
                 const sep =
                   !prefixAdded && d.content && !d.content.endsWith("\n")
@@ -524,7 +531,8 @@ export function BookSpread({
             }
           }
         }
-        return;
+        if (receivedAnyText) return;
+        /* Empty stream — fall through to sync route below */
       }
 
       /* Fallback to sync route */
@@ -803,7 +811,10 @@ export function BookSpread({
             re-enable `auto` only on their inner content stacks. */}
             {/* ── 3D BOOK: preserve-3d spread — shadow on wrapper, not filter (avoids shimmer) ── */}
             <div
-              className={`${isFlipping ? "spread-coil-flipping " : ""}${BOOK_SPREAD_3D_ROW_CLASS} ${BOOK_SPREAD_3D_ROW_TILTED_CLASS}`}
+              /* `spread-coil-flipping--${flipDir}` lets globals.css tune the
+                 coil seam shadow per direction (fwd reveal vs bwd continuous) —
+                 see the direction-aware rule in globals.css. */
+              className={`${isFlipping ? `spread-coil-flipping${flipDir ? ` spread-coil-flipping--${flipDir}` : ""} ` : ""}${BOOK_SPREAD_3D_ROW_CLASS} ${BOOK_SPREAD_3D_ROW_TILTED_CLASS}`}
               style={{
                 display: "flex",
                 alignItems: "stretch",

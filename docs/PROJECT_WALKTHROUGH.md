@@ -699,7 +699,30 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-## 42. Related docs
+## 42. AI reasoning hidden + footer button parity — Wave 50 (2026-07-07)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Reasoning suppression | `lib/ai-provider.ts` | Groq body `reasoning_format:"hidden"` + `max_tokens:700`; OpenRouter `reasoning:{exclude:true}` — no chain-of-thought in editor |
+| Safety net | `lib/ai-provider.ts` | `stripReasoning()` on sync path strips `<think>`/`<reasoning>`/`<redacted_thinking>` blocks |
+| Footer parity | `globals.css` | Shared write-footer buttons `box-sizing`/`min-height:30px`/`line-height:1`; Save `border:1px solid transparent`; mobile 36×36 `box-sizing` |
+| Tests | `ai-provider.test.ts` (9) | **132** Vitest total |
+
+---
+
+## 43. Book-clip parity + flip seam + AI writing status — Wave 51 (2026-07-07)
+
+| Area | Files | Details |
+|------|-------|---------|
+| Book-clip parity | `globals.css`, `BookSpread.tsx` | Journal tilted row (`rotateY(-2deg)`) projected ~16px past the pinned spread width; `overflow:hidden` cut the right corner at rest while flip's `overflow:visible` revealed it (width "pop" + coil-shadow flash). Fix: md+ `.journal-route-viewport .book-spread-scroll-port { overflow: clip; overflow-clip-margin: 220px }` (`clip` never spawns a scrollbar); auth row untouched (perspective only, no tilt). Verified via runtime `getBoundingClientRect` logs — rect stable rest↔flip |
+| Flip seam | `globals.css`, `BookSpread.tsx` | Direction-aware `.spread-coil-flipping--fwd .spread-coil-binding` pins the forward-turn coil shadow to its idle value (seamless reveal); backward turn keeps depth bump |
+| AI writing status | `JournalWriteFooter.tsx`, `journal-responsive-labels.ts` | `VoiceAnimatedStatus` (Sparkles + `WRITE_WRITING_LABEL`) while `isAiThinking` — voice-parity; empty stream → sync `assist` fallback in `BookSpread` |
+| Edit no-flash | `JournalEditor.tsx`, `RightPage.tsx`, `RightPageWritePanel.tsx` | `immediatelyRender:true`; preload `JournalEditor` chunk in read mode; write-panel rows use `journalStaggerRowProps`; edit bumps `entryStaggerKey` |
+| Tests | — | **132** Vitest + lint + typecheck + build PASS |
+
+---
+
+## 44. Related docs
 
 - `README.md` — setup, env vars, API, learning walkthrough, stack badges.
 - `CLAUDE.md` — compact agent instructions (gitignored locally).
@@ -711,4 +734,4 @@ Coil z35 / overlay experiments **reverted** to Wave 13 — double seam lines + b
 
 ---
 
-*Last reviewed: 2026-07-07 — C4 Wave 49; lint/typecheck/131 Vitest/build PASS.*
+*Last reviewed: 2026-07-07 — C4 Wave 51; lint/typecheck/132 Vitest/build PASS.*

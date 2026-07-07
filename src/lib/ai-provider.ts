@@ -1,7 +1,8 @@
 /**
- * AI assist provider chain — REQ-0010 / CR-0006 (Wave 49).
+ * AI assist provider chain — REQ-0010 / CR-0006 (Wave 49), CR-0007 (Wave 50).
  *
  * Groq (shuffled production models) → OpenRouter (:free shuffle) → Anthropic legacy → placeholder.
+ * Groq/OpenRouter bodies suppress reasoning chain-of-thought (reasoning_format hidden / reasoning.exclude).
  * Model IDs are hardcoded — only GROQ_API_KEY / OPENROUTER_API_KEY env vars required on Vercel.
  * verified 2026-07-07 against Groq + OpenRouter model catalogs.
  */
@@ -29,6 +30,27 @@ const RETRYABLE_STATUS = new Set([408, 429, 500, 502, 503, 504]);
 const OPENROUTER_HEADERS = {
   "HTTP-Referer": process.env.NEXTAUTH_URL ?? "https://storybook-journal.vercel.app",
   "X-Title": "StoryBook Journal",
+} as const;
+
+/**
+ * Groq reasoning suppression is model-specific:
+ *   - gpt-oss (20b/120b): `reasoning_format: "hidden"` returns prose only.
+ *   - qwen3.6-27b: uses `reasoning_effort` (not reasoning_format) — sending
+ *     `reasoning_format` yields an EMPTY completion. `none` disables reasoning
+ *     so the model streams the final prose directly.
+ */
+const GROQ_REASONING_EFFORT_MODELS = new Set<string>(["qwen/qwen3.6-27b"]);
+
+function groqBodyForModel(model: string): Record<string, unknown> {
+  if (GROQ_REASONING_EFFORT_MODELS.has(model)) {
+    return { reasoning_effort: "none", max_tokens: 700 };
+  }
+  return { reasoning_format: "hidden", max_tokens: 700 };
+}
+
+/** OpenRouter unified flag — strips reasoning for gpt-oss:free; ignored by non-reasoning models. */
+const OPENROUTER_BODY = {
+  reasoning: { exclude: true },
 } as const;
 
 export type AiProviderName = "groq" | "openrouter" | "placeholder" | "anthropic";
@@ -120,6 +142,7 @@ async function chatCompletion(
   model: string,
   messages: ChatMessage[],
   extraHeaders?: Record<string, string>,
+  extraBody?: Record<string, unknown>,
 ): Promise<Response> {
   return fetch(url, {
     method: "POST",
@@ -133,6 +156,7 @@ async function chatCompletion(
       messages,
       max_tokens: 300,
       temperature: 0.7,
+      ...extraBody,
     }),
   });
 }
@@ -143,6 +167,7 @@ async function streamChatCompletion(
   model: string,
   messages: ChatMessage[],
   extraHeaders?: Record<string, string>,
+  extraBody?: Record<string, unknown>,
 ): Promise<Response> {
   return fetch(url, {
     method: "POST",
@@ -156,8 +181,18 @@ async function streamChatCompletion(
       messages,
       max_tokens: 300,
       stream: true,
+      ...extraBody,
     }),
   });
+}
+
+/** Safety net when a provider still embeds reasoning tags in content (sync path only). */
+export function stripReasoning(text: string): string {
+  return text
+    .replace(/[\s\S]*?<\/think>/gi, "")
+    .replace(/<redacted_thinking>[\s\S]*?<\/redacted_thinking>/gi, "")
+    .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, "")
+    .trim();
 }
 
 async function parseChatJson(res: Response): Promise<string> {
@@ -165,7 +200,8 @@ async function parseChatJson(res: Response): Promise<string> {
   const data = (await res.json()) as {
     choices?: { message?: { content?: string } }[];
   };
-  return data.choices?.[0]?.message?.content?.trim() ?? "";
+  const raw = data.choices?.[0]?.message?.content?.trim() ?? "";
+  return stripReasoning(raw);
 }
 
 /** Try each shuffled model on one provider; advance on retryable status / empty / network error. */
@@ -175,6 +211,7 @@ async function tryProviderModelsSync(
   models: readonly string[],
   messages: ChatMessage[],
   extraHeaders?: Record<string, string>,
+  bodyFor?: (model: string) => Record<string, unknown> | undefined,
 ): Promise<ProviderAttemptResult> {
   let allRateLimited = true;
   let sawAttempt = false;
@@ -183,7 +220,7 @@ async function tryProviderModelsSync(
   for (const model of shuffle(models)) {
     sawAttempt = true;
     try {
-      const res = await chatCompletion(url, apiKey, model, messages, extraHeaders);
+      const res = await chatCompletion(url, apiKey, model, messages, extraHeaders, bodyFor?.(model));
       if (!res.ok) {
         retryAfterSec = maxRetryAfter(retryAfterSec, retryAfterFromResponse(res));
         if (res.status !== 429) allRateLimited = false;
@@ -208,6 +245,7 @@ async function tryProviderModelsStream(
   models: readonly string[],
   messages: ChatMessage[],
   extraHeaders?: Record<string, string>,
+  bodyFor?: (model: string) => Record<string, unknown> | undefined,
 ): Promise<ProviderStreamAttemptResult> {
   let allRateLimited = true;
   let sawAttempt = false;
@@ -216,7 +254,7 @@ async function tryProviderModelsStream(
   for (const model of shuffle(models)) {
     sawAttempt = true;
     try {
-      const res = await streamChatCompletion(url, apiKey, model, messages, extraHeaders);
+      const res = await streamChatCompletion(url, apiKey, model, messages, extraHeaders, bodyFor?.(model));
       if (res.ok && res.body) return { res, model };
       retryAfterSec = maxRetryAfter(retryAfterSec, retryAfterFromResponse(res));
       if (res.status !== 429) allRateLimited = false;
@@ -266,7 +304,14 @@ export async function syncAssistCompletion(prompt: string): Promise<AiProviderRe
   let groqRetryAfterSec: number | undefined;
 
   if (groqKey) {
-    const groq = await tryProviderModelsSync(GROQ_URL, groqKey, GROQ_MODELS, messages);
+    const groq = await tryProviderModelsSync(
+      GROQ_URL,
+      groqKey,
+      GROQ_MODELS,
+      messages,
+      undefined,
+      groqBodyForModel,
+    );
     if (groq.ok) {
       return { text: groq.text, provider: "groq", usedFallback: false, model: groq.model };
     }
@@ -284,6 +329,7 @@ export async function syncAssistCompletion(prompt: string): Promise<AiProviderRe
       OPENROUTER_MODELS,
       messages,
       OPENROUTER_HEADERS,
+      () => OPENROUTER_BODY,
     );
     if (or.ok) {
       return {
@@ -344,7 +390,14 @@ export async function* streamAssistCompletion(prompt: string): AsyncGenerator<Ai
   let res: Response | null = null;
 
   if (groqKey) {
-    const groq = await tryProviderModelsStream(GROQ_URL, groqKey, GROQ_MODELS, messages);
+    const groq = await tryProviderModelsStream(
+      GROQ_URL,
+      groqKey,
+      GROQ_MODELS,
+      messages,
+      undefined,
+      groqBodyForModel,
+    );
     if ("res" in groq) {
       res = groq.res;
     } else {
@@ -361,6 +414,7 @@ export async function* streamAssistCompletion(prompt: string): AsyncGenerator<Ai
       OPENROUTER_MODELS,
       messages,
       OPENROUTER_HEADERS,
+      () => OPENROUTER_BODY,
     );
     if ("res" in or) {
       res = or.res;

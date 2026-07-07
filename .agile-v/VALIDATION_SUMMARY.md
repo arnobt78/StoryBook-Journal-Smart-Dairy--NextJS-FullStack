@@ -3,19 +3,19 @@
 | Field | Value |
 |-------|-------|
 | **Cycle** | C4 |
-| **Revision** | C4-wave48-2026-07-06 |
-| **Status** | Stage 4 static complete; Waves 1–48; Gate 2 pending e2e |
+| **Revision** | C4-wave51-2026-07-07 |
+| **Status** | Stage 4 static complete; Waves 1–51; Gate 2 pending e2e |
 | **Stage** | 4 Verification |
 | **eval_gate_status** | CONDITIONAL |
-| **Last Updated** | 2026-07-06T15:00:00Z |
-| **Verifier** | agile-v-core (session activation 2026-07-06) |
+| **Last Updated** | 2026-07-07T14:45:00Z |
+| **Verifier** | build-agent-js (Wave 51 book-clip parity + flip seam) |
 
 ## Evidence Summary
 
 ```
-Scope: C4 REQ-0029–0032 + regression REQ-0002, REQ-0003, REQ-0007 | Traceability: 32 REQs, ART-0107
-Findings: PASS static/unit through Wave 48 | FAIL 0 | NOT RUN e2e in CI
-Log: 2026-07-06 | build-agent-js | Wave 48 entry auth + voice UX | 123 Vitest + build PASS
+Scope: C4 REQ-0029–0032 + regression REQ-0002, REQ-0003, REQ-0007, REQ-0010, REQ-0020 | Traceability: 32 REQs, ART-0109
+Findings: PASS static/unit through Wave 51 | FAIL 0 | NOT RUN e2e in CI
+Log: 2026-07-07 | build-agent-js | Wave 51 book-clip parity (runtime-log verified) + flip seam + AI writing status | 132 Vitest + build PASS
 ```
 
 ## EvalGate (Gate 2)
@@ -42,7 +42,7 @@ Gate 2 NOT READY — REQ-0021 full e2e in CI; REQ-0009 prod demo gate
 | TC-0041 | REQ-0029–0030 | unit + code audit | **PASS** Wave 24: journal-stagger.ts (3 Vitest); header/left/right row wiring |
 | TC-0042 | REQ-0029–0030 | code audit | **PASS** Wave 26: LeftPage/RightPage `visibility` anti-flash gate mirrors AuthBookShell; `entryStaggerKey` remount replays stagger on both pages post-flip |
 | TC-0043 | REQ-0002, REQ-0003 | unit + code audit | **PASS** Wave 26: `journal-entry-url.ts` (9 Vitest); `?entry=` SSR resolution + `history.replaceState` mirror persists focused entry across hard refresh |
-| TC-0046 | REQ-0010 | unit | **PASS** Wave 49: `ai-provider.test.ts` (8 Vitest); Groq shuffle → OpenRouter :free → rateLimited + Retry-After |
+| TC-0046 | REQ-0010 | unit | **PASS** Wave 49–50: `ai-provider.test.ts` (9 Vitest); Groq shuffle + reasoning hidden + stripReasoning |
 
 ## Tooling (2026-07-06, session activation)
 
@@ -50,7 +50,7 @@ Gate 2 NOT READY — REQ-0021 full e2e in CI; REQ-0009 prod demo gate
 |-------|--------|
 | `npm run lint` | PASS |
 | `npm run typecheck` | PASS |
-| `npm run test` | PASS (**131** Vitest) |
+| `npm run test` | PASS (**132** Vitest) |
 | `npm run build` | PASS (2026-07-05 Wave 40b — re-run before Gate 2) |
 
 ## Prior cycles (archived summary)

@@ -1,4 +1,4 @@
-# Smart Story Book Journal - Next.js, TypeScript, PostgreSQL, Tailwind CSS (Animated Book UI) FullStack Project (Online-Offline Drafting, Sync Capability, Voice Dictation, AI Assist Daily Diary)
+# Smart Story Book Journal - Next.js, TypeScript, PostgreSQL, Tailwind CSS (Animated Book UI) FullStack Project (Online-Offline Draft, Sync Capability, Voice Transcription, AI Assist Daily Diary)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)

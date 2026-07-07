@@ -568,6 +568,16 @@ body {
   filter: drop-shadow(0 0 10px rgba(60, 30, 8, 0.18));
 }
 
+/* Direction-aware seam handoff (Wave 51): a FORWARD turn (next page / new entry)
+   hides the coil under the lifting right sheet, then reveals it mid-rotation —
+   if the coil has already darkened by the time it is uncovered, the reveal reads
+   as a shadow "flash" at the spiral. Pinning the forward-turn coil shadow to its
+   idle value keeps the reveal seamless. A BACKWARD turn keeps the subtle depth
+   bump (base rule above) because the seam stays visible through the whole turn. */
+.spread-coil-flipping.spread-coil-flipping--fwd .spread-coil-binding {
+  filter: drop-shadow(0 0 8px rgba(80, 40, 10, 0.14));
+}
+
 @keyframes authHoldFadeIn {
   from {
     opacity: 0;
@@ -1072,10 +1082,18 @@ body {
     overflow: visible;
   }
 
+  /* md+ — the journal 3-D row is tilted (rotateX 3° / rotateY -2°) so its right
+     page projects ~16px past the pinned spread width. `overflow: clip` (never
+     scrolls, unlike `visible`) + a generous clip-margin lets that tilted corner
+     and ambient shadow paint AT REST, matching the flip state → no sharp cut /
+     no width "pop" when a page turn ends. Vertical bleed is still bounded by the
+     outer `.dashboard-scroll` clip-margin (160/0/100/0). */
   .journal-route-viewport .book-spread-scroll-port {
-    overflow: hidden;
+    overflow: clip;
+    overflow-clip-margin: 220px;
   }
 
+  /* Auth row has no tilt (perspective only) so it fits the port — keep hidden. */
   .auth-route-viewport .book-spread-scroll-port {
     overflow: hidden;
   }
@@ -1698,6 +1716,9 @@ body {
 .journal-write-footer__save-btn,
 .journal-write-footer__action-btn,
 .journal-write-footer__voice-chevron {
+  box-sizing: border-box;
+  min-height: 30px;
+  line-height: 1;
   transition:
     color 0.2s,
     text-shadow 0.2s,
@@ -1742,7 +1763,7 @@ body {
   text-transform: uppercase;
   background: rgba(90, 40, 10, 0.82);
   color: rgba(255, 215, 150, 0.92);
-  border: none;
+  border: 1px solid transparent;
   padding: 5px 12px;
   border-radius: 4px;
   cursor: pointer;
@@ -1781,6 +1802,7 @@ body {
   .journal-write-footer__action-btn,
   .journal-write-footer__voice-chevron,
   .journal-write-footer__voice-mic {
+    box-sizing: border-box;
     min-width: 36px;
     min-height: 36px;
     padding: 6px !important;

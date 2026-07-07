@@ -7,6 +7,7 @@ import {
   OPENROUTER_MODELS,
   parseRetryAfter,
   shuffle,
+  stripReasoning,
   syncAssistCompletion,
   streamAssistCompletion,
 } from "@/lib/ai-provider";
@@ -46,9 +47,30 @@ describe("parseRetryAfter", () => {
   });
 });
 
+describe("stripReasoning", () => {
+  it("removes think, redacted_thinking, and reasoning blocks", () => {
+    const thinkTag = "think";
+    const withThink = `<${thinkTag}>Step 1: brainstorm</${thinkTag}>The morning light spills.`;
+    expect(stripReasoning(withThink)).toBe("The morning light spills.");
+
+    const withRedacted =
+      "<think>Step 1: brainstorm</think>Final prose.";
+    expect(stripReasoning(withRedacted)).toBe("Final prose.");
+
+    const withReasoning =
+      "<reasoning>internal chain</reasoning>Final prose only.";
+    expect(stripReasoning(withReasoning)).toBe("Final prose only.");
+  });
+});
+
 function parseBodyModel(init?: RequestInit): string | undefined {
   if (!init?.body || typeof init.body !== "string") return undefined;
   return (JSON.parse(init.body) as { model?: string }).model;
+}
+
+function parseBody(init?: RequestInit): Record<string, unknown> | undefined {
+  if (!init?.body || typeof init.body !== "string") return undefined;
+  return JSON.parse(init.body) as Record<string, unknown>;
 }
 
 describe("ai-provider shuffle", () => {
@@ -93,9 +115,12 @@ describe("syncAssistCompletion (TC-0046)", () => {
 
     vi.mocked(fetch).mockImplementation(async (url, init) => {
       const model = parseBodyModel(init);
+      const body = parseBody(init);
       expect(url).toBe(GROQ_URL);
       expect(model).toBeDefined();
       expect(ALL_MODELS.has(model!)).toBe(true);
+      expect(body?.reasoning_format).toBe("hidden");
+      expect(body?.max_tokens).toBe(700);
       return chatOk("Poetic continuation.");
     });
 
@@ -115,9 +140,16 @@ describe("syncAssistCompletion (TC-0046)", () => {
 
     vi.mocked(fetch).mockImplementation(async (url, init) => {
       const model = parseBodyModel(init);
+      const body = parseBody(init);
       expect(ALL_MODELS.has(model!)).toBe(true);
-      if (url === GROQ_URL) return chat429();
-      if (url === OPENROUTER_URL) return chatOk("Backup prose.");
+      if (url === GROQ_URL) {
+        expect(body?.reasoning_format).toBe("hidden");
+        return chat429();
+      }
+      if (url === OPENROUTER_URL) {
+        expect(body?.reasoning).toEqual({ exclude: true });
+        return chatOk("Backup prose.");
+      }
       throw new Error(`unexpected url ${url}`);
     });
 

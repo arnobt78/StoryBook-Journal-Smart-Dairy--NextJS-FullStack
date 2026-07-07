@@ -70,7 +70,10 @@ export const JournalEditor = forwardRef<JournalEditorHandle, JournalEditorProps>
       ],
       content: content || "<p></p>",
       editable,
-      immediatelyRender: false,
+      // Editor is mounted only via a client-only dynamic import (ssr:false), so it
+      // never server-renders — rendering immediately (instead of after a mount tick)
+      // avoids the one-frame empty gap that made entry text flash on Edit click.
+      immediatelyRender: true,
       onUpdate: ({ editor: ed }) => {
         skipNextSyncRef.current = true;
         onChange(ed.getHTML());

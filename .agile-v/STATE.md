@@ -7,8 +7,8 @@
 | **Project** | storybook-journal (StoryBook Journal SaaS) |
 | **Repository** | https://github.com/arnobt78/StoryBook-Journal-Smart-Dairy--NextJS-FullStack |
 | **Cycle** | **C4** |
-| **Revision** | C4-wave49-2026-07-07 |
-| **Last commit** | Wave 49: Groq migration + brand/font polish (pending) |
+| **Revision** | C4-wave51-2026-07-07 |
+| **Last commit** | Wave 51: AI writing status + edit stagger/preload + flip seam + book-clip parity (pending) |
 | **Current Stage** | 4 — Verification (static PASS; e2e partial) |
 | **Stage Status** | `IN_PROGRESS` |
 | **Last Gate** | Gate 1 — **Approved** (GATE-0001, GATE-0003, CR-0005) |
@@ -16,14 +16,14 @@
 | **eval_gate_status** | `CONDITIONAL` |
 | **resume_token** | — |
 | **Active Phase Dir** | `phases/04-verification/` |
-| **Last Updated** | 2026-07-07T10:15:00Z |
-| **Updated By** | build-agent-js (Wave 49 Groq migration) |
+| **Last Updated** | 2026-07-07T13:30:00Z |
+| **Updated By** | build-agent-js (Wave 50 reasoning + footer parity) |
 
 ## Resume
 
-1. Read **`STATE.md`** → `PLAYBOOK.md` → `cycles/C4/README.md` → **`DEC-0080`**.
-2. **Code baseline:** Wave 49 — Groq multi-model shuffle fallback in `ai-provider.ts`.
-3. **Verify:** lint · typecheck · **129** Vitest · build PASS · `npm run verify`.
+1. Read **`STATE.md`** → `PLAYBOOK.md` → `cycles/C4/README.md` → **`DEC-0083`**.
+2. **Code baseline:** Wave 51 — journal book-clip parity (`overflow: clip` + 220px clip-margin so tilted right corner paints at rest = flip); AI "Writing…" animated status; edit preload+stagger (no flash); direction-aware coil seam.
+3. **Verify:** lint · typecheck · **132** Vitest · build PASS · `npm run verify`.
 4. **Backlog:** REQ-0021 e2e CI; optional `auth()` on books POST; DRY `journal-api` via `journalFetch`.
 5. **Constraints:** `notifyJournalCacheUpdated` only; `force-dynamic`; SSR in `page.tsx`.
 6. **Skills load order:** 01 core → 02 pipeline → 13 build-agent-js → 18 → 19 → 20.
@@ -32,10 +32,10 @@
 
 | Stage | Status | Evidence |
 |-------|--------|----------|
-| 1 Requirements | **COMPLETE** | REQ-0001–**0032**; CR-0001–0006 |
+| 1 Requirements | **COMPLETE** | REQ-0001–**0032**; CR-0001–0007 |
 | 2 Validation | **COMPLETE** | `phases/02-validation/SUMMARY.md` |
-| 3 Synthesis | **COMPLETE** | ART-0001–**0108**; through Wave 49 |
-| 4 Verification | **IN_PROGRESS** | **129** Vitest PASS; lint/typecheck/build PASS |
+| 3 Synthesis | **COMPLETE** | ART-0001–**0108**; through Wave 50 |
+| 4 Verification | **IN_PROGRESS** | **132** Vitest PASS; lint/typecheck/build PASS |
 | 5 Acceptance | NOT_STARTED | — |
 
 ## C4 UI waves (recent)
@@ -47,7 +47,9 @@
 | 43 | SEO metadata, @file walkthrough comments, README, verify script | prior |
 | 47 | Voice hardening — Phase 3 drain, WASM worker offload | prior |
 | 48 | Entry save 401 fix + voice/editor UX | `ec8ec35` |
-| **49** | **Groq model migration — multi-model shuffle fallback** | this session |
+| **49** | **Groq model migration — multi-model shuffle fallback** | prior |
+| **50** | **AI reasoning hidden + write-footer button parity** | this session |
+| **51** | **AI writing status anim · edit stagger/preload (no flash) · flip seam direction-aware · book-clip parity (auth==journal)** | this session |
 
 ## Infinity Loop
 

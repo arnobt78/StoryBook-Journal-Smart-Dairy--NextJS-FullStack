@@ -40,9 +40,9 @@ These deprecated models should never be used for new development.
 
 ## StoryBook Journal — AI Assist implementation (REQ-0010)
 
-**Code:** `src/lib/ai-provider.ts` · **Routes:** `/api/ai/assist`, `/api/ai/assist/stream` · **Trace:** CR-0006, Wave 49
+**Code:** `src/lib/ai-provider.ts` · **Routes:** `/api/ai/assist`, `/api/ai/assist/stream` · **Trace:** CR-0006, CR-0007, Wave 49–50
 
-Journal AI assist continues a diary entry with 2–3 poetic sentences (`max_tokens: 300`). It is a stateless server proxy — no client API keys, no cache invalidation on assist (entry save uses `notifyJournalCacheUpdated` separately).
+Journal AI assist continues a diary entry with 2–3 poetic sentences. Groq requests use `reasoning_format: "hidden"` and `max_tokens: 700` so reasoning models (gpt-oss, qwen3.6) return prose only — not chain-of-thought. OpenRouter uses `reasoning: { exclude: true }`. Sync path also runs `stripReasoning()` as a safety net.
 
 ### Hardcoded model chains (verified 2026-07-07)
 

@@ -7,17 +7,27 @@
 | Wave | Theme |
 |------|-------|
 | **49** | Groq model migration — `ai-provider.ts` shuffle chains, dynamic toasts, `docs/LLM_MODEL_SELECTION.md` |
+| **50** | AI reasoning hidden (`reasoning_format: hidden`) + write-footer button box-model parity |
+| **51** | Book-clip parity (`overflow:clip` 220px) + direction-aware flip seam + AI writing status anim + edit no-flash (preload/stagger) |
 
-**Verify:** `npm run verify` · **129** Vitest · build PASS
+**Verify:** `npm run verify` · **132** Vitest · build PASS
 
-## Wave 49 summary
+## Wave 51 summary
 
-- Replaced deprecated `llama-3.3-70b-versatile` with hardcoded Groq + OpenRouter shuffle chains
-- `GROQ_MODELS`: gpt-oss-20b, qwen3.6-27b, gpt-oss-120b
-- `OPENROUTER_MODELS`: llama-3.3-70b-instruct:free, deepseek-chat-v3-0324:free, gpt-oss-20b:free
-- Dynamic `retryAfterSec` toasts on 429; `rateLimited` when all providers exhausted
-- TC-0046: `ai-provider.test.ts` (6 Vitest)
-- CR-0006 / DEC-0080 / ART-0108
+- Journal book tilted row projected ~16px past pinned width → `overflow:hidden` cut right corner at rest, `visible` on flip revealed it. Fix: md+ `.journal-route-viewport .book-spread-scroll-port { overflow: clip; overflow-clip-margin: 220px }`. Auth (no tilt) untouched. Runtime-log verified.
+- `.spread-coil-flipping--fwd` pins forward-turn coil shadow (no reveal flash).
+- `JournalWriteFooter` `VoiceAnimatedStatus` (Sparkles) while thinking; empty-stream → sync fallback.
+- Edit no-flash: `immediatelyRender:true` + `JournalEditor` preload + write-panel stagger + `entryStaggerKey` bump.
+- CR-0008 / DEC-0084, DEC-0085
+
+## Wave 50 summary
+
+- Groq requests: `reasoning_format: "hidden"`, `max_tokens: 700`
+- OpenRouter requests: `reasoning: { exclude: true }`
+- `stripReasoning()` sync safety net for ``/`<reasoning>` tags
+- Write footer: shared `box-sizing`/`min-height:30px`; Save `border:1px solid transparent`; mobile 36×36 `box-sizing`
+- TC-0046 extended: `ai-provider.test.ts` (9 Vitest)
+- CR-0007 / DEC-0083
 
 ## Backlog (unchanged)
 
@@ -28,5 +38,7 @@
 ## Do not redo
 
 - Groq migration — done Wave 49
+- AI reasoning leak — fixed Wave 50
+- Book right-corner clip / flip width pop — fixed Wave 51 (don't reintroduce blanket `overflow:visible` at rest — use `clip`+margin)
 - Voice stop / Quick transcript — fixed Wave 48
 - Entry save 401 pilot — entries route only; working in dev

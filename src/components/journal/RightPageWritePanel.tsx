@@ -21,7 +21,6 @@ import { MOODS, WEATHERS } from "@/constants";
 import { mergePendingTag } from "@/lib/journal-tags";
 import {
   JOURNAL_DIVIDER_GRADIENT,
-  JOURNAL_INK_BODY,
   JOURNAL_INK_HEADING,
   JOURNAL_INK_PLACEHOLDER,
   JOURNAL_TAG_INPUT_BG,
@@ -30,6 +29,7 @@ import {
   journalMiniLabelStyle,
 } from "@/lib/journal-page-styles";
 import { normalizeTags, wordCount } from "@/lib/utils";
+import { journalStaggerRowProps } from "@/lib/journal-stagger";
 import { JournalEntryTagsEditor } from "@/components/journal/JournalEntryTagsEditor";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { JournalWriteFooter } from "@/components/journal/JournalWriteFooter";
@@ -129,33 +129,41 @@ export function RightPageWritePanel({
         overflow: "hidden",
       }}
     >
+      {/* ── WRITE-MODE ROW STAGGER — mirrors RightPage read-mode indices so the
+          left + right pages cascade in lockstep (60ms step) on Edit click and
+          after a New Page flip (BookSpread bumps `entryStaggerKey` for both).
+          Date row is index 0 (rendered by RightPage above this panel). ── */}
       <input
         value={draft.title}
         onChange={(e) => onDraftChange("title", e.target.value)}
         placeholder="Title your entry…"
-        style={{
-          fontFamily: "'Playfair Display',serif",
-          fontStyle: "italic",
-          fontSize: "21px",
-          color: JOURNAL_INK_HEADING,
-          background: "transparent",
-          border: "none",
-          outline: "none",
-          width: "100%",
-          lineHeight: 1.2,
-          margin: "6px 0 8px",
-        }}
+        {...journalStaggerRowProps(1, {
+          style: {
+            fontFamily: "'Playfair Display',serif",
+            fontStyle: "italic",
+            fontSize: "21px",
+            color: JOURNAL_INK_HEADING,
+            background: "transparent",
+            border: "none",
+            outline: "none",
+            width: "100%",
+            lineHeight: 1.2,
+            margin: "6px 0 8px",
+          },
+        })}
       />
       <div
-        style={{
-          height: "1px",
-          background: JOURNAL_DIVIDER_GRADIENT,
-          marginBottom: "10px",
-          flexShrink: 0,
-        }}
+        {...journalStaggerRowProps(1, {
+          style: {
+            height: "1px",
+            background: JOURNAL_DIVIDER_GRADIENT,
+            marginBottom: "10px",
+            flexShrink: 0,
+          },
+        })}
       />
 
-      <div className="journal-write-pickers">
+      <div {...journalStaggerRowProps(2, { className: "journal-write-pickers" })}>
         <MiniLabel>Mood</MiniLabel>
         <div style={{ display: "flex", gap: "2px", flexWrap: "wrap", marginBottom: "6px" }}>
           {MOODS.map((m) => (
@@ -205,38 +213,37 @@ export function RightPageWritePanel({
         </div>
       </div>
 
-      <JournalEditor
-        ref={editorRef}
-        content={draft.content}
-        onChange={(html) => onDraftChange("content", html)}
-        placeholder="Write what's on your mind today…"
-        autoFocus
-      />
-
-      {isAiThinking && (
-        <div
-          style={{
-            fontFamily: "'Lora',serif",
-            fontStyle: "italic",
-            fontSize: "11px",
-            color: JOURNAL_INK_BODY,
-            marginTop: "4px",
-          }}
-        >
-          Writing…
-        </div>
-      )}
-
-      <MiniLabel>Tags</MiniLabel>
+      {/* Editor wrapper carries the stagger (index 3) while preserving the flex
+          column so long entries still scroll; the editor eases in instead of
+          flashing (chunk is preloaded in RightPage read mode). */}
       <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          gap: "4px",
-          marginBottom: "8px",
-          flexShrink: 0,
-        }}
+        {...journalStaggerRowProps(3, {
+          style: { flex: 1, minHeight: 0, display: "flex", flexDirection: "column" },
+        })}
+      >
+        <JournalEditor
+          ref={editorRef}
+          content={draft.content}
+          onChange={(html) => onDraftChange("content", html)}
+          placeholder="Write what's on your mind today…"
+          autoFocus
+        />
+      </div>
+
+      {/* AI "Writing…" status now renders as the animated banner in
+          JournalWriteFooter (voice-parity pulse UI) — no inline text here. */}
+      <div {...journalStaggerRowProps(4, { style: journalMiniLabelStyle })}>Tags</div>
+      <div
+        {...journalStaggerRowProps(4, {
+          style: {
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: "4px",
+            marginBottom: "8px",
+            flexShrink: 0,
+          },
+        })}
       >
         <JournalEntryTagsEditor
           tags={draftTags}
@@ -267,22 +274,26 @@ export function RightPageWritePanel({
         />
       </div>
 
-      <JournalWriteFooter
-        mood={draft.mood}
-        weather={draft.weather}
-        wordCount={wc}
-        isAiThinking={isAiThinking}
-        isSaving={isSaving}
-        canAiAssist={Boolean(draft.content.trim())}
-        onAiAssist={onAiAssist}
-        onCancel={onCancel}
-        onSave={handleSave}
-        voiceInterim={voice.interim}
-        voiceIsDraining={voice.isVoiceDraining}
-        voiceError={voice.error}
-        voiceStatus={voice.status}
-        voiceDictation={<VoiceDictationButton voice={voice} />}
-      />
+      {/* Bottom row (mood/weather/words + Dictate/AI/Cancel/Save) rides the
+          cascade as the final stagger step (index 5) — no post-flip button flash. */}
+      <div {...journalStaggerRowProps(5, { style: { flexShrink: 0 } })}>
+        <JournalWriteFooter
+          mood={draft.mood}
+          weather={draft.weather}
+          wordCount={wc}
+          isAiThinking={isAiThinking}
+          isSaving={isSaving}
+          canAiAssist={Boolean(draft.content.trim())}
+          onAiAssist={onAiAssist}
+          onCancel={onCancel}
+          onSave={handleSave}
+          voiceInterim={voice.interim}
+          voiceIsDraining={voice.isVoiceDraining}
+          voiceError={voice.error}
+          voiceStatus={voice.status}
+          voiceDictation={<VoiceDictationButton voice={voice} />}
+        />
+      </div>
     </div>
   );
 }
